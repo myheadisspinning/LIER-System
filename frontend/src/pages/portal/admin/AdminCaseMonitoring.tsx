@@ -87,7 +87,7 @@ export default function AdminCaseMonitoring() {
 
   const maxBreakdown = Math.max(1, ...statusBreakdown.map((s) => s.count));
 
-  const mapPins = filtered.filter((r) => r.lat != null && r.lng != null && r.status !== 'Rejected');
+  const mapPins = filtered.filter((r) => r.lat != null && r.lng != null && r.status !== 'Rejected' && r.status !== 'Resolved');
 
   return (
     <div className="space-y-6">
@@ -142,9 +142,9 @@ export default function AdminCaseMonitoring() {
               </button>
             </div>
           </div>
-          <div className="flex-1 relative rounded-lg overflow-hidden border border-border-subtle/50 bg-slate-100">
+          <div className="flex-1 relative rounded-lg overflow-hidden isolate border border-border-subtle/50 bg-slate-100">
             {mapPins.length > 0 ? (
-              <MapContainer center={BARANGAY_HALL_CENTER} zoom={14} className="w-full h-full" scrollWheelZoom>
+              <MapContainer center={BARANGAY_HALL_CENTER} zoom={13} className="w-full h-full" scrollWheelZoom>
                 <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 {tile === 'satellite' && (
                   <TileLayer attribution="Tiles &copy; Esri" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" opacity={0.9} />

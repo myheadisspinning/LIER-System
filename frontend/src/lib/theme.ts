@@ -27,11 +27,13 @@ export function useTheme(): [Theme, () => void] {
   );
 
   const toggleTheme = useCallback(() => {
-    setTheme((current) => {
-      const next = current === 'dark' ? 'light' : 'dark';
-      applyTheme(next);
-      return next;
-    });
+    const root = document.documentElement;
+    const next: Theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+    root.classList.add('theme-transition');
+    void root.offsetHeight;
+    applyTheme(next);
+    setTheme(next);
+    window.setTimeout(() => root.classList.remove('theme-transition'), 350);
   }, []);
 
   return [theme, toggleTheme];

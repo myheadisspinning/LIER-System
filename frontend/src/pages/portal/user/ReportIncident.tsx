@@ -30,6 +30,66 @@ const formatBytes = (n: number) => {
   return `${(n / (1024 * 1024)).toFixed(1)} MB`;
 };
 
+const timeAgo = (ts: number) => {
+  const mins = Math.max(0, Math.floor((Date.now() - ts) / 60000));
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins} min ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs} hr ${mins % 60} min ago`;
+  return `${Math.floor(hrs / 24)} days ago`;
+};
+
+type DraftPayload = {
+  savedAt: string;
+  step: number;
+  category: string;
+  customCategory: string;
+  incidentStatus: string;
+  reportTitle: string;
+  reportDescription: string;
+  additionalContext: string;
+  incidentTime: string;
+  location: [number, number];
+  address: string;
+  anonymous: boolean;
+  confirm1: boolean;
+  confirm2: boolean;
+  evidenceMeta: { name: string; type: string; size: number }[];
+  analysis: AiAnalysis | null;
+  manualSave: boolean;
+};
+
+const DRAFT_KEY = 'lier_incident_draft_v1';
+
+function loadDraft(): DraftPayload | null {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as DraftPayload;
+    if (!parsed || typeof parsed.savedAt !== 'string' || !Array.isArray(parsed.location)) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function saveDraft(payload: DraftPayload): boolean {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(payload));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function clearDraft() {
+  try {
+    localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    // ignore storage failures
+  }
+}
+
 const CATEGORIES = [
   { icon: 'local_fire_department', label: 'Fire Hazard', flip: false },
   { icon: 'medical_services', label: 'Medical', flip: false },
@@ -66,6 +126,7 @@ function localFallback(category: string): AiAnalysis {
       priority: 'CRITICAL',
       threat: 90,
       actions: ['Evacuate nearest block', 'Dispatch BFP engine to pin'],
+      user_actions: ['Evacuate to a safe area immediately', 'Call 911 if the fire is life-threatening', 'Avoid the affected area and keep others away'],
       dispatch: 'AI Dispatch routed T-04 · ETA 4 min',
       unit: 'BFP Engine T-04',
       eta: '4 min',
@@ -80,6 +141,7 @@ function localFallback(category: string): AiAnalysis {
       priority: 'HIGH',
       threat: 78,
       actions: ['Alert General Hospital ER', 'Route ambulance to pin'],
+      user_actions: ['Keep the person calm and still', 'Call an ambulance or emergency hotline', 'Do not give food or drink unless told to'],
       dispatch: 'AI Dispatch routed M-02 · ETA 6 min',
       unit: 'Medical Ambulance M-02',
       eta: '6 min',
@@ -94,6 +156,7 @@ function localFallback(category: string): AiAnalysis {
       priority: 'CRITICAL',
       threat: 86,
       actions: ['Notify local precinct', 'Keep reporter at safe distance'],
+      user_actions: ['Keep a safe distance from the suspects', 'Do not approach or intervene', 'Note any descriptions without putting yourself at risk'],
       dispatch: 'AI Dispatch routed T-07 · ETA 3 min',
       unit: 'Mobile Alpha (PNP)',
       eta: '3 min',
@@ -108,6 +171,7 @@ function localFallback(category: string): AiAnalysis {
       priority: 'MEDIUM',
       threat: 55,
       actions: ['Assign barangay tanod unit', 'Log to case master'],
+      user_actions: ['Avoid the affected area', 'Notify barangay officials or authorities', 'Monitor for any change in the situation'],
       dispatch: 'AI Dispatch routed T-09 · ETA 9 min',
       unit: 'Tanod Patrol Unit 2',
       eta: '9 min',
@@ -165,25 +229,24 @@ function FlyTo({ target, onDone }: { target: [number, number] | null; onDone: ()
   return null;
 }
 
-function ZoomButtons() {
-  const map = useMap();
-  return (
-    <div className="absolute bottom-4 right-[calc(16rem+1rem)] lg:right-[calc(18rem+1rem)] z-[600] flex flex-col shadow-cc-card">
-      <button type="button" onClick={() => map.zoomIn()} className="w-8 h-8 bg-cc-card/95 border border-cc-border-strong rounded-t-lg flex items-center justify-center font-bold text-lg text-cc-heading hover:bg-cc-hover transition-colors">+</button>
-      <div className="w-8 h-px bg-cc-border"></div>
-      <button type="button" onClick={() => map.zoomOut()} className="w-8 h-8 bg-cc-card/95 border border-cc-border-strong rounded-b-lg flex items-center justify-center font-bold text-lg text-cc-heading hover:bg-cc-hover transition-colors">-</button>
-    </div>
-  );
-}
 
 export default function ReportIncident({ className = '' }: { className?: string }) {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const titleInputRef = useRef<HTMLInputElement>(null);
+  const customCategoryInputRef = useRef<HTMLInputElement>(null);
+  const descriptionTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const analysisSeq = useRef(0);
+  const analysisCache = useRef<Map<string, AiAnalysis>>(new Map());
+  const forceAnalyzeRef = useRef(false);
   const [step, setStep] = useState(1);
   const [category, setCategory] = useState('Fire Hazard');
   const [incidentStatus, setIncidentStatus] = useState('Ongoing');
+  const [draftSavedAt, setDraftSavedAt] = useState<number | null>(null);
+  const [notice, setNotice] = useState<'draft-prompt' | 'draft-saved' | null>(null);
   const [reportTitle, setReportTitle] = useState('');
   const [reportDescription, setReportDescription] = useState('');
+  const [additionalContext, setAdditionalContext] = useState('');
   const [incidentTime, setIncidentTime] = useState(() => toLocalInput(new Date()));
   const [customCategory, setCustomCategory] = useState('');
   const [aiExpanded, setAiExpanded] = useState(false);
@@ -191,7 +254,6 @@ export default function ReportIncident({ className = '' }: { className?: string 
   const [mediaType, setMediaType] = useState<'video' | 'photo' | 'audio'>('photo');
   const [location, setLocation] = useState<[number, number]>(BARANGAY_HALL_CENTER);
   const [address, setAddress] = useState(BARANGAY_HALL_ADDRESS);
-  const [gpsLocked, setGpsLocked] = useState(false);
   const [usingCurrent, setUsingCurrent] = useState(false);
   const [flyTarget, setFlyTarget] = useState<[number, number] | null>(null);
   const [tile, setTile] = useState<'street' | 'satellite'>('street');
@@ -204,6 +266,51 @@ export default function ReportIncident({ className = '' }: { className?: string 
   const [confirm2, setConfirm2] = useState(false);
   const [anonymous, setAnonymous] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [missingField, setMissingField] = useState<'category' | 'title' | 'description' | null>(null);
+
+  useEffect(() => {
+    const d = loadDraft();
+    if (d) {
+      setDraftSavedAt(new Date(d.savedAt).getTime());
+      setNotice('draft-prompt');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (notice !== 'draft-saved') return;
+    const t = setTimeout(() => setNotice(null), 3000);
+    return () => clearTimeout(t);
+  }, [notice]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const existing = loadDraft();
+      if (existing?.manualSave) return;
+      const hasData = reportTitle.trim() || reportDescription.trim() || additionalContext.trim() || evidenceFiles.length > 0;
+      if (!hasData) return;
+      saveDraft({
+        savedAt: new Date().toISOString(),
+        step,
+        category,
+        customCategory,
+        incidentStatus,
+        reportTitle,
+        reportDescription,
+        additionalContext,
+        incidentTime,
+        location: [location[0], location[1]],
+        address,
+        anonymous,
+        confirm1,
+        confirm2,
+        evidenceMeta: evidenceFiles.map((f) => ({ name: f.name, type: f.type, size: f.size })),
+        analysis,
+        manualSave: false,
+      });
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [step, category, customCategory, incidentStatus, reportTitle, reportDescription, additionalContext, incidentTime, location, address, anonymous, confirm1, confirm2, evidenceFiles, analysis]);
 
   const ai = analysis ?? localFallback(category);
   const effectiveCategory =
@@ -213,7 +320,6 @@ export default function ReportIncident({ className = '' }: { className?: string 
 
   const handlePick = useCallback((lat: number, lng: number) => {
     setLocation([lat, lng]);
-    setGpsLocked(false);
   }, []);
 
   const handleFlyDone = useCallback(() => setFlyTarget(null), []);
@@ -229,7 +335,6 @@ export default function ReportIncident({ className = '' }: { className?: string 
         const { latitude, longitude } = pos.coords;
         setLocation([latitude, longitude]);
         setFlyTarget([latitude, longitude]);
-        setGpsLocked(true);
         setUsingCurrent(false);
       },
       () => {
@@ -263,7 +368,20 @@ export default function ReportIncident({ className = '' }: { className?: string 
   }, [location]);
 
   useEffect(() => {
+    const forced = forceAnalyzeRef.current;
+    forceAnalyzeRef.current = false;
     if (reportTitle.trim().length < 3 && reportDescription.trim().length < 3) return;
+    const seq = ++analysisSeq.current;
+    const key = `${reportTitle}|${reportDescription}`.toLowerCase().trim();
+    if (!forced) {
+      const cached = analysisCache.current.get(key);
+      if (cached) {
+        setAnalysis(cached);
+        setAnalysisError(null);
+        setAnalyzing(false);
+        return;
+      }
+    }
     const timer = setTimeout(async () => {
       setAnalyzing(true);
       setAnalysisError(null);
@@ -271,20 +389,22 @@ export default function ReportIncident({ className = '' }: { className?: string 
         const res = await classifyIncident({
           title: reportTitle,
           description: reportDescription,
-          categoryHint: category,
           lat: location[0],
           lng: location[1],
         });
+        if (analysisSeq.current !== seq) return;
+        analysisCache.current.set(key, res);
         setAnalysis(res);
       } catch (e) {
+        if (analysisSeq.current !== seq) return;
         setAnalysisError(e instanceof Error ? e.message : 'AI service unavailable.');
         setAnalysis(localFallback(category));
       } finally {
-        setAnalyzing(false);
+        if (analysisSeq.current === seq) setAnalyzing(false);
       }
-    }, 750);
+    }, forced ? 0 : 1500);
     return () => clearTimeout(timer);
-  }, [reportTitle, reportDescription, category, analyzeTick]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [reportTitle, reportDescription, analyzeTick]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const addFiles = (list: FileList | null) => {
     if (!list) return;
@@ -301,6 +421,74 @@ export default function ReportIncident({ className = '' }: { className?: string 
 
   const removeFile = (name: string, size: number) => {
     setEvidenceFiles((files) => files.filter((f) => !(f.name === name && f.size === size)));
+  };
+
+  const handleSaveDraft = () => {
+    const ok = saveDraft({
+      savedAt: new Date().toISOString(),
+      step,
+      category,
+      customCategory,
+      incidentStatus,
+      reportTitle,
+      reportDescription,
+      additionalContext,
+      incidentTime,
+      location: [location[0], location[1]],
+      address,
+      anonymous,
+      confirm1,
+      confirm2,
+      evidenceMeta: evidenceFiles.map((f) => ({ name: f.name, type: f.type, size: f.size })),
+      analysis,
+      manualSave: true,
+    });
+    if (ok) {
+      setDraftSavedAt(Date.now());
+      setNotice('draft-saved');
+    } else {
+      setToast({ type: 'error', message: 'Could not save draft (storage unavailable).' });
+    }
+  };
+
+  const handleResumeDraft = () => {
+    const d = loadDraft();
+    if (!d) {
+      setDraftSavedAt(null);
+      setNotice(null);
+      setToast({ type: 'error', message: 'Draft could not be loaded.' });
+      return;
+    }
+    setStep(d.step >= 1 && d.step <= 3 ? d.step : 1);
+    setCategory(d.category);
+    setCustomCategory(d.customCategory);
+    setIncidentStatus(d.incidentStatus);
+    setReportTitle(d.reportTitle);
+    setReportDescription(d.reportDescription);
+    setAdditionalContext(d.additionalContext ?? '');
+    setIncidentTime(d.incidentTime);
+    setLocation([d.location[0], d.location[1]]);
+    setAddress(d.address);
+    setAnonymous(d.anonymous);
+    setConfirm1(d.confirm1);
+    setConfirm2(d.confirm2);
+    setAnalysis(d.analysis);
+    setEvidenceFiles([]);
+    clearDraft();
+    setDraftSavedAt(null);
+    setNotice(null);
+    if (d.evidenceMeta.length) {
+      setToast({ type: 'success', message: 'Draft restored. Re-attach your evidence files \u2014 they can\u2019t be stored in a draft.' });
+    } else {
+      setToast({ type: 'success', message: 'Draft restored.' });
+    }
+  };
+
+  const handleDiscardDraft = () => {
+    clearDraft();
+    setDraftSavedAt(null);
+    setNotice(null);
+    setToast({ type: 'success', message: 'Draft discarded.' });
   };
 
   const handleSubmit = async () => {
@@ -342,12 +530,15 @@ export default function ReportIncident({ className = '' }: { className?: string 
         lat: location[0],
         lng: location[1],
         address,
+        additional_context: additionalContext.trim() || null,
         ai_actions: ai.actions,
         ai_dispatch: ai.dispatch,
         evidence,
         anonymous,
       });
       setToast({ type: 'success', message: `Report ${result.report_no} submitted successfully.` });
+      clearDraft();
+      setDraftSavedAt(null);
       setTimeout(() => navigate('/user/my-incident-reports'), 1500);
     } catch (e) {
       setToast({ type: 'error', message: e instanceof Error ? e.message : 'Submission failed. Please try again.' });
@@ -356,17 +547,54 @@ export default function ReportIncident({ className = '' }: { className?: string 
     }
   };
 
+  const scrollToField = (el: HTMLElement | null) => {
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  const goToStep = (target: number) => {
+    if (step === 1) {
+      if (category === 'Others' && !customCategory.trim()) {
+        setMissingField('category');
+        scrollToField(customCategoryInputRef.current);
+        return;
+      }
+      if (!reportTitle.trim()) {
+        setMissingField('title');
+        scrollToField(titleInputRef.current);
+        return;
+      }
+    }
+    if (step === 2 && !reportDescription.trim()) {
+      setMissingField('description');
+      scrollToField(descriptionTextareaRef.current);
+      return;
+    }
+    setMissingField(null);
+    setStep(target);
+  };
+
   return (
     <div className={`bg-cc-card w-full h-full ${className} rounded-2xl shadow-cc-card overflow-hidden flex flex-col relative border border-cc-border`}>
       {/* Critical Notice */}
       <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
-        <div className="bg-cc-red/10 border-l-4 border-l-cc-red p-3 flex items-start gap-3 rounded shadow-sm">
-          <span className="material-symbols-outlined text-cc-red mt-1">warning</span>
-          <div>
-            <h3 className="font-label-md text-label-md font-bold text-cc-heading uppercase">Critical Emergency Notice</h3>
-            <p className="font-body-sm text-body-sm text-cc-body mt-1">For immediate life-threatening situations, dial 911 immediately. This tactical reporting system is for non-immediate response dispatch.</p>
-          </div>
+        <div className="flex items-center gap-2 text-caption text-cc-muted">
+          <span className="material-symbols-outlined text-[16px] text-cc-red">warning</span>
+          <p>For immediate life-threatening situations, dial 911 immediately.</p>
         </div>
+        {notice === 'draft-prompt' && (
+          <div className="bg-cc-accent/10 border-l-4 border-l-cc-accent px-3 py-2 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 rounded shadow-sm">
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <span className="material-symbols-outlined text-cc-accent shrink-0">draft</span>
+              <p className="font-body-sm text-body-sm text-cc-body min-w-0 flex-1 sm:truncate">
+                You have a saved draft{draftSavedAt ? ` \u00b7 ${timeAgo(draftSavedAt)}` : ''}.
+              </p>
+            </div>
+            <div className="flex gap-2 shrink-0">
+              <button type="button" onClick={handleResumeDraft} className="px-3 py-1.5 rounded-lg bg-cc-accent text-cc-on-accent font-label-sm text-[12px] font-bold hover:opacity-90 transition-colors">Resume Draft</button>
+              <button type="button" onClick={handleDiscardDraft} className="px-3 py-1.5 rounded-lg border border-cc-border-strong text-cc-body hover:bg-cc-hover font-label-sm text-[12px] font-medium transition-colors">Discard</button>
+            </div>
+          </div>
+        )}
         {/* Stepper */}
         <div className="flex items-center gap-2 font-label-sm text-[12px]">
           <div className={`flex items-center gap-2 ${step === 1 ? 'text-cc-accent font-bold' : 'text-cc-body'}`}>
@@ -395,7 +623,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
                       <button
                         key={opt.label}
                         type="button"
-                        onClick={() => setCategory(opt.label)}
+                        onClick={() => { setCategory(opt.label); setMissingField((m) => (m === 'category' ? null : m)); }}
                         className={`flex flex-col items-center justify-center gap-2 p-5 rounded-xl border transition-all shadow-sm ${category === opt.label ? 'border-cc-accent bg-cc-accent-soft text-cc-accent' : 'border-cc-border bg-cc-hover hover:border-cc-accent text-cc-body'}`}
                       >
                         <span className="material-symbols-outlined text-3xl" style={opt.flip ? { transform: 'scaleX(-1)' } : undefined}>{opt.icon}</span>
@@ -406,8 +634,8 @@ export default function ReportIncident({ className = '' }: { className?: string 
                 </div>
                 {category === 'Others' && (
                   <div>
-                    <label className="block font-label-sm text-label-sm text-cc-body mb-1 uppercase tracking-wider font-bold">Specify Incident Type</label>
-                    <input className="w-full bg-cc-input border border-cc-border-strong rounded-lg py-[10px] px-3 font-label-md text-label-md text-cc-heading focus:outline-none focus:border-cc-accent placeholder:text-cc-muted placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all" type="text" value={customCategory} placeholder="e.g. Flood, Landslide, Electrical outage" onChange={(e) => { setCustomCategory(e.target.value); if (e.target.value.trim()) setAiExpanded(true); }} />
+                    <label className="block font-label-sm text-label-sm text-cc-body mb-1 uppercase tracking-wider font-bold">Specify Incident Type <span className="text-cc-red">*</span></label>
+                    <input ref={customCategoryInputRef} className={`w-full bg-cc-input border rounded-lg py-[10px] px-3 font-label-md text-label-md text-cc-heading focus:outline-none focus:border-cc-accent placeholder:text-xs placeholder:text-cc-muted placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all ${missingField === 'category' ? 'border-cc-red' : 'border-cc-border-strong'}`} type="text" value={customCategory} placeholder="e.g. Flood, Landslide, Electrical outage" onChange={(e) => { setCustomCategory(e.target.value); setMissingField((m) => (m === 'category' ? null : m)); if (e.target.value.trim()) setAiExpanded(true); }} />
                   </div>
                 )}
                 <div>
@@ -427,45 +655,41 @@ export default function ReportIncident({ className = '' }: { className?: string 
                 </div>
                 <div>
                   <label className="block font-label-sm text-label-sm text-cc-body mb-1 uppercase tracking-wider font-bold">Date &amp; Time</label>
-                  <div className="relative">
-                    <input className="w-full bg-cc-input border border-cc-border-strong rounded-lg py-[10px] px-3 font-label-md text-label-md text-cc-heading focus:outline-none focus:border-cc-accent transition-all" type="datetime-local" value={incidentTime} onChange={(e) => setIncidentTime(e.target.value)} />
-                    <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-cc-muted pointer-events-none">calendar_month</span>
-                  </div>
+                  <input className="w-full bg-cc-input border border-cc-border-strong rounded-lg py-[10px] px-3 font-label-md text-label-md text-cc-heading focus:outline-none focus:border-cc-accent transition-all" type="datetime-local" value={incidentTime} onChange={(e) => setIncidentTime(e.target.value)} />
                 </div>
                 <div>
-                  <label className="block font-label-sm text-label-sm text-cc-body mb-1 uppercase tracking-wider font-bold">Report Title</label>
-                  <input className="w-full bg-cc-input border border-cc-border-strong rounded-lg py-[10px] px-3 font-label-md text-label-md text-cc-heading focus:outline-none focus:border-cc-accent placeholder:text-cc-muted placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all" type="text" value={reportTitle} placeholder="e.g. Large plume of smoke near the warehouse" onChange={(e) => { setReportTitle(e.target.value); if (e.target.value.trim()) setAiExpanded(true); }} />
+                  <label className="block font-label-sm text-label-sm text-cc-body mb-1 uppercase tracking-wider font-bold">Report Title <span className="text-cc-red">*</span></label>
+                  <input ref={titleInputRef} className={`w-full bg-cc-input border rounded-lg py-[10px] px-3 font-label-md text-label-md text-cc-heading focus:outline-none focus:border-cc-accent placeholder:text-xs placeholder:text-cc-muted placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all ${missingField === 'title' ? 'border-cc-red' : 'border-cc-border-strong'}`} type="text" value={reportTitle} placeholder="e.g. Sunog sa barangay" onChange={(e) => { setReportTitle(e.target.value); setMissingField((m) => (m === 'title' ? null : m)); if (e.target.value.trim()) setAiExpanded(true); }} />
                 </div>
               </div>
             </div>
 
             {/* ===== REALTIME LOCATION MAP ===== */}
             <div className="flex flex-col rounded-xl border border-cc-border relative shadow-cc-card overflow-hidden">
-              <div className="bg-cc-hover px-4 py-3 border-b border-cc-border flex flex-wrap items-center justify-between gap-2 z-10 relative">
+              <div className="bg-cc-hover px-4 py-3 border-b border-cc-border flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-2 z-10 relative">
                 <h3 className="font-label-sm text-[12px] text-cc-heading flex items-center gap-2 tracking-wide uppercase font-bold">
                   <span className="material-symbols-outlined text-[16px] text-cc-accent">map</span>
                   Realtime Location Map
                 </h3>
-                <div className="flex items-center gap-2">
-                  <span className="hidden sm:inline-flex items-center gap-1.5 text-[10px] font-bold px-2 py-1 rounded-full bg-cc-emerald/15 text-cc-emerald border border-cc-emerald/25 uppercase tracking-wider">
-                    <span className="w-1.5 h-1.5 rounded-full bg-cc-emerald animate-pulse"></span> {gpsLocked ? 'GPS Locked' : 'Pin Selected'}
-                  </span>
-                  <button type="button" onClick={useCurrentLocation} disabled={usingCurrent} className="bg-cc-hover border border-cc-border-strong hover:border-cc-accent rounded px-3 py-1.5 flex items-center gap-1.5 text-[11px] text-cc-heading transition-colors disabled:opacity-60">
-                    <span className="material-symbols-outlined text-[14px] text-cc-accent">{usingCurrent ? 'progress_activity' : 'my_location'}</span>
-                    {usingCurrent ? 'Locating…' : 'Use Current'}
-                  </button>
-                  <button type="button" onClick={() => { setLocation(BARANGAY_HALL_CENTER); setFlyTarget(BARANGAY_HALL_CENTER); }} className="bg-cc-hover border border-cc-border-strong hover:border-cc-accent rounded px-3 py-1.5 flex items-center gap-1.5 text-[11px] text-cc-heading transition-colors">
-                    <span className="material-symbols-outlined text-[14px] text-cc-accent">pin_drop</span>
-                    Barangay Hall
-                  </button>
-                  <button type="button" onClick={() => setTile((t) => (t === 'street' ? 'satellite' : 'street'))} className="bg-cc-hover border border-cc-border-strong hover:border-cc-accent rounded px-3 py-1.5 flex items-center gap-1.5 text-[11px] text-cc-heading transition-colors">
-                    <span className="material-symbols-outlined text-[14px] text-cc-accent">layers</span>
-                    {tile === 'street' ? 'Satellite' : 'Street'}
-                  </button>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div className="grid grid-cols-3 gap-2 w-full sm:flex sm:flex-wrap sm:items-center sm:gap-2 sm:w-auto">
+                    <button type="button" onClick={useCurrentLocation} disabled={usingCurrent} className="bg-cc-hover border border-cc-border-strong hover:border-cc-accent rounded px-2 py-1.5 sm:px-3 flex items-center justify-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] leading-none text-cc-heading transition-colors disabled:opacity-60 sm:justify-start">
+                      <span className="material-symbols-outlined text-[12px] sm:text-[14px] text-cc-accent">{usingCurrent ? 'progress_activity' : 'my_location'}</span>
+                      {usingCurrent ? 'Locating…' : 'Use Current'}
+                    </button>
+                    <button type="button" onClick={() => { setLocation(BARANGAY_HALL_CENTER); setFlyTarget(BARANGAY_HALL_CENTER); }} className="bg-cc-hover border border-cc-border-strong hover:border-cc-accent rounded px-2 py-1.5 sm:px-3 flex items-center justify-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] leading-none text-cc-heading transition-colors sm:justify-start">
+                      <span className="material-symbols-outlined text-[12px] sm:text-[14px] text-cc-accent">pin_drop</span>
+                      Barangay Hall
+                    </button>
+                    <button type="button" onClick={() => setTile((t) => (t === 'street' ? 'satellite' : 'street'))} className="bg-cc-hover border border-cc-border-strong hover:border-cc-accent rounded px-2 py-1.5 sm:px-3 flex items-center justify-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] leading-none text-cc-heading transition-colors sm:justify-start">
+                      <span className="material-symbols-outlined text-[12px] sm:text-[14px] text-cc-accent">layers</span>
+                      {tile === 'street' ? 'Satellite' : 'Street'}
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div className="relative w-full min-h-[460px] bg-cc-map-tile">
-                <MapContainer center={BARANGAY_HALL_CENTER} zoom={15} className="absolute inset-0 z-0" scrollWheelZoom>
+              <div className="relative w-full min-h-[380px] sm:min-h-[460px] bg-cc-map-tile">
+                <MapContainer center={BARANGAY_HALL_CENTER} zoom={15} className="absolute inset-0 z-0" scrollWheelZoom zoomControl={false}>
                   <MapSizeSync />
                   <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -491,7 +715,6 @@ export default function ReportIncident({ className = '' }: { className?: string 
                       },
                     }}
                   />
-                  <ZoomButtons />
                 </MapContainer>
 
                 {/* crosshair reticle */}
@@ -501,14 +724,14 @@ export default function ReportIncident({ className = '' }: { className?: string 
                 </div>
 
                 {/* legend */}
-                <div className="absolute top-4 right-4 z-[600] rounded-lg bg-cc-card/95 border border-cc-border-strong shadow-cc-card px-3 py-2 text-[10px] font-bold text-cc-heading">
+                <div className="absolute left-4 top-[5.5rem] sm:left-auto sm:right-4 sm:top-4 z-[600] rounded-lg bg-cc-card/95 border border-cc-border-strong shadow-cc-card px-3 py-2 text-[10px] font-bold text-cc-heading">
                   <div className="flex items-center gap-2 mb-1.5"><span className="w-2 h-2 rounded-full bg-cc-red"></span> Incident</div>
                   <div className="flex items-center gap-2 mb-1.5"><span className="w-2 h-2 rounded-full bg-cc-accent"></span> Unit</div>
                   <div className="flex items-center gap-2"><span className="w-2.5 h-0.5 border-t-2 border-dashed border-cc-map-label"></span> District</div>
                 </div>
 
                 {/* address + coordinates chip */}
-                <div className="absolute top-4 left-4 z-[600] bg-cc-card/95 border border-cc-border-strong rounded-lg shadow-cc-card px-3 py-2 flex items-center gap-2 max-w-[260px]" title={address}>
+                <div className="absolute top-4 left-4 z-[600] bg-cc-card/95 border border-cc-border-strong rounded-lg shadow-cc-card px-3 py-2 flex items-center gap-2 max-w-[calc(100%-2rem)] sm:max-w-[260px]" title={address}>
                   <span className="material-symbols-outlined text-cc-accent text-[16px] shrink-0">near_me</span>
                   <div className="min-w-0">
                     <p className="text-[11px] text-cc-heading font-semibold truncate">{address}</p>
@@ -548,6 +771,12 @@ export default function ReportIncident({ className = '' }: { className?: string 
                           <p className="text-[10px] text-cc-red font-semibold flex items-start gap-1.5">
                             <span className="material-symbols-outlined text-[13px] mt-[1px]">warning</span>
                             <span>AI offline — showing rule-based fallback. {analysisError}</span>
+                          </p>
+                        )}
+                        {ai.source === 'fallback' && ai.aiError && (
+                          <p className="text-[10px] text-cc-accent font-semibold flex items-start gap-1.5">
+                            <span className="material-symbols-outlined text-[13px] mt-[1px]">info</span>
+                            <span>Rule-based estimate: {ai.aiError}</span>
                           </p>
                         )}
                         {reportTitle.trim() && (
@@ -596,9 +825,9 @@ export default function ReportIncident({ className = '' }: { className?: string 
                         </div>
 
                         <div className="pt-2 border-t border-cc-border-strong">
-                          <p className="font-label-sm text-[11px] text-cc-body mb-1.5">Recommended Actions</p>
+                          <p className="font-label-sm text-[11px] text-cc-body mb-1.5">Recommended Actions for You</p>
                           <ul className="space-y-1.5">
-                            {ai.actions.map((action) => (
+                            {(ai.user_actions?.length ? ai.user_actions : localFallback(ai.category).user_actions).map((action) => (
                               <li key={action} className="flex items-start gap-1.5 text-[11px] text-cc-body leading-tight">
                                 <span className="material-symbols-outlined text-[13px] text-cc-emerald mt-[1px]">check_circle</span>
                                 {action}
@@ -615,7 +844,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <button type="button" onClick={() => setAnalyzeTick((t) => t + 1)} disabled={analyzing} className="flex-1 py-1.5 rounded-lg border border-cc-accent bg-cc-accent/10 text-cc-accent text-[11px] font-bold hover:bg-cc-accent/15 transition-colors flex items-center justify-center gap-1 disabled:opacity-60">
+                          <button type="button" onClick={() => { forceAnalyzeRef.current = true; setAnalyzeTick((t) => t + 1); }} disabled={analyzing} className="flex-1 py-1.5 rounded-lg border border-cc-accent bg-cc-accent/10 text-cc-accent text-[11px] font-bold hover:bg-cc-accent/15 transition-colors flex items-center justify-center gap-1 disabled:opacity-60">
                             <span className="material-symbols-outlined text-[13px]">refresh</span> {analyzing ? 'Analyzing…' : 'Re-analyze'}
                           </button>
                           <span className="text-[9px] text-cc-muted font-bold uppercase tracking-wider">Tactical AI {ai.source === 'gemini' ? 'v5 (Gemini)' : 'v4.2 (Rules)'}</span>
@@ -635,12 +864,12 @@ export default function ReportIncident({ className = '' }: { className?: string 
               <h2 className="font-headline-md text-headline-md text-cc-heading">Step 2: Details &amp; Media</h2>
               <div className="space-y-3">
                 <div>
-                  <label className="block font-label-sm text-label-sm text-cc-body mb-1 font-bold uppercase tracking-wider">Primary Description</label>
-                  <textarea value={reportDescription} onChange={(e) => setReportDescription(e.target.value)} className="w-full min-h-[150px] bg-cc-input border border-cc-border-strong rounded-lg p-3 font-label-md text-label-md text-cc-heading focus:outline-none focus:border-cc-accent resize-none placeholder:text-cc-muted placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all" placeholder="Provide a detailed account of the incident, including specific actions observed, individuals involved, and immediate risks..."></textarea>
+                  <label className="block font-label-sm text-label-sm text-cc-body mb-1 font-bold uppercase tracking-wider">Primary Description <span className="text-cc-red">*</span></label>
+                  <textarea ref={descriptionTextareaRef} value={reportDescription} onChange={(e) => { setReportDescription(e.target.value); setMissingField((m) => (m === 'description' ? null : m)); }} className={`w-full min-h-[150px] bg-cc-input border rounded-lg p-3 font-label-md text-label-md text-cc-heading focus:outline-none focus:border-cc-accent resize-none placeholder:text-xs placeholder:text-cc-muted placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all ${missingField === 'description' ? 'border-cc-red' : 'border-cc-border-strong'}`} placeholder="Provide a detailed account of the incident, including specific actions observed, individuals involved, and immediate risks..."></textarea>
                 </div>
                 <div>
                   <label className="block font-label-sm text-label-sm text-cc-body mb-1 font-bold uppercase tracking-wider">Additional Context (Optional)</label>
-                  <input className="w-full bg-cc-input border border-cc-border-strong rounded-lg py-3 px-3 font-label-md text-label-md text-cc-heading focus:outline-none focus:border-cc-accent placeholder:text-cc-muted placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all" placeholder="e.g. Weather conditions, lighting, or nearby landmarks" type="text" />
+                  <input value={additionalContext} onChange={(e) => setAdditionalContext(e.target.value)} className="w-full bg-cc-input border border-cc-border-strong rounded-lg py-3 px-3 font-label-md text-label-md text-cc-heading focus:outline-none focus:border-cc-accent placeholder:text-xs placeholder:text-cc-muted placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all" placeholder="e.g. Weather conditions, lighting, or nearby landmarks" type="text" />
                 </div>
               </div>
             </div>
@@ -715,19 +944,62 @@ export default function ReportIncident({ className = '' }: { className?: string 
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-cc-card border border-cc-border rounded-lg p-6 shadow-cc-card relative overflow-hidden">
                 <div className={`absolute top-0 left-0 w-1 h-full ${ai.priority === 'CRITICAL' ? 'bg-cc-red' : 'bg-cc-accent'}`}></div>
-                <div className="flex items-start gap-6">
+                <div className="flex items-start gap-6 flex-wrap">
                   <div className="w-10 h-10 rounded-full bg-cc-red/15 flex items-center justify-center shrink-0">
                     <span className="material-symbols-outlined text-cc-red">smart_toy</span>
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <div className="font-caps-xs text-caps-xs text-cc-body mb-1">AI Tactical Analysis Complete</div>
-                    <h3 className="font-headline-md text-headline-md text-cc-heading mb-2">{ai.priority} {ai.category} Detected</h3>
-                    <div className="flex gap-3">
+                    <h3 className="font-headline-md text-headline-md text-cc-heading mb-3">{ai.priority} {ai.category} Detected</h3>
+                    <div className="flex flex-wrap gap-3">
                       <span className={`px-2 py-1 rounded font-caps-xs text-caps-xs uppercase border ${priorityTone}`}>Priority: {ai.priority}</span>
                       <span className="bg-cc-hover text-cc-body px-2 py-1 rounded font-caps-xs text-caps-xs uppercase border border-cc-border-strong">Confidence: {ai.confidence}%</span>
                       <span className="bg-cc-hover text-cc-body px-2 py-1 rounded font-caps-xs text-caps-xs uppercase border border-cc-border-strong">Threat: {ai.threat}%</span>
                     </div>
                   </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5 pt-5 border-t border-cc-border-strong">
+                  <div>
+                    <p className="font-label-sm text-[11px] text-cc-body mb-1.5">Auto-detected Category</p>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="flex items-center gap-1.5 font-label-md text-[14px] text-cc-heading font-bold">
+                        <span className="material-symbols-outlined text-[15px] text-cc-accent">{CATEGORY_ICONS[ai.category] ?? 'more_horiz'}</span>
+                        {ai.category}
+                      </span>
+                      <span className="text-[11px] font-bold text-cc-accent">{ai.confidence}%</span>
+                    </div>
+                    <div className="mt-2 h-1.5 bg-cc-track rounded-full overflow-hidden">
+                      <div className="h-full bg-cc-accent rounded-full" style={{ width: `${ai.confidence}%` }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="font-label-sm text-[11px] text-cc-body mb-1.5">Threat Level</p>
+                    <div className="grid grid-cols-4 gap-1">
+                      {THREAT_SEGMENTS.map((seg, i) => (
+                        <div key={seg.label} className={`h-1.5 rounded-full ${i < threatActive ? seg.color : 'bg-cc-track'}`}></div>
+                      ))}
+                    </div>
+                    <div className="flex justify-between mt-1">
+                      {THREAT_SEGMENTS.map((seg) => (
+                        <span key={seg.label} className="text-[9px] font-bold text-cc-body uppercase">{seg.label}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-5 pt-4 border-t border-cc-border-strong">
+                  <p className="font-label-sm text-[11px] text-cc-body mb-1.5">Recommended Actions for You</p>
+                  <ul className="space-y-1.5">
+                    {(ai.user_actions?.length ? ai.user_actions : localFallback(ai.category).user_actions).map((action) => (
+                      <li key={action} className="flex items-start gap-1.5 text-[11px] text-cc-body leading-tight">
+                        <span className="material-symbols-outlined text-[13px] text-cc-emerald mt-[1px]">check_circle</span>
+                        {action}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mt-4 flex items-center gap-2 px-2 py-1.5 rounded-lg bg-cc-accent/10 border border-cc-accent/20">
+                  <span className="material-symbols-outlined text-[14px] text-cc-accent">route</span>
+                  <span className="text-[10px] font-bold text-cc-heading leading-tight">{ai.dispatch}</span>
                 </div>
               </div>
               <div className="bg-cc-card border border-cc-border rounded-lg p-6 shadow-cc-card">
@@ -774,6 +1046,14 @@ export default function ReportIncident({ className = '' }: { className?: string 
                     {reportDescription.trim() || reportTitle.trim() || 'No detailed description provided.'}
                   </p>
                 </div>
+                {additionalContext.trim() && (
+                  <>
+                    <div className="font-caps-xs text-caps-xs text-cc-body mb-3 pb-1 border-b border-cc-border-strong">Additional Context</div>
+                    <div className="mb-6">
+                      <p className="font-body-md text-cc-body bg-cc-hover p-3 rounded border border-cc-border">{additionalContext}</p>
+                    </div>
+                  </>
+                )}
                 <div className="font-caps-xs text-caps-xs text-cc-body mb-3 pb-1 border-b border-cc-border-strong">Attached Evidence</div>
                 {evidenceFiles.length === 0 ? (
                   <p className="font-body-sm text-cc-body bg-cc-hover p-3 rounded border border-cc-border">No evidence attached.</p>
@@ -801,7 +1081,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
               </div>
             </div>
             <div className="space-y-6">
-              <div className="bg-cc-card border border-cc-border rounded-lg p-6 shadow-cc-card sticky top-24">
+              <div className="bg-cc-card border border-cc-border rounded-lg p-6 shadow-cc-card lg:sticky lg:top-24">
                 <h4 className="font-headline-md text-headline-md text-cc-heading mb-1">Final Validation</h4>
                 <p className="font-body-sm text-body-sm text-cc-body mb-6">Please review all tactical details carefully before initiating dispatch protocol.</p>
                 <div className="space-y-3 mb-6">
@@ -836,32 +1116,46 @@ export default function ReportIncident({ className = '' }: { className?: string 
           </div>
         )}
       </div>
+      {/* Overlay Success Notification */}
+      {notice === 'draft-saved' && (
+        <div className="fixed top-5 right-5 z-[150] w-[min(280px,calc(100vw-2rem))] sm:w-[min(360px,calc(100vw-2rem))] bg-secondary text-white rounded-lg shadow-2xl p-4 animate-toast-in">
+          <div className="flex items-start gap-3">
+            <span className="material-symbols-outlined text-xl shrink-0">check_circle</span>
+            <div className="min-w-0 flex-1">
+              <p className="font-label-md text-label-md font-bold mb-0.5">Success</p>
+              <p className="text-caption text-white/90 break-words">Draft saved on this device.</p>
+            </div>
+            <button type="button" onClick={() => setNotice(null)} className="ml-auto shrink-0 text-white/70 hover:text-white transition-colors" aria-label="Close notification">
+              <span className="material-symbols-outlined text-lg">close</span>
+            </button>
+          </div>
+        </div>
+      )}
       {/* Footer Actions */}
-      <div className="bg-cc-header border-t border-cc-border px-6 py-4 flex justify-end gap-3 shrink-0">
+      <div className="bg-cc-header border-t border-cc-border px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-3 shrink-0">
         {step === 1 && (
           <>
-            <button type="button" onClick={() => setToast({ type: 'success', message: 'Draft saved locally (demo).' })} className="px-5 py-2.5 rounded-lg border border-cc-border-strong text-cc-heading hover:bg-cc-hover transition-colors bg-cc-hover font-label-md text-[13px] font-medium">Save Draft</button>
-            <button type="button" onClick={() => setStep(2)} className="px-5 py-2.5 rounded-lg bg-cc-accent text-cc-on-accent font-label-md text-[13px] hover:opacity-90 transition-all shadow-sm flex items-center gap-1.5 font-medium">Next Step <span className="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+            <button type="button" onClick={handleSaveDraft} className="px-5 py-2.5 rounded-lg border border-cc-border-strong text-cc-heading hover:bg-cc-hover transition-colors bg-cc-hover font-label-md text-[13px] font-medium w-full sm:w-auto">Save Draft</button>
+            <button type="button" onClick={() => goToStep(2)} className="px-5 py-2.5 rounded-lg bg-cc-accent text-cc-on-accent font-label-md text-[13px] hover:opacity-90 transition-all shadow-sm flex items-center justify-center gap-1.5 font-medium w-full sm:w-auto">Next Step <span className="material-symbols-outlined text-[16px]">arrow_forward</span></button>
           </>
         )}
         {step === 2 && (
           <>
-            <button type="button" onClick={() => setStep(1)} className="px-6 py-3 rounded-lg border border-cc-border-strong text-cc-heading hover:bg-cc-hover transition-colors bg-cc-hover font-label-md text-label-md flex items-center gap-1">
+            <button type="button" onClick={() => setStep(1)} className="px-6 py-3 rounded-lg border border-cc-border-strong text-cc-heading hover:bg-cc-hover transition-colors bg-cc-hover font-label-md text-label-md flex items-center justify-center gap-1 w-full sm:w-auto">
               <span className="material-symbols-outlined text-sm">arrow_back</span> Back
             </button>
-            <button type="button" onClick={() => setStep(3)} className="px-6 py-3 rounded-lg bg-cc-accent text-cc-on-accent font-label-md text-label-md hover:opacity-90 transition-all shadow-sm flex items-center gap-1">Next: Final Review <span className="material-symbols-outlined text-sm">arrow_forward</span></button>
+            <button type="button" onClick={handleSaveDraft} className="px-5 py-2.5 rounded-lg border border-cc-border-strong text-cc-heading hover:bg-cc-hover transition-colors bg-cc-hover font-label-md text-[13px] font-medium w-full sm:w-auto">Save Draft</button>
+            <button type="button" onClick={() => goToStep(3)} className="px-6 py-3 rounded-lg bg-cc-accent text-cc-on-accent font-label-md text-label-md hover:opacity-90 transition-all shadow-sm flex items-center justify-center gap-1 w-full sm:w-auto">Next: Final Review <span className="material-symbols-outlined text-sm">arrow_forward</span></button>
           </>
         )}
         {step === 3 && (
           <>
-            <button type="button" onClick={() => setStep(2)} className="px-6 py-3 rounded-lg border border-cc-border-strong text-cc-heading hover:bg-cc-hover transition-colors bg-cc-hover font-label-md text-label-md flex items-center gap-1">
+            <button type="button" onClick={() => setStep(2)} className="px-6 py-3 rounded-lg border border-cc-border-strong text-cc-heading hover:bg-cc-hover transition-colors bg-cc-hover font-label-md text-label-md flex items-center justify-center gap-1 w-full sm:w-auto">
               <span className="material-symbols-outlined text-sm">arrow_back</span> Back
             </button>
-            <div className="flex items-center gap-3">
-              {(!confirm1 || !confirm2) && (
-                <span className="text-[11px] text-cc-muted">Check both required boxes to submit.</span>
-              )}
-              <button type="button" onClick={handleSubmit} disabled={submitting || !confirm1 || !confirm2} className="px-6 py-3 rounded-lg bg-cc-accent text-cc-on-accent font-label-md text-label-md hover:opacity-90 transition-all shadow-sm flex items-center gap-1 disabled:opacity-60 disabled:cursor-not-allowed">
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <button type="button" onClick={handleSaveDraft} className="px-5 py-2.5 rounded-lg border border-cc-border-strong text-cc-heading hover:bg-cc-hover transition-colors bg-cc-hover font-label-md text-[13px] font-medium">Save Draft</button>
+              <button type="button" onClick={handleSubmit} disabled={submitting || !confirm1 || !confirm2} className="px-6 py-3 rounded-lg bg-cc-accent text-cc-on-accent font-label-md text-label-md hover:opacity-90 transition-all shadow-sm flex items-center justify-center gap-1 flex-1 sm:flex-initial disabled:opacity-60 disabled:cursor-not-allowed">
                 {submitting ? 'Submitting…' : 'Submit Tactical Report'} <span className="material-symbols-outlined text-sm">send</span>
               </button>
             </div>

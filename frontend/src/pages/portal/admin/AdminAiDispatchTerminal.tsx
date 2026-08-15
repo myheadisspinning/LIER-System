@@ -13,11 +13,13 @@ type ReportRow = {
   report_no: string | null;
   title: string;
   description: string | null;
+  additional_context: string | null;
   category: string;
   priority: string;
   threat: number;
   confidence: number;
   status: string;
+  incident_status: string;
   address: string | null;
   ai_dispatch: string | null;
   ai_actions: string[] | null;
@@ -58,6 +60,12 @@ const PRIORITY_LABEL: Record<string, string> = {
   LOW: 'PRIORITY 3: LOW',
 };
 
+const INCIDENT_STATUS_BADGE: Record<string, string> = {
+  Ongoing: 'bg-error-red/10 text-error-red border border-error-red/20',
+  Happened: 'bg-warning-amber/10 text-warning-amber border border-warning-amber/20',
+  Unconfirmed: 'bg-slate-100 text-slate-600 border border-slate-200',
+};
+
 const formatElapsed = (from: string, now: number) => {
   const mins = Math.max(0, Math.floor((now - new Date(from).getTime()) / 60000));
   if (mins < 1) return 'just now';
@@ -82,7 +90,7 @@ export default function AdminAiDispatchTerminal() {
     const [repRes, unitRes, openMap] = await Promise.all([
       supabase
         .from('incident_reports')
-        .select('id, report_no, title, description, category, priority, threat, confidence, status, address, ai_dispatch, ai_actions, incident_time, evidence, dispatch_unit:dispatch_unit_id(name), created_at')
+        .select('id, report_no, title, description, additional_context, category, priority, threat, confidence, status, incident_status, address, ai_dispatch, ai_actions, incident_time, evidence, dispatch_unit:dispatch_unit_id(name), created_at')
         .in('status', ['Pending', 'Verifying', 'Assigned'])
         .order('created_at', { ascending: false })
         .limit(30),
@@ -209,9 +217,12 @@ export default function AdminAiDispatchTerminal() {
               </p>
               <div className="flex justify-between items-center pl-2 pt-2 border-t border-slate-50">
                 <span className="text-xs text-slate-500">AI Score: <span className="text-secondary font-bold">{r.confidence}/100</span></span>
-                <span className="text-xs font-medium text-secondary flex items-center">
-                  <span className="material-symbols-outlined text-[14px] mr-1">smart_toy</span>{r.status}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${INCIDENT_STATUS_BADGE[r.incident_status] ?? INCIDENT_STATUS_BADGE['Unconfirmed']}`}>{r.incident_status}</span>
+                  <span className="text-xs font-medium text-secondary flex items-center">
+                    <span className="material-symbols-outlined text-[14px] mr-1">smart_toy</span>{r.status}
+                  </span>
+                </div>
               </div>
             </div>
           ))}
@@ -252,11 +263,18 @@ export default function AdminAiDispatchTerminal() {
                     <div><span className="text-slate-500 block text-xs uppercase">Category</span><span className="font-medium">{selected.category}</span></div>
                     <div><span className="text-slate-500 block text-xs uppercase">Reported Time</span><span className="font-medium">{new Date(selected.incident_time ?? selected.created_at).toLocaleString('en-PH', { dateStyle: 'short', timeStyle: 'short' })}</span></div>
                     <div><span className="text-slate-500 block text-xs uppercase">AI Confidence</span><span className="font-medium text-warning-amber">{selected.confidence}%</span></div>
+                    <div><span className="text-slate-500 block text-xs uppercase">Incident Status</span><span className="font-medium"><span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${INCIDENT_STATUS_BADGE[selected.incident_status] ?? INCIDENT_STATUS_BADGE['Unconfirmed']}`}>{selected.incident_status}</span></span></div>
                   </div>
                   {selected.description && (
                     <div className="mt-3 pt-3 border-t border-border-subtle">
                       <span className="text-slate-500 block text-xs uppercase mb-1">Description</span>
                       <p className="text-sm text-slate-700 leading-relaxed">{selected.description}</p>
+                    </div>
+                  )}
+                  {selected.additional_context && (
+                    <div className="mt-3 pt-3 border-t border-border-subtle">
+                      <span className="text-slate-500 block text-xs uppercase mb-1">Additional Context</span>
+                      <p className="text-sm text-slate-700 leading-relaxed">{selected.additional_context}</p>
                     </div>
                   )}
                   {(selected.evidence ?? []).length > 0 && (
@@ -325,7 +343,7 @@ export default function AdminAiDispatchTerminal() {
         <div className="p-4 border-b border-border-subtle bg-surface-bg flex justify-between items-center shrink-0">
           <h3 className="font-label-md text-label-md font-bold text-on-surface uppercase tracking-wider">Live Unit Radar</h3>
         </div>
-        <div className="h-48 bg-slate-200 border-b border-border-subtle relative overflow-hidden">
+        <div className="h-48 bg-slate-200 border-b border-border-subtle relative overflow-hidden isolate">
           <MapContainer center={BARANGAY_HALL_CENTER} zoom={14} className="w-full h-full" zoomControl={false} attributionControl={false} scrollWheelZoom={false} dragging={false}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {units.map((u) => u.lat != null && u.lng != null && <Marker key={u.id} position={[u.lat, u.lng]} icon={unitPin} />)}

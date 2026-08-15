@@ -15,6 +15,7 @@ export interface AiAnalysis {
   priority: Priority;
   threat: number;
   actions: string[];
+  user_actions: string[];
   dispatch: string;
   unit: string | null;
   eta: string | null;
@@ -69,6 +70,7 @@ export interface IncidentReportRow {
   lat?: number | null;
   lng?: number | null;
   address?: string | null;
+  additional_context?: string | null;
   ai_actions: string[];
   ai_dispatch?: string | null;
   evidence?: EvidenceFile[] | null;

@@ -236,9 +236,9 @@ export default function AdminDashboard() {
                   </button>
                 </div>
               </div>
-              <div className="relative h-[320px] bg-slate-100">
+              <div className="relative h-[320px] bg-slate-100 overflow-hidden isolate">
                 {mapPins.length > 0 ? (
-                  <MapContainer center={BARANGAY_HALL_CENTER} zoom={14} className="w-full h-full" scrollWheelZoom>
+                  <MapContainer center={BARANGAY_HALL_CENTER} zoom={13} className="w-full h-full" scrollWheelZoom>
                     <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     {tile === 'satellite' && (
                       <TileLayer attribution="Tiles &copy; Esri" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" opacity={0.9} />

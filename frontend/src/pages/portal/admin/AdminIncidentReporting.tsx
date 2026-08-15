@@ -13,9 +13,11 @@ type ReportRow = {
   report_no: string | null;
   title: string;
   description: string | null;
+  additional_context: string | null;
   category: string;
   priority: string;
   status: string;
+  incident_status: string;
   address: string | null;
   lat: number | null;
   lng: number | null;
@@ -51,6 +53,12 @@ const STATUS_STYLES: Record<string, string> = {
   Progress: 'bg-warning-amber/10 text-warning-amber',
   Resolved: 'bg-success-green/10 text-success-green',
   Rejected: 'bg-error-red/10 text-error-red',
+};
+
+const INCIDENT_STATUS_STYLES: Record<string, string> = {
+  Ongoing: 'bg-error-red/10 text-error-red',
+  Happened: 'bg-warning-amber/10 text-warning-amber',
+  Unconfirmed: 'bg-slate-100 text-slate-600',
 };
 
 const pinIconFor = (priority: string) => {
@@ -150,7 +158,7 @@ export default function AdminIncidentReporting() {
   const fetchAll = async () => {
     const res = await supabase
       .from('incident_reports')
-      .select('id, report_no, title, description, category, priority, status, address, lat, lng, incident_time, created_at, ai_dispatch, ai_actions, confidence, evidence, dispatch_unit:dispatch_unit_id(name)')
+      .select('id, report_no, title, description, additional_context, category, priority, status, incident_status, address, lat, lng, incident_time, created_at, ai_dispatch, ai_actions, confidence, evidence, dispatch_unit:dispatch_unit_id(name)')
       .order('created_at', { ascending: false })
       .limit(200);
     const mapped = (res.data ?? []).map((r) => ({
@@ -184,7 +192,7 @@ export default function AdminIncidentReporting() {
     });
   }, [reports, search, statusFilter]);
 
-  const mapPins = useMemo(() => filtered.filter((r) => r.lat != null && r.lng != null && r.status !== 'Rejected'), [filtered]);
+  const mapPins = useMemo(() => filtered.filter((r) => r.lat != null && r.lng != null && r.status !== 'Rejected' && r.status !== 'Resolved'), [filtered]);
 
   const selected = useMemo(
     () => filtered.find((r) => r.id === selectedId) ?? filtered[0] ?? null,
@@ -247,8 +255,8 @@ export default function AdminIncidentReporting() {
             </button>
           </div>
         </div>
-        <div className="relative h-[420px] bg-slate-100">
-          <MapContainer center={BARANGAY_HALL_CENTER} zoom={14} className="w-full h-full" scrollWheelZoom>
+        <div className="relative h-[420px] bg-slate-100 overflow-hidden isolate">
+          <MapContainer center={BARANGAY_HALL_CENTER} zoom={13} className="w-full h-full" scrollWheelZoom>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -319,6 +327,7 @@ export default function AdminIncidentReporting() {
                     <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Location</th>
                     <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Severity</th>
                     <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Responder</th>
+                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Incident</th>
                     <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Status</th>
                     <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
                   </tr>
@@ -337,6 +346,7 @@ export default function AdminIncidentReporting() {
                       <td className="py-3 px-4 text-on-surface-variant max-w-[200px] truncate">{r.address ?? 'No address'}</td>
                       <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${PRIORITY_STYLES[r.priority] ?? 'bg-slate-100 text-slate-600'}`}>{r.priority}</span></td>
                       <td className="py-3 px-4 text-on-surface">{r.dispatch_unit_name ?? '—'}</td>
+                      <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${INCIDENT_STATUS_STYLES[r.incident_status] ?? 'bg-slate-100 text-slate-600'}`}>{r.incident_status}</span></td>
                       <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${STATUS_STYLES[r.status] ?? 'bg-slate-100 text-slate-600'}`}>{r.status}</span></td>
                       <td className="py-3 px-4 text-right whitespace-nowrap">
                         <button type="button" className="text-on-surface-variant hover:text-secondary mr-2" onClick={() => selectReport(r.id)} aria-label="View incident"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
@@ -393,6 +403,10 @@ export default function AdminIncidentReporting() {
                         <p className="text-xs text-on-surface-variant">Time Reported</p>
                         <p className="text-sm text-on-surface">{new Date(selected.incident_time ?? selected.created_at).toLocaleString('en-PH', { dateStyle: 'medium', timeStyle: 'short' })}</p>
                       </div>
+                      <div>
+                        <p className="text-xs text-on-surface-variant">Incident Status</p>
+                        <p className="text-sm font-semibold"><span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${INCIDENT_STATUS_STYLES[selected.incident_status] ?? 'bg-slate-100 text-slate-600'}`}>{selected.incident_status}</span></p>
+                      </div>
                     </div>
                     {selected.description && (
                       <div className="pt-2">
@@ -400,9 +414,15 @@ export default function AdminIncidentReporting() {
                         <p className="text-sm text-on-surface leading-relaxed">{selected.description}</p>
                       </div>
                     )}
+                    {selected.additional_context && (
+                      <div className="pt-2">
+                        <p className="text-xs text-on-surface-variant mb-1">Additional Context</p>
+                        <p className="text-sm text-on-surface leading-relaxed">{selected.additional_context}</p>
+                      </div>
+                    )}
                     {(selected.ai_actions ?? []).length > 0 && (
                       <div className="pt-2">
-                        <p className="text-xs text-on-surface-variant mb-1">AI Recommended Actions</p>
+                        <p className="text-xs text-on-surface-variant mb-1">Recommended Dispatch Actions</p>
                         <ul className="space-y-1">
                           {selected.ai_actions.map((a) => (
                             <li key={a} className="flex items-start gap-1.5 text-sm text-on-surface">

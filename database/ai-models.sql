@@ -98,6 +98,7 @@ create policy "staff update reports" on public.incident_reports
 -- incident_time + evidence (real submitted time / uploaded files metadata)
 alter table public.incident_reports add column if not exists incident_time timestamptz;
 alter table public.incident_reports add column if not exists evidence jsonb default '[]'::jsonb;
+alter table public.incident_reports add column if not exists additional_context text;
 
 -- ------------------------------------------------------------------
 -- 2b) evidence storage bucket (public; images/video/audio up to 50MB)
@@ -246,7 +247,7 @@ delete from public.fallback_rules a
 using public.fallback_rules b
 where a.keywords = b.keywords and a.id <> b.id and a.created_at > b.created_at;
 
--- remove previous seed rows (English-mixed + Tagalog-only), then reseed with blended Filipino/English keywords
+-- remove previous seed rows (blended Filipino/English), then reseed with expanded 16-rule set
 delete from public.fallback_rules
 where keywords in (
   array['stolen', 'missing', 'theft', 'robbery', 'nakaw'],
@@ -260,18 +261,41 @@ where keywords in (
   array['kutsilyo', 'patalim', 'baril', 'armas', 'pananakot', 'nananakot', 'tinatakot'],
   array['sugatan', 'nasugatan', 'dugo', 'dumudugo', 'walang malay', 'himatay', 'nasaktan', 'atake'],
   array['ingay', 'maingay', 'away', 'gulo', 'sigawan', 'sumisigaw'],
-  array['baha', 'bumaha', 'pagbaha', 'pagguho', 'gumuho', 'natabunan']
+  array['baha', 'bumaha', 'pagbaha', 'pagguho', 'gumuho', 'natabunan'],
+  array['saksak', 'saksakin', 'saksakan', 'sinaksak', 'nasaksak', 'pananaksak', 'pamamaril', 'namaril', 'barilin', 'binaril', 'stab', 'stabbing', 'stabbed', 'shoot', 'shooting', 'shot', 'gunshot'],
+  array['gulpi', 'ginulpi', 'binugbog', 'bugbog', 'bugbugan', 'suntukan', 'suntok', 'sinalakay', 'maul', 'mauling', 'assault', 'attacked'],
+  array['patay', 'pinatay', 'patayan', 'pumatay', 'nasawi', 'natagpuang patay', 'kill', 'killed', 'murder', 'homicide', 'dead body', 'namatay'],
+  array['bangkay', 'natagpuang bangkay', 'cadaver', 'deceased', 'patay na tao', 'walang buhay'],
+  array['dinukot', 'nangikidnap', 'kinarnap', 'kidnap', 'kidnapping', 'abducted', 'carnap', 'carnapping', 'hijack'],
+  array['droga', 'ipinagbabawal na gamot', 'drugs', 'drug', 'shabu', 'pusher'],
+  array['basag', 'sinira', 'vandalism', 'vandal', 'riot', 'kaguluhan', 'nagkagulo'],
+  array['sinunog', 'sinusunog', 'panununog', 'arson'],
+  array['pagsabog', 'sumabog', 'bomba', 'tagas ng gas', 'gasolina', 'nakuryente', 'kuryente', 'explosion', 'exploded', 'bomb', 'blast', 'gas leak', 'gas', 'fuel', 'gasoline', 'short circuit', 'electrical fire'],
+  array['aksidente', 'naaksidente', 'nabangga', 'nasagasaan', 'nakabangga', 'nahulog', 'nahulugan', 'nalunod', 'nalulunod', 'nalason', 'pagkalason', 'lason', 'accident', 'vehicular accident', 'hit and run', 'fell', 'fell down', 'drown', 'drowning', 'drowned', 'poison', 'poisoning', 'overdose'],
+  array['kagat', 'nakagat', 'kagat ng aso', 'kagat ng ahas', 'tinuka', 'dog bite', 'snake bite', 'bite', 'buntis', 'manganganak', 'nanganganak', 'nanganak', 'pregnant', 'labor', 'giving birth', 'hika', 'atake ng hika', 'asthma'],
+  array['lindol', 'earthquake', 'bagyo', 'storm', 'brownout', 'power outage', 'no electricity', 'walang kuryente', 'traffic', 'traffic jam', 'fallen tree', 'natumba na puno', 'bumagsak na puno']
 );
 
 insert into public.fallback_rules (keywords, category, action, priority)
 select v.keywords, v.category, v.action, v.priority
 from (values
-  (array['nakaw', 'ninakaw', 'ninanakaw', 'magnanakaw', 'pagnanakaw', 'holdap', 'snatcher', 'mandurukot', 'stolen', 'theft', 'robbery', 'missing', 'stole'], 'Crime', 'Dispatch', 'HIGH'),
-  (array['sunog', 'apoy', 'nasusunog', 'nagliliyab', 'usok', 'nagniningas', 'fire', 'smoke', 'burning', 'flames', 'blaze'], 'Fire Hazard', 'Emergency', 'CRITICAL'),
-  (array['kutsilyo', 'patalim', 'baril', 'armas', 'pananakot', 'nananakot', 'tinatakot', 'knife', 'weapon', 'armed', 'gun', 'threat', 'threatens', 'holdup'], 'Crime', 'Emergency', 'CRITICAL'),
-  (array['sugatan', 'nasugatan', 'dugo', 'dumudugo', 'walang malay', 'himatay', 'nasaktan', 'atake', 'injured', 'wound', 'bleeding', 'unconscious', 'hurt', 'emergency', 'heart attack'], 'Medical', 'Emergency', 'CRITICAL'),
-  (array['ingay', 'maingay', 'away', 'gulo', 'sigawan', 'sumisigaw', 'loud', 'noise', 'disturbance', 'brawl', 'quarrel', 'fight'], 'Others', 'Investigate', 'LOW'),
-  (array['baha', 'bumaha', 'pagbaha', 'pagguho', 'gumuho', 'natabunan', 'flood', 'landslide', 'collapsed', 'buried', 'heavy rain'], 'Others', 'Dispatch', 'HIGH')
+  (array['nakaw', 'ninakaw', 'ninanakaw', 'magnanakaw', 'pagnanakaw', 'holdap', 'snatcher', 'mandurukot', 'stolen', 'theft', 'robbery', 'missing', 'stole', 'shoplifting', 'burglary'], 'Crime', 'Dispatch', 'HIGH'),
+  (array['saksak', 'saksakin', 'saksakan', 'sinaksak', 'nasaksak', 'pananaksak', 'pamamaril', 'namaril', 'barilin', 'binaril', 'stab', 'stabbing', 'stabbed', 'shoot', 'shooting', 'shot', 'gunshot', 'knife', 'weapon', 'armed', 'gun', 'baril', 'patalim', 'kutsilyo', 'armas'], 'Crime', 'Emergency', 'CRITICAL'),
+  (array['gulpi', 'ginulpi', 'binugbog', 'bugbog', 'bugbugan', 'suntukan', 'suntok', 'sinalakay', 'maul', 'mauling', 'assault', 'attacked', 'brawl', 'away', 'gulo'], 'Crime', 'Dispatch', 'HIGH'),
+  (array['patay', 'pinatay', 'patayan', 'pumatay', 'nasawi', 'natagpuang patay', 'kill', 'killed', 'murder', 'homicide', 'dead body', 'namatay'], 'Crime', 'Emergency', 'CRITICAL'),
+  (array['bangkay', 'natagpuang bangkay', 'cadaver', 'deceased', 'patay na tao', 'walang buhay'], 'Crime', 'Emergency', 'CRITICAL'),
+  (array['dinukot', 'nangikidnap', 'kinarnap', 'kidnap', 'kidnapping', 'abducted', 'carnap', 'carnapping', 'hijack'], 'Crime', 'Emergency', 'CRITICAL'),
+  (array['droga', 'ipinagbabawal na gamot', 'drugs', 'drug', 'shabu', 'pusher'], 'Crime', 'Dispatch', 'HIGH'),
+  (array['basag', 'sinira', 'vandalism', 'vandal', 'riot', 'kaguluhan', 'nagkagulo'], 'Crime', 'Investigate', 'MEDIUM'),
+  (array['sunog', 'apoy', 'nasusunog', 'nagliliyab', 'usok', 'nagniningas', 'nagsusunog', 'fire', 'smoke', 'burning', 'flames', 'blaze'], 'Fire Hazard', 'Emergency', 'CRITICAL'),
+  (array['sinunog', 'sinusunog', 'panununog', 'arson'], 'Fire Hazard', 'Emergency', 'CRITICAL'),
+  (array['pagsabog', 'sumabog', 'bomba', 'tagas ng gas', 'gasolina', 'nakuryente', 'kuryente', 'explosion', 'exploded', 'bomb', 'blast', 'gas leak', 'gas', 'fuel', 'gasoline', 'short circuit', 'electrical fire'], 'Fire Hazard', 'Emergency', 'CRITICAL'),
+  (array['sugatan', 'nasugatan', 'dugo', 'dumudugo', 'walang malay', 'himatay', 'nasaktan', 'atake', 'malubhang sugat', 'atake sa puso', 'high blood', 'kombulsyon', 'injured', 'wound', 'bleeding', 'unconscious', 'hurt', 'emergency', 'heart attack', 'stroke', 'seizure', 'convulsion'], 'Medical', 'Emergency', 'CRITICAL'),
+  (array['aksidente', 'naaksidente', 'nabangga', 'nasagasaan', 'nakabangga', 'nahulog', 'nahulugan', 'nalunod', 'nalulunod', 'nalason', 'pagkalason', 'lason', 'accident', 'vehicular accident', 'hit and run', 'fell', 'fell down', 'drown', 'drowning', 'drowned', 'poison', 'poisoning', 'overdose'], 'Medical', 'Emergency', 'CRITICAL'),
+  (array['kagat', 'nakagat', 'kagat ng aso', 'kagat ng ahas', 'tinuka', 'dog bite', 'snake bite', 'bite', 'buntis', 'manganganak', 'nanganganak', 'nanganak', 'pregnant', 'labor', 'giving birth', 'hika', 'atake ng hika', 'asthma'], 'Medical', 'Dispatch', 'HIGH'),
+  (array['baha', 'bumaha', 'pagbaha', 'pagguho', 'gumuho', 'natabunan', 'lindol', 'bagyo', 'flood', 'landslide', 'earthquake', 'storm', 'collapsed', 'buried', 'heavy rain'], 'Others', 'Dispatch', 'HIGH'),
+  (array['brownout', 'power outage', 'no electricity', 'walang kuryente', 'traffic', 'traffic jam', 'fallen tree', 'natumba na puno', 'bumagsak na puno'], 'Others', 'Dispatch', 'MEDIUM'),
+  (array['ingay', 'maingay', 'away', 'gulo', 'sigawan', 'sumisigaw', 'loud', 'noise', 'disturbance', 'quarrel'], 'Others', 'Investigate', 'LOW')
 ) as v(keywords, category, action, priority)
 where not exists (select 1 from public.fallback_rules f where f.keywords = v.keywords);
 

@@ -19,6 +19,7 @@ export default function UserLayout() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const active = useActiveItem(pathname);
+  const isReportIncident = pathname === '/user/report-incident';
   const pageTitle = active?.label ?? userNav.fallbackTitle;
   const [theme, toggleTheme] = useTheme();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -257,9 +258,15 @@ export default function UserLayout() {
               )}
             </div>
 
-            <div className="mt-6 bg-surface-container-lowest/80 backdrop-blur border border-border-subtle rounded-2xl shadow-[0_1px_2px_rgba(2,6,23,0.05),0_12px_32px_-16px_rgba(2,6,23,0.18)] p-5 lg:p-8">
-              <Outlet />
-            </div>
+            {isReportIncident ? (
+              <div className="mt-6">
+                <Outlet />
+              </div>
+            ) : (
+              <div className="mt-6 bg-surface-container-lowest/80 backdrop-blur border border-border-subtle rounded-2xl shadow-[0_1px_2px_rgba(2,6,23,0.05),0_12px_32px_-16px_rgba(2,6,23,0.18)] p-5 lg:p-8">
+                <Outlet />
+              </div>
+            )}
           </div>
         </main>
       </div>
