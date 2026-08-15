@@ -1,0 +1,1 @@
+drop trigger if exists trg_incident_status_timestamps on public.incident_reports

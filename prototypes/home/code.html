@@ -1,0 +1,435 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">try{
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#45464d",
+                        "surface-bright": "#f8f9ff",
+                        "tertiary": "#000000",
+                        "on-primary-fixed": "#131b2e",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "primary-fixed": "#dae2fd",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#fefcff",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#131b2e",
+                        "on-background": "#0b1c30",
+                        "on-secondary-fixed": "#00174b",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#0051d5",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#261a00",
+                        "surface-tint": "#565e74",
+                        "tertiary-fixed-dim": "#f9bd22",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#e5eeff",
+                        "on-tertiary-container": "#a87d00",
+                        "primary": "#000000",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-primary-container": "#7c839b",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-fixed": "#261a00",
+                        "outline": "#76777d",
+                        "secondary-container": "#316bf3",
+                        "background": "#f8f9ff",
+                        "surface-variant": "#d3e4fe",
+                        "on-surface": "#0b1c30",
+                        "inverse-surface": "#213145",
+                        "inverse-on-surface": "#eaf1ff",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-dim": "#cbdbf5",
+                        "secondary-fixed": "#dbe1ff",
+                        "tertiary-fixed": "#ffdf9f",
+                        "outline-variant": "#c6c6cd",
+                        "surface-container-low": "#eff4ff",
+                        "surface": "#f8f9ff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "inverse-primary": "#bec6e0",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "on-tertiary-fixed-variant": "#5c4300"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "64px",
+                        "lg": "48px",
+                        "base": "8px",
+                        "xl": "80px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "sm": "12px",
+                        "md": "24px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Poppins"],
+                        "headline-md": ["Poppins"],
+                        "display-lg": ["Poppins"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "caption": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    }catch(_e){}</script>
+<style>
+    .hero-overlay {
+        background: linear-gradient(to bottom, rgba(11, 28, 48, 0.4) 0%, rgba(11, 28, 48, 0.85) 70%, rgba(11, 28, 48, 0.95) 100%);
+    }
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .gold-gradient {
+        background: linear-gradient(135deg, #f9bd22 0%, #ffdf9f 100%);
+    }
+</style>
+</head><body class="bg-background text-on-surface font-body-md overflow-x-hidden" style="overflow: auto;">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-[100] flex justify-between items-center px-4 md:px-margin-desktop h-20 bg-primary-container/90 backdrop-blur-md shadow-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jE_R6jk2am8ZI5hq_njSALDXpHfM55Gdc_vwxSzuezEgFYuC6H_kJa6P-8BUQ_YA1XVrLwZFgV6qtLOJ6mfs5KfEvqutKZn-JUKYq4ncsmGNjPf0tXQxzHhRe2e9DVTUIIhVO7uKGtfPYl8U9wpptHAEHgTX7Cq5D8Z7uL_DmOiKTNOZ-si_NxiQ0n430AnXt6BQSJnxg__oGfZsdCCi0-hy4IVwNF9HeJ2pcJsoUiRqZhvmierx5fBFXHBwb4dSJnB15fVLyU4" alt="Barangay Tandang Sora Logo" class="w-full h-full object-cover"></div>
+<h1 class="font-headline-md text-base md:text-headline-md font-bold text-surface-bright leading-tight">Barangay Tandang Sora Safety</h1>
+</div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="font-label-md text-label-md text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim pb-1" href="#">Home</a>
+<a class="font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">About</a>
+<a class="font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">Officials</a>
+<a class="font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">Services</a>
+<a class="font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">Contact</a>
+</nav>
+<div class="flex items-center gap-sm md:gap-md">
+<a class="bg-secondary text-on-secondary px-4 md:px-md py-2 rounded-lg font-bold hover:shadow-lg transition-all text-xs md:text-sm flex items-center justify-center whitespace-nowrap" href="{{DATA:SCREEN:SCREEN_59}}">Login/Register</a>
+<button class="md:hidden p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors" id="mobile-menu-button">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</button>
+</div>
+</header>
+<!-- Mobile Side Menu -->
+<div class="fixed inset-0 z-[200] invisible pointer-events-none transition-all duration-300" id="mobile-drawer-container">
+<div class="absolute inset-0 bg-primary-container/60 backdrop-blur-sm opacity-0 transition-opacity duration-300" id="drawer-overlay"></div>
+<div class="absolute right-0 top-0 h-full w-[280px] bg-background shadow-2xl flex flex-col p-lg translate-x-full transition-transform duration-300 ease-in-out" id="mobile-drawer">
+<div class="flex justify-between items-center mb-xl">
+<span class="font-headline-md text-on-surface">Menu</span>
+<button class="text-on-surface-variant hover:text-primary p-2" id="close-drawer">
+<span class="material-symbols-outlined text-3xl">close</span>
+</button>
+</div>
+<nav class="flex flex-col gap-lg">
+<a class="font-label-md text-lg text-secondary border-l-4 border-secondary pl-4 font-bold" href="#">Home</a>
+<a class="font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">About</a>
+<a class="font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">Officials</a>
+<a class="font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">Services</a>
+<a class="font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">Contact</a>
+</nav>
+<div class="mt-auto pt-lg border-t border-outline-variant">
+<a class="w-full px-md py-4 bg-secondary text-on-secondary font-bold rounded-xl flex items-center justify-center text-center shadow-lg" href="{{DATA:SCREEN:SCREEN_59}}">Login/Register</a>
+</div>
+</div>
+</div>
+<!-- Hero Section -->
+<header class="relative min-h-[90vh] md:min-h-screen pt-16 flex items-center overflow-hidden">
+<!-- Hero Background with Tandang Sora Monument -->
+<div class="absolute inset-0 z-0">
+<img alt="Barangay Tandang Sora Hall" class="w-full h-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCi72yclYEcs29-GosEvH8aQ8jjXHUMvfDnwtV0y20Nl-TnLislGk7Ws1c4HgdXpM_asFVyyTnUBX31t8OC0uwNKQCR3Hxx11IBGu62qbGcC2B95VyxowF17rObBOTvby6MZM9BxdCfVeBEVprfj_4RR5JVHAiSbSpv4D54faNJCfRHrgXN3QXDJ5_qlNL-Yz5-AO4bfUA8uw9zIPvL7LeWyC-lIiQmugyf_XnwAo7e9pO44GE55-q3dxFvmJNTc9HfbS0C8fdM7AI">
+<div class="absolute inset-0 hero-overlay"></div>
+</div>
+<div class="container mx-auto px-4 md:px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-xl relative z-10 py-xl">
+<div class="flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-md">
+<!-- Tactical Command Center Badge -->
+<div class="inline-flex items-center gap-sm bg-secondary-container/30 backdrop-blur-md px-md py-xs rounded-full border border-secondary-fixed/30 mb-sm">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
+<span class="text-white font-label-md text-xs md:text-label-md tracking-wider uppercase font-bold">Tactical Command Center</span>
+</div>
+<h1 class="font-display-lg text-3xl md:text-5xl lg:text-display-lg text-white leading-tight drop-shadow-lg">
+<span class="text-tertiary-fixed-dim">Law Enforcement</span> and Incident Reporting System
+            </h1>
+<p class="font-body-md md:font-body-lg text-body-md md:text-body-lg text-surface-container-low/90 max-w-xl">
+                AI-Assisted Dispatch, Case Tracking, and Evidence Management for Barangay Tandang Sora, Quezon City. Ensuring a safer community through transparent and efficient technology.
+            </p>
+<div class="flex flex-col sm:flex-row items-center gap-md pt-base w-full">
+<button class="w-full sm:w-auto px-lg md:px-xl py-4 gold-gradient text-on-tertiary-fixed font-headline-md text-lg rounded-2xl shadow-xl hover:scale-105 transition-transform flex items-center justify-center gap-sm active:scale-95 touch-manipulation">
+<span class="material-symbols-outlined">campaign</span>
+                    Report an Incident
+                </button>
+<!-- System Uptime Card -->
+<div class="w-full sm:w-auto glass-card rounded-2xl p-sm flex items-center gap-sm border border-white/10">
+<div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-2xl">monitoring</span>
+</div>
+<div class="text-left">
+<p class="text-xs font-bold text-secondary-fixed-dim">System Uptime: 99.9%</p>
+<p class="text-[10px] text-surface-container-low/60 italic">Encrypted Secure Line 0x24A</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tactical Monitor for Desktop -->
+<div class="hidden lg:flex items-center justify-center relative">
+<div class="relative w-full max-w-md aspect-square rounded-[2rem] overflow-hidden glass-card shadow-2xl flex items-center justify-center p-md border border-white/20 ring-1 ring-white/10">
+<img alt="Police Cap" class="w-full h-full object-contain rounded-2xl p-4 bg-gradient-to-br from-white/5 to-transparent" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClwEZk2RgbOt8uf5IKCYQeWbuBU_F7aqmeL7cpF1O-y8GmpiBzpgChPWJ2mYGqEDB5wSYq60tYe99v2P79mr-JeM0MEqW2_zIxAPwUKCT48l24YSoT78Z5u17hU_GboEOvmAh1N07OUBXHZ77-QcCoXz8SocWac_HNlvFRvOw6i47PfrlirYsTBiZel5rgnYDEbo8MDmXHi-MItM-10GczuuiP2J1f_QF3XJV3o9S0V9n1kZ7lmi5Nf5V456srvGmbXA">
+<div class="absolute -bottom-2 -right-2 bg-white/10 backdrop-blur-md px-6 py-3 rounded-xl shadow-xl flex items-center gap-sm border border-white/20 transition-all hover:scale-105">
+<span class="material-symbols-outlined text-white">bolt</span>
+<span class="text-white font-label-md">Real-time Response</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Statistics Row -->
+<section class="py-md md:py-xl -mt-8 md:-mt-xl relative z-20">
+<div class="container mx-auto px-4 md:px-margin-desktop grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
+<div class="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20">
+<span class="material-symbols-outlined text-secondary text-2xl md:text-4xl" style="font-variation-settings: &quot;FILL&quot; 1;">assignment</span>
+<span class="font-display-lg text-2xl md:text-display-lg text-on-surface">2,450+</span>
+<span class="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Total Incidents</span>
+</div>
+<div class="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border-l-4 border-l-error border-y border-r border-outline-variant/20">
+<span class="material-symbols-outlined text-error text-2xl md:text-4xl" style="font-variation-settings: &quot;FILL&quot; 1;">warning</span>
+<span class="font-display-lg text-2xl md:text-display-lg text-on-surface">124</span>
+<span class="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Active Cases</span>
+</div>
+<div class="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border-l-4 border-l-secondary border-y border-r border-outline-variant/20">
+<span class="material-symbols-outlined text-secondary text-2xl md:text-4xl" style="font-variation-settings: &quot;FILL&quot; 1;">check_circle</span>
+<span class="font-display-lg text-2xl md:text-display-lg text-on-surface">2,210</span>
+<span class="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Resolved Cases</span>
+</div>
+<div class="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20">
+<span class="material-symbols-outlined text-secondary text-2xl md:text-4xl" style="font-variation-settings: &quot;FILL&quot; 1;">groups</span>
+<span class="font-display-lg text-2xl md:text-display-lg text-on-surface">15k+</span>
+<span class="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Registered Users</span>
+</div>
+</div>
+</section>
+<!-- Quick Services Grid -->
+<section class="py-xl bg-surface-container-low">
+<div class="container mx-auto px-4 md:px-margin-desktop">
+<div class="text-center mb-xl">
+<h2 class="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">LGU Public Safety Services</h2>
+<p class="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Access critical services and report concerns directly to our integrated law enforcement team.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
+<div class="group bg-surface p-lg rounded-2xl border border-outline-variant hover:border-secondary hover:shadow-xl transition-all cursor-pointer touch-manipulation">
+<div class="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary mb-md group-active:bg-secondary group-active:text-white">
+<span class="material-symbols-outlined text-3xl">report_problem</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md mb-xs text-on-surface">Report an Incident</h3>
+<p class="font-body-md text-on-surface-variant">Submit detailed reports for security concerns in your area.</p>
+</div>
+<div class="group bg-surface p-lg rounded-2xl border border-outline-variant hover:border-error hover:shadow-xl transition-all cursor-pointer touch-manipulation">
+<div class="w-14 h-14 rounded-xl bg-error/10 flex items-center justify-center text-error mb-md group-active:bg-error group-active:text-white">
+<span class="material-symbols-outlined text-3xl">call</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md mb-xs text-on-surface">Emergency Hotline</h3>
+<p class="font-body-md text-on-surface-variant">Quick access to local police, fire department, and medical EMS.</p>
+</div>
+<div class="group bg-surface p-lg rounded-2xl border border-outline-variant hover:border-secondary hover:shadow-xl transition-all cursor-pointer touch-manipulation">
+<div class="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary mb-md group-active:bg-secondary group-active:text-white">
+<span class="material-symbols-outlined text-3xl">local_police</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md mb-xs text-on-surface">Police Assistance</h3>
+<p class="font-body-md text-on-surface-variant">Request non-emergency patrol or police presence in your zone.</p>
+</div>
+<div class="group bg-surface p-lg rounded-2xl border border-outline-variant hover:border-secondary hover:shadow-xl transition-all cursor-pointer touch-manipulation">
+<div class="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary mb-md group-active:bg-secondary group-active:text-white">
+<span class="material-symbols-outlined text-3xl">forum</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md mb-xs text-on-surface">Contact Barangay</h3>
+<p class="font-body-md text-on-surface-variant">Direct messaging line to Barangay officials and safety officers.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Highlights Section -->
+<section class="py-xl">
+<div class="container mx-auto px-4 md:px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-xl items-center">
+<div>
+<div class="bg-white p-6 md:p-lg rounded-3xl shadow-xl border border-outline-variant">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between mb-lg gap-sm">
+<h3 class="font-headline-lg text-xl md:text-headline-lg text-on-surface">Recent Incident Summary</h3>
+<span class="text-on-surface-variant font-label-md text-xs bg-surface-container-high px-md py-xs rounded-full self-start">Last 30 Days</span>
+</div>
+<div class="w-full h-64 md:h-80 bg-surface-container-lowest rounded-xl flex items-center justify-center overflow-hidden border border-outline-variant/30 relative">
+<div class="absolute inset-0 bg-gradient-to-t from-secondary/5 to-transparent"></div>
+<div class="flex flex-col items-center gap-md p-4">
+<div class="flex gap-2 md:gap-md items-end h-40">
+<div class="w-6 md:w-10 bg-secondary/80 rounded-t-lg" style="height: 60%;"></div>
+<div class="w-6 md:w-10 bg-secondary/80 rounded-t-lg" style="height: 40%;"></div>
+<div class="w-6 md:w-10 bg-secondary/80 rounded-t-lg" style="height: 85%;"></div>
+<div class="w-6 md:w-10 bg-secondary/80 rounded-t-lg" style="height: 55%;"></div>
+<div class="w-6 md:w-10 bg-secondary/80 rounded-t-lg" style="height: 30%;"></div>
+</div>
+<p class="text-on-surface-variant font-caption text-caption text-center">Interactive data visualization loading...</p>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-6 md:space-y-lg">
+<div class="bg-white p-6 md:p-lg rounded-3xl border-l-8 border-l-secondary shadow-lg border border-outline-variant/20">
+<div class="flex flex-col sm:flex-row items-start gap-md">
+<div class="p-sm bg-secondary/10 rounded-xl text-secondary">
+<span class="material-symbols-outlined text-3xl">psychology</span>
+</div>
+<div>
+<h3 class="font-headline-md text-lg md:text-headline-md text-on-surface mb-xs">AI Dispatch Statistics</h3>
+<p class="font-body-md text-on-surface-variant mb-md">Our AI-driven routing has reduced average response times by 35% across all sectors.</p>
+<div class="flex items-center gap-8 md:gap-xl">
+<div>
+<p class="font-display-lg text-secondary text-2xl md:text-headline-lg">4.2m</p>
+<p class="font-caption text-caption text-on-surface-variant">Avg Response</p>
+</div>
+<div class="h-10 w-[1px] bg-outline-variant"></div>
+<div>
+<p class="font-display-lg text-secondary text-2xl md:text-headline-lg">98%</p>
+<p class="font-caption text-caption text-on-surface-variant">Accuracy</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-primary-container p-6 md:p-lg rounded-3xl text-white shadow-lg relative overflow-hidden group">
+<div class="relative z-10">
+<h4 class="font-headline-md text-lg md:text-headline-md mb-base">Command Center Visibility</h4>
+<p class="font-body-md text-on-primary-container mb-md">Monitor live incidents and resource allocation through a unified interface.</p>
+<button class="flex items-center gap-xs font-label-md text-tertiary-fixed-dim uppercase tracking-wider group-active:translate-x-2 transition-transform">VIEW MY DASHBOARD <span class="material-symbols-outlined">arrow_right_alt</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Community Impact -->
+<section class="py-xl bg-surface-container-highest/30">
+<div class="container mx-auto px-4 md:px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-xl items-center">
+<div class="order-2 lg:order-1 text-center lg:text-left">
+<div class="inline-flex items-center gap-sm bg-secondary/10 px-md py-xs rounded-full mb-md mx-auto lg:mx-0">
+<span class="material-symbols-outlined text-secondary text-sm">auto_awesome</span>
+<span class="text-secondary font-label-md text-xs tracking-wider uppercase">COMMUNITY IMPACT</span>
+</div>
+<h2 class="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-md leading-tight">Digital Dispatch: A 4-Minute Success Story</h2>
+<p class="font-body-md md:font-body-lg text-on-surface-variant mb-lg">
+                    Last Tuesday, our AI-assisted dispatch routed an emergency call in record time, resulting in a 4-minute response. This is how smart governance saves lives.
+                </p>
+<button class="w-full sm:w-auto px-lg py-sm bg-secondary text-on-secondary font-label-md rounded-lg hover:bg-secondary-container transition-all flex items-center justify-center gap-xs">
+                    Read Full Story <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="order-1 lg:order-2">
+<div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-video">
+<img alt="Community Safety" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyz-oK2RsSj2yK33jbN8fQpLDAdqmPDtloyWNHn7d1Ti-H1lwF38v29CZg41QehHglMMSH7aEGQSkhVbGuLdfM_6me-h2DyHGzaCzwsokc-H8trHLtYs0-5EdYEhxSoTryeCnTPEfaUuGlaDwnwLNW4nDY1tLrJV56_6We9a4Tr6jQgjzS09LKR85m2a2YCFKe000L6EeD5-k77sfcJpXMEDXGDGKkIz8nNyEr_FPjLHPkdCxCM2xK">
+<div class="absolute inset-0 bg-gradient-to-t from-on-background/80 to-transparent flex items-end p-6">
+<p class="text-white font-caption text-caption italic">"The response was faster than I ever expected. Technology really made the difference." - Local Resident</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Community Guides -->
+<section class="py-xl bg-surface">
+<div class="container mx-auto px-4 md:px-margin-desktop">
+<div class="text-center mb-xl">
+<h2 class="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">Community Safety Guides</h2>
+<p class="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Essential resources and step-by-step instructions for a safer Barangay Tandang Sora.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-gutter">
+<div class="bg-surface-container-low p-6 md:p-lg rounded-2xl border border-outline-variant/30 flex flex-col h-full hover:shadow-lg transition-all">
+<h3 class="font-headline-md text-lg md:text-headline-md text-on-surface mb-sm">Elders' Guide: Navigating the Portal</h3>
+<p class="font-body-md text-on-surface-variant mb-lg flex-grow">A step-by-step guide for our seniors on how to use digital tools to report incidents and access services safely.</p>
+<button class="w-full py-3 border border-secondary text-secondary font-label-md rounded-lg hover:bg-secondary hover:text-white transition-all">View Guide</button>
+</div>
+<div class="bg-surface-container-low p-6 md:p-lg rounded-2xl border border-outline-variant/30 flex flex-col h-full hover:shadow-lg transition-all">
+<h3 class="font-headline-md text-lg md:text-headline-md text-on-surface mb-sm">Public Safety &amp; Protocols</h3>
+<p class="font-body-md text-on-surface-variant mb-lg flex-grow">Learn the official procedures for reporting emergencies and how to coordinate with our public safety officers during critical incidents.</p>
+<button class="w-full py-3 border border-secondary text-secondary font-label-md rounded-lg hover:bg-secondary hover:text-white transition-all">Learn More</button>
+</div>
+<div class="bg-surface-container-low p-6 md:p-lg rounded-2xl border border-outline-variant/30 flex flex-col h-full hover:shadow-lg transition-all">
+<h3 class="font-headline-md text-lg md:text-headline-md text-on-surface mb-sm">Building a Resilient Community</h3>
+<p class="font-body-md text-on-surface-variant mb-lg flex-grow">Discover community initiatives, neighborhood watch programs, and best practices for maintaining a safe environment.</p>
+<button class="w-full py-3 border border-secondary text-secondary font-label-md rounded-lg hover:bg-secondary hover:text-white transition-all">Get Involved</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full py-xl md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-lowest border-t border-outline-variant px-margin-desktop">
+<div class="flex flex-col gap-sm text-center md:text-left">
+<div class="flex items-center justify-center md:justify-start gap-xs">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant flex items-center justify-center"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jE_R6jk2am8ZI5hq_njSALDXpHfM55Gdc_vwxSzuezEgFYuC6H_kJa6P-8BUQ_YA1XVrLwZFgV6qtLOJ6mfs5KfEvqutKZn-JUKYq4ncsmGNjPf0tXQxzHhRe2e9DVTUIIhVO7uKGtfPYl8U9wpptHAEHgTX7Cq5D8Z7uL_DmOiKTNOZ-si_NxiQ0n430AnXt6BQSJnxg__oGfZsdCCi0-hy4IVwNF9HeJ2pcJsoUiRqZhvmierx5fBFXHBwb4dSJnB15fVLyU4" alt="Barangay Tandang Sora Logo" class="w-full h-full object-cover"></div>
+<span class="font-headline-md text-headline-md text-primary">Barangay Tandang Sora</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant">© 2024 Barangay Tandang Sora Law Enforcement. Public Safety &amp; Transparency Portal.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-lg">
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Terms of Service</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">FOI Manual</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Accessibility</a>
+</div>
+<div class="flex gap-md">
+<div class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span class="material-symbols-outlined">public</span></div>
+<div class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span class="material-symbols-outlined">share</span></div>
+</div>
+</footer>
+<script>
+    // Mobile Menu Logic
+    const menuButton = document.getElementById('mobile-menu-button');
+    const closeDrawer = document.getElementById('close-drawer');
+    const drawerContainer = document.getElementById('mobile-drawer-container');
+    const drawerOverlay = document.getElementById('drawer-overlay');
+    const drawer = document.getElementById('mobile-drawer');
+
+    menuButton.addEventListener('click', () => {
+        drawerContainer.classList.remove('invisible', 'pointer-events-none');
+        drawerOverlay.classList.replace('opacity-0', 'opacity-100');
+        drawer.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden';
+    });
+
+    const hideDrawer = () => {
+        drawerContainer.classList.add('invisible', 'pointer-events-none');
+        drawerOverlay.classList.replace('opacity-100', 'opacity-0');
+        drawer.classList.add('translate-x-full');
+        document.body.style.overflow = 'auto';
+    };
+
+    closeDrawer.addEventListener('click', hideDrawer);
+    drawerOverlay.addEventListener('click', hideDrawer);
+
+    // Close menu on link click
+    drawer.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', hideDrawer);
+    });
+</script>
+
+
+</body></html>

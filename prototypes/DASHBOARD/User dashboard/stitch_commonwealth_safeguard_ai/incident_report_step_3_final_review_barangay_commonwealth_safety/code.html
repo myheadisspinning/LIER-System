@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Barangay Command - Step 3: Final Review</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#f8f9ff",
+                        "tertiary-container": "#261a00",
+                        "on-surface-variant": "#45464d",
+                        "error-red": "#ef4444",
+                        "on-primary-container": "#7c839b",
+                        "secondary-fixed": "#dbe1ff",
+                        "inverse-surface": "#213145",
+                        "text-on-dark": "#cbd5e1",
+                        "tertiary-fixed": "#ffdfa0",
+                        "on-primary-fixed": "#131b2e",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f8f9ff",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#e5eeff",
+                        "surface-dim": "#cbdbf5",
+                        "surface-variant": "#d3e4fe",
+                        "secondary-container": "#316bf3",
+                        "surface-container-highest": "#d3e4fe",
+                        "warning-amber": "#f59e0b",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#00174b",
+                        "primary-container": "#131b2e",
+                        "tertiary-fixed-dim": "#f9bd22",
+                        "primary": "#000000",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "tertiary": "#000000",
+                        "primary-fixed-dim": "#bec6e0",
+                        "success-green": "#22c55e",
+                        "on-background": "#0b1c30",
+                        "on-tertiary-fixed": "#261a00",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-surface": "#0b1c30",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#dae2fd",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary": "#0051d5",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "surface-bg": "#f8fafc",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#eff4ff",
+                        "inverse-primary": "#bec6e0",
+                        "outline-variant": "#c6c6cd",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "border-subtle": "#e2e8f0",
+                        "on-tertiary-container": "#a87d00",
+                        "surface-tint": "#565e74",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#dce9ff",
+                        "on-secondary-container": "#fefcff",
+                        "outline": "#76777d",
+                        "sidebar-bg": "#0f172a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "md": "24px",
+                        "sidebar-width": "256px",
+                        "margin-desktop": "40px",
+                        "lg": "48px",
+                        "sm": "12px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Poppins"],
+                        "headline-md": ["Poppins"],
+                        "body-lg": ["Inter"],
+                        "caps-xs": ["Inter"],
+                        "display-lg": ["Poppins"],
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["30px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "caps-xs": ["10px", { "lineHeight": "12px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "display-lg": ["36px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.025em", "fontWeight": "500" }],
+                        "body-md": ["15px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface-bg text-on-surface font-body-md min-h-screen">
+<!-- Top Navigation (Transactional Layout - Hidden in main flow but kept for structure) -->
+<header class="bg-sidebar-bg dark:bg-sidebar-bg fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 border-b border-white/10">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-sidebar-bg" data-icon="shield">shield</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-on-tertiary tracking-tighter uppercase">Tactical Incident Reporting</h1>
+</div>
+<div class="flex items-center gap-sm">
+<button class="text-secondary-fixed hover:bg-white/5 p-2 rounded-full transition-colors scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+</header>
+<main class="pt-[104px] pb-lg px-margin-desktop max-w-5xl mx-auto">
+<!-- Emergency Notice -->
+<div class="bg-error-container border-l-4 border-error-red p-sm mb-lg flex items-start gap-sm rounded shadow-sm">
+<span class="material-symbols-outlined text-error-red mt-1" data-icon="warning">warning</span>
+<div>
+<h3 class="font-label-md text-label-md font-bold text-on-error-container uppercase">Critical Emergency Notice</h3>
+<p class="font-body-sm text-body-sm text-on-error-container mt-xs">For immediate life-threatening situations, dial 911 immediately. This tactical reporting system is for non-immediate response dispatch.</p>
+</div>
+</div>
+<!-- Stepper -->
+<div class="mb-lg">
+<div class="flex items-center justify-between relative">
+<!-- Line -->
+<div class="absolute top-1/2 left-0 w-full h-1 bg-border-subtle -z-10 translate-y-[-50%]"></div>
+<div class="absolute top-1/2 left-0 w-full h-1 bg-secondary-fixed -z-10 translate-y-[-50%] transition-all duration-500"></div>
+<!-- Step 1 -->
+<div class="flex flex-col items-center gap-xs bg-surface-bg px-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant flex items-center justify-center font-label-md font-bold border-2 border-secondary-fixed">
+<span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+</div>
+<span class="font-caps-xs text-caps-xs text-on-surface-variant uppercase">Classification</span>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col items-center gap-xs bg-surface-bg px-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant flex items-center justify-center font-label-md font-bold border-2 border-secondary-fixed">
+<span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+</div>
+<span class="font-caps-xs text-caps-xs text-on-surface-variant uppercase">Details</span>
+</div>
+<!-- Step 3 -->
+<div class="flex flex-col items-center gap-xs bg-surface-bg px-sm">
+<div class="w-8 h-8 rounded-full bg-secondary text-on-primary flex items-center justify-center font-label-md font-bold border-2 border-secondary shadow-md">
+                        3
+                    </div>
+<span class="font-caps-xs text-caps-xs text-secondary font-bold uppercase">Review</span>
+</div>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-md">
+<!-- Left Column: Details -->
+<div class="lg:col-span-2 space-y-md">
+<!-- AI Verification Note -->
+<div class="bg-surface border border-border-subtle rounded-lg p-md shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-error-red"></div>
+<div class="flex items-start gap-md">
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-error-red" data-icon="smart_toy">smart_toy</span>
+</div>
+<div>
+<div class="font-caps-xs text-caps-xs text-on-surface-variant mb-xs">AI Tactical Analysis Complete</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-base">Critical Fire Hazard Detected</h3>
+<div class="flex gap-sm">
+<span class="bg-error-red text-on-error px-2 py-1 rounded font-caps-xs text-caps-xs uppercase">Priority: Critical</span>
+<span class="bg-surface-variant text-on-surface px-2 py-1 rounded font-caps-xs text-caps-xs uppercase">Confidence: 98%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Review Content -->
+<div class="bg-surface border border-border-subtle rounded-lg p-md shadow-sm">
+<div class="font-caps-xs text-caps-xs text-on-surface-variant mb-sm pb-xs border-b border-border-subtle">Incident Summary</div>
+<div class="grid grid-cols-2 gap-md mb-lg">
+<div>
+<div class="font-caps-xs text-caps-xs text-on-surface-variant mb-xs">Category</div>
+<div class="font-body-md text-on-surface font-medium">Fire Hazard / Industrial</div>
+</div>
+<div>
+<div class="font-caps-xs text-caps-xs text-on-surface-variant mb-xs">Status</div>
+<div class="font-body-md text-error-red font-medium flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error-red animate-pulse"></span>
+                                Ongoing
+                            </div>
+</div>
+<div>
+<div class="font-caps-xs text-caps-xs text-on-surface-variant mb-xs">Date &amp; Time</div>
+<div class="font-body-md text-on-surface font-medium">Oct 24, 2023 - 14:32 PHT</div>
+</div>
+<div>
+<div class="font-caps-xs text-caps-xs text-on-surface-variant mb-xs">Reporter ID</div>
+<div class="font-body-md text-on-surface font-medium">USR-8492-X</div>
+</div>
+</div>
+<div class="font-caps-xs text-caps-xs text-on-surface-variant mb-sm pb-xs border-b border-border-subtle">Location Details</div>
+<div class="mb-lg">
+<div class="h-48 rounded bg-surface-variant mb-sm relative overflow-hidden border border-border-subtle">
+<!-- Placeholder for map snippet -->
+<img class="w-full h-full object-cover opacity-80" data-alt="A tactical top-down satellite map view of a densely populated urban area, specifically Commonwealth Avenue, Quezon City, Philippines. The map is rendered in a high-contrast dark mode aesthetic with glowing blue grid lines and a prominent flashing red objective marker pinpointing a specific intersection. The style mimics a military command center HUD display, highly detailed, precise, dramatic lighting." data-location="Quezon City, Philippines" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB8ILHeaWmxT-JfH39PDo6uaLJRhAEfxRdye5ZSt99q6zkAhRz-IpjW_xnwItwcWUuihxX4EXt9DmoKks8NZDH0mbGB4CRLrIHLeEHMugd4mrDi3x9Z-2XmNmpSQnBlPffdNfxk5kp8000xOiuaQEenIur0Pn6eVcG9dgiDB3XkXFFeCX84HmFM25dPCIJEd-gmg0bxaM0pomSp7kKht-HZN4ZdGXc33udE1rmy4BQwaXOwbTvOqyU">
+<div class="absolute inset-0 bg-gradient-to-t from-sidebar-bg/60 to-transparent"></div>
+<div class="absolute bottom-sm left-sm right-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="location_on">location_on</span>
+<span class="font-label-sm text-label-sm text-on-tertiary">Commonwealth Ave, cor Katuparan, Barangay Commonwealth</span>
+</div>
+</div>
+</div>
+<div class="font-caps-xs text-caps-xs text-on-surface-variant mb-sm pb-xs border-b border-border-subtle">Detailed Description</div>
+<div class="mb-lg">
+<p class="font-body-md text-on-surface bg-surface-bg p-sm rounded border border-border-subtle">
+                            Large plume of black smoke visible from the abandoned warehouse on Katuparan street. Looks like chemical fire. No visible flames from the outside yet, but strong smell of burning plastic. Several residents are starting to gather. Immediate response recommended before it spreads to adjacent residential block.
+                        </p>
+</div>
+<div class="font-caps-xs text-caps-xs text-on-surface-variant mb-sm pb-xs border-b border-border-subtle">Attached Evidence</div>
+<div class="flex gap-sm">
+<div class="w-24 h-24 rounded border border-border-subtle relative overflow-hidden group">
+<img class="w-full h-full object-cover" data-alt="A low-resolution, slightly grainy mobile phone photo showing a large, ominous plume of thick black smoke rising behind a row of concrete urban buildings under a cloudy sky. The image has a raw, urgent documentary feel, typical of a citizen-reported incident in a dense metropolitan area like Manila." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArRqERoj6-CE5M9M38bkJ6yx4OoOD9oxR7Jdt1Hzc4ODpWVTaeCYTKQklKJPvOLQwFivA65tumiwM09egt8JY4FUCxEcs0B0ed4LmcqKBor5mKabCUySHEHe1Dld4ZxSvv0qgiTMO52O2lV30mPQRaJIjMxLP1xPVeIM4uMiOcA0N6GZlAGhcNAFdiBKfhJJoNn3V4m2p6cBcR9danfXXzTgyOaHbBfOLM3bbPzS9_zdLZjPd68L-O">
+<div class="absolute inset-0 bg-primary/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-on-tertiary" data-icon="visibility">visibility</span>
+</div>
+</div>
+<div class="w-24 h-24 rounded border border-border-subtle bg-surface-variant flex flex-col items-center justify-center text-on-surface-variant cursor-pointer hover:bg-surface-dim transition-colors">
+<span class="material-symbols-outlined mb-1" data-icon="videocam">videocam</span>
+<span class="font-caps-xs text-caps-xs">CCTV_01.mp4</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Submission Panel -->
+<div class="space-y-md">
+<div class="bg-surface border border-border-subtle rounded-lg p-md shadow-sm sticky top-24">
+<h4 class="font-headline-md text-headline-md text-on-surface mb-xs">Final Validation</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Please review all tactical details carefully before initiating dispatch protocol.</p>
+<div class="space-y-sm mb-lg">
+<label class="flex items-start gap-sm cursor-pointer group">
+<input class="mt-1 rounded text-secondary border-outline-variant focus:ring-secondary focus:ring-offset-surface" type="checkbox">
+<span class="font-label-sm text-label-sm text-on-surface group-hover:text-secondary transition-colors">I confirm that the location and details provided are accurate to the best of my knowledge.</span>
+</label>
+<label class="flex items-start gap-sm cursor-pointer group">
+<input class="mt-1 rounded text-secondary border-outline-variant focus:ring-secondary focus:ring-offset-surface" type="checkbox">
+<span class="font-label-sm text-label-sm text-on-surface group-hover:text-secondary transition-colors">I understand this will trigger an official command center response.</span>
+</label>
+<label class="flex items-start gap-sm cursor-pointer group mt-md pt-sm border-t border-border-subtle"><input class="mt-1 rounded text-secondary border-outline-variant focus:ring-secondary focus:ring-offset-surface" type="checkbox"><div class="flex flex-col"><span class="font-label-sm text-label-sm text-on-surface group-hover:text-secondary transition-colors">Post Anonymously</span><span class="font-caps-xs text-caps-xs text-on-surface-variant mt-xs">Hide your identity from public records for this report.</span></div></label></div>
+<div class="flex flex-col gap-sm">
+<button class="w-full bg-secondary hover:bg-secondary-container text-on-primary font-label-md text-label-md py-3 px-4 rounded shadow-lg transition-all duration-200 active:scale-95 flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+                            Submit Tactical Report
+                        </button>
+<button class="w-full bg-transparent hover:bg-surface-variant text-secondary font-label-md text-label-md py-3 px-4 rounded border border-secondary transition-all duration-200 active:scale-95">
+                            Back to Details
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+
+</body></html>

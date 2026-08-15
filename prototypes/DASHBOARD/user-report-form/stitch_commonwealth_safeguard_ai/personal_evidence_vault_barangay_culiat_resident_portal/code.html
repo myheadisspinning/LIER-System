@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Personal Evidence Vault - Barangay Culiat Resident Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Work+Sans:wght@600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#611e00",
+                        "surface-container": "#eceef0",
+                        "inverse-primary": "#b8c4ff",
+                        "background": "#f7f9fb",
+                        "on-secondary-fixed-variant": "#004b73",
+                        "on-secondary-container": "#00476e",
+                        "surface-dim": "#d8dadc",
+                        "on-primary-fixed": "#001453",
+                        "on-background": "#191c1e",
+                        "primary": "#00288e",
+                        "surface-container-high": "#e6e8ea",
+                        "primary-fixed-dim": "#b8c4ff",
+                        "surface-tint": "#3755c3",
+                        "tertiary-fixed": "#ffdbce",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#173bab",
+                        "secondary-fixed-dim": "#93ccff",
+                        "on-surface": "#191c1e",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f7f9fb",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "on-secondary-fixed": "#001d31",
+                        "on-tertiary-fixed-variant": "#802a00",
+                        "on-tertiary-container": "#ffa583",
+                        "surface": "#f7f9fb",
+                        "secondary-fixed": "#cce5ff",
+                        "on-tertiary-fixed": "#380d00",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-primary-container": "#a8b8ff",
+                        "outline": "#757684",
+                        "on-surface-variant": "#444653",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed-dim": "#ffb59a",
+                        "surface-container-low": "#f2f4f6",
+                        "primary-container": "#1e40af",
+                        "secondary-container": "#5bb8fe",
+                        "tertiary-container": "#872d00",
+                        "outline-variant": "#c4c5d5",
+                        "primary-fixed": "#dde1ff",
+                        "secondary": "#006398"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "margin-desktop": "48px",
+                        "max-width": "1280px",
+                        "base": "4px",
+                        "container-padding": "24px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Work Sans"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Work Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Work Sans"],
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Work Sans"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "code-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #F8FAFC; }
+        .evidence-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            padding: 24px;
+            border-radius: 0.125rem;
+            transition: box-shadow 0.2s ease-in-out;
+        }
+        .evidence-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.04), 0 2px 4px -1px rgba(30, 64, 175, 0.04);
+        }
+        .status-pill-verified {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+        }
+        .status-pill-warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #F59E0B;
+        }
+        .status-pill-linked {
+            background-color: rgba(30, 64, 175, 0.1);
+            color: #1E40AF;
+        }
+        .input-field:focus {
+            border-color: #0284C7;
+            box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+            outline: none;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen text-on-surface">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-lowest border-r border-outline-variant h-screen w-72 flex flex-col py-6 px-4 hidden md:flex shrink-0 fixed">
+<div class="mb-8">
+<h1 class="font-headline-md text-headline-md font-semibold text-primary">Resident Portal</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Secure Evidence Vault</p>
+</div>
+<button class="bg-primary-container text-on-primary w-full py-2 rounded-lg font-body-sm font-semibold mb-6 hover:bg-primary transition-colors">
+            Report Incident
+        </button>
+<ul class="flex flex-col gap-2">
+<li><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container transition-transform scale-98 active:scale-95" href="#"><span class="material-symbols-outlined">dashboard</span> <span class="font-body-sm text-body-sm">Dashboard</span></a></li>
+<li><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container transition-transform scale-98 active:scale-95" href="#"><span class="material-symbols-outlined">description</span> <span class="font-body-sm text-body-sm">My Incident Reports</span></a></li>
+<li><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container transition-transform scale-98 active:scale-95" href="#"><span class="material-symbols-outlined">emergency</span> <span class="font-body-sm text-body-sm">Emergency Hotline</span></a></li>
+<li><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container transition-transform scale-98 active:scale-95" href="#"><span class="material-symbols-outlined">notifications</span> <span class="font-body-sm text-body-sm">Notifications</span></a></li>
+<li><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container transition-transform scale-98 active:scale-95" href="#"><span class="material-symbols-outlined">message</span> <span class="font-body-sm text-body-sm">Messages</span></a></li>
+<li><a class="flex items-center gap-3 px-3 py-2 bg-primary-container text-on-primary-container font-semibold rounded-lg" href="#"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">folder_shared</span> <span class="font-body-sm text-body-sm">Personal Evidence Vault</span></a></li>
+<li><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container transition-transform scale-98 active:scale-95" href="#"><span class="material-symbols-outlined">person</span> <span class="font-body-sm text-body-sm">Profile</span></a></li>
+<li><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container transition-transform scale-98 active:scale-95" href="#"><span class="material-symbols-outlined">settings</span> <span class="font-body-sm text-body-sm">Settings</span></a></li>
+</ul>
+<div class="mt-auto flex items-center gap-3">
+<img class="w-8 h-8 rounded-full bg-surface-variant object-cover" data-alt="A small, circular avatar image of a resident user with a neutral, professional expression, set against a clean, light blue background. High-key lighting, modern corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhTmxjeW1deICm96qLnxIx2qdbtmfBZaXWfPppFip2Y-tePSe-zo_XTNR8LGrPNy9OAiTE_xdzhGsRHw-QpdzMXhT1Q0JoDZUtagv6_V3TPvOpK2d9_NFJWEdoAeczrBl4teZS2NgLXSzNErlg1i56HCzA3v2nz8TvlBBL-xO_AfTYYA2kDMAKNRZVqsN-ZikM66M2NyHd9M48pCEDwIA4nyqL28YKoAqL3mqDX32zHAGJ2UKg5Qz9"/>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Resident User Profile</span>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 ml-0 md:ml-72 p-margin-mobile md:p-margin-desktop max-w-max-width mx-auto w-full">
+<!-- Header & Storage -->
+<div class="flex flex-col xl:flex-row justify-between gap-8 mb-8">
+<div class="max-w-2xl">
+<h2 class="font-headline-lg text-headline-lg md:font-headline-lg-mobile md:text-headline-lg-mobile text-on-surface mb-2">Personal Evidence Vault</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Securely store, hash, and organize CCTV snippets, dashcam footage, and media files before linking them to incident reports.</p>
+</div>
+<div class="evidence-card w-full xl:w-72 flex flex-col justify-center">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Storage Used</span>
+<span class="font-body-sm text-body-sm font-semibold">128 MB / 500 MB</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-2 mb-2">
+<div class="bg-primary h-2 rounded-full" style="width: 25.6%"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-xs"><span class="material-symbols-outlined text-[14px] align-middle mr-1">lock</span>Unlinked files auto-purge after 30 days.</p>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="flex flex-col md:flex-row gap-4 mb-8">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline">search</span>
+<input class="input-field w-full pl-10 pr-4 py-2 border border-outline-variant rounded font-body-sm text-body-sm bg-surface-container-lowest" placeholder="Search files by name, date, or hash..." type="text"/>
+</div>
+<div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+<button class="px-4 py-2 bg-surface-container-lowest border border-primary text-primary font-body-sm text-body-sm rounded whitespace-nowrap">All Files</button>
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-body-sm text-body-sm rounded whitespace-nowrap hover:bg-surface-container-low">CCTV / Video</button>
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-body-sm text-body-sm rounded whitespace-nowrap hover:bg-surface-container-low">Photos</button>
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-body-sm text-body-sm rounded whitespace-nowrap hover:bg-surface-container-low">Audio / Voice</button>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded lg flex items-center justify-center gap-2 font-body-sm font-semibold shrink-0 hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">upload</span> Upload New File
+            </button>
+</div>
+<!-- Quick Action Banner -->
+<div class="bg-secondary-fixed text-on-secondary-fixed p-4 rounded border border-secondary-fixed-dim mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">info</span>
+<span class="font-body-sm text-body-sm">You have 2 unlinked media files. Want to attach them to an open incident report?</span>
+</div>
+<button class="px-4 py-2 bg-surface-container-lowest text-primary border border-primary font-body-sm text-body-sm rounded font-semibold shrink-0 w-full sm:w-auto">Link Files to Open Case</button>
+</div>
+<!-- Media File Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Card 1 (Linked Video) -->
+<div class="evidence-card flex flex-col relative group">
+<div class="absolute top-4 right-4 z-10">
+<span class="status-pill-linked px-2 py-1 rounded-full font-label-caps text-label-caps flex items-center gap-1 shadow-sm bg-surface-container-lowest">
+<span class="material-symbols-outlined text-[12px]">link</span> Linked to Case #BLT-2026-0891
+                    </span>
+</div>
+<div class="aspect-video bg-surface-container-highest rounded-sm mb-4 relative overflow-hidden group-hover:opacity-90 transition-opacity cursor-pointer border border-outline-variant">
+<div class="bg-cover bg-center w-full h-full" data-alt="A still frame from a high-definition CCTV security camera showing a quiet suburban street at night. The lighting is stark and high-contrast, with deep shadows and a bright pool of light from a streetlamp. The mood is clinical and objective. Modern security footage aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAe3Xj2sd0Fxuq6NZ7aLkADPR844_kr1yRYPfLEE9eSXBuasjolvIbOLds_ApeZxmin4JGGzQLjnDyX7mnqpJ6I36j_ypuEVDhzOd2BaRnqU4IQGO4kXW_XbjdQxCXYFl0m98yhZpOlfrFimgf-CUcWXvMpbK-m_7Ee2L6FnLLILxDDrzM334DQCKXmS-PCe-HFAz-6i2lszfFaaGKa6hrX8q-ub7N69OzoKozFzyqxSZ2bzb5bnFsC')"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-4xl drop-shadow-md">play_circle</span>
+</div>
+<div class="absolute bottom-2 right-2 bg-on-surface text-on-primary px-1.5 py-0.5 rounded text-xs font-code-md">01:45</div>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2 truncate" title="Visayas_Ave_CCTV_Snippet_Aug6.mp4">Visayas_Ave_CCTV_Snippet_Aug6.mp4</h3>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="bg-surface-container px-2 py-1 rounded font-body-sm text-[12px] text-on-surface-variant border border-outline-variant">14.2 MB</span>
+<span class="status-pill-verified px-2 py-1 rounded font-body-sm text-[12px] flex items-center gap-1 border border-emerald-200">
+<span class="material-symbols-outlined text-[14px]">verified</span> SHA-256 Verified
+                    </span>
+<span class="bg-surface-container px-2 py-1 rounded font-body-sm text-[12px] text-on-surface-variant border border-outline-variant">Uploaded: Aug 6, 2026</span>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+<div class="flex gap-2">
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 font-body-sm text-body-sm"><span class="material-symbols-outlined text-[18px]">visibility</span> View</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 font-body-sm text-body-sm ml-2"><span class="material-symbols-outlined text-[18px]">download</span> Download</button>
+</div>
+<button class="text-error hover:text-on-error-container transition-colors flex items-center gap-1 font-body-sm text-body-sm"><span class="material-symbols-outlined text-[18px]">link_off</span> Unlink</button>
+</div>
+</div>
+<!-- Card 2 (Unlinked Photo) -->
+<div class="evidence-card flex flex-col relative group">
+<div class="absolute top-4 right-4 z-10">
+<span class="status-pill-warning px-2 py-1 rounded-full font-label-caps text-label-caps flex items-center gap-1 shadow-sm bg-surface-container-lowest">
+<span class="material-symbols-outlined text-[12px]">warning</span> Unlinked
+                    </span>
+</div>
+<div class="aspect-video bg-surface-container-highest rounded-sm mb-4 relative overflow-hidden group-hover:opacity-90 transition-opacity cursor-pointer border border-outline-variant">
+<div class="bg-cover bg-center w-full h-full" data-alt="A clear daytime photograph of a damaged street light pole in a residential area. The pole is dented near the base. The lighting is bright natural sunlight, creating sharp shadows. The mood is investigative and documentary. Professional civic documentation aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCCvXnW5zKFDWFvGW1MML9wSqW_6_hDbMI4CwmDkb9qyDPlPr4yIkW8DX6ij24feZ-BcpkxR1I6dT_xRhZ2mYQ9RdJl4RL9zDENjvmQ_tv8JP6cBwRFIitYuvWizwTjOKZiea-U_kaS8yKu9g3fWDq5-x-UWdpw4suBfYZe1Z7ghfPhF6ZyIM3okPZ2_u3Jv4nb_YcV05-0WIyIB_doV2VrLNXKitf7gSWt4yjS2-qidnHBf-seE2_c')"></div>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2 truncate" title="Street_Light_Damage_Purok3.jpg">Street_Light_Damage_Purok3.jpg</h3>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="bg-surface-container px-2 py-1 rounded font-body-sm text-[12px] text-on-surface-variant border border-outline-variant">3.1 MB</span>
+<span class="text-error px-2 py-1 rounded font-body-sm text-[12px] flex items-center gap-1 bg-error-container border border-error-container">
+<span class="material-symbols-outlined text-[14px]">timer</span> Auto-deletes in 22 Days
+                    </span>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+<button class="text-primary hover:text-primary-container font-semibold transition-colors flex items-center gap-1 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px]">add</span> Link to Incident
+                    </button>
+<div class="flex gap-2">
+<button class="text-on-surface-variant hover:text-primary transition-colors" title="Preview"><span class="material-symbols-outlined text-[20px]">preview</span></button>
+<button class="text-error hover:text-on-error-container transition-colors" title="Delete"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- File Inspection Modal (Simulated Opened State) -->
+<div class="fixed inset-0 bg-on-surface/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm hidden" id="inspectionModal">
+<div class="bg-surface-container-lowest w-full max-w-4xl rounded-lg shadow-2xl flex flex-col border border-outline-variant max-h-[921px]">
+<div class="flex justify-between items-center p-4 border-b border-outline-variant">
+<h2 class="font-headline-md text-headline-md text-on-surface truncate pr-4">Visayas_Ave_CCTV_Snippet_Aug6.mp4</h2>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors" onclick="document.getElementById('inspectionModal').classList.add('hidden')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-6 bg-surface-container-low">
+<!-- Video Player Area -->
+<div class="w-full bg-on-surface aspect-video rounded-md border border-outline-variant flex items-center justify-center mb-6 relative shadow-inner">
+<span class="material-symbols-outlined text-surface-variant text-6xl opacity-50">play_circle</span>
+<!-- Subtitles/Controls mock -->
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent flex gap-4 items-center">
+<span class="material-symbols-outlined text-white">play_arrow</span>
+<div class="h-1 flex-1 bg-surface-variant/50 rounded-full"><div class="h-full w-1/3 bg-primary rounded-full"></div></div>
+<span class="text-white font-code-md text-xs">00:32 / 01:45</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Chain of Custody -->
+<div class="evidence-card shadow-none bg-surface-container-lowest">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-4 border-b border-outline-variant pb-2">Chain-of-Custody</h4>
+<div class="mb-3">
+<label class="block font-body-sm text-xs text-on-surface-variant mb-1">SHA-256 Checksum</label>
+<div class="bg-surface-container p-2 rounded border border-outline-variant flex justify-between items-center">
+<span class="font-code-md text-[11px] text-on-surface break-all">e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</span>
+<button class="text-outline hover:text-primary"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px] mt-0.5">schedule</span>
+<div>
+<span class="block font-body-sm text-xs text-on-surface-variant">Recorded Timestamp</span>
+<span class="font-code-md text-sm">Aug 6, 2026 — 21:14 PST</span>
+</div>
+</div>
+<div class="flex items-start gap-2 mt-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px] mt-0.5">location_on</span>
+<div>
+<span class="block font-body-sm text-xs text-on-surface-variant">Location Metadata</span>
+<span class="font-body-sm text-sm">Near Purok 3 Hall</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Association Panel -->
+<div class="evidence-card shadow-none bg-surface-container-lowest flex flex-col">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-4 border-b border-outline-variant pb-2">Case Association</h4>
+<div class="bg-primary-fixed/30 border border-primary-fixed p-3 rounded mb-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">link</span>
+<div>
+<span class="block font-body-sm text-xs text-primary font-semibold">Currently Linked</span>
+<a class="font-code-md text-sm text-on-surface hover:underline hover:text-primary" href="#">#BLT-2026-0891 - Vandalism</a>
+</div>
+</div>
+<div class="mt-auto">
+<label class="block font-body-sm text-xs text-on-surface-variant mb-1">Link to another report</label>
+<select class="input-field w-full p-2 border border-outline-variant rounded font-body-sm text-body-sm bg-surface-container-lowest mb-3">
+<option>Select open incident report...</option>
+<option>#BLT-2026-0902 - Noise Complaint</option>
+</select>
+<button class="w-full bg-surface-container-lowest border border-outline text-on-surface py-2 rounded font-body-sm text-body-sm font-semibold hover:bg-surface-container-low transition-colors">
+                                Update Association
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,1 @@
+alter table public.officials enable row level security

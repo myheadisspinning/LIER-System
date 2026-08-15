@@ -1,0 +1,576 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Commonwealth | Superadmin Dashboard</title>
+<!-- Google Fonts: Inter & Poppins -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#eff4ff",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "tertiary": "#000000",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "surface-variant": "#d3e4fe",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#a87d00",
+                    "inverse-surface": "#213145",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-primary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "background": "#f8f9ff",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "on-primary-fixed": "#131b2e",
+                    "on-error": "#ffffff",
+                    "primary": "#0f172a",
+                    "surface-dim": "#cbdbf5",
+                    "tertiary-fixed-dim": "#f9bd22",
+                    "secondary-fixed": "#dbe1ff",
+                    "on-error-container": "#93000a",
+                    "surface-container-highest": "#d3e4fe",
+                    "error-container": "#ffdad6",
+                    "tertiary-container": "#261a00",
+                    "surface-bright": "#f8f9ff",
+                    "secondary": "#0051d5",
+                    "on-secondary-container": "#fefcff",
+                    "inverse-primary": "#bec6e0",
+                    "surface-container": "#e5eeff",
+                    "primary-container": "#0f172a",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#0b1c30",
+                    "primary-fixed": "#dae2fd",
+                    "on-secondary-fixed": "#00174b",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "on-primary-container": "#f1f5f9",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "secondary-container": "#316bf3",
+                    "tertiary-fixed": "#ffdf9f",
+                    "on-tertiary-fixed": "#261a00",
+                    "surface-tint": "#565e74",
+                    "outline-variant": "#cbd5e1",
+                    "on-surface-variant": "#475569",
+                    "outline": "#94a3b8",
+                    "on-surface": "#0f172a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "base": "8px",
+                    "xl": "80px",
+                    "sm": "12px",
+                    "margin-mobile": "16px",
+                    "md": "24px",
+                    "lg": "48px",
+                    "gutter": "24px",
+                    "margin-desktop": "64px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Poppins"],
+                    "caption": ["Inter"],
+                    "display-lg-mobile": ["Poppins"],
+                    "headline-lg": ["Poppins"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Poppins"],
+                    "headline-md": ["Poppins"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["20px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "caption": ["11px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                    "display-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "headline-lg": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "display-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #f8fafc; color: #0f172a; font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+        .fill-icon { font-variation-settings: 'FILL' 1; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .status-badge { padding: 2px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .nav-item-active { background: #1e293b; border-left: 4px solid #3b82f6; color: #f8fafc; }
+        .card-header { border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+    </style>
+</head>
+<body class="min-h-screen flex">
+<!-- Tactical Dark Side Navigation (Anchor: SideNavBar) -->
+<aside class="h-screen w-72 fixed left-0 top-0 bg-primary-container z-50 flex flex-col border-r border-slate-800 shadow-2xl overflow-y-auto">
+<div class="p-6 border-b border-slate-800/50">
+<div class="flex items-center gap-3 mb-1">
+<span class="material-symbols-outlined text-blue-400 text-3xl fill-icon">shield</span>
+<h1 class="font-headline-md text-xl text-white font-bold tracking-tight">Commonwealth</h1>
+</div>
+<p class="text-[11px] text-slate-400 font-bold uppercase tracking-[0.2em]">Law Enforcement Command</p>
+</div>
+<nav class="flex-1 px-3 py-6 space-y-1">
+<!-- 11-module high-density nav -->
+<a class="flex items-start gap-3 px-4 py-3 nav-item-active rounded-md transition-all group" href="#">
+<span class="material-symbols-outlined mt-0.5 group-hover:text-blue-400" data-icon="dashboard">dashboard</span>
+<div>
+<p class="font-bold text-sm">Dashboard</p>
+<p class="text-[10px] opacity-60">System-wide tactical overview</p>
+</div>
+</a>
+<a class="flex items-start gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-md transition-all group" href="#">
+<span class="material-symbols-outlined mt-0.5 group-hover:text-blue-400" data-icon="smart_toy">smart_toy</span>
+<div>
+<p class="font-bold text-sm">AI Assistant</p>
+<p class="text-[10px] opacity-60">Automated incident triage</p>
+</div>
+</a>
+<a class="flex items-start gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-md transition-all group" href="#">
+<span class="material-symbols-outlined mt-0.5 group-hover:text-blue-400" data-icon="assignment">assignment</span>
+<div>
+<p class="font-bold text-sm">Incidents</p>
+<p class="text-[10px] opacity-60">Active report management</p>
+</div>
+</a>
+<a class="flex items-start gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-md transition-all group" href="#">
+<span class="material-symbols-outlined mt-0.5 group-hover:text-blue-400" data-icon="rate_review">rate_review</span>
+<div>
+<p class="font-bold text-sm">Case Review</p>
+<p class="text-[10px] opacity-60">AI-driven evidence analysis</p>
+</div>
+</a>
+<a class="flex items-start gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-md transition-all group" href="#">
+<span class="material-symbols-outlined mt-0.5 group-hover:text-blue-400" data-icon="local_police">local_police</span>
+<div>
+<p class="font-bold text-sm">Dispatch</p>
+<p class="text-[10px] opacity-60">Unit tracking &amp; CAD</p>
+</div>
+</a>
+<a class="flex items-start gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-md transition-all group" href="#">
+<span class="material-symbols-outlined mt-0.5 group-hover:text-blue-400" data-icon="inventory">inventory</span>
+<div>
+<p class="font-bold text-sm">Evidence Vault</p>
+<p class="text-[10px] opacity-60">Digital chain of custody</p>
+</div>
+</a>
+<a class="flex items-start gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-md transition-all group" href="#">
+<span class="material-symbols-outlined mt-0.5 group-hover:text-blue-400" data-icon="groups">groups</span>
+<div>
+<p class="font-bold text-sm">Personnel</p>
+<p class="text-[10px] opacity-60">Unit &amp; roster management</p>
+</div>
+</a>
+<a class="flex items-start gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-md transition-all group" href="#">
+<span class="material-symbols-outlined mt-0.5 group-hover:text-blue-400" data-icon="analytics">analytics</span>
+<div>
+<p class="font-bold text-sm">Analytics</p>
+<p class="text-[10px] opacity-60">Crime patterns &amp; heatmaps</p>
+</div>
+</a>
+<a class="flex items-start gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-md transition-all group" href="#">
+<span class="material-symbols-outlined mt-0.5 group-hover:text-blue-400" data-icon="archive">archive</span>
+<div>
+<p class="font-bold text-sm">Archive</p>
+<p class="text-[10px] opacity-60">Cold cases &amp; history</p>
+</div>
+</a>
+<div class="my-4 border-t border-slate-800 mx-4"></div>
+<a class="flex items-start gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-md transition-all group" href="#">
+<span class="material-symbols-outlined mt-0.5 group-hover:text-blue-400" data-icon="settings">settings</span>
+<div>
+<p class="font-bold text-sm">System Configuration</p>
+<p class="text-[10px] opacity-60">Core engine parameters</p>
+</div>
+</a>
+<a class="flex items-start gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-md transition-all group" href="#">
+<span class="material-symbols-outlined mt-0.5 group-hover:text-blue-400" data-icon="help">help</span>
+<div>
+<p class="font-bold text-sm">Support Portal</p>
+<p class="text-[10px] opacity-60">24/7 Technical assistance</p>
+</div>
+</a>
+</nav>
+<div class="mt-auto p-4 bg-slate-900/50 border-t border-slate-800">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img alt="Superadmin" class="w-10 h-10 rounded-lg object-cover ring-1 ring-slate-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1U1eKKcNfyciLggsOIs6cBGG3Yjs3xgJD9egJQKQ611TGsgD-jMN-Mq485dkkyGumpS5OtTupmrfu2xCmDWwYrofuTJgiOc7y1hKsOYn660xVneDfm0cM4QDVDDfI2TBgtbYo-zSM4NQoe28zoqec2stSxcj3OsAIn_zD5UPuEep_UfC7LiIb5osooaToUWXdXWcmrblJZ5TW9XAs-TYwAh1HTkuVdoY5p8c5QZiC-tI08XOyNPKJ">
+<span class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-slate-900 rounded-full"></span>
+</div>
+<div class="overflow-hidden">
+<p class="text-sm font-bold text-white truncate">Superadmin Maria</p>
+<p class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">Shift Commander</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Workspace -->
+<div class="flex-1 ml-72 flex flex-col">
+<!-- Top Bar -->
+<header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-40">
+<div class="flex items-center gap-8">
+<h2 class="font-headline-lg text-lg text-slate-900 font-bold">Public Safety Administration | <span class="text-blue-600">Admin Panel</span></h2>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-slate-50 border border-slate-200 rounded-md focus:ring-2 focus:ring-blue-500 w-80 text-xs" placeholder="Search incidents, cases, or units..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-md transition-all relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-md transition-all">
+<span class="material-symbols-outlined">history</span>
+</button>
+<div class="w-px h-6 bg-slate-200 mx-2"></div>
+<button class="flex items-center gap-2 px-3 py-1.5 text-slate-700 hover:bg-slate-50 rounded-md font-bold text-sm">
+<span class="material-symbols-outlined fill-icon text-blue-600">account_circle</span>
+<span>Admin</span>
+</button>
+</div>
+</header>
+<!-- Content Area: 2-Column Modular Grid -->
+<main class="p-6 grid grid-cols-12 gap-6 items-start">
+<!-- Left Column: Module 1 & 3 -->
+<div class="col-span-12 lg:col-span-5 space-y-6">
+<!-- 1. AI Incident Assistant -->
+<section class="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col">
+<div class="card-header p-4 pb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-600 font-bold">smart_toy</span>
+<h3 class="font-bold text-sm text-slate-900 uppercase tracking-tight">1. AI Incident Assistant</h3>
+</div>
+<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">LIVE STREAM</span>
+</div>
+<div class="p-4 pt-0 space-y-4">
+<div class="bg-slate-50 border border-slate-200 p-3 rounded-lg">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg">person</span>
+<span class="text-[11px] font-bold text-slate-500">User Report (Tagalog):</span>
+</div>
+<span class="text-[10px] text-slate-400">13m ago</span>
+</div>
+<p class="text-sm text-slate-900 italic font-medium px-6">"May taong nanakot gamit ang kutsilyo sa kanto"</p>
+</div>
+<div class="border border-blue-100 bg-blue-50/30 p-4 rounded-lg relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2 opacity-10">
+<span class="material-symbols-outlined text-6xl">auto_awesome</span>
+</div>
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-blue-600 fill-icon text-lg">auto_awesome</span>
+<span class="text-xs font-bold text-blue-700">AI Suggestion</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-3">
+<div>
+<p class="text-[10px] text-slate-500 uppercase font-bold">Category</p>
+<p class="text-sm font-bold text-slate-900">Threat / Assault</p>
+</div>
+<div>
+<p class="text-[10px] text-slate-500 uppercase font-bold">Priority</p>
+<span class="status-badge bg-red-600 text-white">Critical (High-priority)</span>
+</div>
+</div>
+<p class="text-xs text-slate-700 leading-relaxed"><strong class="text-blue-700">Recommendation:</strong> Dispatch nearest responders and notify local precinct immediately.</p>
+</div>
+<div class="grid grid-cols-3 gap-2 pt-2">
+<button class="bg-blue-600 text-white py-2 rounded font-bold text-[11px] hover:bg-blue-700 shadow-sm transition-all">Accept Suggestion</button>
+<button class="border border-slate-300 text-slate-700 py-2 rounded font-bold text-[11px] hover:bg-slate-50 transition-all">Modify</button>
+<button class="border border-red-200 text-red-600 py-2 rounded font-bold text-[11px] hover:bg-red-50 transition-all">Reject</button>
+</div>
+</div>
+</section>
+<!-- 3. AI-Assisted Case Review -->
+<section class="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col">
+<div class="card-header p-4 pb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-600 font-bold">analytics</span>
+<h3 class="font-bold text-sm text-slate-900 uppercase tracking-tight">3. Case Analysis</h3>
+</div>
+</div>
+<div class="p-4 pt-0 space-y-4">
+<div class="border-l-4 border-blue-600 bg-slate-50 p-4 rounded-r-lg">
+<div class="flex items-center justify-between mb-3">
+<p class="text-xs font-bold text-slate-900">Case ID: CAS-501</p>
+<span class="status-badge bg-green-100 text-green-700">Active</span>
+</div>
+<div class="flex gap-3 mb-4">
+<span class="material-symbols-outlined text-blue-600 fill-icon">smart_toy</span>
+<p class="text-xs text-slate-700 font-medium leading-relaxed italic">
+                                "The report lacks time and exact location. Request additional information."
+                            </p>
+</div>
+<div class="bg-white border border-slate-200 p-3 rounded-md mb-4 shadow-sm">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">AI Prompt Suggestions:</p>
+<ul class="space-y-1.5">
+<li class="flex items-center gap-2 text-xs font-semibold text-slate-700">
+<span class="w-1 h-1 rounded-full bg-blue-600"></span> Exact Time
+                                </li>
+<li class="flex items-center gap-2 text-xs font-semibold text-slate-700">
+<span class="w-1 h-1 rounded-full bg-blue-600"></span> Specific Address
+                                </li>
+</ul>
+</div>
+<button class="w-full bg-blue-600 text-white py-2 rounded font-bold text-xs hover:bg-blue-700 shadow-md">Request Info</button>
+</div>
+<div class="space-y-2">
+<p class="text-[10px] font-bold text-slate-400 uppercase px-1">Other Active Cases</p>
+<div class="flex items-center justify-between p-2.5 bg-white border border-slate-100 rounded-md hover:border-blue-200 cursor-pointer transition-all">
+<span class="text-xs font-bold text-slate-700">CAS-499: Theft Inquiry</span>
+<span class="text-[10px] text-slate-400 font-bold uppercase tracking-tight">2h ago</span>
+</div>
+<div class="flex items-center justify-between p-2.5 bg-white border border-slate-100 rounded-md hover:border-blue-200 cursor-pointer transition-all">
+<span class="text-xs font-bold text-slate-700">CAS-495: Vandalism Disturbance</span>
+<span class="text-[10px] text-slate-400 font-bold uppercase tracking-tight">5h ago</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Module 2, 4 & 5 -->
+<div class="col-span-12 lg:col-span-7 space-y-6">
+<!-- 2. Incident Management -->
+<section class="bg-white rounded-xl border border-slate-200 shadow-sm">
+<div class="card-header p-4 pb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-600 font-bold">assignment</span>
+<h3 class="font-bold text-sm text-slate-900 uppercase tracking-tight">2. Incident Management</h3>
+</div>
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-slate-50 border border-slate-200 rounded text-slate-500"><span class="material-symbols-outlined text-sm">filter_list</span></button>
+<button class="bg-blue-600 text-white px-3 py-1 rounded text-[11px] font-bold">+ NEW REPORT</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 border-y border-slate-200">
+<tr>
+<th class="py-2.5 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Report ID</th>
+<th class="py-2.5 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Timestamp</th>
+<th class="py-2.5 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Summary</th>
+<th class="py-2.5 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Status</th>
+<th class="py-2.5 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-blue-50/30 transition-colors">
+<td class="py-3 px-4 text-xs font-bold text-blue-600">REP-8902</td>
+<td class="py-3 px-4 text-xs text-slate-600">10:45 AM, Oct 24</td>
+<td class="py-3 px-4 text-xs text-slate-900 font-medium">Weapon threat at Commonwealth corner</td>
+<td class="py-3 px-4"><span class="status-badge bg-blue-100 text-blue-700">Pending</span></td>
+<td class="py-3 px-4 text-right">
+<div class="flex gap-2 justify-end">
+<button class="text-[10px] font-bold text-blue-600 uppercase hover:underline">Verify</button>
+<button class="text-[10px] font-bold text-slate-400 uppercase hover:text-slate-900">Assign</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-blue-50/30 transition-colors">
+<td class="py-3 px-4 text-xs font-bold text-blue-600">REP-8901</td>
+<td class="py-3 px-4 text-xs text-slate-600">10:30 AM, Oct 24</td>
+<td class="py-3 px-4 text-xs text-slate-900 font-medium">Broken traffic light, Magsaysay St.</td>
+<td class="py-3 px-4"><span class="status-badge bg-amber-100 text-amber-700">Progress</span></td>
+<td class="py-3 px-4 text-right">
+<div class="flex gap-2 justify-end">
+<button class="text-[10px] font-bold text-blue-600 uppercase hover:underline">Verify</button>
+<button class="text-[10px] font-bold text-slate-400 uppercase hover:text-slate-900">Assign</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-blue-50/30 transition-colors">
+<td class="py-3 px-4 text-xs font-bold text-blue-600">REP-8899</td>
+<td class="py-3 px-4 text-xs text-slate-600">09:12 AM, Oct 24</td>
+<td class="py-3 px-4 text-xs text-slate-900 font-medium">Public disturbance, Area 4 Market</td>
+<td class="py-3 px-4"><span class="status-badge bg-red-600 text-white">Critical</span></td>
+<td class="py-3 px-4 text-right">
+<div class="flex gap-2 justify-end">
+<button class="text-[10px] font-bold text-blue-600 uppercase hover:underline">Verify</button>
+<button class="text-[10px] font-bold text-slate-400 uppercase hover:text-slate-900">Assign</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-3 border-t border-slate-100 flex items-center justify-between text-[10px] font-bold text-slate-400">
+<span>Showing 3 of 42 records</span>
+<div class="flex gap-1">
+<button class="w-6 h-6 flex items-center justify-center border border-slate-200 rounded hover:bg-slate-50"><span class="material-symbols-outlined text-sm">chevron_left</span></button>
+<button class="w-6 h-6 flex items-center justify-center bg-blue-600 text-white rounded">1</button>
+<button class="w-6 h-6 flex items-center justify-center border border-slate-200 rounded hover:bg-slate-50">2</button>
+<button class="w-6 h-6 flex items-center justify-center border border-slate-200 rounded hover:bg-slate-50"><span class="material-symbols-outlined text-sm">chevron_right</span></button>
+</div>
+</div>
+</section>
+<!-- 4. Dispatch Support Management -->
+<section class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden h-[450px] flex flex-col">
+<div class="card-header p-4 pb-2 border-b-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-600 font-bold">local_police</span>
+<h3 class="font-bold text-sm text-slate-900 uppercase tracking-tight">4. Dispatch Support Management</h3>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-0.5 bg-green-100 rounded-full">
+<span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+<span class="text-[9px] font-bold text-green-700 uppercase">Secure</span>
+</div>
+</div>
+<div class="flex-1 flex border-t border-slate-100">
+<!-- Map Canvas -->
+<div class="flex-1 bg-slate-100 relative">
+<div class="absolute inset-0 bg-cover bg-center opacity-80" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDbmIS1VTOcrHKN-CSwl3tzvtZ_30a6GsxCt6BQmubrEEAz1lNIcPPPoyVIglE_seHMVpRCSH_a2x_9QGIHINjNL02OzbJUGraJkIDUShPO0N2xWGX_sYP7csuOnPHuwSIIdQ7Y4YCuVeAiM7mkkw13yvRGHlDyPbl8mwO1JL40N4-MNSSjuMqDHRAoo5P3ZsBK3ZR7leTI6SSP-zC5RuQBpANYfyi8n_XxuqJal0OYeIJclqJazoF_')"></div>
+<div class="absolute top-4 left-4 bg-white/95 p-2 rounded border border-slate-200 shadow-sm space-y-1">
+<div class="flex items-center gap-2 text-[9px] font-bold uppercase"><span class="w-2 h-2 rounded-full bg-red-500"></span> Incident</div>
+<div class="flex items-center gap-2 text-[9px] font-bold uppercase"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Units (Active)</div>
+</div>
+</div>
+<!-- AI Responses & Unit Roster -->
+<div class="w-64 border-l border-slate-100 bg-slate-50/50 flex flex-col p-4 overflow-y-auto space-y-5">
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">AI Recommended Responses</p>
+<div class="space-y-2">
+<div class="bg-white border border-slate-200 p-2 rounded text-[11px] font-medium text-slate-700 shadow-sm relative">
+<span class="absolute top-0 left-0 w-1 h-full bg-blue-500"></span>
+                                    "Patrol Unit A, proceed to Commonwealth corner for REP-8902."
+                                </div>
+<div class="bg-white border border-slate-200 p-2 rounded text-[11px] font-medium text-slate-700 shadow-sm relative">
+<span class="absolute top-0 left-0 w-1 h-full bg-red-500"></span>
+                                    "Medical Alert: Notify General Hospital for standby."
+                                </div>
+</div>
+</div>
+<div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Unit Status</p>
+<div class="space-y-1.5">
+<div class="bg-white p-2 border border-slate-200 rounded flex items-center justify-between shadow-sm">
+<div>
+<p class="text-[11px] font-bold text-slate-900">Alpha-1</p>
+<p class="text-[9px] text-green-600 font-bold">ARRIVED</p>
+</div>
+<span class="material-symbols-outlined text-blue-600 text-base fill-icon">shield</span>
+</div>
+<div class="bg-white p-2 border border-slate-200 rounded flex items-center justify-between shadow-sm">
+<div>
+<p class="text-[11px] font-bold text-slate-900">Bravo-4</p>
+<p class="text-[9px] text-amber-600 font-bold">EN ROUTE</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-base">shield</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Evidence & Case Management -->
+<section class="bg-white rounded-xl border border-slate-200 shadow-sm">
+<div class="card-header p-4 pb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-600 font-bold">inventory</span>
+<h3 class="font-bold text-sm text-slate-900 uppercase tracking-tight">5. Evidence &amp; Case Records</h3>
+</div>
+</div>
+<div class="flex flex-col xl:flex-row gap-0">
+<div class="flex-1">
+<table class="w-full text-left">
+<thead class="bg-slate-50 border-y border-slate-200">
+<tr>
+<th class="py-2.5 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Case ID</th>
+<th class="py-2.5 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Category</th>
+<th class="py-2.5 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Status</th>
+<th class="py-2.5 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Evidence</th>
+<th class="py-2.5 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Timeline</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-slate-50/50">
+<td class="py-3.5 px-4 text-xs font-bold text-blue-600">CAS-501</td>
+<td class="py-3.5 px-4 text-xs text-slate-600">Threat</td>
+<td class="py-3.5 px-4"><span class="status-badge bg-red-100 text-red-700">Critical</span></td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-slate-400 text-sm">image</span>
+<span class="material-symbols-outlined text-slate-400 text-sm">attach_file</span>
+<span class="text-[10px] font-bold text-blue-600">+3</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-blue-600 w-3/4"></div>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50">
+<td class="py-3.5 px-4 text-xs font-bold text-blue-600">CAS-498</td>
+<td class="py-3.5 px-4 text-xs text-slate-600">Robbery</td>
+<td class="py-3.5 px-4"><span class="status-badge bg-slate-100 text-slate-600">Review</span></td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-slate-400 text-sm">videocam</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-blue-600 w-1/4"></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="w-full xl:w-72 bg-slate-50 border-l border-slate-200 p-4">
+<p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-4">Live Evidence Feed</p>
+<div class="space-y-4 border-l border-slate-200 ml-2">
+<div class="relative pl-6 pb-4">
+<span class="absolute left-[-5px] top-0 w-2.5 h-2.5 rounded-full bg-blue-600 ring-4 ring-slate-50"></span>
+<p class="text-[11px] font-bold text-slate-900">Photo_Weapon_01.jpg</p>
+<p class="text-[9px] text-slate-400 font-bold">Uploaded by Unit A-1 • 10:55 AM</p>
+</div>
+<div class="relative pl-6 pb-4">
+<span class="absolute left-[-5px] top-0 w-2.5 h-2.5 rounded-full bg-slate-300 ring-4 ring-slate-50"></span>
+<p class="text-[11px] font-bold text-slate-900">Witness_Statement.pdf</p>
+<p class="text-[9px] text-slate-400 font-bold">Pending Verification • 09:30 AM</p>
+</div>
+</div>
+<div class="mt-4 border-2 border-dashed border-slate-200 rounded-lg p-4 flex flex-col items-center justify-center bg-white/50 hover:bg-white transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-slate-300 group-hover:text-blue-500 transition-colors mb-1">upload_file</span>
+<p class="text-[10px] font-bold text-slate-500">Drag Evidence</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<script>
+    // Visual indicators for interactivity
+    document.querySelectorAll('button, a').forEach(el => {
+        el.addEventListener('click', function() {
+            this.classList.add('scale-[0.98]');
+            setTimeout(() => this.classList.remove('scale-[0.98]'), 100);
+        });
+    });
+
+    // Simulating dashboard dynamism
+    const statusDot = document.querySelector('.animate-pulse');
+    setInterval(() => {
+        statusDot.classList.toggle('opacity-50');
+    }, 2000);
+</script>
+</body></html>

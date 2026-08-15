@@ -1,0 +1,1 @@
+drop policy if exists "presence read all" on public.presence

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Blotter &amp; Case Tracking - Commonwealth Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#dae2fd",
+                        "error-container": "#ffdad6",
+                        "outline": "#76777d",
+                        "surface-bg": "#f8fafc",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-secondary-fixed": "#00174b",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#f9bd22",
+                        "on-error-container": "#93000a",
+                        "text-on-dark": "#cbd5e1",
+                        "surface-container": "#e5eeff",
+                        "warning-amber": "#f59e0b",
+                        "inverse-surface": "#213145",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-primary-fixed": "#131b2e",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#316bf3",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#a87d00",
+                        "surface-bright": "#f8f9ff",
+                        "surface-tint": "#565e74",
+                        "background": "#f8f9ff",
+                        "border-subtle": "#e2e8f0",
+                        "tertiary-container": "#261a00",
+                        "surface": "#f8f9ff",
+                        "secondary": "#0051d5",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#c6c6cd",
+                        "on-primary-container": "#7c839b",
+                        "surface-variant": "#d3e4fe",
+                        "error-red": "#ef4444",
+                        "on-background": "#0b1c30",
+                        "secondary-fixed": "#dbe1ff",
+                        "primary-container": "#131b2e",
+                        "tertiary": "#000000",
+                        "surface-container-low": "#eff4ff",
+                        "primary": "#000000",
+                        "surface-dim": "#cbdbf5",
+                        "on-surface": "#0b1c30",
+                        "sidebar-bg": "#0f172a",
+                        "on-secondary-container": "#fefcff",
+                        "inverse-primary": "#bec6e0",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "surface-container-high": "#dce9ff",
+                        "success-green": "#22c55e",
+                        "on-tertiary-fixed": "#261a00",
+                        "tertiary-fixed": "#ffdfa0",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "on-surface-variant": "#45464d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "sidebar-width": "256px",
+                        "base": "8px",
+                        "md": "24px",
+                        "margin-desktop": "40px",
+                        "sm": "12px",
+                        "lg": "48px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Poppins"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Poppins"],
+                        "headline-md": ["Poppins"],
+                        "caps-xs": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "display-lg": ["36px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["15px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.025em", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "caps-xs": ["10px", { "lineHeight": "12px", "letterSpacing": "0.1em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0; }
+        .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-surface-bg text-on-surface antialiased flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-sidebar-width bg-sidebar-bg flex flex-col py-md z-50">
+<div class="px-md mb-8 flex items-center gap-4">
+<img alt="Barangay Seal" class="w-10 h-10 rounded-full" data-alt="A highly detailed official government seal for a barangay command center. The logo features a crest with intricate vector details in gold and navy blue, symbolizing authority, order, and community service. Clean modern corporate vector art style on a dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJyv0tRkSDKojAIcy4XUQJIqKbhN-Zr-8qiFDel2KpkY2lEfrASTY3sXPNDVl02XkqivSU4Tb9bEntNJlrYP8xU5hSjLk10Gy20xLpoBvxFQuXWa1ECwj7mz9oJp0iOHI77BMrtmqNALsfRZekMopGMM7EATb8jfPliDmb0Dj0W_ifovRvwzu88QzzFmyQQuhlW44lZ_wGnB39ixbN-6Ufn2HtJt1yWxzaotx8WVjKM7nP0BSYeay5"/>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary leading-tight">Commonwealth Command</h1>
+<p class="font-caps-xs text-caps-xs text-text-on-dark/70 uppercase tracking-wider mt-1">Operational HQ</p>
+</div>
+</div>
+<div class="px-md mb-6">
+<button class="w-full bg-secondary hover:bg-secondary/90 text-on-secondary font-label-md text-label-md py-3 px-4 rounded-lg shadow-2xl flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined fill text-[20px]">add_circle</span>
+                Quick Dispatch
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto px-sm flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill">dashboard</span>
+<div>
+<div class="font-label-md text-label-md">Command Dashboard</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill">emergency</span>
+<div>
+<div class="font-label-md text-label-md">Incident Reporting</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill">smart_toy</span>
+<div>
+<div class="font-label-md text-label-md">AI Dispatch</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill">forum</span>
+<div>
+<div class="font-label-md text-label-md">Contacts &amp; Inbox</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-secondary-container/20 text-on-secondary-container border-l-4 border-secondary opacity-90 transition-all" href="#">
+<span class="material-symbols-outlined fill">description</span>
+<div>
+<div class="font-label-md text-label-md">Tracking &amp; Docs</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill">inventory_2</span>
+<div>
+<div class="font-label-md text-label-md">Evidence Vault</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill">notifications_active</span>
+<div>
+<div class="font-label-md text-label-md">Status Notifications</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill">assignment_turned_in</span>
+<div>
+<div class="font-label-md text-label-md">Case Monitoring</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill">analytics</span>
+<div>
+<div class="font-label-md text-label-md">Reports &amp; Analytics</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill">groups</span>
+<div>
+<div class="font-label-md text-label-md">Officials MGMT</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill">history</span>
+<div>
+<div class="font-label-md text-label-md">Audit Logs</div>
+</div>
+</a>
+</div>
+<div class="mt-auto px-sm pt-4 border-t border-white/10 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:fill">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 ml-sidebar-width flex flex-col h-screen overflow-hidden">
+<!-- Header Section -->
+<header class="bg-surface-container-lowest border-b border-border-subtle px-gutter py-md shrink-0">
+<div class="max-w-7xl mx-auto flex flex-col gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">Blotter &amp; Case Tracking (Katarungang Pambarangay)</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Official record of local dispute mediations, formal blotter entries, and Lupon Tagapamayapa hearings.</p>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-4 mt-2">
+<div class="flex flex-wrap items-center gap-3 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 font-body-sm text-body-sm focus:ring-2 focus:ring-secondary/50 placeholder-on-surface-variant/70" placeholder="Search Complainant / Respondent / Case No..." type="text"/>
+</div>
+<div class="flex bg-surface-container-low rounded-lg p-1">
+<button class="px-3 py-1 rounded bg-white shadow-sm font-label-sm text-label-sm text-on-surface">All</button>
+<button class="px-3 py-1 rounded hover:bg-white/50 font-label-sm text-label-sm text-on-surface-variant">Pending</button>
+<button class="px-3 py-1 rounded hover:bg-white/50 font-label-sm text-label-sm text-on-surface-variant">Settled</button>
+<button class="px-3 py-1 rounded hover:bg-white/50 font-label-sm text-label-sm text-on-surface-variant">Escalated</button>
+</div>
+<select class="bg-surface-container-low border-none rounded-lg py-2 pl-3 pr-8 font-label-sm text-label-sm focus:ring-2 focus:ring-secondary/50 text-on-surface-variant">
+<option>All Puroks</option>
+<option>Purok 1</option>
+<option>Purok 2</option>
+<option>Purok 3</option>
+</select>
+</div>
+<button class="bg-[#1E40AF] hover:bg-[#1E40AF]/90 text-white font-label-md text-label-md py-2 px-4 rounded-lg flex items-center gap-2 transition-colors shrink-0">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        File New Blotter Entry
+                    </button>
+</div>
+</div>
+</header>
+<!-- Split View Layout -->
+<div class="flex-1 flex overflow-hidden max-w-7xl mx-auto w-full p-gutter gap-gutter">
+<!-- Left Data Table (65%) -->
+<div class="flex-[6.5] bg-surface-container-lowest rounded-xl border border-border-subtle shadow-sm flex flex-col overflow-hidden">
+<div class="px-5 py-4 border-b border-border-subtle bg-surface-bright flex items-center justify-between">
+<div class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-widest">Active Cases Register</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">more_horiz</span>
+</div>
+<div class="flex-1 overflow-auto">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface-bright z-10 border-b border-border-subtle">
+<tr>
+<th class="px-5 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-semibold whitespace-nowrap">Blotter No.</th>
+<th class="px-5 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-semibold whitespace-nowrap">Filing Date</th>
+<th class="px-5 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-semibold">Complainant vs. Respondent</th>
+<th class="px-5 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-semibold">Status</th>
+<th class="px-5 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-subtle">
+<!-- Row 1 (Active) -->
+<tr class="hover:bg-slate-50 transition-colors bg-blue-50/30 cursor-pointer">
+<td class="px-5 py-4 font-label-md text-label-md text-secondary font-medium">#BLTR-2026-014</td>
+<td class="px-5 py-4 font-body-sm text-body-sm text-on-surface-variant">Oct 12, 2026</td>
+<td class="px-5 py-4">
+<div class="font-label-sm text-label-sm text-on-surface font-medium">Juan Dela Cruz</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant text-xs mt-0.5">vs. Pedro Penduko</div>
+<div class="font-caps-xs text-caps-xs text-[#1E40AF] mt-1">Property Dispute</div>
+</td>
+<td class="px-5 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 font-label-sm text-[11px] font-medium border border-amber-200">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Scheduled
+                                    </span>
+</td>
+<td class="px-5 py-4 text-right">
+<button class="text-on-surface-variant hover:text-secondary p-1"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 transition-colors cursor-pointer">
+<td class="px-5 py-4 font-label-md text-label-md text-on-surface font-medium">#BLTR-2026-013</td>
+<td class="px-5 py-4 font-body-sm text-body-sm text-on-surface-variant">Oct 10, 2026</td>
+<td class="px-5 py-4">
+<div class="font-label-sm text-label-sm text-on-surface font-medium">Maria Clara</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant text-xs mt-0.5">vs. Crisostomo Ibarra</div>
+<div class="font-caps-xs text-caps-xs text-[#1E40AF] mt-1">Noise Complaint</div>
+</td>
+<td class="px-5 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 text-green-700 font-label-sm text-[11px] font-medium border border-green-200">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Settled
+                                    </span>
+</td>
+<td class="px-5 py-4 text-right">
+<button class="text-on-surface-variant hover:text-secondary p-1"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right Side Drawer (35%) -->
+<div class="flex-[3.5] bg-surface-container-lowest rounded-xl border border-border-subtle shadow-sm flex flex-col overflow-hidden">
+<div class="px-5 py-4 border-b border-border-subtle bg-[#1E40AF] text-white flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-caps-xs text-[10px] uppercase tracking-widest text-white/80">Case File</span>
+<button class="text-white/80 hover:text-white"><span class="material-symbols-outlined text-[18px]">close</span></button>
+</div>
+<div class="font-headline-md text-headline-md font-bold">#BLTR-2026-014</div>
+</div>
+<div class="flex-1 overflow-auto p-5 flex flex-col gap-6 bg-surface-bg">
+<!-- Statement -->
+<div class="bg-white rounded-lg border border-border-subtle p-4 shadow-sm">
+<h4 class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-widest mb-3">Statement of Dispute</h4>
+<p class="font-body-sm text-body-sm text-on-surface leading-relaxed">
+                            Complainant alleges that respondent encroached approximately 2 meters into their property line while constructing a new concrete fence. Respondent claims the lot boundaries were mutually agreed upon in 2015.
+                        </p>
+<div class="mt-4 pt-3 border-t border-border-subtle flex justify-between items-center text-xs text-on-surface-variant">
+<span>Assigned Lupon: Kagawad Reyes</span>
+</div>
+</div>
+<!-- Hearing Logs -->
+<div class="bg-white rounded-lg border border-border-subtle p-4 shadow-sm">
+<h4 class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-widest mb-4">Lupon Hearing Logs</h4>
+<div class="relative pl-4 border-l-2 border-border-subtle space-y-4">
+<div class="relative">
+<span class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-[#1E40AF] border-2 border-white"></span>
+<div class="font-label-sm text-label-sm text-on-surface font-medium">1st Conciliation Hearing</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant text-xs mt-1">Oct 15, 2026 • Scheduled</div>
+</div>
+<div class="relative opacity-50">
+<span class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-border-subtle border-2 border-white"></span>
+<div class="font-label-sm text-label-sm text-on-surface font-medium">2nd Conciliation Hearing</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant text-xs mt-1">Pending outcome of 1st hearing</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Drawer Actions -->
+<div class="p-5 border-t border-border-subtle bg-surface-bright flex flex-col gap-2">
+<button class="w-full bg-white border border-border-subtle hover:bg-slate-50 text-on-surface font-label-md text-label-md py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span> Generate Summons PDF
+                    </button>
+<div class="flex gap-2">
+<button class="flex-1 bg-white border border-error-red/30 hover:bg-error-red/5 text-error-red font-label-md text-label-md py-2.5 rounded-lg transition-colors">
+                            Escalate (CFA)
+                        </button>
+<button class="flex-1 bg-[#1E40AF] hover:bg-[#1E40AF]/90 text-white font-label-md text-label-md py-2.5 rounded-lg transition-colors">
+                            Close Case
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

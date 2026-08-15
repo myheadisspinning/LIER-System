@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Configuration Management - Commonwealth Superadmin</title>
+<!-- Google Fonts: Poppins (Display) and Inter (Body) -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#dbe1ff",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "tertiary-fixed": "#ffdf9f",
+                    "inverse-surface": "#213145",
+                    "surface": "#f8f9ff",
+                    "primary-fixed": "#dae2fd",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-secondary-fixed": "#00174b",
+                    "tertiary-container": "#261a00",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#7c839b",
+                    "on-tertiary-fixed": "#261a00",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#cbdbf5",
+                    "on-background": "#0b1c30",
+                    "tertiary": "#000000",
+                    "surface-container-low": "#eff4ff",
+                    "surface-container": "#e5eeff",
+                    "primary-fixed-dim": "#bec6e0",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "on-surface": "#0b1c30",
+                    "on-secondary": "#ffffff",
+                    "on-surface-variant": "#45464d",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#c6c6cd",
+                    "inverse-primary": "#bec6e0",
+                    "primary": "#000000",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#76777d",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#f8f9ff",
+                    "surface-variant": "#d3e4fe",
+                    "secondary": "#0051d5",
+                    "primary-container": "#131b2e",
+                    "on-tertiary-container": "#a87d00",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "surface-container-high": "#dce9ff",
+                    "background": "#f8f9ff",
+                    "on-secondary-container": "#fefcff",
+                    "tertiary-fixed-dim": "#f9bd22",
+                    "surface-tint": "#565e74",
+                    "surface-container-highest": "#d3e4fe",
+                    "on-primary-fixed": "#131b2e",
+                    "secondary-container": "#316bf3",
+                    "on-error": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "64px",
+                    "gutter": "24px",
+                    "xl": "80px",
+                    "md": "24px",
+                    "xs": "4px",
+                    "base": "8px",
+                    "margin-mobile": "16px",
+                    "sm": "12px",
+                    "lg": "48px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Poppins"],
+                    "body-lg": ["Inter"],
+                    "caption": ["Inter"],
+                    "display-lg-mobile": ["Poppins"],
+                    "display-lg": ["Poppins"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Poppins"],
+                    "headline-lg": ["Poppins"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .nav-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .nav-scroll::-webkit-scrollbar-thumb {
+            background: rgba(124, 131, 155, 0.2);
+            border-radius: 10px;
+        }
+        .sidebar-active {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: white;
+            position: relative;
+        }
+        .sidebar-active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 24px;
+            background-color: #0051d5;
+            border-radius: 0 4px 4px 0;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="w-64 fixed left-0 top-0 bottom-0 bg-on-primary-fixed text-slate-300 flex flex-col border-r border-slate-800 z-50">
+<div class="p-6 mb-4">
+<h1 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+<span class="w-2 h-6 bg-secondary rounded-full"></span>
+            Commonwealth
+        </h1>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1 font-bold">Safety Command</p>
+</div>
+<nav class="flex-grow flex flex-col px-3 gap-1 overflow-y-auto nav-scroll pb-10">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<div class="flex flex-col">
+<span class="text-sm font-medium">Dashboard</span>
+</div>
+</a>
+<!-- Reports -->
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-all" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<div class="flex flex-col">
+<span class="text-sm font-medium">Reports</span>
+</div>
+</a>
+<!-- Administration -->
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-all" href="#">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<div class="flex flex-col">
+<span class="text-sm font-medium">Administration</span>
+</div>
+</a>
+<!-- Settings (Active) -->
+<a class="flex items-center gap-3 px-3 py-2 sidebar-active rounded-r-md transition-all" href="#">
+<span class="material-symbols-outlined ml-2">settings</span>
+<div class="flex flex-col">
+<span class="text-sm font-semibold">Settings</span>
+<span class="text-[10px] text-slate-400">System configuration</span>
+</div>
+</a>
+<!-- System Logs -->
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-all" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<div class="flex flex-col">
+<span class="text-sm font-medium">System Logs</span>
+</div>
+</a>
+</nav>
+<div class="mt-auto p-4 border-t border-slate-800 text-center">
+<p class="text-[10px] text-slate-500">v2.4.0-PROD</p>
+</div>
+</aside>
+<!-- Main Shell -->
+<div class="flex-1 flex flex-col ml-64 min-h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="h-16 bg-white border-b border-slate-200 sticky top-0 w-full z-40 px-10 flex justify-between items-center">
+<div class="flex flex-col">
+<h2 class="text-lg font-bold text-slate-900 leading-tight">Superadmin Control Panel - AI Configuration Management</h2>
+<p class="text-xs text-slate-500 font-medium">System Owner / Technical Control</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" style="font-size: 18px;">search</span>
+<input class="pl-9 pr-4 py-1.5 bg-slate-100 rounded-lg border-transparent focus:ring-1 focus:ring-secondary w-64 text-sm" placeholder="Search parameters..." type="text"/>
+</div>
+<div class="flex items-center gap-3 border-l border-slate-200 pl-6">
+<button class="p-1.5 text-slate-500 hover:bg-slate-100 rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden">
+<span class="material-symbols-outlined flex items-center justify-center h-full w-full text-slate-500">account_circle</span>
+</div>
+<span class="text-xs font-semibold text-slate-700">Admin_Root</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Content -->
+<main class="flex-1 overflow-y-auto p-8 bg-[#F8F9FF]">
+<!-- Top Row Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+<!-- SECTION 1: AI Configuration Management -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">settings_input_component</span>
+                        AI Configuration
+                    </h3>
+<span class="px-2.5 py-0.5 bg-green-50 text-green-700 text-[10px] font-bold rounded-full border border-green-100 flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> ACTIVE / ONLINE (100% UPTIME)
+                    </span>
+</div>
+<div class="space-y-6">
+<!-- API Key -->
+<div>
+<label class="block text-xs font-semibold text-slate-500 mb-2">Google Gemini API integration</label>
+<div class="flex gap-2">
+<input class="flex-1 text-sm bg-slate-50 border-slate-200 rounded-lg px-4 py-2 text-slate-600 font-mono" readonly="" type="password" value="sk-gemini-••••••••••••••••••••3a7f"/>
+<button class="px-3 py-2 bg-slate-100 text-slate-700 text-xs font-bold rounded-lg hover:bg-slate-200 transition-colors">Manage API Keys</button>
+</div>
+</div>
+<!-- Toggle & Status -->
+<div class="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+<div>
+<p class="text-sm font-semibold text-slate-900">Enable/Disable AI Assistance</p>
+<p class="text-xs text-slate-500">Global toggle for AI-assisted classification</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<!-- Slider -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="text-xs font-semibold text-slate-500">AI Response Limits (Max Tokens)</label>
+<span class="text-xs font-bold text-secondary">1024 Tokens</span>
+</div>
+<input class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-secondary" max="4096" min="256" type="range" value="1024"/>
+<div class="flex justify-between mt-1">
+<span class="text-[10px] text-slate-400">256</span>
+<span class="text-[10px] text-slate-400">4096</span>
+</div>
+</div>
+<button class="w-full py-2.5 bg-on-primary-fixed text-white text-sm font-bold rounded-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">tune</span>
+                        Configure AI usage settings
+                    </button>
+</div>
+</div>
+<!-- SECTION 2: AI Model Monitoring -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+<h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">monitoring</span>
+                    AI Model Monitoring
+                </h3>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+<p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Success Rate</p>
+<div class="flex items-end justify-between">
+<span class="text-xl font-bold text-green-600">99.8%</span>
+<div class="h-6 w-16 flex items-end gap-0.5 pb-1">
+<div class="w-1 bg-green-500 h-2 rounded-t-sm"></div>
+<div class="w-1 bg-green-500 h-3 rounded-t-sm"></div>
+<div class="w-1 bg-green-500 h-4 rounded-t-sm"></div>
+<div class="w-1 bg-green-500 h-5 rounded-t-sm"></div>
+<div class="w-1 bg-green-500 h-6 rounded-t-sm"></div>
+</div>
+</div>
+</div>
+<div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+<p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Avg Response</p>
+<div class="flex items-end justify-between">
+<span class="text-xl font-bold text-slate-900">1.2s</span>
+<div class="h-6 w-16 flex items-end gap-1 pb-1">
+<div class="w-2 bg-secondary h-4 rounded-t-sm"></div>
+<div class="w-2 bg-secondary h-2 rounded-t-sm"></div>
+<div class="w-2 bg-secondary h-5 rounded-t-sm"></div>
+<div class="w-2 bg-secondary h-3 rounded-t-sm"></div>
+</div>
+</div>
+</div>
+<div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+<p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Total Requests</p>
+<div class="flex items-end justify-between">
+<span class="text-xl font-bold text-slate-900">5,432</span>
+<div class="w-6 h-6 border-4 border-slate-200 border-t-secondary rounded-full"></div>
+</div>
+</div>
+<div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+<p class="text-[10px] font-bold text-slate-400 uppercase mb-1">AI Uptime</p>
+<div class="flex items-center gap-2">
+<span class="text-xl font-bold text-slate-900 tracking-tighter">99.9%</span>
+<span class="material-symbols-outlined text-green-500 text-sm">trending_up</span>
+</div>
+</div>
+</div>
+<!-- Preview Box -->
+<div class="mt-auto border border-slate-200 rounded-lg overflow-hidden">
+<div class="bg-slate-50 px-4 py-2 border-b border-slate-200 flex justify-between items-center">
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Real-time Inference Preview</span>
+<span class="px-1.5 py-0.5 bg-green-100 text-green-700 text-[9px] font-black rounded uppercase">Success</span>
+</div>
+<div class="p-4 space-y-3">
+<div class="text-xs">
+<span class="font-bold text-slate-400 uppercase block mb-1">User Report:</span>
+<p class="text-slate-700 bg-slate-50 p-2 rounded italic">"Someone stole my motorcycle from the parking lot."</p>
+</div>
+<div class="grid grid-cols-3 gap-2 text-[11px]">
+<div class="flex flex-col"><span class="font-bold text-slate-400 uppercase">Category</span><span class="font-semibold text-slate-900">Theft</span></div>
+<div class="flex flex-col"><span class="font-bold text-slate-400 uppercase">Priority</span><span class="font-semibold text-red-600">High</span></div>
+<div class="flex flex-col"><span class="font-bold text-slate-400 uppercase">Status</span><span class="font-semibold text-green-600">Successful</span></div>
+</div>
+<div class="pt-2 border-t border-slate-100">
+<span class="font-bold text-slate-400 uppercase text-[10px] block mb-1">Suggested Action:</span>
+<span class="text-xs font-bold text-secondary">Dispatch officer</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Row Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- SECTION 3: Fallback Rule Engine Management -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">terminal</span>
+                        Fallback Rule Engine
+                    </h3>
+<button class="p-1.5 text-secondary hover:bg-slate-50 rounded transition-colors">
+<span class="material-symbols-outlined">add_box</span>
+</button>
+</div>
+<div class="mb-4 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-slate-50 border-slate-200 rounded-lg text-xs" placeholder="Search fallback rules..." type="text"/>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-xs border-collapse">
+<thead>
+<tr class="border-b border-slate-100">
+<th class="py-2 text-[10px] font-bold text-slate-400 uppercase">Keywords</th>
+<th class="py-2 text-[10px] font-bold text-slate-400 uppercase">Category</th>
+<th class="py-2 text-[10px] font-bold text-slate-400 uppercase">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr class="hover:bg-slate-50 cursor-pointer">
+<td class="py-3 font-medium text-slate-600">stolen, missing...</td>
+<td class="py-3"><span class="px-1.5 py-0.5 bg-slate-100 rounded text-slate-700">Theft</span></td>
+<td class="py-3 text-secondary font-bold">Dispatch</td>
+</tr>
+<tr class="hover:bg-slate-50 cursor-pointer">
+<td class="py-3 font-medium text-slate-600">fire, smoke...</td>
+<td class="py-3"><span class="px-1.5 py-0.5 bg-red-50 text-red-600 rounded">Fire</span></td>
+<td class="py-3 text-secondary font-bold">Emergency</td>
+</tr>
+<tr class="hover:bg-slate-50 cursor-pointer">
+<td class="py-3 font-medium text-slate-600">loud, noise...</td>
+<td class="py-3"><span class="px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded">Noise</span></td>
+<td class="py-3 text-secondary font-bold">Investigate</td>
+</tr>
+</tbody>
+</table>
+</div>
+<button class="mt-auto pt-4 text-[10px] font-bold text-slate-400 uppercase text-center hover:text-secondary transition-colors">+ Add New Fallback Rule</button>
+</div>
+<!-- SECTION 4: Incident Classification Settings -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+<h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">account_tree</span>
+                    Classification Settings
+                </h3>
+<div class="space-y-4">
+<!-- Tree View Mock -->
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg">folder_open</span>
+<span class="text-xs font-bold text-slate-700 uppercase">Crime</span>
+</div>
+<div class="pl-6 space-y-1.5 border-l border-slate-100 ml-2">
+<div class="flex items-center justify-between group">
+<span class="text-xs text-slate-500">Theft</span>
+<span class="px-1.5 py-0.5 bg-red-50 text-red-700 text-[9px] font-bold rounded">HIGH SEVERITY</span>
+</div>
+<div class="flex items-center justify-between group">
+<span class="text-xs text-slate-500">Assault</span>
+<span class="px-1.5 py-0.5 bg-red-50 text-red-700 text-[9px] font-bold rounded">CRITICAL</span>
+</div>
+<div class="flex items-center justify-between group">
+<span class="text-xs text-slate-500">Robbery</span>
+<span class="px-1.5 py-0.5 bg-red-50 text-red-700 text-[9px] font-bold rounded">CRITICAL</span>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg">emergency_home</span>
+<span class="text-xs font-bold text-slate-700 uppercase">Emergency</span>
+</div>
+<div class="pl-6 space-y-1.5 border-l border-slate-100 ml-2">
+<div class="flex items-center justify-between group">
+<span class="text-xs text-slate-500">Fire / Accident</span>
+<span class="px-1.5 py-0.5 bg-amber-50 text-amber-700 text-[9px] font-bold rounded">AUTO-DISPATCH</span>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg">groups</span>
+<span class="text-xs font-bold text-slate-700 uppercase">Community</span>
+</div>
+<div class="pl-6 space-y-1.5 border-l border-slate-100 ml-2">
+<div class="flex items-center justify-between group">
+<span class="text-xs text-slate-500">Noise / Disturbance</span>
+<span class="px-1.5 py-0.5 bg-slate-100 text-slate-700 text-[9px] font-bold rounded">LOW PRIORITY</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-6">
+<button class="w-full py-2 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors">Manage Severity Rules</button>
+</div>
+</div>
+<!-- SECTION 5: AI Audit Logs -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">history_edu</span>
+                        AI Audit Logs
+                    </h3>
+<a class="text-[10px] font-bold text-secondary uppercase hover:underline" href="#">Full Audit</a>
+</div>
+<div class="space-y-4 overflow-y-auto max-h-[300px] nav-scroll">
+<!-- Log Item 1 -->
+<div class="p-3 bg-slate-50 rounded-lg border-l-4 border-secondary">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[9px] font-bold text-slate-400">14:22:01 | Root_Admin</span>
+<span class="material-symbols-outlined text-sm text-slate-400">visibility</span>
+</div>
+<p class="text-[11px] text-slate-700 font-medium">Modified API Response Limit from 512 to 1024 tokens.</p>
+<p class="text-[9px] text-slate-400 mt-1 italic">Reason: Performance optimization for complex reports.</p>
+</div>
+<!-- Log Item 2 -->
+<div class="p-3 bg-slate-50 rounded-lg border-l-4 border-green-500">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[9px] font-bold text-slate-400">14:15:30 | AI_System</span>
+<span class="material-symbols-outlined text-sm text-slate-400">smart_toy</span>
+</div>
+<p class="text-[11px] text-slate-700 font-medium">Successfully classified Report #9422 as "Theft (High Priority)".</p>
+<p class="text-[9px] text-slate-400 mt-1 italic">Action: AI suggestion reviewed and approved by Officer.</p>
+</div>
+<!-- Log Item 3 -->
+<div class="p-3 bg-slate-50 rounded-lg border-l-4 border-amber-500">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[9px] font-bold text-slate-400">13:50:12 | Root_Admin</span>
+<span class="material-symbols-outlined text-sm text-slate-400">edit_note</span>
+</div>
+<p class="text-[11px] text-slate-700 font-medium">Updated Fallback Rule for "Fire" category.</p>
+<p class="text-[9px] text-slate-400 mt-1 italic">Action: Added keywords 'ignition' and 'combustion'.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Status -->
+<footer class="h-8 bg-slate-100 border-t border-slate-200 px-10 flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1.5"><span class="w-2 h-2 bg-green-500 rounded-full"></span> API Status: Optimal</span>
+<span class="flex items-center gap-1.5"><span class="w-2 h-2 bg-green-500 rounded-full"></span> Gemini 1.5 Pro Connected</span>
+</div>
+<div class="flex items-center gap-4">
+<span>Last Sync: 2 mins ago</span>
+<span class="text-secondary cursor-pointer hover:underline">Support Ticket</span>
+</div>
+</footer>
+</div>
+<script>
+    // Slider Value Update (Visual Only)
+    const slider = document.querySelector('input[type="range"]');
+    const sliderVal = document.querySelector('.text-secondary.font-bold');
+    if(slider && sliderVal) {
+        slider.addEventListener('input', (e) => {
+            sliderVal.textContent = e.target.value + ' Tokens';
+        });
+    }
+
+    // Toggle interaction simulation
+    document.querySelectorAll('input[type="checkbox"]').forEach(toggle => {
+        toggle.addEventListener('change', function() {
+            const statusBadge = document.querySelector('.bg-green-50');
+            if(!this.checked) {
+                statusBadge.classList.replace('bg-green-50', 'bg-red-50');
+                statusBadge.classList.replace('text-green-700', 'text-red-700');
+                statusBadge.classList.replace('border-green-100', 'border-red-100');
+                statusBadge.innerHTML = '<span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span> INACTIVE / DISABLED';
+            } else {
+                statusBadge.classList.replace('bg-red-50', 'bg-green-50');
+                statusBadge.classList.replace('text-red-700', 'text-green-700');
+                statusBadge.classList.replace('border-red-100', 'border-green-100');
+                statusBadge.innerHTML = '<span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> ACTIVE / ONLINE (100% UPTIME)';
+            }
+        });
+    });
+</script>
+</body></html>

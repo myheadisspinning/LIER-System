@@ -1,0 +1,20 @@
+.bgImage {
+  background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDLwvWMwHAHxPoOBk3gTBJ0u1DBoZLlrCJxSFti4vmvHKJOJ2NYIEHWjSIi3_Q0A7flCU8rHmSKCmJQCQrQZ8ymLkK2rzwcUh9cvRfdMidV67HMbtbcMLZBtkAWwPmKmmLQ6ggKxA6LAOLYNMGfTKkdMZ7Nsnpds9EZ6dmvbhcWMuYbxVk1wCgK6XNYlQkXBt_yt8nkLxl8cRoJ4Egw4ZP1UjR94bk-SrQQmoIB6leiTYj84fOWC9_6ADZMUT0Fa8f8tmvWABTprb0");
+  background-size: cover;
+  background-position: center;
+}
+
+.overlayGradient {
+  background: linear-gradient(to bottom right, rgba(19, 27, 46, 0.9), rgba(0, 81, 213, 0.6));
+}
+
+.hideScrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.hideScrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.hideScrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}

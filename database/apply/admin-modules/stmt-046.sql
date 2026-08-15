@@ -1,0 +1,1 @@
+alter table public.presence enable row level security

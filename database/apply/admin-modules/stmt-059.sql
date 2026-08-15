@@ -1,0 +1,1 @@
+drop trigger if exists trg_set_blotter_no on public.blotters

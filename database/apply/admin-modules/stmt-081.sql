@@ -1,0 +1,1 @@
+revoke all on function public.admin_reset_password(uuid) from public

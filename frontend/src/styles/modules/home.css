@@ -1,0 +1,7 @@
+.gold-gradient {
+  background: linear-gradient(135deg, #f9bd22 0%, #ffdf9f 100%);
+}
+
+.hero-overlay {
+  background: linear-gradient(to bottom, rgba(11, 28, 48, 0.4) 0%, rgba(11, 28, 48, 0.85) 70%, rgba(11, 28, 48, 0.95) 100%);
+}

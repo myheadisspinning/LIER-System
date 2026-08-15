@@ -1,0 +1,1 @@
+grant execute on function public.admin_create_user(text, text, text, text) to authenticated

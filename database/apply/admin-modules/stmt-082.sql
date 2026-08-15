@@ -1,0 +1,1 @@
+grant execute on function public.admin_reset_password(uuid) to authenticated

@@ -1,0 +1,1 @@
+drop policy if exists "staff manage report archives" on public.report_archives

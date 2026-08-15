@@ -1,0 +1,1 @@
+drop policy if exists "inquiry messages staff all" on public.inquiry_messages

@@ -1,0 +1,535 @@
+<!--
+DESIGN.md (Design Documentation)
+================================
+---
+name: Commonwealth Safety Design System
+colors:
+  surface: '#f8f9ff'
+  surface-dim: '#cbdbf5'
+  surface-bright: '#f8f9ff'
+  surface-container-lowest: '#ffffff'
+  surface-container-low: '#eff4ff'
+  surface-container: '#e5eeff'
+  surface-container-high: '#dce9ff'
+  surface-container-highest: '#d3e4fe'
+  on-surface: '#0b1c30'
+  on-surface-variant: '#45464d'
+  inverse-surface: '#213145'
+  inverse-on-surface: '#eaf1ff'
+  outline: '#76777d'
+  outline-variant: '#c6c6cd'
+  surface-tint: '#565e74'
+  primary: '#000000'
+  on-primary: '#ffffff'
+  primary-container: '#131b2e'
+  on-primary-container: '#7c839b'
+  inverse-primary: '#bec6e0'
+  secondary: '#0051d5'
+  on-secondary: '#ffffff'
+  secondary-container: '#316bf3'
+  on-secondary-container: '#fefcff'
+  tertiary: '#000000'
+  on-tertiary: '#ffffff'
+  tertiary-container: '#261a00'
+  on-tertiary-container: '#a87d00'
+  error: '#ba1a1a'
+  on-error: '#ffffff'
+  error-container: '#ffdad6'
+  on-error-container: '#93000a'
+  primary-fixed: '#dae2fd'
+  primary-fixed-dim: '#bec6e0'
+  on-primary-fixed: '#131b2e'
+  on-primary-fixed-variant: '#3f465c'
+  secondary-fixed: '#dbe1ff'
+  secondary-fixed-dim: '#b4c5ff'
+  on-secondary-fixed: '#00174b'
+  on-secondary-fixed-variant: '#003ea8'
+  tertiary-fixed: '#ffdf9f'
+  tertiary-fixed-dim: '#f9bd22'
+  on-tertiary-fixed: '#261a00'
+  on-tertiary-fixed-variant: '#5c4300'
+  background: '#f8f9ff'
+  on-background: '#0b1c30'
+  surface-variant: '#d3e4fe'
+typography:
+  display-lg:
+    fontFamily: Poppins
+    fontSize: 48px
+    fontWeight: '700'
+    lineHeight: '1.2'
+    letterSpacing: -0.02em
+  display-lg-mobile:
+    fontFamily: Poppins
+    fontSize: 32px
+    fontWeight: '700'
+    lineHeight: '1.2'
+  headline-lg:
+    fontFamily: Poppins
+    fontSize: 32px
+    fontWeight: '600'
+    lineHeight: '1.3'
+  headline-lg-mobile:
+    fontFamily: Poppins
+    fontSize: 24px
+    fontWeight: '600'
+    lineHeight: '1.3'
+  headline-md:
+    fontFamily: Poppins
+    fontSize: 24px
+    fontWeight: '600'
+    lineHeight: '1.4'
+  body-lg:
+    fontFamily: Inter
+    fontSize: 18px
+    fontWeight: '400'
+    lineHeight: '1.6'
+  body-md:
+    fontFamily: Inter
+    fontSize: 16px
+    fontWeight: '400'
+    lineHeight: '1.6'
+  label-md:
+    fontFamily: Inter
+    fontSize: 14px
+    fontWeight: '600'
+    lineHeight: '1'
+    letterSpacing: 0.05em
+  caption:
+    fontFamily: Inter
+    fontSize: 12px
+    fontWeight: '500'
+    lineHeight: '1.4'
+rounded:
+  sm: 0.25rem
+  DEFAULT: 0.5rem
+  md: 0.75rem
+  lg: 1rem
+  xl: 1.5rem
+  full: 9999px
+spacing:
+  base: 8px
+  xs: 4px
+  sm: 12px
+  md: 24px
+  lg: 48px
+  xl: 80px
+  gutter: 24px
+  margin-mobile: 16px
+  margin-desktop: 64px
+---
+
+## Brand & Style
+
+The design system is engineered to project **authority, transparency, and urgent reliability**. As a public safety and government portal for Barangay Commonwealth, the visual narrative balances the gravity of civic duty with the modern efficiency of a premium digital service. 
+
+The aesthetic is **Corporate Modern with Glassmorphism accents**. It utilizes high-contrast typography and structured layouts to ensure information accessibility while employing frosted glass effects and subtle gradients to feel contemporary and high-end. The goal is to instill a sense of security and trust in the residents of Quezon City through a precise, organized, and polished interface.
+
+## Colors
+
+The palette is anchored by **Deep Navy Blue**, representing the stability and tradition of government institutions. **Royal Blue** serves as the primary action color, providing a modern, digital-first energy. **Gold** is used sparingly as an accent to denote premium status, high-priority alerts, or official seals.
+
+- **Primary (Navy):** Used for headers, heavy branding, and primary navigation backgrounds.
+- **Secondary (Royal):** Used for interactive elements, links, and progress indicators.
+- **Accent (Gold):** Reserved for recognition, official badges, and specific "Staff" or "Premium" touchpoints.
+- **Semantic Colors:** Emerald Green and Crimson Red are strictly utilized for status updates and emergency alerts to maintain clear visual communication.
+
+## Typography
+
+This design system uses a dual-font strategy. **Poppins** provides a friendly yet authoritative geometric structure for headlines, making the government's message feel modern and accessible. **Inter** is the workhorse for body text, chosen for its exceptional legibility in data-heavy safety reports and official documentation.
+
+Hierarchy is maintained through generous line heights and distinct weight contrasts. Large displays use negative letter spacing for a tighter, more "editorial" look, while labels utilize uppercase tracking to denote systemic hierarchy.
+
+## Layout & Spacing
+
+The layout follows a **Fluid Grid System** with strict constraints to maintain an authoritative structure. 
+
+- **Desktop:** 12-column grid with 24px gutters and 64px side margins. Content is typically contained to a maximum width of 1440px.
+- **Tablet:** 8-column grid with 20px gutters and 32px side margins.
+- **Mobile:** 4-column grid with 16px gutters and 16px side margins.
+
+Spacing follows an 8px base unit. Component internal padding should prioritize "breathability" to reduce cognitive load during emergency situations, using `md` (24px) as the standard container padding.
+
+## Elevation & Depth
+
+To achieve the "Government Portal" aesthetic, depth is communicated through a mix of **Ambient Shadows** and **Glassmorphism**.
+
+1.  **Glassmorphism:** Navigation sidebars and modal overlays use a background blur (12px to 20px) with a semi-transparent white or navy fill (opacity 70-85%). A 1px translucent border provides a "crystal" edge.
+2.  **Shadows:** Elevated cards use soft, multi-layered shadows with a low-opacity navy tint (`rgba(15, 23, 42, 0.08)`) to avoid a "dirty" look on the light gray background.
+3.  **Tonal Layers:** Surfaces are layered from the background (`#F8FAFC`) to the primary surface (`#FFFFFF`), with glass layers sitting at the highest perceived elevation.
+
+## Shapes
+
+The design system utilizes **Large Rounded Corners** to soften the traditional rigidity of government interfaces, making the technology feel more approachable. 
+
+- **Main Containers & Cards:** Use `radius-2xl` (24px) for a modern, friendly feel.
+- **Buttons & Inputs:** Use `radius-lg` (12px) to maintain a professional balance.
+- **Status Badges:** Use pill-shaped (fully rounded) geometry to distinguish them from interactive buttons.
+
+## Components
+
+### Buttons
+- **Primary:** Gradient fill (Royal Blue to Deep Navy) with white text and a soft shadow. 
+- **Emergency:** Solid Crimson Red with high-contrast white text and a pulse animation effect for high-priority alerts.
+- **Secondary/Ghost:** 1.5px border in Navy or Blue with no fill, transitioning to a glass effect on hover.
+
+### Cards
+- Standard cards feature `radius-2xl`, white backgrounds, and a subtle 1px border (`#E2E8F0`). 
+- Emergency cards utilize a thick left-border accent in the semantic color (Red/Yellow/Green).
+
+### Input Fields
+- Inputs should be tall (min-height 48px) with `radius-lg` and a background color of `#F1F5F9`. On focus, the border transitions to Royal Blue with a 3px soft glow.
+
+### Glass Overlays
+- Sidebars and mobile menus must use the `backdrop-filter: blur(16px)` property with a semi-transparent Deep Navy (`#0F172A` at 80% opacity) for a premium, high-tech look.
+
+### Chips & Badges
+- Used for safety categories (e.g., "Fire Safety", "Public Health"). These should use the Royal Blue color at 10% opacity for the background and 100% opacity for the text.
+-->
+<!DOCTYPE html>
+
+<html class="light" lang="en" style=""><head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed-dim": "#b4c5ff",
+                      "outline-variant": "#c6c6cd",
+                      "tertiary-fixed-dim": "#f9bd22",
+                      "on-surface-variant": "#45464d",
+                      "on-tertiary-fixed": "#261a00",
+                      "surface-container-highest": "#d3e4fe",
+                      "surface-dim": "#cbdbf5",
+                      "secondary": "#0051d5",
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#dae2fd",
+                      "tertiary": "#000000",
+                      "on-background": "#0b1c30",
+                      "surface-container-high": "#dce9ff",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed": "#00174b",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "primary-container": "#131b2e",
+                      "on-primary-fixed": "#131b2e",
+                      "inverse-surface": "#213145",
+                      "on-secondary-fixed-variant": "#003ea8",
+                      "surface": "#f8f9ff",
+                      "outline": "#76777d",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#e5eeff",
+                      "primary": "#000000",
+                      "on-error-container": "#93000a",
+                      "surface-bright": "#f8f9ff",
+                      "surface-container-low": "#eff4ff",
+                      "inverse-primary": "#bec6e0",
+                      "on-secondary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-primary-container": "#7c839b",
+                      "secondary-container": "#316bf3",
+                      "tertiary-container": "#261a00",
+                      "on-surface": "#0b1c30",
+                      "surface-variant": "#d3e4fe",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "surface-tint": "#565e74",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed": "#dbe1ff",
+                      "on-tertiary-container": "#a87d00",
+                      "background": "#f8f9ff",
+                      "inverse-on-surface": "#eaf1ff",
+                      "on-secondary-container": "#fefcff",
+                      "tertiary-fixed": "#ffdf9f",
+                      "primary-fixed-dim": "#bec6e0"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "2xl": "1.5rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "lg": "48px",
+                      "xl": "80px",
+                      "sm": "12px",
+                      "gutter": "24px",
+                      "margin-desktop": "64px",
+                      "margin-mobile": "16px",
+                      "md": "24px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Poppins"],
+                      "label-md": ["Inter"],
+                      "headline-lg": ["Poppins"],
+                      "caption": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-md": ["Poppins"],
+                      "display-lg-mobile": ["Poppins"],
+                      "body-md": ["Inter"],
+                      "display-lg": ["Poppins"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    }catch(_e){}</script></head><body class="bg-background text-on-surface selection:bg-secondary-fixed-dim selection:text-on-secondary-fixed">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-[100] flex justify-between items-center px-4 md:px-margin-desktop h-20 bg-primary-container/90 backdrop-blur-md shadow-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim"><img alt="Barangay Culiat Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlMqVF6ceU92KGut0j1JO_7P78JgpLZl6ioRmbQNcYZYP9YXAkkVR8gAQZUMmLzopOcdZy_oxgZq86FX-zoBFUueIso0ot2G4rtm1cr1jWznaM2qKQihHkUX34E8-eTFwBFBN_77HUatqPHZnPgd_kIzpUiKib8qwFtXpos4x5JmhblbmhWAryR_SL00f0sJ9U1tEjVgM-WgFujUqxTy9Q7KoMZbnwPX3oBDSmDgGkKzqQliCo37aaRyhJP9gTlv51oFROtfmAVpU"/></div>
+<h1 class="font-headline-md text-base md:text-headline-md font-bold text-surface-bright leading-tight">Barangay Culiat Safety</h1>
+</div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">Home</a>
+<a class="font-label-md text-label-md text-secondary border-b-2 border-secondary pb-1 font-bold" href="#">About</a>
+<a class="font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">Officials</a>
+<a class="font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">Services</a>
+<a class="font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">Contact</a>
+</nav>
+<div class="flex items-center gap-sm md:gap-md">
+<a class="bg-secondary text-on-secondary px-4 md:px-md py-2 rounded-lg font-bold hover:shadow-lg transition-all text-xs md:text-sm flex items-center justify-center whitespace-nowrap" href="{{DATA:SCREEN:SCREEN_59}}">Login/Register</a>
+<button class="md:hidden p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors" id="mobile-menu-button">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</button>
+</div>
+</header><div class="w-full h-2 relative z-[90] bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLxqqtZLoB8H8kAKno2uvkDiBWWGz49WTKAVMRQiU3iJn9z_9aXs8td9JMSokNoEd5PaoEiEmknOI7ZgfskWtnaOK4Gvq2Trr6Nf1wh-JD3_Don9GXbwwdvpfzD0i4u4ezPpi5Dz1ZNJIDOCuq1mjUgOH4nyu_h-4IwxL4eax68k9rkebNunNd-r1I9hFzZ9qcxpE-8OsAyXDtJTIVZanLrKx2ZHP4F-VAceCBwuleMpvAsRjSVYLbJnScLK54pJNEkh6U2sBLouM");'></div><div class="fixed inset-0 z-[200] invisible pointer-events-none transition-all duration-300" id="mobile-drawer-container">
+<div class="absolute inset-0 bg-primary-container/60 backdrop-blur-sm opacity-0 transition-opacity duration-300" id="drawer-overlay"></div>
+<div class="absolute right-0 top-0 h-full w-[280px] bg-background shadow-2xl flex flex-col p-lg translate-x-full transition-transform duration-300 ease-in-out" id="mobile-drawer">
+<div class="flex justify-between items-center mb-xl">
+<span class="font-headline-md text-on-surface">Menu</span>
+<button class="text-on-surface-variant hover:text-primary p-2" id="close-drawer">
+<span class="material-symbols-outlined text-3xl">close</span>
+</button>
+</div>
+<nav class="flex flex-col gap-lg">
+<a class="font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">Home</a>
+<a class="font-label-md text-lg text-secondary border-l-4 border-secondary pl-4 font-bold" href="#">About</a>
+<a class="font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">Officials</a>
+<a class="font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">Services</a>
+<a class="font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">Contact</a>
+</nav>
+<div class="mt-auto pt-lg border-t border-outline-variant">
+<a class="w-full px-md py-4 bg-secondary text-on-secondary font-bold rounded-xl flex items-center justify-center text-center shadow-lg" href="{{DATA:SCREEN:SCREEN_59}}">Login/Register</a>
+</div>
+</div>
+</div>
+<main class="">
+<!-- Hero Section -->
+<section class="relative h-[60vh] flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center brightness-50" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBO9a7tgmBd3TIpjJycGCeGSUqYaTms92D67dfZ8VrKupV2w8AEhzx7g26qv_LVKaxyw90_38k6a69jjBG2Yte-RZCX-UPhYw6VgwIOwI46PSsIkIFZtZNaa7kZZTfTGjdh0-EiodRgWk_urSzUtu7xU70XuNIyVWmmmNz9FMTu6lHEIk36r8RX00mwp8ko6WHLR3K_b3LP8xk2st8xGm2JQ7PzV35lOPqY_A2gJwF-D54lBmn_-M-Rd21ImffbPhxGVg"); background-size: cover; background-position: center center;'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-primary-container/40"></div>
+</div>
+<div class="relative z-10 text-center px-margin-mobile md:px-0">
+<h2 class="font-display-lg text-display-lg text-surface-bright mb-md drop-shadow-lg">Engineering Safety for the Heart of QC</h2>
+<p class="font-body-lg text-body-lg text-surface-variant max-w-2xl mx-auto leading-relaxed">
+                    Barangay Culiat is charting a new course in public governance, building a future-ready community through modern smart city technology and inclusive service.
+                </p>
+</div>
+</section>
+<!-- Mission & Vision Bento -->
+<section class="px-margin-mobile md:px-margin-desktop py-xl">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<div class="md:col-span-7 glass-card p-lg rounded-2xl flex flex-col justify-center border border-outline-variant/20 bg-surface-container-lowest">
+<span class="text-secondary font-label-md text-label-md uppercase tracking-widest mb-sm">The Mission</span>
+<h3 class="font-headline-lg text-headline-lg mb-md text-on-background">A Safe Culiat for All</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-loose mb-md">
+                        Our mission is to provide an inclusive, transparent, and technology-driven public safety environment. We leverage digital monitoring and real-time community reporting to ensure that every resident of Barangay Culiat feels secure, valued, and heard.
+                    </p>
+<div class="flex gap-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" style='font-variation-settings: "FILL" 1;'>verified_user</span>
+<span class="font-label-md text-label-md">24/7 Monitoring</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" style='font-variation-settings: "FILL" 1;'>groups</span>
+<span class="font-label-md text-label-md">Citizen-First Design</span>
+</div>
+</div>
+</div>
+<div class="md:col-span-5 bg-primary-container text-surface-bright p-lg rounded-2xl relative overflow-hidden group">
+<div class="absolute -right-20 -top-20 w-64 h-64 bg-secondary rounded-full blur-[100px] opacity-20 transition-all group-hover:opacity-40"></div>
+<span class="text-tertiary-fixed-dim font-label-md text-label-md uppercase tracking-widest mb-sm">The Vision</span>
+<h3 class="font-headline-lg text-headline-lg mb-md">Culiat Smart Governance 2030</h3>
+<p class="font-body-md text-body-md text-on-primary-container leading-loose">
+                        To become the gold standard of digital-first community management in Quezon City—where data drives decisions, transparency breeds trust, and the spirit of collective action inspires immediate, intelligent response.
+                    </p>
+</div>
+</div>
+</section>
+<!-- History Section -->
+<section class="bg-surface-container-low py-xl px-margin-mobile md:px-margin-desktop">
+<div class="max-w-4xl mx-auto">
+<div class="flex flex-col md:flex-row items-center gap-xl">
+<div class="flex-1">
+<h3 class="font-headline-lg text-headline-lg mb-md text-on-background">The Legacy of Barangay Culiat</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-base leading-relaxed">
+                            Barangay Culiat is one of the largest and most vibrant districts in Quezon City. Historically part of a vast agricultural landscape, it has transformed into a critical urban hub that bridges diverse communities and key commercial corridors.
+                        </p>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            Today, we meet the modern challenges of urban safety with resilience and a commitment to progressive governance. Our goal is to balance the district's rapid growth with sustainable safety initiatives that protect our multi-cultural resident base and thriving local economy.
+                        </p>
+</div>
+<div class="w-full md:w-80 h-80 rounded-2xl overflow-hidden shadow-xl border-4 border-surface-bright relative group">
+<img alt="Aerial view of Barangay Culiat" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYHB4c_QahS_au8z7YU1Jg_01ILZSPuVHn-4_wF3nEdPdudx5WqamHbI0tKGT4iA3-ynEXiJhmkM4T67k87PYcSLdLzooZHx1Oz-xUPCdEHti3hIy5yt42dXOMB1WkcSmZuJ1LyE1Dfq_gcMop702825p2NbH_W2CdmQdvHBPThYNFUELijQfGHG53v-2_8dH4lLtiwxlVrDPj35_aJTVVuvPyIS_5GVzPkHi8sB1SqqDppRFz2Y9f"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-background/60 to-transparent"></div>
+<div class="absolute bottom-md left-md">
+<p class="text-surface-bright font-bold font-headline-md text-headline-md">70k+</p>
+<p class="text-surface-variant text-caption font-caption uppercase">Resident Population</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Core Values Section -->
+<section class="py-xl px-margin-mobile md:px-margin-desktop">
+<div class="text-center mb-xl">
+<h3 class="font-headline-lg text-headline-lg mb-sm">Our Core Values</h3>
+<div class="w-24 h-1.5 bg-secondary mx-auto rounded-full"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Integrity -->
+<div class="p-lg rounded-2xl bg-surface-bright border border-outline-variant/30 hover:shadow-lg transition-shadow duration-300">
+<div class="w-16 h-16 rounded-xl bg-secondary/10 flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-secondary text-4xl" style='font-variation-settings: "FILL" 1;'>balance</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Integrity</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Unwavering honesty and transparency in every report, every action, and every digital record we maintain for the residents of Culiat.</p>
+</div>
+<!-- Vigilance -->
+<div class="p-lg rounded-2xl bg-surface-bright border border-outline-variant/30 hover:shadow-lg transition-shadow duration-300">
+<div class="w-16 h-16 rounded-xl bg-error/10 flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-error text-4xl" style='font-variation-settings: "FILL" 1;'>visibility</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Vigilance</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Proactive monitoring and rapid response systems designed to protect our community and prevent incidents before they escalate.</p>
+</div>
+<!-- Community Service -->
+<div class="p-lg rounded-2xl bg-surface-bright border border-outline-variant/30 hover:shadow-lg transition-shadow duration-300">
+<div class="w-16 h-16 rounded-xl bg-tertiary-fixed-dim/20 flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant text-4xl" style='font-variation-settings: "FILL" 1;'>volunteer_activism</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Dedicated Service</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Putting the needs of the residents first, ensuring that digital tools serve the people and enhance the quality of life in Culiat.</p>
+</div>
+</div>
+</section>
+<!-- Smart Governance Transition -->
+<section class="mb-xl px-margin-mobile md:px-margin-desktop">
+<div class="bg-on-background rounded-[2.5rem] p-lg md:p-xl relative overflow-hidden">
+<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-xl">
+<div class="max-w-xl">
+<h3 class="font-headline-lg text-headline-lg text-surface-bright mb-md">The Smart Governance Shift</h3>
+<p class="font-body-lg text-body-lg text-on-primary-container leading-relaxed">
+                            We are transitioning from reactive law enforcement to **Predictive Public Safety**. By integrating IoT sensors, data analysis, and unified communication channels, we are building a safer, more efficient Barangay Culiat.
+                        </p>
+</div>
+<div class="flex flex-col gap-md w-full md:w-auto">
+<div class="bg-surface-bright/10 backdrop-blur-md p-md rounded-xl border border-white/10 flex items-center gap-md">
+<span class="material-symbols-outlined text-secondary-fixed-dim">analytics</span>
+<span class="text-surface-bright font-label-md text-label-md">Real-time Data Integration</span>
+</div>
+<div class="bg-surface-bright/10 backdrop-blur-md p-md rounded-xl border border-white/10 flex items-center gap-md">
+<span class="material-symbols-outlined text-secondary-fixed-dim">smart_toy</span>
+<span class="text-surface-bright font-label-md text-label-md">AI-Driven Dispatch Logic</span>
+</div>
+<div class="bg-surface-bright/10 backdrop-blur-md p-md rounded-xl border border-white/10 flex items-center gap-md">
+<span class="material-symbols-outlined text-secondary-fixed-dim">shield_person</span>
+<span class="text-surface-bright font-label-md text-label-md">Community Accountability Portal</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-xl md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-lowest border-t border-outline-variant px-margin-desktop">
+<div class="flex flex-col gap-sm text-center md:text-left">
+<div class="flex items-center justify-center md:justify-start gap-xs">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant flex items-center justify-center"><img alt="Barangay Culiat Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxPrOzG01FofarIiUl53aVR5LC7Zn2Jy9Qd2qcMRxcv599cOoCEzmjPPH-iPdJHv9YouvZF29_x0FWQZPMXGeTBAPCE2nuI3980ZsJZ8lpTqEFpUFoJ3fd5cvOFyMxBOVHpbyHcqw-lDZQ53V5EEvkR060o7rNlpc854FSOxd6bURRwv029xJA2Xtk0u2cAfUH98umGujJHBfxSzpBKheNrbqmK9tWqqOlMIErH9Y708F_F1vRXmA-iEmAYa2d57foFAlHP-M-0_I"/></div>
+<span class="font-headline-md text-headline-md text-primary">Barangay Culiat</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant">© 2024 Barangay Culiat Law Enforcement. Public Safety &amp; Transparency Portal.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-lg">
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Terms of Service</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">FOI Manual</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Accessibility</a>
+</div>
+<div class="flex gap-md">
+<div class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span class="material-symbols-outlined">public</span></div>
+<div class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span class="material-symbols-outlined">share</span></div>
+</div>
+</footer>
+<script>
+        // Drawer toggle logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-button');
+        const closeDrawerBtn = document.getElementById('close-drawer');
+        const drawerContainer = document.getElementById('mobile-drawer-container');
+        const drawer = document.getElementById('mobile-drawer');
+        const overlay = document.getElementById('drawer-overlay');
+
+        function openDrawer() {
+            drawerContainer.classList.remove('invisible');
+            drawerContainer.classList.add('pointer-events-auto');
+            overlay.classList.add('opacity-100');
+            drawer.classList.remove('translate-x-full');
+        }
+
+        function closeDrawer() {
+            overlay.classList.remove('opacity-100');
+            drawer.classList.add('translate-x-full');
+            setTimeout(() => {
+                drawerContainer.classList.add('invisible');
+                drawerContainer.classList.remove('pointer-events-auto');
+            }, 300);
+        }
+
+        mobileMenuBtn.addEventListener('click', openDrawer);
+        closeDrawerBtn.addEventListener('click', closeDrawer);
+        overlay.addEventListener('click', closeDrawer);
+
+        // Micro-interaction for hover states and button scales
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                btn.style.transform = 'scale(1.02)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'scale(1)';
+            });
+            btn.addEventListener('mousedown', () => {
+                btn.style.transform = 'scale(0.95)';
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.style.transform = 'scale(1.02)';
+            });
+        });
+
+        // Simple smooth scroll implementation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body></html>

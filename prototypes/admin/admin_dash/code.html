@@ -1,0 +1,485 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Commonwealth Command Center | Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#00174b",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "surface-variant": "#d3e4fe",
+                    "surface-tint": "#565e74",
+                    "primary": "#000000",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "on-surface": "#0b1c30",
+                    "secondary-container": "#316bf3",
+                    "secondary-fixed": "#dbe1ff",
+                    "outline-variant": "#c6c6cd",
+                    "surface-container-low": "#eff4ff",
+                    "error-container": "#ffdad6",
+                    "on-secondary-container": "#fefcff",
+                    "tertiary-fixed-dim": "#f9bd22",
+                    "primary-fixed": "#dae2fd",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-background": "#0b1c30",
+                    "inverse-on-surface": "#eaf1ff",
+                    "tertiary-fixed": "#ffdf9f",
+                    "on-tertiary-container": "#a87d00",
+                    "on-primary-container": "#7c839b",
+                    "inverse-surface": "#213145",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "on-tertiary-fixed": "#261a00",
+                    "surface-container": "#f1f5f9",
+                    "on-secondary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "on-primary-fixed": "#0f172a",
+                    "surface-bright": "#ffffff",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "inverse-primary": "#bec6e0",
+                    "on-surface-variant": "#64748b",
+                    "on-error-container": "#93000a",
+                    "error": "#ef4444",
+                    "tertiary-container": "#261a00",
+                    "outline": "#94a3b8",
+                    "background": "#f8fafc",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#e2e8f0",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#cbd5e1",
+                    "surface": "#ffffff",
+                    "primary-container": "#1e293b",
+                    "tertiary": "#000000",
+                    "secondary": "#2563eb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.375rem",
+                    "xl": "0.5rem",
+                    "2xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "80px",
+                    "xs": "4px",
+                    "sm": "12px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "40px",
+                    "md": "24px",
+                    "lg": "48px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Poppins"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Poppins"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["1.25rem", {"lineHeight": "1.75rem", "fontWeight": "600"}],
+                    "body-lg": ["1.125rem", {"lineHeight": "1.75rem", "fontWeight": "400"}],
+                    "display-lg": ["2.25rem", {"lineHeight": "2.5rem", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["0.875rem", {"lineHeight": "1.25rem", "letterSpacing": "0.025em", "fontWeight": "500"}],
+                    "body-md": ["0.9375rem", {"lineHeight": "1.5rem", "fontWeight": "400"}],
+                    "headline-lg": ["1.875rem", {"lineHeight": "2.25rem", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            font-size: 20px;
+        }
+        .chart-bar {
+            transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sidebar-active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid #2563eb;
+        }
+        .scroll-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scroll-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen antialiased">
+<!-- Side Navigation (Logical Sectioning) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-on-primary-fixed text-slate-300 flex flex-col border-r border-slate-800 z-50">
+<div class="p-6 mb-4">
+<h1 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+<span class="w-2 h-6 bg-secondary rounded-full"></span>
+            Commonwealth
+        </h1>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1 font-bold">Safety Command</p>
+</div>
+<nav class="flex-grow flex flex-col px-3 gap-1 overflow-y-auto scroll-hide pb-10">
+<!-- Dashboard Home -->
+<a class="flex items-center gap-3 px-3 py-2 sidebar-active text-white rounded-r-md transition-all bg-white/10 border-l-4 border-l-secondary" href="#"><span class="material-symbols-outlined">dashboard</span><div class="flex flex-col"><span class="text-sm font-semibold">Command Dashboard</span><span class="text-[10px] text-slate-500">Central operational overview and alerts</span></div></a>
+<!-- Core Operations -->
+<div class="mt-4 mb-1 px-3">
+<p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Core Operations</p>
+</div>
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-colors" href="#"><span class="material-symbols-outlined">emergency</span><div class="flex flex-col"><span class="text-sm font-medium">Incident Reporting</span><span class="text-[10px] text-slate-500">Review submitted incident reports</span></div></a>
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-colors" href="#"><span class="material-symbols-outlined">smart_toy</span><div class="flex flex-col"><span class="text-sm font-medium">AI Dispatch</span><span class="text-[10px] text-slate-500">Manage dispatch operations</span></div></a>
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-colors" href="#"><span class="material-symbols-outlined">chat</span><div class="flex flex-col"><span class="text-sm font-medium">Contacts &amp; Inbox</span><span class="text-[10px] text-slate-500">Official communication and inquiries</span></div><span class="ml-auto bg-error text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">4</span></a>
+<!-- Case Management -->
+<div class="mt-4 mb-1 px-3">
+<p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Case Management</p>
+</div>
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-colors" href="#"><span class="material-symbols-outlined">assignment_turned_in</span><div class="flex flex-col"><span class="text-sm font-medium">Tracking &amp; Docs</span><span class="text-[10px] text-slate-500">Create and manage cases</span></div></a>
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-colors" href="#"><span class="material-symbols-outlined">inventory_2</span><div class="flex flex-col"><span class="text-sm font-medium">Evidence Vault</span><span class="text-[10px] text-slate-500">Manage evidence records</span></div></a>
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-colors" href="#"><span class="material-symbols-outlined">notifications_active</span><div class="flex flex-col"><span class="text-sm font-medium">Status Notifications</span><span class="text-[10px] text-slate-500">Publish announcements and alerts</span></div></a>
+<!-- Intelligence -->
+<div class="mt-4 mb-1 px-3">
+<p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Intelligence</p>
+</div>
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-colors" href="#"><span class="material-symbols-outlined">monitoring</span><div class="flex flex-col"><span class="text-sm font-medium">Case Monitoring</span><span class="text-[10px] text-slate-500">Real-time case progress tracking</span></div></a>
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-colors" href="#"><span class="material-symbols-outlined">bar_chart</span><div class="flex flex-col"><span class="text-sm font-medium">Reports &amp; Analytics</span><span class="text-[10px] text-slate-500">Generate reports and view analytics</span></div></a>
+<!-- Administration -->
+<div class="mt-4 mb-1 px-3">
+<p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Administration</p>
+</div>
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-colors" href="#"><span class="material-symbols-outlined">badge</span><div class="flex flex-col"><span class="text-sm font-medium">Officials MGMT</span><span class="text-[10px] text-slate-500">Manage barangay officials displayed</span></div></a>
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-colors" href="#"><span class="material-symbols-outlined">security</span><div class="flex flex-col"><span class="text-sm font-medium">Audit Logs</span><span class="text-[10px] text-slate-500">System activity and security logs</span></div></a>
+<a class="flex items-center gap-3 px-3 py-2 hover:bg-white/5 hover:text-white rounded-r-md transition-colors" href="#"><span class="material-symbols-outlined">manage_accounts</span><div class="flex flex-col"><span class="text-sm font-medium">Account Settings</span><span class="text-[10px] text-slate-500">Manage user accounts (except Super Admin)</span></div></a>
+</nav>
+<div class="mt-auto p-4 border-t border-slate-800">
+
+</div>
+</aside>
+<!-- Main Content -->
+<div class="ml-64 flex-1 w-full">
+<!-- Header -->
+<header class="h-16 bg-white border-b border-slate-200 sticky top-0 z-40 px-10 flex justify-between items-center w-full">
+<h2 class="text-xl font-bold text-slate-900">Admin Command Center</h2>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" style="font-size: 18px;">search</span>
+<input class="pl-9 pr-4 py-1.5 bg-slate-100 rounded-lg border-transparent focus:ring-1 focus:ring-secondary w-64 text-sm" placeholder="Search incidents, files, officials..." type="text">
+</div>
+<div class="flex items-center gap-3 border-l border-slate-200 pl-6">
+<button class="p-1.5 text-slate-500 hover:bg-slate-100 rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
+</button>
+<div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden cursor-pointer hover:ring-2 hover:ring-secondary/20 transition-all">
+<img alt="Admin Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRhWvitnoO_KRPo-JZvM0-v5ZoyQqJRZkrj0jtp44DabPTdKsD4LyP5vnlUS0Wv80ubHUC9n4wIuhUsrV2RS0oF_0yYi3STsA4SBjbxB2yerZxc4qRxuWTzBg2cK9fOrVEkZIF7IJ5rOHPEmshuxCqtVGv9diDX5cQDPp5rpJnntf-ahU1Vf-0ya0wytbUAn6_Uq_ul-T_vVKWEWYFSQwbmAufyEc9qwEkMIKPpBFvDCrWV7RDrnbC">
+</div>
+</div>
+</div>
+</header>
+<main class="p-10 mx-auto">
+<!-- Module 5: Case Status Monitoring (Visual Anchor 1) -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+<div class="col-span-12 lg:col-span-3 bg-white p-6 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-secondary">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-slate-900 font-bold" style="font-variation-settings: &quot;FILL&quot; 1;">assignment</span>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Cases</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold text-slate-900">12</span>
+<span class="text-xs font-bold text-green-500 flex items-center">↑ 2</span>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-3 bg-white p-6 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-tertiary-fixed-dim">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-slate-900 font-bold" style="font-variation-settings: &quot;FILL&quot; 1;">pending</span>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pending Verification</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold text-slate-900">47</span>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-3 bg-white p-6 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-blue-400">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-slate-900 font-bold" style="font-variation-settings: &quot;FILL&quot; 1;">local_police</span>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Units In Field</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold text-slate-900">09</span>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-3 bg-white p-6 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-green-400">
+<div class="flex items-center justify-between mb-4">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Global Resolution</span>
+<span class="text-lg font-bold text-slate-900">94.8%</span>
+</div>
+<div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-green-500 w-[94.8%]"></div>
+</div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-4">Avg response: 12m 30s</p>
+</div>
+</div>
+<!-- Primary Operation Grid -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+<!-- Module 3: AI-Assisted Dispatch (Visual Anchor 2) -->
+<div class="col-span-12 lg:col-span-8 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+<div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+<div>
+<h3 class="font-bold text-slate-900 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">smart_toy</span>
+                            AI Dispatch Logic &amp; Map
+                        </h3>
+<p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Live Responder Tracking</p>
+</div>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-green-50 text-green-600 text-[10px] font-bold rounded border border-green-100">AI OPTIMIZED</span>
+<button class="p-1.5 hover:bg-slate-200 rounded transition-colors"><span class="material-symbols-outlined">fullscreen</span></button>
+</div>
+</div>
+<div class="flex-grow min-h-[350px] relative bg-slate-100 flex items-center justify-center">
+<!-- Map Placeholder with tactical markers -->
+<div class="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://www.google.com/maps/vt/pb=!1m4!1m3!1i14!2i9050!3i7200!2m3!1e0!2sm!3i420120488!3m8!2sen!3sph!4e1105!6m6!1e12!2i2!11e0!12e0!20e3!4e0!5m1!1e0!23i4111425')] bg-cover"></div>
+<div class="z-10 text-center">
+<div class="inline-flex items-center gap-3 px-4 py-2 bg-white rounded-full shadow-lg border border-slate-200 mb-4 animate-pulse">
+<span class="w-3 h-3 bg-error rounded-full"></span>
+<span class="text-xs font-bold text-slate-900">Active Incident: Traffic Collision - Area 4</span>
+</div>
+<div class="flex gap-4 justify-center">
+<div class="bg-on-primary-fixed text-white p-3 rounded-lg shadow-xl text-left border border-slate-700 w-56">
+<p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-2">Nearest Responder</p>
+<p class="text-sm font-bold">Officer S. Reyes</p>
+<p class="text-xs text-slate-400">ETA: 4 mins • Dist: 1.2km</p>
+<button class="mt-3 w-full bg-secondary py-1.5 rounded text-xs font-bold">DISPATCH NOW</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Module 10: Reports and Analytics (Mini) & Module 4: Evidence Vault (Mini) -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<!-- Analytics Module 10 -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-bold text-slate-900">Incident Analytics</h3>
+<button class="text-xs font-bold text-secondary hover:underline flex items-center gap-1">Export PDF <span class="material-symbols-outlined text-sm">download</span></button>
+</div>
+<div class="h-32 flex items-end justify-between gap-1 mb-4">
+<div class="w-full bg-slate-100 rounded-t-sm relative h-[40%] group hover:bg-secondary transition-colors cursor-help"><div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold opacity-0 group-hover:opacity-100">45</div></div>
+<div class="w-full bg-slate-100 rounded-t-sm relative h-[65%] group hover:bg-secondary transition-colors cursor-help"></div>
+<div class="w-full bg-slate-900 rounded-t-sm relative h-[85%] group hover:bg-secondary transition-colors cursor-help"></div>
+<div class="w-full bg-slate-100 rounded-t-sm relative h-[30%] group hover:bg-secondary transition-colors cursor-help"></div>
+<div class="w-full bg-slate-100 rounded-t-sm relative h-[50%] group hover:bg-secondary transition-colors cursor-help"></div>
+<div class="w-full bg-slate-100 rounded-t-sm relative h-[45%] group hover:bg-secondary transition-colors cursor-help"></div>
+<div class="w-full bg-slate-100 rounded-t-sm relative h-[20%] group hover:bg-secondary transition-colors cursor-help"></div>
+</div>
+<div class="flex justify-between text-[9px] font-bold text-slate-400 uppercase">
+<span class="">Mon</span><span class="">Tue</span><span class="">Wed</span><span class="">Thu</span><span class="">Fri</span><span class="">Sat</span><span class="">Sun</span>
+</div>
+</div>
+<!-- Evidence Module 4 -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex-grow">
+<h3 class="font-bold text-slate-900 mb-4">Evidence Vault</h3>
+<div class="space-y-3">
+<div class="p-3 bg-slate-50 rounded-lg border border-slate-100 flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">videocam</span>
+<div class="flex-grow">
+<p class="text-xs font-bold text-slate-900 leading-tight">CCTV_CAM_04.mp4</p>
+<p class="text-[10px] text-slate-500">Case #8821 • 14.2 MB</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 text-sm">lock</span>
+</div>
+<div class="p-3 bg-slate-50 rounded-lg border border-slate-100 flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">image</span>
+<div class="flex-grow">
+<p class="text-xs font-bold text-slate-900 leading-tight">CRIME_SCENE_01.jpg</p>
+<p class="text-[10px] text-slate-500">Case #8821 • 2.1 MB</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 text-sm">lock</span>
+</div>
+<button class="w-full py-2 border border-dashed border-slate-300 rounded text-[10px] font-bold text-slate-400 hover:bg-slate-50">MANAGE ALL ASSETS</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Lower Management Row -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Module 7: Barangay Officials Management (CRUD Table) -->
+<div class="col-span-12 xl:col-span-8 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+<div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+<h3 class="font-bold text-slate-900">Barangay Officials &amp; Personnel</h3>
+<button class="text-secondary font-bold text-xs flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-[16px]">person_add</span> Add New Official
+                    </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50/30 text-slate-400 border-b border-slate-100">
+<tr>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-widest">Name</th>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-widest">Position</th>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-center">Duty Status</th>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center font-bold text-xs text-secondary">MC</div>
+<div>
+<p class="text-sm font-bold text-slate-900">Manuel Noel Co</p>
+<p class="text-[10px] text-slate-400">ID: BC-2024-001</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-xs text-slate-500 font-medium">Punong Barangay</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-50 text-green-600 text-[9px] font-bold border border-green-100 uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> On Duty
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-3 text-slate-400">
+<button class="hover:text-secondary"><span class="material-symbols-outlined" style="font-size: 18px;">edit</span></button>
+<button class="hover:text-error"><span class="material-symbols-outlined" style="font-size: 18px;">delete</span></button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs text-slate-500">JS</div>
+<div>
+<p class="text-sm font-bold text-slate-900">Juan San Jose</p>
+<p class="text-[10px] text-slate-400">ID: BC-2024-004</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-xs text-slate-500 font-medium">Kagawad (Public Order)</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-50 text-green-600 text-[9px] font-bold border border-green-100 uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> On Duty
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-3 text-slate-400">
+<button class="hover:text-secondary"><span class="material-symbols-outlined" style="font-size: 18px;">edit</span></button>
+<button class="hover:text-error"><span class="material-symbols-outlined" style="font-size: 18px;">delete</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-slate-50 border-t border-slate-100 text-center">
+<button class="text-[11px] font-bold text-slate-500 hover:text-slate-900">View Full Official Directory (Total 18)</button>
+</div>
+</div>
+<!-- Module 11: Audit Logs & Module 9: Notifications (System Activity) -->
+<div class="col-span-12 xl:col-span-4 flex flex-col gap-6">
+<!-- Module 11 Audit Logs -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full">
+<div class="p-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+<h3 class="font-bold text-slate-900">System Audit Logs</h3>
+<span class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-ping"></span>
+<span class="text-[10px] font-bold text-slate-400 uppercase">Live Trace</span>
+</span>
+</div>
+<div class="p-5 space-y-4 flex-grow overflow-y-auto max-h-[350px] scroll-hide">
+<div class="flex gap-4">
+<div class="w-8 h-8 rounded bg-blue-50 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px] text-secondary">login</span>
+</div>
+<div class="border-b border-slate-50 pb-2 flex-grow">
+<div class="flex justify-between items-start">
+<p class="text-xs font-bold text-slate-900">Admin_Session_Init</p>
+<span class="text-[9px] text-slate-400 font-bold uppercase">2m ago</span>
+</div>
+<p class="text-[10px] text-slate-500 mt-0.5">User: admin_02 • IP: 112.204.xx.xx</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-8 h-8 rounded bg-yellow-50 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed-dim">edit_document</span>
+</div>
+<div class="border-b border-slate-50 pb-2 flex-grow">
+<div class="flex justify-between items-start">
+<p class="text-xs font-bold text-slate-900">Case Record Modified</p>
+<span class="text-[9px] text-slate-400 font-bold uppercase">14m ago</span>
+</div>
+<p class="text-[10px] text-slate-500 mt-0.5">Case #8821 • Status -&gt; Resolved</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-8 h-8 rounded bg-green-50 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px] text-green-600">outgoing_mail</span>
+</div>
+<div class="border-b border-slate-50 pb-2 flex-grow">
+<div class="flex justify-between items-start">
+<p class="text-xs font-bold text-slate-900">SMS Notification Sent</p>
+<span class="text-[9px] text-slate-400 font-bold uppercase">45m ago</span>
+</div>
+<p class="text-[10px] text-slate-500 mt-0.5">Target: Resident_ID_992 (Closure Alert)</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-8 h-8 rounded bg-red-50 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px] text-error">warning</span>
+</div>
+<div class="border-b border-slate-50 pb-2 flex-grow">
+<div class="flex justify-between items-start">
+<p class="text-xs font-bold text-error">DB_ACCESS_DENIED</p>
+<span class="text-[9px] text-error font-bold uppercase">1h ago</span>
+</div>
+<p class="text-[10px] text-slate-500 mt-0.5">Attempted unauthorized table RLS bypass</p>
+</div>
+</div>
+</div>
+<button class="m-5 py-2 text-slate-600 text-[10px] font-bold bg-slate-50 border border-slate-200 rounded hover:bg-slate-100 transition-colors">
+                        FULL SECURITY AUDIT
+                    </button>
+</div>
+</div>
+</div>
+<!-- Infrastructure & Health Bar (Module 6/11 Context) -->
+<div class="mt-8 bg-on-primary-fixed rounded-xl p-4 flex items-center justify-between text-slate-400 border border-slate-800">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-400"></span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Cloud Engine: Optimal</span>
+</div>
+<div class="flex items-center gap-4 text-xs font-medium">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">database</span>
+<span class="text-[10px]">DB Sync: Live</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">shield_person</span>
+<span class="text-[10px]">RLS Layer: active</span>
+</div>
+</div>
+</div>
+<div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                Last System Sync: Just Now
+            </div>
+</div>
+</main>
+</div>
+<!-- Quick Command (Module 1/3) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-secondary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group border-4 border-white">
+<span class="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform">bolt</span>
+<!-- Tooltip -->
+<span class="absolute right-16 bg-on-primary-fixed text-white text-[10px] font-bold px-3 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">QUICK DISPATCH</span>
+</button>
+
+
+
+
+</body></html>

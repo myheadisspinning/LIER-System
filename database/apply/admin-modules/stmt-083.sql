@@ -1,0 +1,1 @@
+revoke all on function public.admin_suspend_user(uuid, boolean) from public

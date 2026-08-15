@@ -1,0 +1,1 @@
+alter table public.blotters enable row level security

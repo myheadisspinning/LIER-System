@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Public Advisories &amp; Announcements - Culiat Command</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-red": "#ef4444",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary-container": "#316bf3",
+                        "on-secondary-fixed": "#00174b",
+                        "tertiary-container": "#261a00",
+                        "surface": "#f8f9ff",
+                        "surface-bg": "#f8fafc",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#000000",
+                        "secondary-fixed": "#dbe1ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "warning-amber": "#f59e0b",
+                        "primary-fixed-dim": "#bec6e0",
+                        "tertiary-fixed-dim": "#f9bd22",
+                        "secondary": "#0051d5",
+                        "sidebar-bg": "#0f172a",
+                        "surface-dim": "#cbdbf5",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#fefcff",
+                        "surface-variant": "#d3e4fe",
+                        "border-subtle": "#e2e8f0",
+                        "tertiary-fixed": "#ffdfa0",
+                        "surface-container": "#e5eeff",
+                        "inverse-surface": "#213145",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-tertiary-fixed": "#261a00",
+                        "outline": "#76777d",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#a87d00",
+                        "success-green": "#22c55e",
+                        "primary-fixed": "#dae2fd",
+                        "surface-container-high": "#dce9ff",
+                        "background": "#f8f9ff",
+                        "surface-container-low": "#eff4ff",
+                        "on-secondary": "#ffffff",
+                        "primary": "#000000",
+                        "outline-variant": "#c6c6cd",
+                        "on-primary-container": "#7c839b",
+                        "primary-container": "#131b2e",
+                        "inverse-primary": "#bec6e0",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#45464d",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "text-on-dark": "#cbd5e1",
+                        "surface-tint": "#565e74",
+                        "on-primary-fixed": "#131b2e",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "on-surface": "#0b1c30",
+                        "on-background": "#0b1c30"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "lg": "48px",
+                        "gutter": "24px",
+                        "sm": "12px",
+                        "md": "24px",
+                        "sidebar-width": "256px",
+                        "xs": "4px",
+                        "margin-desktop": "40px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Poppins"],
+                        "headline-lg": ["Poppins"],
+                        "display-lg": ["Poppins"],
+                        "caps-xs": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["30px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "caps-xs": ["10px", { "lineHeight": "12px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.025em", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-md": ["15px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #f8fafc; }
+    </style>
+</head>
+<body class="text-on-background font-body-md antialiased overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-sidebar-width h-16 bg-surface border-b border-border-subtle flex justify-between items-center px-gutter w-[calc(100%-256px)] z-40 hidden md:flex">
+<div class="flex items-center gap-md">
+<h1 class="font-headline-md text-headline-md font-extrabold tracking-tighter text-on-surface">Culiat Command Center</h1>
+<nav class="hidden lg:flex gap-sm">
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-md text-label-md px-sm py-xs" href="#">Live Map</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-md text-label-md px-sm py-xs" href="#">Resources</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-md text-label-md px-sm py-xs" href="#">Hotlines</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="material-symbols-outlined text-on-surface-variant absolute left-2 top-1/2 -translate-y-1/2" style="font-variation-settings: 'FILL' 0;">search</span>
+<input class="bg-[#f1f5f9] border-none rounded pl-8 pr-3 py-1 text-sm focus:ring-secondary w-64 text-on-surface" placeholder="Search..." type="text"/>
+</div>
+<button class="text-on-surface-variant hover:text-secondary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-on-surface-variant hover:text-secondary transition-colors"><span class="material-symbols-outlined">settings</span></button>
+<img alt="Resident User Avatar" class="w-8 h-8 rounded-full border border-border-subtle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuNriAFFFU6t7HbiW4MLGpOp2iDmYSrfYDqqvejSu4uTnHALqGrgVnpa9_w0thNWNOFhglqTass7uxjfKoiWCQzy2kDiy_VV85VtfxW7mbn-GUlJRnwa270T9sYwOYCb9UydbHlniSCeQC4AGdGT5Z-TdJ_EKrtP8mP9tfayQqFgoLXogHgwIEM4QtToj1P3gIOgxRCsGkFJKkARAbq0tI-7ZGA_stM8jLdpcafF2qwd0-y4IHquOe"/>
+<button class="bg-secondary text-on-secondary font-label-md text-label-md px-4 py-2 rounded shadow-2xl hover:bg-secondary/90 transition-colors opacity-80 active:opacity-100 flex items-center gap-2">
+                Emergency Dispatch
+            </button>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="w-sidebar-width h-screen fixed left-0 top-0 bg-sidebar-bg border-r border-outline-variant flex flex-col py-md overflow-y-auto z-50">
+<div class="px-md mb-lg">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 bg-primary-fixed rounded flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sidebar-bg">shield</span>
+</div>
+<div>
+<h2 class="font-headline-lg text-headline-lg font-bold text-on-primary-fixed leading-tight text-white">Culiat Command</h2>
+<p class="font-caps-xs text-caps-xs text-primary-fixed-dim opacity-70">Resident Portal v2.4</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-sm">
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 text-text-on-dark/70 hover:text-text-on-dark hover:bg-white/5 transition-colors duration-200 rounded mx-2 my-1 px-3 py-2 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<div>
+<div class="font-label-md text-label-md">Dashboard</div>
+</div>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-text-on-dark/70 hover:text-text-on-dark hover:bg-white/5 transition-colors duration-200 rounded mx-2 my-1 px-3 py-2 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined text-error-red">emergency</span>
+<div>
+<div class="font-label-md text-label-md">Emergency SOS</div>
+</div>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-text-on-dark/70 hover:text-text-on-dark hover:bg-white/5 transition-colors duration-200 rounded mx-2 my-1 px-3 py-2 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">groups</span>
+<div>
+<div class="font-label-md text-label-md">Resident Services</div>
+</div>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded mx-2 my-1 px-3 py-2 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">campaign</span>
+<div>
+<div class="font-label-md text-label-md font-bold">Community Alerts</div>
+<div class="font-caps-xs text-caps-xs opacity-80 mt-0.5">Advisories &amp; Notices</div>
+</div>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-text-on-dark/70 hover:text-text-on-dark hover:bg-white/5 transition-colors duration-200 rounded mx-2 my-1 px-3 py-2 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">phone_in_talk</span>
+<div>
+<div class="font-label-md text-label-md">Hotline Directory</div>
+</div>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-text-on-dark/70 hover:text-text-on-dark hover:bg-white/5 transition-colors duration-200 rounded mx-2 my-1 px-3 py-2 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">report_problem</span>
+<div>
+<div class="font-label-md text-label-md">Incident Reports</div>
+</div>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-text-on-dark/70 hover:text-text-on-dark hover:bg-white/5 transition-colors duration-200 rounded mx-2 my-1 px-3 py-2 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">medical_services</span>
+<div>
+<div class="font-label-md text-label-md">Health Center</div>
+</div>
+</a>
+</li>
+</ul>
+</nav>
+<div class="mt-auto px-md">
+<a class="flex items-center gap-3 text-text-on-dark/70 hover:text-text-on-dark hover:bg-white/5 transition-colors duration-200 rounded mx-2 my-1 px-3 py-2 scale-95 active:scale-90 mb-4" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<div class="font-label-md text-label-md">Profile Settings</div>
+</a>
+<button class="w-full bg-error-red/20 text-error-red border border-error-red/30 hover:bg-error-red hover:text-on-error transition-colors py-3 rounded flex justify-center items-center gap-2 font-bold font-label-md text-label-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
+                Quick SOS Trigger
+            </button>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-sidebar-width pt-16 min-h-screen flex flex-col">
+<div class="p-margin-desktop flex-1 max-w-[1600px] mx-auto w-full">
+<!-- Page Header -->
+<div class="mb-lg">
+<h2 class="font-display-lg text-display-lg text-on-background mb-2">Public Advisories &amp; Announcements</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">Official safety warnings, weather alerts, road closures, and community notices issued by Barangay Culiat Leadership.</p>
+</div>
+<!-- Filter Bar -->
+<div class="bg-surface-container-lowest border border-border-subtle rounded p-sm flex flex-col md:flex-row justify-between items-center mb-md gap-4">
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-1.5 bg-secondary text-on-secondary rounded font-label-md text-label-md transition-colors hover:bg-secondary/90">All Advisories</button>
+<button class="px-4 py-1.5 bg-[#f1f5f9] text-on-surface-variant rounded border border-border-subtle font-label-md text-label-md hover:bg-surface-variant transition-colors">Emergency &amp; Crime</button>
+<button class="px-4 py-1.5 bg-[#f1f5f9] text-on-surface-variant rounded border border-border-subtle font-label-md text-label-md hover:bg-surface-variant transition-colors">Weather &amp; Floods</button>
+<button class="px-4 py-1.5 bg-[#f1f5f9] text-on-surface-variant rounded border border-border-subtle font-label-md text-label-md hover:bg-surface-variant transition-colors">Barangay Services</button>
+<button class="px-4 py-1.5 bg-[#f1f5f9] text-on-surface-variant rounded border border-border-subtle font-label-md text-label-md hover:bg-surface-variant transition-colors">Traffic / Works</button>
+</div>
+<div class="relative w-full md:w-auto">
+<span class="material-symbols-outlined text-on-surface-variant absolute left-3 top-1/2 -translate-y-1/2">search</span>
+<input class="w-full md:w-64 bg-[#f1f5f9] border border-border-subtle rounded pl-10 pr-3 py-1.5 text-sm focus:ring-secondary focus:border-secondary" placeholder="Search advisories..." type="text"/>
+</div>
+</div>
+<!-- Hero Advisory (High Priority) -->
+<div class="bg-surface-container-lowest border border-error-red/30 rounded p-md mb-lg relative overflow-hidden shadow-sm">
+<!-- Subtle warning background pattern/gradient -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-error-red/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+<div class="flex items-start justify-between gap-6 relative z-10">
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-error-red text-on-error font-caps-xs text-caps-xs uppercase tracking-wider">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                                HIGH PRIORITY — FLOOD WARNING
+                            </span>
+<span class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+                                Issued 30 mins ago by QC DRRMO &amp; Barangay Captain Office
+                            </span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-background mb-4">Preemptive Evacuation Advisory: Low-lying areas in Purok 4 &amp; Purok 5 due to heavy rainfall.</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 max-w-4xl">
+                            Due to continuous heavy downpour from Tropical Storm, water levels at Tullahan River have reached critical status. Residents in low-lying sectors of Purok 4 and Purok 5 are advised to conduct preemptive evacuation immediately. Designated evacuation centers are Culiat High School and the Barangay Covered Court. Rescue vehicles are stationed at the main archway.
+                        </p>
+<div class="flex flex-wrap gap-3">
+<button class="bg-[#1E40AF] text-white px-6 py-2.5 rounded font-label-md text-label-md hover:bg-blue-900 transition-colors flex items-center gap-2 shadow-md">
+                                Read Full Advisory
+                            </button>
+<button class="bg-surface-variant text-on-surface px-6 py-2.5 rounded border border-border-subtle font-label-md text-label-md hover:bg-surface-dim transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">share</span>
+                                Share Announcement
+                            </button>
+<button class="bg-surface-variant text-on-surface px-6 py-2.5 rounded border border-border-subtle font-label-md text-label-md hover:bg-surface-dim transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">map</span>
+                                View Shelter Map
+                            </button>
+</div>
+</div>
+<!-- Tactical Map Placeholder -->
+<div class="hidden lg:block w-72 h-48 bg-[#f1f5f9] rounded border border-border-subtle relative overflow-hidden flex-shrink-0">
+<div class="w-full h-full bg-cover bg-center opacity-70 mix-blend-multiply" data-alt="A detailed map visualization showing the barangay culiat area with highlighted red zones indicating flood risks near purok 4 and 5, tactical modern UI style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAReegeW7MwXDMwy4WOlpCys3KSi9kU81ueMPFhY1zZUEIbaMkM9PpcSj4S419WW4hV1DHHEEpCRRl9sEc86viVlH-ZU_-NBx59WKV_7in0m50e-YMIoBjVPuuZTXWDdw_Ejom8Ktj-YDnkVzcpukHIpFIuY1xXBmSVs2RrauQi11xB4jPExcFe7SD934U50AXkTplxY1E32wHCiQf1jQu94m9WdZq72uLtmbJPtvSdrMij3LA1wtB3')"></div>
+<div class="absolute inset-0 border border-black/10 rounded pointer-events-none"></div>
+<div class="absolute top-2 right-2 bg-white/90 px-2 py-1 rounded shadow text-xs font-bold text-error-red flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error-red animate-pulse"></span> LIVE
+                        </div>
+</div>
+</div>
+</div>
+<!-- Secondary Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest border border-border-subtle rounded p-md hover:border-secondary/50 transition-colors flex flex-col h-full shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-blue-100 text-[#1E40AF] font-caps-xs text-caps-xs uppercase tracking-wider border border-blue-200">
+                            Barangay Services
+                        </span>
+<span class="text-on-surface-variant font-label-sm text-label-sm">2 hrs ago</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-background mb-3">Scheduled Power Interruption in Purok 2 — Aug 10</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 flex-1">
+                        Meralco will conduct line maintenance and replacement of primary poles along Tandang Sora Ave. Expect power interruption from 8:00 AM to 3:00 PM.
+                    </p>
+<a class="text-secondary font-label-md text-label-md hover:underline flex items-center gap-1 mt-auto w-fit" href="#">
+                        Read Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest border border-border-subtle rounded p-md hover:border-secondary/50 transition-colors flex flex-col h-full shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-green-100 text-green-800 font-caps-xs text-caps-xs uppercase tracking-wider border border-green-200">
+                            Community
+                        </span>
+<span class="text-on-surface-variant font-label-sm text-label-sm">Yesterday</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-background mb-3">Katarungang Pambarangay Free Legal Clinic Schedule</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 flex-1">
+                        Free legal consultations will be held at the Barangay Hall this coming Saturday from 9:00 AM to 12:00 NN. Open to all registered residents. Priority for seniors.
+                    </p>
+<a class="text-secondary font-label-md text-label-md hover:underline flex items-center gap-1 mt-auto w-fit" href="#">
+                        Read Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest border border-border-subtle rounded p-md hover:border-secondary/50 transition-colors flex flex-col h-full shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-[#1E40AF]/10 text-[#1E40AF] font-caps-xs text-caps-xs uppercase tracking-wider border border-[#1E40AF]/20">
+                            Public Safety
+                        </span>
+<span class="text-on-surface-variant font-label-sm text-label-sm">Aug 5</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-background mb-3">CCTV Installation &amp; Enhanced Tanod Night Patrols</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 flex-1">
+                        New high-definition surveillance cameras have been activated along Union St. Checkpoints and roving patrols will be increased between 10 PM and 4 AM.
+                    </p>
+<a class="text-secondary font-label-md text-label-md hover:underline flex items-center gap-1 mt-auto w-fit" href="#">
+                        Read Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="mt-8 flex justify-center">
+<button class="bg-[#f1f5f9] text-on-surface px-6 py-2 rounded border border-border-subtle font-label-md text-label-md hover:bg-surface-variant transition-colors">
+                    Load More Advisories
+                </button>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full py-4 px-margin-desktop border-t border-outline-variant bg-surface-container-lowest flex flex-row justify-between items-center mt-auto">
+<span class="font-label-sm text-label-sm text-on-surface-variant">© 2024 Barangay Culiat Command Center. Unauthorized access is prohibited.</span>
+<div class="flex gap-4">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline text-secondary" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" href="#">Dispatch Protocol</a>
+</div>
+</footer>
+</main>
+</body></html>

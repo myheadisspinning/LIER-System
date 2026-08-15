@@ -1,0 +1,9 @@
+.iconFill {
+  font-variation-settings: "FILL" 1;
+}
+
+.mapBg {
+  background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCAeU1VLecEVDZkqCZ1Tkw-S3A_1WDTHgz2T6srh9BwFTNVoM7ILpdGyFNysRFMQA47nNfReyKzX6gVMi5xT8D5OgXTPXd7WPbPCuLohNAvrUL9mAyIgXmkybdtTJANKe_3n0BpitHpjj-gVbqd2M8GKT1a_B9b72pkcJuULiH72FpNvft4MmNSH1pn9eEr-wP8g-UFNr-bJAZmYM3qkbm6AbxLao5fdZSF2Wm6BaIRMKdWkQypo19a");
+  background-size: cover;
+  background-position: center;
+}

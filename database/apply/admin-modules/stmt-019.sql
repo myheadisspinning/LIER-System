@@ -1,0 +1,1 @@
+drop policy if exists "staff manage broadcasts" on public.broadcasts

@@ -1,0 +1,835 @@
+<!--
+DESIGN.md (Design Documentation)
+================================
+---
+name: Commonwealth Safety Design System
+colors:
+  surface: '#f8f9ff'
+  surface-dim: '#cbdbf5'
+  surface-bright: '#f8f9ff'
+  surface-container-lowest: '#ffffff'
+  surface-container-low: '#eff4ff'
+  surface-container: '#e5eeff'
+  surface-container-high: '#dce9ff'
+  surface-container-highest: '#d3e4fe'
+  on-surface: '#0b1c30'
+  on-surface-variant: '#45464d'
+  inverse-surface: '#213145'
+  inverse-on-surface: '#eaf1ff'
+  outline: '#76777d'
+  outline-variant: '#c6c6cd'
+  surface-tint: '#565e74'
+  primary: '#000000'
+  on-primary: '#ffffff'
+  primary-container: '#131b2e'
+  on-primary-container: '#7c839b'
+  inverse-primary: '#bec6e0'
+  secondary: '#0051d5'
+  on-secondary: '#ffffff'
+  secondary-container: '#316bf3'
+  on-secondary-container: '#fefcff'
+  tertiary: '#000000'
+  on-tertiary: '#ffffff'
+  tertiary-container: '#261a00'
+  on-tertiary-container: '#a87d00'
+  error: '#ba1a1a'
+  on-error: '#ffffff'
+  error-container: '#ffdad6'
+  on-error-container: '#93000a'
+  primary-fixed: '#dae2fd'
+  primary-fixed-dim: '#bec6e0'
+  on-primary-fixed: '#131b2e'
+  on-primary-fixed-variant: '#3f465c'
+  secondary-fixed: '#dbe1ff'
+  secondary-fixed-dim: '#b4c5ff'
+  on-secondary-fixed: '#00174b'
+  on-secondary-fixed-variant: '#003ea8'
+  tertiary-fixed: '#ffdf9f'
+  tertiary-fixed-dim: '#f9bd22'
+  on-tertiary-fixed: '#261a00'
+  on-tertiary-fixed-variant: '#5c4300'
+  background: '#f8f9ff'
+  on-background: '#0b1c30'
+  surface-variant: '#d3e4fe'
+typography:
+  display-lg:
+    fontFamily: Poppins
+    fontSize: 48px
+    fontWeight: '700'
+    lineHeight: '1.2'
+    letterSpacing: -0.02em
+  display-lg-mobile:
+    fontFamily: Poppins
+    fontSize: 32px
+    fontWeight: '700'
+    lineHeight: '1.2'
+  headline-lg:
+    fontFamily: Poppins
+    fontSize: 32px
+    fontWeight: '600'
+    lineHeight: '1.3'
+  headline-lg-mobile:
+    fontFamily: Poppins
+    fontSize: 24px
+    fontWeight: '600'
+    lineHeight: '1.3'
+  headline-md:
+    fontFamily: Poppins
+    fontSize: 24px
+    fontWeight: '600'
+    lineHeight: '1.4'
+  body-lg:
+    fontFamily: Inter
+    fontSize: 18px
+    fontWeight: '400'
+    lineHeight: '1.6'
+  body-md:
+    fontFamily: Inter
+    fontSize: 16px
+    fontWeight: '400'
+    lineHeight: '1.6'
+  label-md:
+    fontFamily: Inter
+    fontSize: 14px
+    fontWeight: '600'
+    lineHeight: '1'
+    letterSpacing: 0.05em
+  caption:
+    fontFamily: Inter
+    fontSize: 12px
+    fontWeight: '500'
+    lineHeight: '1.4'
+rounded:
+  sm: 0.25rem
+  DEFAULT: 0.5rem
+  md: 0.75rem
+  lg: 1rem
+  xl: 1.5rem
+  full: 9999px
+spacing:
+  base: 8px
+  xs: 4px
+  sm: 12px
+  md: 24px
+  lg: 48px
+  xl: 80px
+  gutter: 24px
+  margin-mobile: 16px
+  margin-desktop: 64px
+---
+
+## Brand & Style
+
+The design system is engineered to project **authority, transparency, and urgent reliability**. As a public safety and government portal for Barangay Commonwealth, the visual narrative balances the gravity of civic duty with the modern efficiency of a premium digital service. 
+
+The aesthetic is **Corporate Modern with Glassmorphism accents**. It utilizes high-contrast typography and structured layouts to ensure information accessibility while employing frosted glass effects and subtle gradients to feel contemporary and high-end. The goal is to instill a sense of security and trust in the residents of Quezon City through a precise, organized, and polished interface.
+
+## Colors
+
+The palette is anchored by **Deep Navy Blue**, representing the stability and tradition of government institutions. **Royal Blue** serves as the primary action color, providing a modern, digital-first energy. **Gold** is used sparingly as an accent to denote premium status, high-priority alerts, or official seals.
+
+- **Primary (Navy):** Used for headers, heavy branding, and primary navigation backgrounds.
+- **Secondary (Royal):** Used for interactive elements, links, and progress indicators.
+- **Accent (Gold):** Reserved for recognition, official badges, and specific "Staff" or "Premium" touchpoints.
+- **Semantic Colors:** Emerald Green and Crimson Red are strictly utilized for status updates and emergency alerts to maintain clear visual communication.
+
+## Typography
+
+This design system uses a dual-font strategy. **Poppins** provides a friendly yet authoritative geometric structure for headlines, making the government's message feel modern and accessible. **Inter** is the workhorse for body text, chosen for its exceptional legibility in data-heavy safety reports and official documentation.
+
+Hierarchy is maintained through generous line heights and distinct weight contrasts. Large displays use negative letter spacing for a tighter, more "editorial" look, while labels utilize uppercase tracking to denote systemic hierarchy.
+
+## Layout & Spacing
+
+The layout follows a **Fluid Grid System** with strict constraints to maintain an authoritative structure. 
+
+- **Desktop:** 12-column grid with 24px gutters and 64px side margins. Content is typically contained to a maximum width of 1440px.
+- **Tablet:** 8-column grid with 20px gutters and 32px side margins.
+- **Mobile:** 4-column grid with 16px gutters and 16px side margins.
+
+Spacing follows an 8px base unit. Component internal padding should prioritize "breathability" to reduce cognitive load during emergency situations, using `md` (24px) as the standard container padding.
+
+## Elevation & Depth
+
+To achieve the "Government Portal" aesthetic, depth is communicated through a mix of **Ambient Shadows** and **Glassmorphism**.
+
+1.  **Glassmorphism:** Navigation sidebars and modal overlays use a background blur (12px to 20px) with a semi-transparent white or navy fill (opacity 70-85%). A 1px translucent border provides a "crystal" edge.
+2.  **Shadows:** Elevated cards use soft, multi-layered shadows with a low-opacity navy tint (`rgba(15, 23, 42, 0.08)`) to avoid a "dirty" look on the light gray background.
+3.  **Tonal Layers:** Surfaces are layered from the background (`#F8FAFC`) to the primary surface (`#FFFFFF`), with glass layers sitting at the highest perceived elevation.
+
+## Shapes
+
+The design system utilizes **Large Rounded Corners** to soften the traditional rigidity of government interfaces, making the technology feel more approachable. 
+
+- **Main Containers & Cards:** Use `radius-2xl` (24px) for a modern, friendly feel.
+- **Buttons & Inputs:** Use `radius-lg` (12px) to maintain a professional balance.
+- **Status Badges:** Use pill-shaped (fully rounded) geometry to distinguish them from interactive buttons.
+
+## Components
+
+### Buttons
+- **Primary:** Gradient fill (Royal Blue to Deep Navy) with white text and a soft shadow. 
+- **Emergency:** Solid Crimson Red with high-contrast white text and a pulse animation effect for high-priority alerts.
+- **Secondary/Ghost:** 1.5px border in Navy or Blue with no fill, transitioning to a glass effect on hover.
+
+### Cards
+- Standard cards feature `radius-2xl`, white backgrounds, and a subtle 1px border (`#E2E8F0`). 
+- Emergency cards utilize a thick left-border accent in the semantic color (Red/Yellow/Green).
+
+### Input Fields
+- Inputs should be tall (min-height 48px) with `radius-lg` and a background color of `#F1F5F9`. On focus, the border transitions to Royal Blue with a 3px soft glow.
+
+### Glass Overlays
+- Sidebars and mobile menus must use the `backdrop-filter: blur(16px)` property with a semi-transparent Deep Navy (`#0F172A` at 80% opacity) for a premium, high-tech look.
+
+### Chips & Badges
+- Used for safety categories (e.g., "Fire Safety", "Public Health"). These should use the Royal Blue color at 10% opacity for the background and 100% opacity for the text.
+-->
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        try {
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        "colors": {
+                            "on-surface-variant": "#45464d",
+                            "surface-bright": "#f8f9ff",
+                            "tertiary": "#000000",
+                            "on-primary-fixed": "#131b2e",
+                            "surface-container-lowest": "#ffffff",
+                            "on-primary-fixed-variant": "#3f465c",
+                            "primary-fixed": "#dae2fd",
+                            "on-error": "#ffffff",
+                            "error-container": "#ffdad6",
+                            "on-secondary-container": "#fefcff",
+                            "on-secondary": "#ffffff",
+                            "primary-container": "#131b2e",
+                            "on-background": "#0b1c30",
+                            "on-secondary-fixed": "#00174b",
+                            "on-tertiary": "#ffffff",
+                            "secondary": "#0051d5",
+                            "error": "#ba1a1a",
+                            "tertiary-container": "#261a00",
+                            "surface-tint": "#565e74",
+                            "tertiary-fixed-dim": "#f9bd22",
+                            "on-primary": "#ffffff",
+                            "surface-container": "#e5eeff",
+                            "on-tertiary-container": "#a87d00",
+                            "primary": "#000000",
+                            "surface-container-highest": "#d3e4fe",
+                            "on-primary-container": "#7c839b",
+                            "surface-container-high": "#dce9ff",
+                            "on-tertiary-fixed": "#261a00",
+                            "outline": "#76777d",
+                            "secondary-container": "#316bf3",
+                            "background": "#f8f9ff",
+                            "surface-variant": "#d3e4fe",
+                            "on-surface": "#0b1c30",
+                            "inverse-surface": "#213145",
+                            "inverse-on-surface": "#eaf1ff",
+                            "primary-fixed-dim": "#bec6e0",
+                            "surface-dim": "#cbdbf5",
+                            "secondary-fixed": "#dbe1ff",
+                            "tertiary-fixed": "#ffdf9f",
+                            "outline-variant": "#c6c6cd",
+                            "surface-container-low": "#eff4ff",
+                            "surface": "#f8f9ff",
+                            "on-error-container": "#93000a",
+                            "secondary-fixed-dim": "#b4c5ff",
+                            "inverse-primary": "#bec6e0",
+                            "on-secondary-fixed-variant": "#003ea8",
+                            "on-tertiary-fixed-variant": "#5c4300"
+                        },
+                        "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "2xl": "1rem",
+                            "full": "9999px"
+                        },
+                        "spacing": {
+                            "margin-desktop": "64px",
+                            "lg": "48px",
+                            "base": "8px",
+                            "xl": "80px",
+                            "gutter": "24px",
+                            "margin-mobile": "16px",
+                            "sm": "12px",
+                            "md": "24px",
+                            "xs": "4px"
+                        },
+                        "fontFamily": {
+                            "headline-lg": ["Poppins"],
+                            "headline-md": ["Poppins"],
+                            "display-lg": ["Poppins"],
+                            "body-md": ["Inter"],
+                            "body-lg": ["Inter"],
+                            "label-md": ["Inter"],
+                            "caption": ["Inter"],
+                            "mono": ["JetBrains Mono"]
+                        },
+                        "fontSize": {
+                            "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                            "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                            "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                            "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                            "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                            "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                            "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}]
+                        }
+                    }
+                }
+            }
+        } catch (_e) {}
+    </script>
+<style>
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(11, 28, 48, 0.4) 0%, rgba(11, 28, 48, 0.85) 70%, rgba(11, 28, 48, 0.95) 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #f9bd22 0%, #ffdf9f 100%);
+        }
+        
+        @keyframes heartbeat {
+            0% { stroke-dashoffset: 1000; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .animate-heartbeat {
+            stroke-dasharray: 1000;
+            animation: heartbeat 30s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(200%); }
+        }
+        .scan-line {
+            animation: scan 3s linear infinite;
+            background: linear-gradient(to bottom, transparent, rgba(180, 197, 255, 0.3), transparent);
+        }
+
+        @keyframes flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 1; }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% { opacity: 0.4; }
+        }
+        .animate-flicker {
+            animation: flicker 4s infinite;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .shimmer-effect {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .reveal-left, .reveal-right {
+                transition: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+            }
+            .shimmer-effect {
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden" style="overflow: auto;">
+<!-- Page Loader -->
+<div class="fixed inset-0 z-[1000] bg-white/80 backdrop-blur-sm flex items-center justify-center transition-opacity duration-300 pointer-events-none opacity-0" id="page-loader">
+<div class="w-12 h-12 border-4 border-secondary/20 border-t-secondary rounded-full animate-spin"></div>
+</div>
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-[100] flex justify-between items-center px-4 md:px-margin-desktop h-20 bg-primary-container/90 backdrop-blur-md shadow-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim transition-transform hover:scale-110">
+<img alt="Barangay Tandang Sora Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jE_R6jk2am8ZI5hq_njSALDXpHfM55Gdc_vwxSzuezEgFYuC6H_kJa6P-8BUQ_YA1XVrLwZFgV6qtLOJ6mfs5KfEvqutKZn-JUKYq4ncsmGNjPf0tXQxzHhRe2e9DVTUIIhVO7uKGtfPYl8U9wpptHAEHgTX7Cq5D8Z7uL_DmOiKTNOZ-si_NxiQ0n430AnXt6BQSJnxg__oGfZsdCCi0-hy4IVwNF9HeJ2pcJsoUiRqZhvmierx5fBFXHBwb4dSJnB15fVLyU4"/>
+</div>
+<h1 class="font-headline-md text-base md:text-headline-md font-bold text-surface-bright leading-tight">Barangay Tandang Sora Safety</h1>
+</div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="nav-link font-label-md text-label-md text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim pb-1 transition-all" href="#">Home</a>
+<a class="nav-link font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-all duration-200" href="#">About</a>
+<a class="nav-link font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-all duration-200" href="#">Officials</a>
+<a class="nav-link font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-all duration-200" href="#">Services</a>
+<a class="nav-link font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-all duration-200" href="#">Contact</a>
+</nav>
+<div class="flex items-center gap-sm md:gap-md">
+<a class="nav-link bg-secondary text-on-secondary px-4 md:px-md py-2 rounded-lg font-bold hover:bg-secondary-container hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all text-xs md:text-sm flex items-center justify-center whitespace-nowrap" href="{{DATA:SCREEN:SCREEN_59}}">Login/Register</a>
+<button class="md:hidden p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors" id="mobile-menu-button">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</button>
+</div>
+</header>
+<!-- Mobile Side Menu -->
+<div class="fixed inset-0 z-[200] invisible pointer-events-none transition-all duration-300" id="mobile-drawer-container">
+<div class="absolute inset-0 bg-primary-container/60 backdrop-blur-sm opacity-0 transition-opacity duration-300" id="drawer-overlay"></div>
+<div class="absolute right-0 top-0 h-full w-[280px] bg-background shadow-2xl flex flex-col p-lg translate-x-full transition-transform duration-300 ease-in-out" id="mobile-drawer">
+<div class="flex justify-between items-center mb-xl">
+<span class="font-headline-md text-on-surface">Menu</span>
+<button class="text-on-surface-variant hover:text-primary p-2 transition-transform hover:rotate-90" id="close-drawer">
+<span class="material-symbols-outlined text-3xl">close</span>
+</button>
+</div>
+<nav class="flex flex-col gap-lg">
+<a class="nav-link font-label-md text-lg text-secondary border-l-4 border-secondary pl-4 font-bold" href="#">Home</a>
+<a class="nav-link font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">About</a>
+<a class="nav-link font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">Officials</a>
+<a class="nav-link font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">Services</a>
+<a class="nav-link font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">Contact</a>
+</nav>
+<div class="mt-auto pt-lg border-t border-outline-variant">
+<a class="nav-link w-full px-md py-4 bg-secondary text-on-secondary font-bold rounded-xl flex items-center justify-center text-center shadow-lg transition-transform hover:scale-[1.02]" href="{{DATA:SCREEN:SCREEN_59}}">Login/Register</a>
+</div>
+</div>
+</div>
+<!-- Hero Section -->
+<header class="relative min-h-[90vh] md:min-h-screen pt-16 flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Barangay Tandang Sora Hall" class="w-full h-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCi72yclYEcs29-GosEvH8aQ8jjXHUMvfDnwtV0y20Nl-TnLislGk7Ws1c4HgdXpM_asFVyyTnUBX31t8OC0uwNKQCR3Hxx11IBGu62qbGcC2B95VyxowF17rObBOTvby6MZM9BxdCfVeBEVprfj_4RR5JVHAiSbSpv4D54faNJCfRHrgXN3QXDJ5_qlNL-Yz5-AO4bfUA8uw9zIPvL7LeWyC-lIiQmugyf_XnwAo7e9pO44GE55-q3dxFvmJNTc9HfbS0C8fdM7AI"/>
+<div class="absolute inset-0 hero-overlay"></div>
+</div>
+<div class="container mx-auto px-4 md:px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-xl relative z-10 py-xl">
+<div class="flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-md reveal active">
+<div class="inline-flex items-center gap-sm bg-secondary-container/30 backdrop-blur-md px-md py-xs rounded-full border border-secondary-fixed/30 mb-sm">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
+<span class="text-white font-label-md text-xs md:text-label-md tracking-wider uppercase font-bold">Tactical Command Center</span>
+</div>
+<h1 class="font-display-lg text-3xl md:text-5xl lg:text-display-lg text-white leading-tight drop-shadow-lg">
+<span class="text-tertiary-fixed-dim">Law Enforcement</span> and Incident Reporting System
+            </h1>
+<p class="font-body-md md:font-body-lg text-body-md md:text-body-lg text-surface-container-low/90 max-w-xl">
+                AI-Assisted Dispatch, Case Tracking, and Evidence Management for Barangay Tandang Sora, Quezon City. Ensuring a safer community through transparent and efficient technology.
+            </p>
+<div class="flex flex-col sm:flex-row items-center gap-md pt-base w-full">
+<button class="relative overflow-hidden w-full sm:w-auto px-lg md:px-xl py-4 gold-gradient text-on-tertiary-fixed font-headline-md text-lg rounded-2xl shadow-xl hover:scale-105 hover:shadow-2xl transition-all flex items-center justify-center gap-sm active:scale-95 touch-manipulation group">
+<div class="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<span class="material-symbols-outlined relative z-10">campaign</span>
+<span class="relative z-10">Report an Incident</span>
+</button>
+<div class="w-full sm:w-auto glass-card rounded-2xl p-sm flex items-center gap-sm border border-white/10 hover:bg-white/10 transition-colors">
+<div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-2xl">monitoring</span>
+</div>
+<div class="text-left">
+<p class="text-xs font-bold text-secondary-fixed-dim">System Uptime: 99.9%</p>
+<p class="text-[10px] text-surface-container-low/60 italic">Encrypted Secure Line 0x24A</p>
+</div>
+</div>
+</div>
+</div>
+<div class="hidden lg:flex items-center justify-center relative reveal-right active">
+<div class="relative p-6 glass-card rounded-3xl border border-white/20 shadow-2xl overflow-hidden min-w-[340px] group transition-all duration-500 hover:border-secondary-fixed-dim/50 hover:shadow-blue-500/10">
+<div class="absolute inset-x-0 top-0 h-1/2 scan-line pointer-events-none opacity-20"></div>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<div class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-green-500 shadow-[0_0_8px_#4ade80]"></span>
+</div>
+<span class="font-mono text-[10px] font-bold tracking-[0.2em] text-white uppercase animate-flicker">Live System Active</span>
+</div>
+<span class="font-mono text-[9px] text-secondary-fixed-dim opacity-70">NODE: QC-TS-04</span>
+</div>
+<div class="relative h-16 w-full mb-6 bg-black/20 rounded-xl overflow-hidden border border-white/5">
+<svg class="absolute inset-0 h-full w-full" preserveaspectratio="none" viewbox="0 0 100 40">
+<path class="animate-heartbeat" d="M0 20 L10 20 L15 10 L20 30 L25 20 L40 20 L45 5 L50 35 L55 20 L75 20 L80 15 L85 25 L90 20 L100 20" fill="none" stroke="#b4c5ff" stroke-opacity="0.6" stroke-width="0.5"></path>
+<path class="animate-pulse" d="M0 20 L10 20 L15 10 L20 30 L25 20 L40 20 L45 5 L50 35 L55 20 L75 20 L80 15 L85 25 L90 20 L100 20" fill="none" stroke="#b4c5ff" stroke-opacity="0.3" stroke-width="1.5"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="font-mono text-[10px] text-white/40 tracking-[0.3em] uppercase">AI Dispatch Pulse</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-sm">speed</span>
+<p class="font-mono text-[9px] text-surface-container-low/60 uppercase">Response Latency</p>
+</div>
+<p class="font-mono text-xl font-bold text-white leading-none">0.42<span class="text-xs text-secondary-fixed-dim ml-1">ms</span></p>
+</div>
+<div class="space-y-1 border-l border-white/10 pl-4">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-sm">lock</span>
+<p class="font-mono text-[9px] text-surface-container-low/60 uppercase">Encryption</p>
+</div>
+<div class="flex items-center gap-1">
+<div class="flex gap-[2px]">
+<div class="w-1 h-3 bg-secondary-fixed-dim"></div>
+<div class="w-1 h-3 bg-secondary-fixed-dim"></div>
+<div class="w-1 h-3 bg-secondary-fixed-dim"></div>
+<div class="w-1 h-3 bg-secondary-fixed-dim/30"></div>
+</div>
+<p class="font-mono text-[10px] font-bold text-white uppercase tracking-tighter">AES-256</p>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-white/5 flex justify-between">
+<span class="font-mono text-[8px] text-white/30 tracking-widest">COORD: 14.6760° N, 121.0437° E</span>
+<span class="font-mono text-[8px] text-green-400/50 animate-pulse">SYNC OK</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Statistics Row -->
+<section class="py-md md:py-xl -mt-8 md:-mt-xl relative z-20">
+<div class="container mx-auto px-4 md:px-margin-desktop grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
+<div class="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20 reveal transition-all hover:-translate-y-2 hover:shadow-2xl">
+<span class="material-symbols-outlined text-secondary text-2xl md:text-4xl" style='font-variation-settings: "FILL" 1;'>assignment</span>
+<span class="font-display-lg text-2xl md:text-display-lg text-on-surface count-up" data-suffix="+" data-target="2450">0+</span>
+<span class="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Total Incidents</span>
+</div>
+<div class="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border-l-4 border-l-error border-y border-r border-outline-variant/20 reveal transition-all hover:-translate-y-2 hover:shadow-2xl">
+<span class="material-symbols-outlined text-error text-2xl md:text-4xl" style='font-variation-settings: "FILL" 1;'>warning</span>
+<span class="font-display-lg text-2xl md:text-display-lg text-on-surface count-up" data-target="124">0</span>
+<span class="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Active Cases</span>
+</div>
+<div class="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border-l-4 border-l-secondary border-y border-r border-outline-variant/20 reveal transition-all hover:-translate-y-2 hover:shadow-2xl">
+<span class="material-symbols-outlined text-secondary text-2xl md:text-4xl" style='font-variation-settings: "FILL" 1;'>check_circle</span>
+<span class="font-display-lg text-2xl md:text-display-lg text-on-surface count-up" data-target="2210">0</span>
+<span class="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Resolved Cases</span>
+</div>
+<div class="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20 reveal transition-all hover:-translate-y-2 hover:shadow-2xl">
+<span class="material-symbols-outlined text-secondary text-2xl md:text-4xl" style='font-variation-settings: "FILL" 1;'>groups</span>
+<span class="font-display-lg text-2xl md:text-display-lg text-on-surface count-up" data-suffix="+" data-target="15000">0+</span>
+<span class="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Registered Users</span>
+</div>
+</div>
+</section>
+<!-- Quick Services Grid -->
+<section class="py-xl bg-surface-container-low">
+<div class="container mx-auto px-4 md:px-margin-desktop">
+<div class="text-center mb-xl reveal">
+<h2 class="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">LGU Public Safety Services</h2>
+<p class="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Access critical services and report concerns directly to our integrated law enforcement team.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
+<div class="group bg-surface p-lg rounded-2xl border border-outline-variant hover:border-secondary hover:shadow-xl transition-all cursor-pointer touch-manipulation reveal hover:-translate-y-2">
+<div class="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary mb-md group-hover:bg-secondary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl">report_problem</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md mb-xs text-on-surface">Report an Incident</h3>
+<p class="font-body-md text-on-surface-variant">Submit detailed reports for security concerns in your area.</p>
+</div>
+<div class="group bg-surface p-lg rounded-2xl border border-outline-variant hover:border-error hover:shadow-xl transition-all cursor-pointer touch-manipulation reveal hover:-translate-y-2">
+<div class="w-14 h-14 rounded-xl bg-error/10 flex items-center justify-center text-error mb-md group-hover:bg-error group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl">call</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md mb-xs text-on-surface">Emergency Hotline</h3>
+<p class="font-body-md text-on-surface-variant">Quick access to local police, fire department, and medical EMS.</p>
+</div>
+<div class="group bg-surface p-lg rounded-2xl border border-outline-variant hover:border-secondary hover:shadow-xl transition-all cursor-pointer touch-manipulation reveal hover:-translate-y-2">
+<div class="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary mb-md group-hover:bg-secondary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl">local_police</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md mb-xs text-on-surface">Police Assistance</h3>
+<p class="font-body-md text-on-surface-variant">Request non-emergency patrol or police presence in your zone.</p>
+</div>
+<div class="group bg-surface p-lg rounded-2xl border border-outline-variant hover:border-secondary hover:shadow-xl transition-all cursor-pointer touch-manipulation reveal hover:-translate-y-2">
+<div class="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary mb-md group-hover:bg-secondary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl">forum</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md mb-xs text-on-surface">Contact Barangay</h3>
+<p class="font-body-md text-on-surface-variant">Direct messaging line to Barangay officials and safety officers.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Highlights Section -->
+<section class="py-xl">
+<div class="container mx-auto px-4 md:px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-xl items-center">
+<div class="reveal-left">
+<div class="bg-white p-6 md:p-lg rounded-3xl shadow-xl border border-outline-variant transition-transform hover:scale-[1.01]">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between mb-lg gap-sm">
+<h3 class="font-headline-lg text-xl md:text-headline-lg text-on-surface">Recent Incident Summary</h3>
+<span class="text-on-surface-variant font-label-md text-xs bg-surface-container-high px-md py-xs rounded-full self-start">Last 30 Days</span>
+</div>
+<div class="w-full h-64 md:h-80 bg-surface-container-lowest rounded-xl flex items-center justify-center overflow-hidden border border-outline-variant/30 relative">
+<div class="absolute inset-0 bg-gradient-to-t from-secondary/5 to-transparent"></div>
+<div class="flex flex-col items-center gap-md p-4">
+<div class="flex gap-2 md:gap-md items-end h-40">
+<div class="w-6 md:w-10 bg-secondary/80 rounded-t-lg transition-all duration-1000 origin-bottom" data-height="60%" style="height: 0%;"></div>
+<div class="w-6 md:w-10 bg-secondary/80 rounded-t-lg transition-all duration-1000 delay-100 origin-bottom" data-height="40%" style="height: 0%;"></div>
+<div class="w-6 md:w-10 bg-secondary/80 rounded-t-lg transition-all duration-1000 delay-200 origin-bottom" data-height="85%" style="height: 0%;"></div>
+<div class="w-6 md:w-10 bg-secondary/80 rounded-t-lg transition-all duration-1000 delay-300 origin-bottom" data-height="55%" style="height: 0%;"></div>
+<div class="w-6 md:w-10 bg-secondary/80 rounded-t-lg transition-all duration-1000 delay-400 origin-bottom" data-height="30%" style="height: 0%;"></div>
+</div>
+<p class="text-on-surface-variant font-caption text-caption text-center">Interactive data visualization loading...</p>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-6 md:space-y-lg reveal-right">
+<div class="bg-white p-6 md:p-lg rounded-3xl border-l-8 border-l-secondary shadow-lg border border-outline-variant/20 hover:shadow-xl transition-all">
+<div class="flex flex-col sm:flex-row items-start gap-md">
+<div class="p-sm bg-secondary/10 rounded-xl text-secondary">
+<span class="material-symbols-outlined text-3xl">psychology</span>
+</div>
+<div>
+<h3 class="font-headline-md text-lg md:text-headline-md text-on-surface mb-xs">AI Dispatch Statistics</h3>
+<p class="font-body-md text-on-surface-variant mb-md">Our AI-driven routing has reduced average response times by 35% across all sectors.</p>
+<div class="flex items-center gap-8 md:gap-xl">
+<div>
+<p class="font-display-lg text-secondary text-2xl md:text-headline-lg">4.2m</p>
+<p class="font-caption text-caption text-on-surface-variant">Avg Response</p>
+</div>
+<div class="h-10 w-[1px] bg-outline-variant"></div>
+<div>
+<p class="font-display-lg text-secondary text-2xl md:text-headline-lg">98%</p>
+<p class="font-caption text-caption text-on-surface-variant">Accuracy</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-primary-container p-6 md:p-lg rounded-3xl text-white shadow-lg relative overflow-hidden group hover:shadow-2xl transition-all">
+<div class="absolute inset-0 bg-secondary opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+<div class="relative z-10">
+<h4 class="font-headline-md text-lg md:text-headline-md mb-base">Command Center Visibility</h4>
+<p class="font-body-md text-on-primary-container mb-md">Monitor live incidents and resource allocation through a unified interface.</p>
+<button class="flex items-center gap-xs font-label-md text-tertiary-fixed-dim uppercase tracking-wider group-hover:translate-x-2 transition-transform">VIEW MY DASHBOARD <span class="material-symbols-outlined">arrow_right_alt</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Community Impact -->
+<section class="py-xl bg-surface-container-highest/30">
+<div class="container mx-auto px-4 md:px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-xl items-center">
+<div class="order-2 lg:order-1 text-center lg:text-left reveal-left">
+<div class="inline-flex items-center gap-sm bg-secondary/10 px-md py-xs rounded-full mb-md mx-auto lg:mx-0">
+<span class="material-symbols-outlined text-secondary text-sm">auto_awesome</span>
+<span class="text-secondary font-label-md text-xs tracking-wider uppercase">COMMUNITY IMPACT</span>
+</div>
+<h2 class="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-md leading-tight">Digital Dispatch: A 4-Minute Success Story</h2>
+<p class="font-body-md md:font-body-lg text-on-surface-variant mb-lg">
+                    Last Tuesday, our AI-assisted dispatch routed an emergency call in record time, resulting in a 4-minute response. This is how smart governance saves lives.
+                </p>
+<button class="w-full sm:w-auto px-lg py-sm bg-secondary text-on-secondary font-label-md rounded-lg hover:bg-secondary-container hover:shadow-lg transition-all flex items-center justify-center gap-xs group">
+                    Read Full Story <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+<div class="order-1 lg:order-2 reveal-right">
+<div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-video group">
+<img alt="Community Safety" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyz-oK2RsSj2yK33jbN8fQpLDAdqmPDtloyWNHn7d1Ti-H1lwF38v29CZg41QehHglMMSH7aEGQSkhVbGuLdfM_6me-h2DyHGzaCzwsokc-H8trHLtYs0-5EdYEhxSoTryeCnTPEfaUuGlaDwnwLNW4nDY1tLrJV56_6We9a4Tr6jQgjzS09LKR85m2a2YCFKe000L6EeD5-k77sfcJpXMEDXGDGKkIz8nNyEr_FPjLHPkdCxCM2xK"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-background/80 to-transparent flex items-end p-6">
+<p class="text-white font-caption text-caption italic">"The response was faster than I ever expected. Technology really made the difference." - Local Resident</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Community Guides -->
+<section class="py-xl bg-surface">
+<div class="container mx-auto px-4 md:px-margin-desktop">
+<div class="text-center mb-xl reveal">
+<h2 class="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">Community Safety Guides</h2>
+<p class="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Essential resources and step-by-step instructions for a safer Barangay Tandang Sora.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-gutter">
+<div class="bg-surface-container-low p-6 md:p-lg rounded-2xl border border-outline-variant/30 flex flex-col h-full hover:shadow-2xl hover:-translate-y-2 transition-all reveal">
+<h3 class="font-headline-md text-lg md:text-headline-md text-on-surface mb-sm">Elders' Guide: Navigating the Portal</h3>
+<p class="font-body-md text-on-surface-variant mb-lg flex-grow">A step-by-step guide for our seniors on how to use digital tools to report incidents and access services safely.</p>
+<button class="w-full py-3 border border-secondary text-secondary font-label-md rounded-lg hover:bg-secondary hover:text-white transition-all">View Guide</button>
+</div>
+<div class="bg-surface-container-low p-6 md:p-lg rounded-2xl border border-outline-variant/30 flex flex-col h-full hover:shadow-2xl hover:-translate-y-2 transition-all reveal">
+<h3 class="font-headline-md text-lg md:text-headline-md text-on-surface mb-sm">Public Safety &amp; Protocols</h3>
+<p class="font-body-md text-on-surface-variant mb-lg flex-grow">Learn the official procedures for reporting emergencies and how to coordinate with our public safety officers during critical incidents.</p>
+<button class="w-full py-3 border border-secondary text-secondary font-label-md rounded-lg hover:bg-secondary hover:text-white transition-all">Learn More</button>
+</div>
+<div class="bg-surface-container-low p-6 md:p-lg rounded-2xl border border-outline-variant/30 flex flex-col h-full hover:shadow-2xl hover:-translate-y-2 transition-all reveal">
+<h3 class="font-headline-md text-lg md:text-headline-md text-on-surface mb-sm">Building a Resilient Community</h3>
+<p class="font-body-md text-on-surface-variant mb-lg flex-grow">Discover community initiatives, neighborhood watch programs, and best practices for maintaining a safe environment.</p>
+<button class="w-full py-3 border border-secondary text-secondary font-label-md rounded-lg hover:bg-secondary hover:text-white transition-all">Get Involved</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full py-xl md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-lowest border-t border-outline-variant px-margin-desktop">
+<div class="flex flex-col gap-sm text-center md:text-left">
+<div class="flex items-center justify-center md:justify-start gap-xs">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant flex items-center justify-center">
+<img alt="Barangay Tandang Sora Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jE_R6jk2am8ZI5hq_njSALDXpHfM55Gdc_vwxSzuezEgFYuC6H_kJa6P-8BUQ_YA1XVrLwZFgV6qtLOJ6mfs5KfEvqutKZn-JUKYq4ncsmGNjPf0tXQxzHhRe2e9DVTUIIhVO7uKGtfPYl8U9wpptHAEHgTX7Cq5D8Z7uL_DmOiKTNOZ-si_NxiQ0n430AnXt6BQSJnxg__oGfZsdCCi0-hy4IVwNF9HeJ2pcJsoUiRqZhvmierx5fBFXHBwb4dSJnB15fVLyU4"/>
+</div>
+<span class="font-headline-md text-headline-md text-primary">Barangay Tandang Sora</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant">© 2024 Barangay Tandang Sora Law Enforcement. Public Safety &amp; Transparency Portal.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-lg">
+<a class="nav-link font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Privacy Policy</a>
+<a class="nav-link font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Terms of Service</a>
+<a class="nav-link font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">FOI Manual</a>
+<a class="nav-link font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Accessibility</a>
+</div>
+<div class="flex gap-md">
+<div class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span class="material-symbols-outlined">public</span></div>
+<div class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span class="material-symbols-outlined">share</span></div>
+</div>
+</footer>
+<script>
+    // Simplified Loader Logic
+    const loader = document.getElementById('page-loader');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    const showLoader = () => {
+        loader.classList.remove('pointer-events-none', 'opacity-0');
+        loader.classList.add('opacity-100');
+    };
+
+    const hideLoader = () => {
+        loader.classList.add('opacity-0');
+        loader.classList.add('pointer-events-none');
+    };
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (href && href !== '#' && !href.startsWith('{{DATA')) {
+                e.preventDefault();
+                showLoader();
+                setTimeout(() => {
+                    hideLoader();
+                }, 800);
+            } else if (href && href !== '#') {
+                // If it's a real link, show loader immediately
+                showLoader();
+            }
+        });
+    });
+
+    // Mobile Menu Logic
+    const menuButton = document.getElementById('mobile-menu-button');
+    const closeDrawer = document.getElementById('close-drawer');
+    const drawerContainer = document.getElementById('mobile-drawer-container');
+    const drawerOverlay = document.getElementById('drawer-overlay');
+    const drawer = document.getElementById('mobile-drawer');
+
+    menuButton.addEventListener('click', () => {
+        drawerContainer.classList.remove('invisible', 'pointer-events-none');
+        drawerOverlay.classList.replace('opacity-0', 'opacity-100');
+        drawer.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden';
+    });
+
+    const hideDrawer = () => {
+        drawerContainer.classList.add('invisible', 'pointer-events-none');
+        drawerOverlay.classList.replace('opacity-100', 'opacity-0');
+        drawer.classList.add('translate-x-full');
+        document.body.style.overflow = 'auto';
+    };
+
+    closeDrawer.addEventListener('click', hideDrawer);
+    drawerOverlay.addEventListener('click', hideDrawer);
+
+    drawer.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', hideDrawer);
+    });
+
+    // Intersection Observer for Entrance Animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                
+                // Count up effect for numbers
+                if (entry.target.classList.contains('count-up')) {
+                    const target = parseInt(entry.target.getAttribute('data-target'));
+                    const suffix = entry.target.getAttribute('data-suffix') || '';
+                    let current = 0;
+                    const duration = 2000;
+                    const stepTime = Math.abs(Math.floor(duration / (target / 50)));
+                    
+                    const timer = setInterval(() => {
+                        current += Math.ceil(target / 50);
+                        if (current >= target) {
+                            entry.target.innerText = target.toLocaleString() + suffix;
+                            clearInterval(timer);
+                        } else {
+                            entry.target.innerText = current.toLocaleString() + suffix;
+                        }
+                    }, stepTime || 10);
+                    observer.unobserve(entry.target);
+                }
+
+                // Chart bar animation
+                const bars = entry.target.querySelectorAll('[data-height]');
+                bars.forEach(bar => {
+                    bar.style.height = bar.getAttribute('data-height');
+                });
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .count-up').forEach(el => {
+        if (!el.classList.contains('active')) {
+            observer.observe(el);
+        }
+    });
+
+    // Staggered reveal for grid items
+    document.querySelectorAll('.grid').forEach(grid => {
+        const items = grid.children;
+        Array.from(items).forEach((item, index) => {
+            if (item.classList.contains('reveal')) {
+                item.style.transitionDelay = `${index * 100}ms`;
+            }
+        });
+    });
+</script>
+</body></html>

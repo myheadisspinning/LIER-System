@@ -1,0 +1,1 @@
+drop policy if exists "inquiry messages owner read" on public.inquiry_messages

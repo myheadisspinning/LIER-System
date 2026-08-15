@@ -1,0 +1,1 @@
+revoke all on function public.admin_create_user(text, text, text, text) from public

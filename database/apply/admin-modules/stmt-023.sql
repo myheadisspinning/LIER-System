@@ -1,0 +1,1 @@
+drop policy if exists "inquiries public insert" on public.inquiries

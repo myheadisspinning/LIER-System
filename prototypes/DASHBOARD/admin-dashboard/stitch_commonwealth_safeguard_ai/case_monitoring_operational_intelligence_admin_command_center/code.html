@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Case Monitoring &amp; Operational Intelligence - Barangay Culiat Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "border-subtle": "#e2e8f0",
+                        "surface-bg": "#f8fafc",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-dim": "#cbdbf5",
+                        "primary-container": "#131b2e",
+                        "on-surface-variant": "#45464d",
+                        "surface-container-high": "#dce9ff",
+                        "sidebar-bg": "#0f172a",
+                        "surface-container": "#e5eeff",
+                        "on-primary-fixed": "#131b2e",
+                        "background": "#f8f9ff",
+                        "tertiary-fixed": "#ffdfa0",
+                        "on-secondary-container": "#fefcff",
+                        "on-tertiary-fixed": "#261a00",
+                        "inverse-primary": "#bec6e0",
+                        "primary-fixed": "#dae2fd",
+                        "inverse-surface": "#213145",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c6c6cd",
+                        "on-tertiary-container": "#a87d00",
+                        "surface-container-low": "#eff4ff",
+                        "warning-amber": "#f59e0b",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#d3e4fe",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "tertiary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "error-red": "#ef4444",
+                        "secondary": "#0051d5",
+                        "secondary-fixed": "#dbe1ff",
+                        "surface-bright": "#f8f9ff",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-fixed-dim": "#f9bd22",
+                        "primary": "#000000",
+                        "text-on-dark": "#cbd5e1",
+                        "outline": "#76777d",
+                        "surface": "#f8f9ff",
+                        "on-primary": "#ffffff",
+                        "success-green": "#22c55e",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "secondary-container": "#316bf3",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "on-background": "#0b1c30",
+                        "on-secondary-fixed": "#00174b",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-primary-container": "#7c839b",
+                        "surface-tint": "#565e74",
+                        "tertiary-container": "#261a00",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-desktop": "40px",
+                        "xs": "4px",
+                        "sm": "12px",
+                        "sidebar-width": "256px",
+                        "base": "8px",
+                        "lg": "48px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "caps-xs": ["Inter"],
+                        "headline-md": ["Poppins"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Poppins"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Poppins"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "caps-xs": ["10px", { "lineHeight": "12px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "display-lg": ["36px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["15px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.025em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="bg-surface-bg text-on-background antialiased flex">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-sidebar-width bg-sidebar-bg flex flex-col py-md z-50">
+<div class="px-gutter mb-lg">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high/20 flex items-center justify-center shrink-0">
+<img class="w-8 h-8 object-contain" data-alt="Official seal of Barangay Culiat, featuring standard heraldic elements in a circular layout, predominantly blue and yellow on a dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7XjpR13YHKTmBO82wCJfD1P9yeO1GkxxKutwvGsAwO8Jf8588cXV88dZiEo1BzJQ9qliiQ0hpAoRQg7nODdMvZo-UMd06hFb-fDGqoX4ZOIV7B81cyFXTt3Ji3RfGOVffJ1EibhgGkGyMzcaafr0MLgJhE-B73VLVYPVuzeOCYi2h5-TyuTzHNxnvTREos2X6zgkIm7tHnGQwPdPLhq1oQuh73NgiWLpTmp_Mpdcj2rw-YuH99lbj"/>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary">Commonwealth Command</h1>
+<p class="font-caps-xs text-caps-xs text-text-on-dark/70">Operational HQ</p>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-sm space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-label-md text-label-md">Command Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">emergency</span>
+<span class="font-label-md text-label-md">Incident Reporting</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">smart_toy</span>
+<span class="font-label-md text-label-md">AI Dispatch</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">forum</span>
+<span class="font-label-md text-label-md">Contacts &amp; Inbox</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">description</span>
+<span class="font-label-md text-label-md">Tracking &amp; Docs</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label-md text-label-md">Evidence Vault</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">notifications_active</span>
+<span class="font-label-md text-label-md">Status Notifications</span>
+</a>
+<!-- Active Tab -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-secondary-container/20 text-on-secondary-container border-l-4 border-secondary opacity-90 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px] text-secondary">assignment_turned_in</span>
+<span class="font-label-md text-label-md">Case Monitoring</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span class="font-label-md text-label-md">Reports &amp; Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+<span class="font-label-md text-label-md">Officials MGMT</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-on-dark/70 hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="font-label-md text-label-md">Audit Logs</span>
+</a>
+</div>
+<div class="px-gutter mt-auto pt-lg">
+<button class="w-full flex items-center justify-center gap-2 bg-secondary text-on-secondary py-3 rounded-lg font-label-md text-label-md hover:bg-secondary/90 transition-colors shadow-2xl border-4 border-white/10">
+<span class="material-symbols-outlined text-[18px]">flash_on</span>
+                Quick Dispatch
+            </button>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="ml-sidebar-width flex-1 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 bg-surface dark:bg-surface-container border-b border-outline-variant flex justify-between items-center w-full h-16 px-gutter z-40 sticky">
+<div class="flex items-center gap-lg">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">Commonwealth Command Center</span>
+<div class="hidden lg:flex items-center gap-md">
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-md text-label-md" href="#">Live Map</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-md text-label-md" href="#">Unit Status</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-md text-label-md" href="#">Resource Grid</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 bg-error-red/10 text-error-red px-4 py-2 rounded-full font-label-sm text-label-sm hover:bg-error-red/20 transition-colors scale-95 duration-150">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+                    Emergency Alert
+                </button>
+<div class="flex items-center gap-2 border-l border-border-subtle pl-4">
+<button class="text-on-surface-variant hover:text-secondary transition-colors scale-95 duration-150">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden cursor-pointer hover:ring-2 ring-secondary transition-all">
+<img class="w-full h-full object-cover" data-alt="Administrator Profile picture, a professional headshot of a uniformed officer in a well-lit office setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSublZff0sQc51Xd19bwVFsymQWag_xY9qQzP2M7w8r6qcQiIc0GO5RQnACY0OPPSKKcvxj1uVjbVBbIna5Edl-Q9SlxIJqUolcirvPLfIG6XpNSPzIsH3YgeoGOk5gUJ6mXcriIqLFhMX5vSrFl-CZz2aqGA-lUn7sCEiKRfyWe3EOkaE2Nean_3RTkyd0onbO2VTKEQT0Iq9dL-VBgAZqXInPKzJW1PythDGXDW3GdIg4vVEbCmU"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<main class="flex-1 p-margin-desktop space-y-lg">
+<!-- Header & Filters -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Case Monitoring &amp; Operational Intelligence</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Real-time tracking of active incidents and mediation settlements.</p>
+</div>
+<div class="flex gap-3">
+<select class="bg-white border border-border-subtle rounded-lg px-4 py-2 font-label-md text-label-md text-on-surface focus:ring-2 focus:ring-secondary focus:border-secondary outline-none">
+<option>Last 7 Days</option>
+<option>This Month</option>
+<option>Year to Date</option>
+</select>
+<select class="bg-white border border-border-subtle rounded-lg px-4 py-2 font-label-md text-label-md text-on-surface focus:ring-2 focus:ring-secondary focus:border-secondary outline-none">
+<option>All Puroks</option>
+<option>Purok 1</option>
+<option>Purok 2</option>
+</select>
+</div>
+</div>
+<!-- KPI Metrics Bar -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="bg-white rounded-xl border border-border-subtle p-gutter">
+<div class="font-caps-xs text-caps-xs text-on-surface-variant mb-2">AVG CASE RESOLUTION TIME</div>
+<div class="font-display-lg text-display-lg text-secondary">4.2 Hours</div>
+<div class="mt-2 flex items-center gap-1 text-success-green font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">trending_down</span>
+<span>-12% from last week</span>
+</div>
+</div>
+<div class="bg-white rounded-xl border border-border-subtle p-gutter">
+<div class="font-caps-xs text-caps-xs text-on-surface-variant mb-2">TOTAL CASES (THIS MONTH)</div>
+<div class="font-display-lg text-display-lg text-on-surface">142 Cases</div>
+<div class="mt-2 flex items-center gap-1 text-warning-amber font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>+5% vs avg</span>
+</div>
+</div>
+<div class="bg-white rounded-xl border border-border-subtle p-gutter">
+<div class="font-caps-xs text-caps-xs text-on-surface-variant mb-2">MEDIATION SETTLEMENT RATE</div>
+<div class="font-display-lg text-display-lg text-success-green">86%</div>
+<div class="mt-2 font-body-sm text-body-sm text-on-surface-variant">
+                        Settled at Barangay level
+                    </div>
+</div>
+<div class="bg-white rounded-xl border border-border-subtle p-gutter bg-error-red/5 border-error-red/20">
+<div class="font-caps-xs text-caps-xs text-error-red mb-2">ACTIVE HIGH-RISK INCIDENTS</div>
+<div class="font-display-lg text-display-lg text-error-red">2 Ongoing</div>
+<div class="mt-2 font-body-sm text-body-sm text-error-red/80 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">gavel</span>
+                        Requires immediate review
+                    </div>
+</div>
+</div>
+<!-- Analytics Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter h-[400px]">
+<!-- Hotspot Map Card -->
+<div class="bg-white rounded-xl border border-border-subtle p-gutter flex flex-col">
+<div class="flex justify-between items-center mb-4">
+<div class="font-caps-xs text-caps-xs text-on-surface-variant">INCIDENT HOTSPOT MAP &amp; PUROK BREAKDOWN</div>
+<button class="text-on-surface-variant hover:text-secondary"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</div>
+<div class="flex-1 relative rounded-lg overflow-hidden border border-border-subtle/50">
+<!-- Placeholder for Map/Heatmap visualization -->
+<div class="absolute inset-0 bg-slate-100 flex items-center justify-center text-on-surface-variant font-body-sm text-body-sm flex-col gap-2">
+<span class="material-symbols-outlined text-[48px] text-primary-fixed-dim">map</span>
+<span>Interactive Map Visualization Area</span>
+</div>
+</div>
+</div>
+<!-- Trend Chart Card -->
+<div class="bg-white rounded-xl border border-border-subtle p-gutter flex flex-col">
+<div class="flex justify-between items-center mb-4">
+<div class="font-caps-xs text-caps-xs text-on-surface-variant">INCIDENT CATEGORIES TREND (LAST 7 DAYS)</div>
+<div class="flex gap-2">
+<span class="flex items-center gap-1 font-label-sm text-label-sm"><div class="w-2 h-2 rounded-full bg-secondary"></div> Theft</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm"><div class="w-2 h-2 rounded-full bg-warning-amber"></div> Disputes</span>
+</div>
+</div>
+<div class="flex-1 relative">
+<!-- CSS Grid Lines to simulate Recharts -->
+<div class="absolute inset-0 flex flex-col justify-between py-4">
+<div class="border-b border-border-subtle border-dashed w-full opacity-50"></div>
+<div class="border-b border-border-subtle border-dashed w-full opacity-50"></div>
+<div class="border-b border-border-subtle border-dashed w-full opacity-50"></div>
+<div class="border-b border-border-subtle border-dashed w-full opacity-50"></div>
+</div>
+<!-- Placeholder for Line Chart -->
+<div class="absolute inset-0 flex items-end px-4 gap-8 pb-4">
+<div class="flex-1 h-[40%] bg-secondary/20 rounded-t relative"><div class="absolute top-0 w-full h-1 bg-secondary"></div></div>
+<div class="flex-1 h-[60%] bg-secondary/20 rounded-t relative"><div class="absolute top-0 w-full h-1 bg-secondary"></div></div>
+<div class="flex-1 h-[30%] bg-secondary/20 rounded-t relative"><div class="absolute top-0 w-full h-1 bg-secondary"></div></div>
+<div class="flex-1 h-[80%] bg-secondary/20 rounded-t relative"><div class="absolute top-0 w-full h-1 bg-secondary"></div></div>
+<div class="flex-1 h-[50%] bg-secondary/20 rounded-t relative"><div class="absolute top-0 w-full h-1 bg-secondary"></div></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Active High-Priority Tracker Table -->
+<div class="bg-white rounded-xl border border-border-subtle overflow-hidden">
+<div class="p-gutter border-b border-border-subtle flex justify-between items-center">
+<div class="font-caps-xs text-caps-xs text-on-surface-variant">ACTIVE HIGH-PRIORITY TRACKER</div>
+<button class="font-label-sm text-label-sm text-secondary hover:underline">View All</button>
+</div>
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-bg border-b border-border-subtle">
+<th class="font-caps-xs text-caps-xs text-on-surface-variant py-3 px-gutter font-semibold tracking-wider">CASE ID</th>
+<th class="font-caps-xs text-caps-xs text-on-surface-variant py-3 px-gutter font-semibold tracking-wider">INCIDENT TYPE</th>
+<th class="font-caps-xs text-caps-xs text-on-surface-variant py-3 px-gutter font-semibold tracking-wider">PUROK</th>
+<th class="font-caps-xs text-caps-xs text-on-surface-variant py-3 px-gutter font-semibold tracking-wider">LEAD OFFICER</th>
+<th class="font-caps-xs text-caps-xs text-on-surface-variant py-3 px-gutter font-semibold tracking-wider">STATUS PROGRESSION</th>
+<th class="py-3 px-gutter"></th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface divide-y divide-border-subtle">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-4 px-gutter font-label-md text-label-md text-secondary">#CAS-2023-089</td>
+<td class="py-4 px-gutter flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-error-red">local_fire_department</span>
+                                    Property Dispute
+                                </td>
+<td class="py-4 px-gutter">Purok 4</td>
+<td class="py-4 px-gutter flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-high overflow-hidden"><img class="w-full h-full object-cover" data-alt="Officer profile avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAV2UMI2V3NNoeAPjPVUjpJBowc3XVUsuXiU3jacNVuxdJeb1CbAbtWmLJ27bg1nqH0M7FPovQWJXWT8jhlsys7T8Qf1vAgbvVwR4wd4GVSADgj0pS46WQPAaMHGaBXYLwJ3dUbmipCnUrL8oqYQm4bopiG7GwApBNU2oeD2gcZ0jhj4Yl0v3nOFI4-KLi5u7WDu-oKK1ZN1IUbST8Ig1x1z9rUrmna8kfXTglQ0IwR24FSvJopm2QG"/></div>
+                                    Off. Reyes
+                                </td>
+<td class="py-4 px-gutter">
+<div class="flex items-center gap-1 w-full max-w-[200px]">
+<div class="h-2 flex-1 rounded bg-success-green relative group"><div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Investigation</div></div>
+<div class="h-2 flex-1 rounded bg-success-green"></div>
+<div class="h-2 flex-1 rounded bg-border-subtle"></div>
+</div>
+<div class="text-[10px] text-on-surface-variant mt-1">In Mediation</div>
+</td>
+<td class="py-4 px-gutter text-right">
+<button class="text-on-surface-variant hover:text-secondary"><span class="material-symbols-outlined text-[20px]">chevron_right</span></button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 transition-colors bg-error-red/5">
+<td class="py-4 px-gutter font-label-md text-label-md text-secondary">#CAS-2023-091</td>
+<td class="py-4 px-gutter flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-error-red">warning</span>
+                                    Theft - Ongoing
+                                </td>
+<td class="py-4 px-gutter">Purok 2</td>
+<td class="py-4 px-gutter flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-high overflow-hidden"><img class="w-full h-full object-cover" data-alt="Officer profile avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtv22kkyxXlIU7pyeLOprJECmUv1QX66jC-vGmESvXdWdfB5LOEYGmayyn4_VRWbQwc_P2h7_D0za8dSrGvT3CqyxsmFEIwB58QmsA7J6ow4xQ0PG2B6r_CTkNFhIFi0p8HWVEggHTRUjjGllB7Lz-z74mdOvjF3XhfRrwKMDspnK9rqmCCn9KMB8UQCP5RSbC6vZVQQnHrkAPzCumN8hVz5p11nQ9rA1ApgnbOW0QfPH3Cm2otDTu"/></div>
+                                    Sgt. Cruz
+                                </td>
+<td class="py-4 px-gutter">
+<div class="flex items-center gap-1 w-full max-w-[200px]">
+<div class="h-2 flex-1 rounded bg-warning-amber"></div>
+<div class="h-2 flex-1 rounded bg-border-subtle"></div>
+<div class="h-2 flex-1 rounded bg-border-subtle"></div>
+</div>
+<div class="text-[10px] text-error-red mt-1 font-bold">Investigation</div>
+</td>
+<td class="py-4 px-gutter text-right">
+<button class="text-on-surface-variant hover:text-secondary"><span class="material-symbols-outlined text-[20px]">chevron_right</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+</body></html>

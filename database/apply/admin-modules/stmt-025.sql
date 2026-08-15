@@ -1,0 +1,1 @@
+drop policy if exists "inquiries owner read" on public.inquiries

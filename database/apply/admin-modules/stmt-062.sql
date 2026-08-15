@@ -1,0 +1,1 @@
+alter table public.report_archives enable row level security

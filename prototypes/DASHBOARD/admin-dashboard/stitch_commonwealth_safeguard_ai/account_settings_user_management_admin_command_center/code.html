@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Account Settings &amp; User Management - Commonwealth Command Center</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error-red": "#ef4444",
+                      "on-secondary-fixed": "#00174b",
+                      "primary": "#000000",
+                      "outline-variant": "#c6c6cd",
+                      "on-tertiary-fixed": "#261a00",
+                      "secondary-fixed-dim": "#b4c5ff",
+                      "on-background": "#0b1c30",
+                      "surface-tint": "#565e74",
+                      "surface-container-high": "#dce9ff",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "tertiary-container": "#261a00",
+                      "inverse-surface": "#213145",
+                      "on-primary-container": "#7c839b",
+                      "error": "#ba1a1a",
+                      "on-tertiary-container": "#a87d00",
+                      "secondary": "#0051d5",
+                      "surface-variant": "#d3e4fe",
+                      "error-container": "#ffdad6",
+                      "text-on-dark": "#cbd5e1",
+                      "on-error-container": "#93000a",
+                      "surface-bright": "#f8f9ff",
+                      "tertiary-fixed-dim": "#f9bd22",
+                      "on-secondary": "#ffffff",
+                      "surface-container-highest": "#d3e4fe",
+                      "surface-dim": "#cbdbf5",
+                      "border-subtle": "#e2e8f0",
+                      "primary-fixed-dim": "#bec6e0",
+                      "surface-container": "#e5eeff",
+                      "inverse-on-surface": "#eaf1ff",
+                      "primary-fixed": "#dae2fd",
+                      "on-primary": "#ffffff",
+                      "surface": "#f8f9ff",
+                      "surface-bg": "#f8fafc",
+                      "success-green": "#22c55e",
+                      "on-secondary-fixed-variant": "#003ea8",
+                      "tertiary-fixed": "#ffdfa0",
+                      "secondary-container": "#316bf3",
+                      "warning-amber": "#f59e0b",
+                      "on-error": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-low": "#eff4ff",
+                      "outline": "#76777d",
+                      "sidebar-bg": "#0f172a",
+                      "on-surface-variant": "#45464d",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed": "#dbe1ff",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "tertiary": "#000000",
+                      "on-primary-fixed": "#131b2e",
+                      "inverse-primary": "#bec6e0",
+                      "on-surface": "#0b1c30",
+                      "background": "#f8f9ff",
+                      "primary-container": "#131b2e",
+                      "on-secondary-container": "#fefcff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "sm": "12px",
+                      "base": "8px",
+                      "sidebar-width": "256px",
+                      "lg": "48px",
+                      "xs": "4px",
+                      "md": "24px",
+                      "margin-desktop": "40px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Poppins"
+                      ],
+                      "caps-xs": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Poppins"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Poppins"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "caps-xs": [
+                              "10px",
+                              {
+                                      "lineHeight": "12px",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "30px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.025em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "15px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-surface-bg text-on-surface font-body-md antialiased overflow-hidden flex h-screen">
+<!-- Sidebar -->
+<nav class="fixed left-0 top-0 h-screen w-sidebar-width bg-sidebar-bg flex flex-col py-md z-50">
+<!-- Brand -->
+<div class="px-gutter mb-lg">
+<div class="flex items-center gap-sm">
+<img class="w-10 h-10 object-contain" data-alt="A detailed flat vector illustration of a modern, official-looking barangay seal in subtle shades of navy and silver, conveying authority and trust. Clean background, minimalist design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByWscE8Ug-Fz76BO_8Q3kj38tTV9JzQfxPOtNFoJIznKDhjb8X3fKpC3AQUApguq3fxXjOfQ8OjKEEX93eXJpQqNICzbbcfxkkML2cW92guYq6FH0q_4MsPfk4bDXCvnbSh-9zOFGjjOYjjEWt3NmMUYZKZB_jVheOCE5IEEk28lJK3qPh5LAg0Ei4HAfbe2aquo9IONs2WqxLwAj57qInOjR_oaBq_Xti5dSHP0ZtN8GyWAfDIBpG"/>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary leading-tight">Commonwealth Command</h1>
+<p class="font-caps-xs text-caps-xs text-text-on-dark/70 mt-1 uppercase tracking-widest">Operational HQ</p>
+</div>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<div class="flex-1 overflow-y-auto px-base space-y-1 pb-gutter">
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-80 group-hover:opacity-100" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<div>
+<div class="font-label-md text-label-md">Command Dashboard</div>
+</div>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-80 group-hover:opacity-100" style="font-variation-settings: 'FILL' 0;">emergency</span>
+<div>
+<div class="font-label-md text-label-md">Incident Reporting</div>
+</div>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-80 group-hover:opacity-100" style="font-variation-settings: 'FILL' 0;">smart_toy</span>
+<div>
+<div class="font-label-md text-label-md">AI Dispatch</div>
+</div>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-80 group-hover:opacity-100" style="font-variation-settings: 'FILL' 0;">forum</span>
+<div>
+<div class="font-label-md text-label-md">Contacts &amp; Inbox</div>
+</div>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-80 group-hover:opacity-100" style="font-variation-settings: 'FILL' 0;">description</span>
+<div>
+<div class="font-label-md text-label-md">Tracking &amp; Docs</div>
+</div>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-80 group-hover:opacity-100" style="font-variation-settings: 'FILL' 0;">inventory_2</span>
+<div>
+<div class="font-label-md text-label-md">Evidence Vault</div>
+</div>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-80 group-hover:opacity-100" style="font-variation-settings: 'FILL' 0;">notifications_active</span>
+<div>
+<div class="font-label-md text-label-md">Status Notifications</div>
+</div>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-80 group-hover:opacity-100" style="font-variation-settings: 'FILL' 0;">assignment_turned_in</span>
+<div>
+<div class="font-label-md text-label-md">Case Monitoring</div>
+</div>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-80 group-hover:opacity-100" style="font-variation-settings: 'FILL' 0;">analytics</span>
+<div>
+<div class="font-label-md text-label-md">Reports &amp; Analytics</div>
+</div>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-80 group-hover:opacity-100" style="font-variation-settings: 'FILL' 0;">groups</span>
+<div>
+<div class="font-label-md text-label-md">Officials MGMT</div>
+</div>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-80 group-hover:opacity-100" style="font-variation-settings: 'FILL' 0;">history</span>
+<div>
+<div class="font-label-md text-label-md">Audit Logs</div>
+</div>
+</a>
+</div>
+<!-- Footer Actions -->
+<div class="px-base mt-auto border-t border-white/10 pt-sm space-y-1">
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg bg-secondary-container/20 text-on-secondary-container border-l-4 border-secondary opacity-90 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-80 group-hover:opacity-100" style="font-variation-settings: 'FILL' 0;">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-sidebar-width h-full flex flex-col relative overflow-hidden bg-surface-bg">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center w-full h-16 px-gutter bg-surface dark:bg-surface-container border-b border-outline-variant shrink-0 z-40 relative">
+<div class="flex items-center gap-lg">
+<div class="font-headline-md text-headline-md font-bold text-on-surface">Commonwealth Command Center</div>
+<div class="hidden lg:flex items-center gap-md">
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-md text-label-md" href="#">Live Map</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-md text-label-md" href="#">Unit Status</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-md text-label-md" href="#">Resource Grid</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-error-red hover:bg-error-red/90 text-white font-label-md text-label-md px-4 py-1.5 rounded flex items-center gap-2 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+                    Emergency Alert
+                </button>
+<div class="h-6 w-[1px] bg-outline-variant mx-2"></div>
+<button class="text-on-surface-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="text-on-surface-variant hover:text-secondary transition-colors flex items-center">
+<img class="w-8 h-8 rounded-full object-cover border border-border-subtle" data-alt="A professional headshot of a female administrator with dark hair pulled back, wearing a subtle navy blue blazer over a light blue collared shirt. Clean, bright corporate lighting, neutral grey background, exuding competence and reliability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6JoWw3jYASmPccZbhmx_YEaOOAyhxnE45QNFmWTMZZuNqlsp-eUitQcMVVh8WwzLh67UgHHOasrsLwGVljd3Sr-KCFzQItME-MbhLJ17GAN4VOgbkc02KhDYunl2yVaOgLgFIvm7NDs0zzUsUB154zzig0T_5tBB2U--fYBRJ-_kPT3XRgCQAQkismYbIIXMX008UoOhr19_HDhLTu5lmv4VQ8FGMw2RqRlminEoJaj5JmkVtWDMy"/>
+</button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-margin-desktop">
+<!-- Page Header -->
+<div class="mb-lg">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Account Settings &amp; User Management</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">Manage station admins, desk officers, and registered barangay resident user accounts.</p>
+</div>
+<!-- Metric Ribbon -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md mb-lg">
+<div class="bg-surface-container-lowest p-gutter rounded border border-border-subtle flex flex-col justify-between h-full">
+<div class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-sm">Total Admins &amp; Staff</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-primary">6</span>
+<span class="font-label-sm text-label-sm text-success-green bg-success-green/10 px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">check_circle</span> Active Staff
+                        </span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-gutter rounded border border-border-subtle flex flex-col justify-between h-full">
+<div class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-sm">Duty Officers</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-primary">14</span>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary/10 px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">badge</span> Desk Officers
+                        </span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-gutter rounded border border-border-subtle flex flex-col justify-between h-full">
+<div class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-sm">Registered Resident Users</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-primary">1,240</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">group</span> Residents
+                        </span>
+</div>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-md mb-lg">
+<div class="flex flex-1 w-full xl:w-auto gap-4 items-center bg-surface-container-lowest p-1.5 rounded border border-border-subtle">
+<button class="px-4 py-1.5 font-label-md text-label-md rounded bg-surface-container text-primary shadow-sm font-medium transition-colors">All Accounts</button>
+<button class="px-4 py-1.5 font-label-md text-label-md rounded text-on-surface-variant hover:bg-surface-container-low transition-colors">Admins &amp; Staff</button>
+<button class="px-4 py-1.5 font-label-md text-label-md rounded text-on-surface-variant hover:bg-surface-container-low transition-colors">Desk Officers</button>
+<button class="px-4 py-1.5 font-label-md text-label-md rounded text-on-surface-variant hover:bg-surface-container-low transition-colors">Resident Users</button>
+<div class="h-6 w-[1px] bg-border-subtle mx-2 hidden xl:block"></div>
+<div class="relative flex-1 max-w-xs hidden xl:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-surface-bg border-none rounded font-body-sm text-body-sm text-on-surface focus:ring-1 focus:ring-secondary placeholder:text-outline-variant" placeholder="Search accounts..." type="text"/>
+</div>
+</div>
+<button class="bg-secondary hover:bg-secondary/90 text-on-secondary px-5 py-2 rounded font-label-md text-label-md flex items-center gap-2 shadow-sm transition-colors whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+                    Register New Account
+                </button>
+</div>
+<!-- Split View Layout -->
+<div class="flex flex-col lg:flex-row gap-gutter h-full min-h-[600px]">
+<!-- Left: Data Table (65%) -->
+<div class="w-full lg:w-[65%] bg-surface-container-lowest rounded border border-border-subtle flex flex-col overflow-hidden">
+<div class="px-gutter py-sm border-b border-border-subtle bg-surface-bg/50">
+<h3 class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-bold">Account Directory</h3>
+</div>
+<div class="flex-1 overflow-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-border-subtle bg-surface-bg">
+<th class="px-gutter py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-medium">Account Holder</th>
+<th class="px-gutter py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-medium">Type/Role</th>
+<th class="px-gutter py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-medium">ID / Mobile No.</th>
+<th class="px-gutter py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-medium">Status</th>
+<th class="px-gutter py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-medium text-right">Action</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm divide-y divide-border-subtle">
+<tr class="hover:bg-surface-bg transition-colors bg-secondary/5 cursor-pointer">
+<td class="px-gutter py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center text-secondary font-bold text-xs">MS</div>
+<div>
+<div class="font-medium text-primary">Maria Santos</div>
+<div class="text-on-surface-variant text-xs">maria.santos@cmd.gov</div>
+</div>
+</div>
+</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[#1E40AF]/10 text-[#1E40AF]">Duty Officer</span>
+</td>
+<td class="px-gutter py-4 text-on-surface-variant">DO-2023-084</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-success-green/10 text-success-green border border-success-green/20">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green"></span> Active
+                                        </span>
+</td>
+<td class="px-gutter py-4 text-right">
+<button class="text-on-surface-variant hover:text-secondary p-1"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bg transition-colors cursor-pointer">
+<td class="px-gutter py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-primary font-bold text-xs">RJ</div>
+<div>
+<div class="font-medium text-primary">Roberto Javier</div>
+<div class="text-on-surface-variant text-xs">+63 917 555 0123</div>
+</div>
+</div>
+</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-surface-container-high text-on-surface-variant">Resident User</span>
+</td>
+<td class="px-gutter py-4 text-on-surface-variant">Sector 4</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-warning-amber/10 text-warning-amber border border-warning-amber/20">
+<span class="w-1.5 h-1.5 rounded-full bg-warning-amber"></span> Pending
+                                        </span>
+</td>
+<td class="px-gutter py-4 text-right">
+<button class="text-on-surface-variant hover:text-secondary p-1"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bg transition-colors cursor-pointer">
+<td class="px-gutter py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">CD</div>
+<div>
+<div class="font-medium text-primary">Carlos Dela Cruz</div>
+<div class="text-on-surface-variant text-xs">carlos.dc@cmd.gov</div>
+</div>
+</div>
+</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary text-white">System Admin</span>
+</td>
+<td class="px-gutter py-4 text-on-surface-variant">ADM-001</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-success-green/10 text-success-green border border-success-green/20">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green"></span> Active
+                                        </span>
+</td>
+<td class="px-gutter py-4 text-right">
+<button class="text-on-surface-variant hover:text-secondary p-1"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bg transition-colors cursor-pointer opacity-75">
+<td class="px-gutter py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-error-red/10 flex items-center justify-center text-error-red font-bold text-xs">LT</div>
+<div>
+<div class="font-medium text-primary">Luis Torres</div>
+<div class="text-on-surface-variant text-xs">luis.t@cmd.gov</div>
+</div>
+</div>
+</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[#1E40AF]/10 text-[#1E40AF]">Duty Officer</span>
+</td>
+<td class="px-gutter py-4 text-on-surface-variant">DO-2022-041</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-error-red/10 text-error-red border border-error-red/20">
+<span class="w-1.5 h-1.5 rounded-full bg-error-red"></span> Suspended
+                                        </span>
+</td>
+<td class="px-gutter py-4 text-right">
+<button class="text-on-surface-variant hover:text-secondary p-1"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right: Profile & Permissions Panel (35%) -->
+<div class="w-full lg:w-[35%] bg-surface-container-lowest rounded border border-border-subtle flex flex-col h-full shadow-sm relative overflow-hidden">
+<!-- Decorative Top Accent -->
+<div class="h-1.5 w-full bg-[#1E40AF]"></div>
+<div class="p-gutter border-b border-border-subtle flex-shrink-0">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center text-secondary font-headline-lg text-headline-lg border-2 border-secondary/20">MS</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary leading-tight">Maria Santos</h3>
+<p class="font-body-sm text-body-sm text-secondary font-medium">Duty Officer</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-success-green/10 text-success-green uppercase tracking-wider">
+                                Active
+                            </span>
+</div>
+<div class="grid grid-cols-2 gap-y-3 gap-x-4 mt-6">
+<div>
+<div class="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Badge ID</div>
+<div class="font-body-sm text-body-sm text-primary font-medium">DO-2023-084</div>
+</div>
+<div>
+<div class="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Contact</div>
+<div class="font-body-sm text-body-sm text-primary font-medium">+63 917 123 4567</div>
+</div>
+<div>
+<div class="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Assigned Sector</div>
+<div class="font-body-sm text-body-sm text-primary font-medium">North Sector (S1)</div>
+</div>
+<div>
+<div class="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Last Login</div>
+<div class="font-body-sm text-body-sm text-primary font-medium">Today, 08:42 AM</div>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-gutter bg-surface-bg/30">
+<h4 class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-bold mb-4">Role Permission Matrix</h4>
+<div class="space-y-3">
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-3 rounded bg-surface-container-lowest border border-border-subtle hover:border-secondary/30 transition-colors">
+<div>
+<div class="font-label-md text-label-md text-primary">Create/Edit Reports</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant text-[12px]">File and modify incident logs.</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-3 rounded bg-surface-container-lowest border border-border-subtle hover:border-secondary/30 transition-colors">
+<div>
+<div class="font-label-md text-label-md text-primary">Override AI Dispatch</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant text-[12px]">Manually re-route automated unit dispatch.</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-3 rounded bg-surface-container-lowest border border-border-subtle hover:border-secondary/30 transition-colors">
+<div>
+<div class="font-label-md text-label-md text-primary">Issue Blotter Summons</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant text-[12px]">Generate official barangay summons documents.</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-3 rounded bg-surface-container-lowest border border-border-subtle hover:border-secondary/30 transition-colors">
+<div>
+<div class="font-label-md text-label-md text-primary">Access Audit Logs</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant text-[12px]">View historical system activity.</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between p-3 rounded bg-surface-container-lowest border border-border-subtle hover:border-secondary/30 transition-colors opacity-60">
+<div>
+<div class="font-label-md text-label-md text-primary">Manage Other Accounts</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant text-[12px]">Requires System Admin role.</div>
+</div>
+<label class="relative inline-flex items-center cursor-not-allowed">
+<input class="sr-only peer" disabled="" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-border-subtle bg-surface-container-lowest space-y-2 mt-auto">
+<button class="w-full py-2 px-4 rounded border border-outline-variant text-primary font-label-md text-label-md hover:bg-surface-bg transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">lock_reset</span>
+                            Trigger Password Reset
+                        </button>
+<button class="w-full py-2 px-4 rounded border border-error-red/30 text-error-red font-label-md text-label-md hover:bg-error-red/5 transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">block</span>
+                            Suspend Account Access
+                        </button>
+</div>
+</div>
+</div>
+<div class="h-lg w-full shrink-0"></div> <!-- Bottom padding buffer -->
+</div>
+</main>
+</body></html>

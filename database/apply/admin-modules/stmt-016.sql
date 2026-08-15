@@ -1,0 +1,1 @@
+alter table public.broadcasts enable row level security

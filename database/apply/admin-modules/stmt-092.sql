@@ -1,0 +1,2 @@
+-- 10d) dispatch_units.manual_status: nullable manual override. NULL = Auto
+--      (status derived from duty roster + live dispatch/resolution)

@@ -1,0 +1,1 @@
+grant execute on function public.mark_inquiries_read() to authenticated

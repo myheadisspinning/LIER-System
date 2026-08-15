@@ -1,0 +1,19 @@
+.heroOverlay {
+  background: linear-gradient(to bottom, rgba(11,28,48,0.4), rgba(11,28,48,0.85), rgba(11,28,48,0.95));
+}
+
+.reportBtnGradient {
+  background: linear-gradient(to bottom right, #f9bd22, #ffdf9f);
+}
+
+.chartGradient {
+  background: linear-gradient(to top, rgba(0, 81, 213, 0.05), transparent);
+}
+
+.iconFill {
+  font-variation-settings: "FILL" 1;
+}
+
+.communityGradient {
+  background: linear-gradient(to top, rgba(11,28,48,0.8), transparent);
+}

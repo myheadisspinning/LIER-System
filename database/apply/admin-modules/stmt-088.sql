@@ -1,0 +1,4 @@
+-- ------------------------------------------------------------------
+-- 10c) dispatch_units.area + duty_days (Tanod duty scheduling: a
+--      responder is Available when on duty that day AND not currently
+--      assigned to an open incident

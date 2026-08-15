@@ -1,0 +1,1 @@
+drop policy if exists "staff manage officials" on public.officials

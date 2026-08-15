@@ -1,0 +1,504 @@
+<!--
+DESIGN.md (Design Documentation)
+================================
+---
+name: Commonwealth Safety Design System
+colors:
+  surface: '#f8f9ff'
+  surface-dim: '#cbdbf5'
+  surface-bright: '#f8f9ff'
+  surface-container-lowest: '#ffffff'
+  surface-container-low: '#eff4ff'
+  surface-container: '#e5eeff'
+  surface-container-high: '#dce9ff'
+  surface-container-highest: '#d3e4fe'
+  on-surface: '#0b1c30'
+  on-surface-variant: '#45464d'
+  inverse-surface: '#213145'
+  inverse-on-surface: '#eaf1ff'
+  outline: '#76777d'
+  outline-variant: '#c6c6cd'
+  surface-tint: '#565e74'
+  primary: '#000000'
+  on-primary: '#ffffff'
+  primary-container: '#131b2e'
+  on-primary-container: '#7c839b'
+  inverse-primary: '#bec6e0'
+  secondary: '#0051d5'
+  on-secondary: '#ffffff'
+  secondary-container: '#316bf3'
+  on-secondary-container: '#fefcff'
+  tertiary: '#000000'
+  on-tertiary: '#ffffff'
+  tertiary-container: '#261a00'
+  on-tertiary-container: '#a87d00'
+  error: '#ba1a1a'
+  on-error: '#ffffff'
+  error-container: '#ffdad6'
+  on-error-container: '#93000a'
+  primary-fixed: '#dae2fd'
+  primary-fixed-dim: '#bec6e0'
+  on-primary-fixed: '#131b2e'
+  on-primary-fixed-variant: '#3f465c'
+  secondary-fixed: '#dbe1ff'
+  secondary-fixed-dim: '#b4c5ff'
+  on-secondary-fixed: '#00174b'
+  on-secondary-fixed-variant: '#003ea8'
+  tertiary-fixed: '#ffdf9f'
+  tertiary-fixed-dim: '#f9bd22'
+  on-tertiary-fixed: '#261a00'
+  on-tertiary-fixed-variant: '#5c4300'
+  background: '#f8f9ff'
+  on-background: '#0b1c30'
+  surface-variant: '#d3e4fe'
+typography:
+  display-lg:
+    fontFamily: Poppins
+    fontSize: 48px
+    fontWeight: '700'
+    lineHeight: '1.2'
+    letterSpacing: -0.02em
+  display-lg-mobile:
+    fontFamily: Poppins
+    fontSize: 32px
+    fontWeight: '700'
+    lineHeight: '1.2'
+  headline-lg:
+    fontFamily: Poppins
+    fontSize: 32px
+    fontWeight: '600'
+    lineHeight: '1.3'
+  headline-lg-mobile:
+    fontFamily: Poppins
+    fontSize: 24px
+    fontWeight: '600'
+    lineHeight: '1.3'
+  headline-md:
+    fontFamily: Poppins
+    fontSize: 24px
+    fontWeight: '600'
+    lineHeight: '1.4'
+  body-lg:
+    fontFamily: Inter
+    fontSize: 18px
+    fontWeight: '400'
+    lineHeight: '1.6'
+  body-md:
+    fontFamily: Inter
+    fontSize: 16px
+    fontWeight: '400'
+    lineHeight: '1.6'
+  label-md:
+    fontFamily: Inter
+    fontSize: 14px
+    fontWeight: '600'
+    lineHeight: '1'
+    letterSpacing: 0.05em
+  caption:
+    fontFamily: Inter
+    fontSize: 12px
+    fontWeight: '500'
+    lineHeight: '1.4'
+rounded:
+  sm: 0.25rem
+  DEFAULT: 0.5rem
+  md: 0.75rem
+  lg: 1rem
+  xl: 1.5rem
+  full: 9999px
+spacing:
+  base: 8px
+  xs: 4px
+  sm: 12px
+  md: 24px
+  lg: 48px
+  xl: 80px
+  gutter: 24px
+  margin-mobile: 16px
+  margin-desktop: 64px
+---
+
+## Brand & Style
+
+The design system is engineered to project **authority, transparency, and urgent reliability**. As a public safety and government portal for Barangay Commonwealth, the visual narrative balances the gravity of civic duty with the modern efficiency of a premium digital service. 
+
+The aesthetic is **Corporate Modern with Glassmorphism accents**. It utilizes high-contrast typography and structured layouts to ensure information accessibility while employing frosted glass effects and subtle gradients to feel contemporary and high-end. The goal is to instill a sense of security and trust in the residents of Quezon City through a precise, organized, and polished interface.
+
+## Colors
+
+The palette is anchored by **Deep Navy Blue**, representing the stability and tradition of government institutions. **Royal Blue** serves as the primary action color, providing a modern, digital-first energy. **Gold** is used sparingly as an accent to denote premium status, high-priority alerts, or official seals.
+
+- **Primary (Navy):** Used for headers, heavy branding, and primary navigation backgrounds.
+- **Secondary (Royal):** Used for interactive elements, links, and progress indicators.
+- **Accent (Gold):** Reserved for recognition, official badges, and specific "Staff" or "Premium" touchpoints.
+- **Semantic Colors:** Emerald Green and Crimson Red are strictly utilized for status updates and emergency alerts to maintain clear visual communication.
+
+## Typography
+
+This design system uses a dual-font strategy. **Poppins** provides a friendly yet authoritative geometric structure for headlines, making the government's message feel modern and accessible. **Inter** is the workhorse for body text, chosen for its exceptional legibility in data-heavy safety reports and official documentation.
+
+Hierarchy is maintained through generous line heights and distinct weight contrasts. Large displays use negative letter spacing for a tighter, more "editorial" look, while labels utilize uppercase tracking to denote systemic hierarchy.
+
+## Layout & Spacing
+
+The layout follows a **Fluid Grid System** with strict constraints to maintain an authoritative structure. 
+
+- **Desktop:** 12-column grid with 24px gutters and 64px side margins. Content is typically contained to a maximum width of 1440px.
+- **Tablet:** 8-column grid with 20px gutters and 32px side margins.
+- **Mobile:** 4-column grid with 16px gutters and 16px side margins.
+
+Spacing follows an 8px base unit. Component internal padding should prioritize "breathability" to reduce cognitive load during emergency situations, using `md` (24px) as the standard container padding.
+
+## Elevation & Depth
+
+To achieve the "Government Portal" aesthetic, depth is communicated through a mix of **Ambient Shadows** and **Glassmorphism**.
+
+1.  **Glassmorphism:** Navigation sidebars and modal overlays use a background blur (12px to 20px) with a semi-transparent white or navy fill (opacity 70-85%). A 1px translucent border provides a "crystal" edge.
+2.  **Shadows:** Elevated cards use soft, multi-layered shadows with a low-opacity navy tint (`rgba(15, 23, 42, 0.08)`) to avoid a "dirty" look on the light gray background.
+3.  **Tonal Layers:** Surfaces are layered from the background (`#F8FAFC`) to the primary surface (`#FFFFFF`), with glass layers sitting at the highest perceived elevation.
+
+## Shapes
+
+The design system utilizes **Large Rounded Corners** to soften the traditional rigidity of government interfaces, making the technology feel more approachable. 
+
+- **Main Containers & Cards:** Use `radius-2xl` (24px) for a modern, friendly feel.
+- **Buttons & Inputs:** Use `radius-lg` (12px) to maintain a professional balance.
+- **Status Badges:** Use pill-shaped (fully rounded) geometry to distinguish them from interactive buttons.
+
+## Components
+
+### Buttons
+- **Primary:** Gradient fill (Royal Blue to Deep Navy) with white text and a soft shadow. 
+- **Emergency:** Solid Crimson Red with high-contrast white text and a pulse animation effect for high-priority alerts.
+- **Secondary/Ghost:** 1.5px border in Navy or Blue with no fill, transitioning to a glass effect on hover.
+
+### Cards
+- Standard cards feature `radius-2xl`, white backgrounds, and a subtle 1px border (`#E2E8F0`). 
+- Emergency cards utilize a thick left-border accent in the semantic color (Red/Yellow/Green).
+
+### Input Fields
+- Inputs should be tall (min-height 48px) with `radius-lg` and a background color of `#F1F5F9`. On focus, the border transitions to Royal Blue with a 3px soft glow.
+
+### Glass Overlays
+- Sidebars and mobile menus must use the `backdrop-filter: blur(16px)` property with a semi-transparent Deep Navy (`#0F172A` at 80% opacity) for a premium, high-tech look.
+
+### Chips & Badges
+- Used for safety categories (e.g., "Fire Safety", "Public Health"). These should use the Royal Blue color at 10% opacity for the background and 100% opacity for the text.
+-->
+<!DOCTYPE html><html lang="en" class="light" style=""><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@600;700;800&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "tertiary": "#000000",
+                "inverse-on-surface": "#eaf1ff",
+                "tertiary-fixed": "#ffdf9f",
+                "primary": "#000000",
+                "outline-variant": "#c6c6cd",
+                "on-tertiary-fixed": "#261a00",
+                "on-surface-variant": "#45464d",
+                "on-error-container": "#93000a",
+                "on-primary-fixed-variant": "#3f465c",
+                "on-background": "#0b1c30",
+                "tertiary-container": "#261a00",
+                "secondary": "#0051d5",
+                "error-container": "#ffdad6",
+                "primary-container": "#131b2e",
+                "secondary-fixed": "#dbe1ff",
+                "inverse-surface": "#213145",
+                "inverse-primary": "#bec6e0",
+                "on-tertiary-container": "#a87d00",
+                "on-primary": "#ffffff",
+                "surface-dim": "#cbdbf5",
+                "secondary-fixed-dim": "#b4c5ff",
+                "tertiary-fixed-dim": "#f9bd22",
+                "on-secondary-fixed": "#00174b",
+                "surface-tint": "#565e74",
+                "primary-fixed": "#dae2fd",
+                "on-error": "#ffffff",
+                "on-secondary-container": "#fefcff",
+                "on-tertiary": "#ffffff",
+                "on-secondary-fixed-variant": "#003ea8",
+                "surface-variant": "#d3e4fe",
+                "on-secondary": "#ffffff",
+                "on-tertiary-fixed-variant": "#5c4300",
+                "surface-container-low": "#eff4ff",
+                "primary-fixed-dim": "#bec6e0",
+                "surface-container-lowest": "#ffffff",
+                "error": "#ba1a1a",
+                "on-surface": "#0b1c30",
+                "on-primary-container": "#7c839b",
+                "on-primary-fixed": "#131b2e",
+                "surface-bright": "#f8f9ff",
+                "surface-container-highest": "#d3e4fe",
+                "surface-container-high": "#dce9ff",
+                "background": "#f8f9ff",
+                "outline": "#76777d",
+                "surface-container": "#e5eeff",
+                "surface": "#f8f9ff",
+                "secondary-container": "#316bf3"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "2xl": "1rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "md": "24px",
+                "xs": "4px",
+                "lg": "48px",
+                "margin-mobile": "16px",
+                "gutter": "24px",
+                "sm": "12px",
+                "xl": "80px",
+                "base": "8px",
+                "margin-desktop": "64px"
+            },
+            "fontFamily": {
+                "body-md": ["Inter"],
+                "body-lg": ["Inter"],
+                "headline-lg": ["Poppins"],
+                "headline-md": ["Poppins"],
+                "caption": ["Inter"],
+                "label-md": ["Inter"],
+                "display-lg-mobile": ["Poppins"],
+                "headline-lg-mobile": ["Poppins"],
+                "display-lg": ["Poppins"]
+            }
+          }
+        }
+      }
+    }catch(_e){}</script><meta charset="utf-8"></head><body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-[100] flex justify-between items-center px-4 md:px-margin-desktop h-20 bg-primary-container/90 backdrop-blur-md shadow-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim">
+<img alt="Barangay Commonwealth Logo" class="w-full h-full object-contain p-1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8IOe2MkfkTn8B1eP9HtLlRIIhwZphqWG5vymXAnN2o5TcdpMlsvXybc6NC0_jWesMOujHlDhhOuBeEsV4AwLaswII8MQsC_dDED3jFSykwjiNcUw_qcYx6ZApxP6Nkwk_uQSBAbjsKyUX1yuaedr4-8g6EWLjaWE0D-tnH5C2_yXFWVcpCcvJGwnkSP6AIxNluQGYdM4lfVzB5ta_oqY-hLq9pI-UAYzRTz9pg1a6huGorSeb1niMbZQBGnyef2yMkg">
+</div>
+<h1 class="font-headline-md text-base md:text-headline-md font-bold text-surface-bright leading-tight">Barangay Commonwealth Safety</h1>
+</div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">Home</a>
+<a class="font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">About</a>
+<a class="font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">Officials</a>
+<a class="font-label-md text-label-md text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim pb-1" href="#">Services</a>
+<a class="font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">Contact</a>
+</nav>
+<div class="flex items-center gap-sm md:gap-md">
+<a class="bg-secondary text-on-secondary px-4 md:px-md py-2 rounded-lg font-bold hover:shadow-lg transition-all text-xs md:text-sm flex items-center justify-center whitespace-nowrap" href="#">Login/Register</a>
+<button class="md:hidden p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors" id="mobile-menu-button">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</button>
+</div>
+</header>
+<main class="flex-grow w-full max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop py-md pt-24">
+<!-- Welcome Section -->
+<section class="mb-lg">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary mb-2">Track My Cases</h2>
+<p class="text-on-surface-variant text-body-md">Real-time updates on your submitted reports and ongoing community safety investigations.</p>
+</section>
+<!-- Main Content Area: Responsive Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Case List Column -->
+<div class="lg:col-span-5 space-y-4">
+<div class="flex items-center justify-between mb-2">
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Active Reports</h3>
+<span class="bg-surface-container text-secondary text-caption px-3 py-1 rounded-full font-bold">3 Active</span>
+</div>
+<!-- Case Card 1 (Active/Selected) -->
+<button onclick="selectCase('BC-2024-0892')" class="w-full text-left glass-card border-2 border-secondary p-md rounded-2xl shadow-xl transition-all hover:translate-y-[-2px] focus:outline-none">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-secondary">#BC-2024-0892</span>
+<span class="bg-secondary-container text-on-secondary-container text-caption px-2 py-1 rounded-md font-bold uppercase">Ongoing</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface font-bold mb-1">Unscheduled Waste Disposal</h4>
+<p class="text-on-surface-variant text-caption line-clamp-1 mb-3">Reported on Aug 14, 2024 • Zone 4</p>
+<div class="flex items-center text-secondary">
+<span class="material-symbols-outlined text-base mr-1" data-icon="investigating">search</span>
+<span class="text-caption font-bold">Currently Investigating</span>
+</div>
+</button>
+<!-- Case Card 2 -->
+<button onclick="selectCase('BC-2024-0845')" class="w-full text-left bg-white border border-outline-variant/30 p-md rounded-2xl shadow-sm transition-all hover:bg-surface-container/30 focus:outline-none">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-on-surface-variant">#BC-2024-0845</span>
+<span class="bg-error-container text-on-error-container text-caption px-2 py-1 rounded-md font-bold uppercase">Pending</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface font-bold mb-1">Street Light Outage</h4>
+<p class="text-on-surface-variant text-caption line-clamp-1 mb-3">Reported on Aug 12, 2024 • Upper Commonwealth</p>
+<div class="flex items-center text-on-surface-variant">
+<span class="material-symbols-outlined text-base mr-1" data-icon="schedule">schedule</span>
+<span class="text-caption font-bold">Awaiting Verification</span>
+</div>
+</button>
+<!-- Case Card 3 -->
+<button onclick="selectCase('BC-2024-0711')" class="w-full text-left bg-white border border-outline-variant/30 p-md rounded-2xl shadow-sm transition-all hover:bg-surface-container/30 focus:outline-none opacity-80">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-on-surface-variant">#BC-2024-0711</span>
+<span class="bg-surface-container-highest text-on-surface text-caption px-2 py-1 rounded-md font-bold uppercase">Resolved</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-on-surface font-bold mb-1">Noise Complaint</h4>
+<p class="text-on-surface-variant text-caption line-clamp-1 mb-3">Resolved on Aug 08, 2024 • Litex Road</p>
+<div class="flex items-center text-on-surface-variant">
+<span class="material-symbols-outlined text-base mr-1" data-icon="check_circle">check_circle</span>
+<span class="text-caption font-bold">Case Closed</span>
+</div>
+</button>
+<div class="flex justify-center pt-4">
+  <button class="flex items-center gap-2 px-6 py-2 border-2 border-secondary text-secondary rounded-xl font-bold text-label-md hover:bg-secondary-container/10 transition-colors active:scale-95 focus:outline-none">
+    <span class="material-symbols-outlined" data-icon="expand_more">expand_more</span>
+    Load More Reports
+  </button>
+</div></div>
+<!-- Case Detail Column -->
+<div id="case-details-panel" class="lg:col-span-7">
+<div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-outline-variant/20 sticky top-[80px]">
+<!-- Detail Header -->
+<div class="p-md bg-primary-container text-on-primary">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h3 id="detail-id" class="text-secondary-fixed-dim font-label-md">CASE BC-2024-0892</h3>
+<h2 id="detail-title" class="font-headline-md text-headline-md font-bold">Unscheduled Waste Disposal</h2>
+</div>
+<button class="bg-secondary px-6 py-2 rounded-xl text-white font-bold text-label-md flex items-center gap-2 hover:bg-secondary-fixed-dim hover:text-on-secondary-fixed transition-colors">
+<span class="material-symbols-outlined" data-icon="phone_in_talk">phone_in_talk</span>
+                                Contact Officer
+                            </button>
+</div>
+</div>
+<!-- Details Content -->
+<div class="p-md md:p-lg grid md:grid-cols-2 gap-lg">
+<!-- Progress Timeline -->
+<div>
+<h4 class="font-label-md text-secondary uppercase mb-6 tracking-widest">Case Progress</h4>
+<div class="relative space-y-8 pl-8">
+<div class="absolute left-3.5 top-2 bottom-2 w-0.5 timeline-line"></div>
+<!-- Step 1 -->
+<div class="relative">
+<div class="absolute -left-8 w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-white z-10">
+<span class="material-symbols-outlined text-[18px]" data-icon="campaign">campaign</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface font-bold text-body-md">Reported</span>
+<span class="text-caption text-on-surface-variant">Aug 14, 09:30 AM • Citizen Portal</span>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative">
+<div class="absolute -left-8 w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-white z-10">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified">verified</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface font-bold text-body-md">Verified</span>
+<span class="text-caption text-on-surface-variant">Aug 14, 01:15 PM • P. Santos</span>
+</div>
+</div>
+<!---->
+<div class="relative">
+<div class="absolute -left-8 w-8 h-8 bg-white border-4 border-secondary rounded-full flex items-center justify-center text-secondary z-10">
+<span class="material-symbols-outlined text-[18px]" data-icon="manage_search">manage_search</span>
+</div>
+<div class="flex flex-col">
+<span class="text-secondary font-bold text-body-md">Investigating</span>
+<span class="text-caption text-on-surface-variant italic">Dispatch assigned to Unit 4-B. Physical inspection scheduled.</span>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="relative opacity-30">
+<div class="absolute -left-8 w-8 h-8 bg-outline-variant rounded-full flex items-center justify-center text-white z-10">
+<span class="material-symbols-outlined text-[18px]" data-icon="task_alt">task_alt</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface-variant font-bold text-body-md">Resolved</span>
+<span class="text-caption text-on-surface-variant">Pending completion</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary & Evidence -->
+<div class="space-y-6">
+<div>
+<h4 class="font-label-md text-secondary uppercase mb-3 tracking-widest">Case Summary</h4>
+<p class="text-body-md text-on-surface leading-relaxed">
+                                    Large volume of plastic waste and construction debris illegally dumped near the Zone 4 boundary. Obstructing pedestrian pathway and posing health risks.
+                                </p>
+</div>
+<div>
+<h4 class="font-label-md text-secondary uppercase mb-3 tracking-widest">Submitted Evidence</h4>
+<div class="grid grid-cols-2 gap-2">
+<div class="aspect-square rounded-xl bg-cover bg-center border border-outline-variant" data-alt="A gritty high-contrast photo of urban street waste on a sidewalk in a Philippines barangay. The lighting is bright daylight, showing plastic bags and debris against a concrete wall. The visual style is documentary and authentic, emphasizing community safety and cleanliness within a modern digital portal interface." style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCiuqhhAKgqNUo0pg-fWuq6pcNMu_sxTlkESV7rIJ2cVyEjrwbeuEImDxOwaEtyhHnSE2q2M6o-dpxRX0xXG8E76Iha9Amzc_fZ7csmE6suOEsqc9GYQYH1S-ZimNcwLZu7c8HmMfwzTQaEDkgquOySYQ_RkVpnIaarT0GcNOtqrBi8c7UmsL5CjCTn4MW4e0Ekd9xwx6uWDHjP6IIsBNByWI012VM-yQfV3BAlDzXNI-OMkDP2GFy5&quot;);"></div>
+<div class="aspect-square rounded-xl bg-cover bg-center border border-outline-variant flex items-center justify-center bg-surface-container-highest" data-alt="A wide angle shot of a street corner in Quezon City with a clear view of an obstruction on the sidewalk. Soft afternoon shadows stretch across the road. The photo has a professional, evidence-focused aesthetic, presented within a clean light-mode UI context with primary blue accents." style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDGpUwZBeqkrLFVk9DP0z4Wf7MFGBxFnSMlylz44nYJQADVTFrInRBvfLkI_NElQ8o9zT4r4K2PT4X0ck0FdrSFspekCK9_WQRFkwB3QWFxS9Ej5sEIP8a4Oc191zv_IN8_ymxsNm8K_JgJ2tN_7ZBFpyM7RXyUM6sRdA5bMtv1rbM_ZwR6szOhBfJL3KRWutymaLuYfU4BXUouqa_56Vfex0Rj99C4gY0QCFa88jsA1yeqrLm3uNEl&quot;);"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/10">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="info">info</span>
+<div>
+<p class="text-caption text-on-surface font-bold">Estimated Resolution</p>
+<p class="text-caption text-on-surface-variant">Expected within 48 hours based on current priority level.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Spacer for Mobile Nav -->
+<div class="h-24 md:hidden"></div>
+<!-- BottomNavBar -->
+
+<!-- Footer (Desktop) -->
+<footer class="w-full py-xl px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-lowest border-t border-outline-variant">
+<div class="flex flex-col gap-sm text-center md:text-left">
+<div class="flex items-center justify-center md:justify-start gap-xs">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+<img alt="Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW74s2nearQNN4blA0X_4FiQV6ofHdltCHlWXwSzWpVbbPZZ5GbXxuYcIx5V0SHV1VoBueZmm4kEivwk9nzaTC5vcrz3mG4P5ZpB52v-6lo8U_Zx9-kXfVVj713jx01IPNIhpa7j6CWKWRwsyIXkoiUFCSp5kDQPtyJa2kF7zPHfauLcwLYGWBC5yjbSG6KYnpYOu2on2ficRRg9JqDILgPgyN3ocKl6Aa_sUnDRAAwzyUGNioF9-3tL4vKnnKe4CAcg">
+</div>
+<span class="font-headline-md text-headline-md text-primary">Barangay Commonwealth</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant">© 2024 Barangay Commonwealth Law Enforcement. Public Safety &amp; Transparency Portal.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-lg">
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Terms of Service</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">FOI Manual</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Accessibility</a>
+</div>
+<div class="flex gap-md">
+<div class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span class="material-symbols-outlined">public</span></div>
+<div class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span class="material-symbols-outlined">share</span></div>
+</div>
+</footer>
+<script>
+        function selectCase(caseId) {
+            // Simple visual interaction simulator
+            const titleEl = document.getElementById('detail-title');
+            const idEl = document.getElementById('detail-id');
+            const panel = document.getElementById('case-details-panel');
+            
+            // Add a quick fade out/in effect
+            panel.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                idEl.textContent = `CASE ${caseId}`;
+                if(caseId === 'BC-2024-0845') {
+                    titleEl.textContent = 'Street Light Outage';
+                } else if(caseId === 'BC-2024-0711') {
+                    titleEl.textContent = 'Noise Complaint';
+                } else {
+                    titleEl.textContent = 'Unscheduled Waste Disposal';
+                }
+                panel.style.opacity = '1';
+                panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 150);
+        }
+    </script>
+
+
+
+</body></html>

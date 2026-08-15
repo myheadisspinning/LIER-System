@@ -1,0 +1,751 @@
+<!--
+DESIGN.md (Design Documentation)
+================================
+---
+name: Commonwealth Safety Design System
+colors:
+  surface: '#f8f9ff'
+  surface-dim: '#cbdbf5'
+  surface-bright: '#f8f9ff'
+  surface-container-lowest: '#ffffff'
+  surface-container-low: '#eff4ff'
+  surface-container: '#e5eeff'
+  surface-container-high: '#dce9ff'
+  surface-container-highest: '#d3e4fe'
+  on-surface: '#0b1c30'
+  on-surface-variant: '#45464d'
+  inverse-surface: '#213145'
+  inverse-on-surface: '#eaf1ff'
+  outline: '#76777d'
+  outline-variant: '#c6c6cd'
+  surface-tint: '#565e74'
+  primary: '#000000'
+  on-primary: '#ffffff'
+  primary-container: '#131b2e'
+  on-primary-container: '#7c839b'
+  inverse-primary: '#bec6e0'
+  secondary: '#0051d5'
+  on-secondary: '#ffffff'
+  secondary-container: '#316bf3'
+  on-secondary-container: '#fefcff'
+  tertiary: '#000000'
+  on-tertiary: '#ffffff'
+  tertiary-container: '#261a00'
+  on-tertiary-container: '#a87d00'
+  error: '#ba1a1a'
+  on-error: '#ffffff'
+  error-container: '#ffdad6'
+  on-error-container: '#93000a'
+  primary-fixed: '#dae2fd'
+  primary-fixed-dim: '#bec6e0'
+  on-primary-fixed: '#131b2e'
+  on-primary-fixed-variant: '#3f465c'
+  secondary-fixed: '#dbe1ff'
+  secondary-fixed-dim: '#b4c5ff'
+  on-secondary-fixed: '#00174b'
+  on-secondary-fixed-variant: '#003ea8'
+  tertiary-fixed: '#ffdf9f'
+  tertiary-fixed-dim: '#f9bd22'
+  on-tertiary-fixed: '#261a00'
+  on-tertiary-fixed-variant: '#5c4300'
+  background: '#f8f9ff'
+  on-background: '#0b1c30'
+  surface-variant: '#d3e4fe'
+typography:
+  display-lg:
+    fontFamily: Poppins
+    fontSize: 48px
+    fontWeight: '700'
+    lineHeight: '1.2'
+    letterSpacing: -0.02em
+  display-lg-mobile:
+    fontFamily: Poppins
+    fontSize: 32px
+    fontWeight: '700'
+    lineHeight: '1.2'
+  headline-lg:
+    fontFamily: Poppins
+    fontSize: 32px
+    fontWeight: '600'
+    lineHeight: '1.3'
+  headline-lg-mobile:
+    fontFamily: Poppins
+    fontSize: 24px
+    fontWeight: '600'
+    lineHeight: '1.3'
+  headline-md:
+    fontFamily: Poppins
+    fontSize: 24px
+    fontWeight: '600'
+    lineHeight: '1.4'
+  body-lg:
+    fontFamily: Inter
+    fontSize: 18px
+    fontWeight: '400'
+    lineHeight: '1.6'
+  body-md:
+    fontFamily: Inter
+    fontSize: 16px
+    fontWeight: '400'
+    lineHeight: '1.6'
+  label-md:
+    fontFamily: Inter
+    fontSize: 14px
+    fontWeight: '600'
+    lineHeight: '1'
+    letterSpacing: 0.05em
+  caption:
+    fontFamily: Inter
+    fontSize: 12px
+    fontWeight: '500'
+    lineHeight: '1.4'
+rounded:
+  sm: 0.25rem
+  DEFAULT: 0.5rem
+  md: 0.75rem
+  lg: 1rem
+  xl: 1.5rem
+  full: 9999px
+spacing:
+  base: 8px
+  xs: 4px
+  sm: 12px
+  md: 24px
+  lg: 48px
+  xl: 80px
+  gutter: 24px
+  margin-mobile: 16px
+  margin-desktop: 64px
+---
+
+## Brand & Style
+
+The design system is engineered to project **authority, transparency, and urgent reliability**. As a public safety and government portal for Barangay Commonwealth, the visual narrative balances the gravity of civic duty with the modern efficiency of a premium digital service. 
+
+The aesthetic is **Corporate Modern with Glassmorphism accents**. It utilizes high-contrast typography and structured layouts to ensure information accessibility while employing frosted glass effects and subtle gradients to feel contemporary and high-end. The goal is to instill a sense of security and trust in the residents of Quezon City through a precise, organized, and polished interface.
+
+## Colors
+
+The palette is anchored by **Deep Navy Blue**, representing the stability and tradition of government institutions. **Royal Blue** serves as the primary action color, providing a modern, digital-first energy. **Gold** is used sparingly as an accent to denote premium status, high-priority alerts, or official seals.
+
+- **Primary (Navy):** Used for headers, heavy branding, and primary navigation backgrounds.
+- **Secondary (Royal):** Used for interactive elements, links, and progress indicators.
+- **Accent (Gold):** Reserved for recognition, official badges, and specific "Staff" or "Premium" touchpoints.
+- **Semantic Colors:** Emerald Green and Crimson Red are strictly utilized for status updates and emergency alerts to maintain clear visual communication.
+
+## Typography
+
+This design system uses a dual-font strategy. **Poppins** provides a friendly yet authoritative geometric structure for headlines, making the government's message feel modern and accessible. **Inter** is the workhorse for body text, chosen for its exceptional legibility in data-heavy safety reports and official documentation.
+
+Hierarchy is maintained through generous line heights and distinct weight contrasts. Large displays use negative letter spacing for a tighter, more "editorial" look, while labels utilize uppercase tracking to denote systemic hierarchy.
+
+## Layout & Spacing
+
+The layout follows a **Fluid Grid System** with strict constraints to maintain an authoritative structure. 
+
+- **Desktop:** 12-column grid with 24px gutters and 64px side margins. Content is typically contained to a maximum width of 1440px.
+- **Tablet:** 8-column grid with 20px gutters and 32px side margins.
+- **Mobile:** 4-column grid with 16px gutters and 16px side margins.
+
+Spacing follows an 8px base unit. Component internal padding should prioritize "breathability" to reduce cognitive load during emergency situations, using `md` (24px) as the standard container padding.
+
+## Elevation & Depth
+
+To achieve the "Government Portal" aesthetic, depth is communicated through a mix of **Ambient Shadows** and **Glassmorphism**.
+
+1.  **Glassmorphism:** Navigation sidebars and modal overlays use a background blur (12px to 20px) with a semi-transparent white or navy fill (opacity 70-85%). A 1px translucent border provides a "crystal" edge.
+2.  **Shadows:** Elevated cards use soft, multi-layered shadows with a low-opacity navy tint (`rgba(15, 23, 42, 0.08)`) to avoid a "dirty" look on the light gray background.
+3.  **Tonal Layers:** Surfaces are layered from the background (`#F8FAFC`) to the primary surface (`#FFFFFF`), with glass layers sitting at the highest perceived elevation.
+
+## Shapes
+
+The design system utilizes **Large Rounded Corners** to soften the traditional rigidity of government interfaces, making the technology feel more approachable. 
+
+- **Main Containers & Cards:** Use `radius-2xl` (24px) for a modern, friendly feel.
+- **Buttons & Inputs:** Use `radius-lg` (12px) to maintain a professional balance.
+- **Status Badges:** Use pill-shaped (fully rounded) geometry to distinguish them from interactive buttons.
+
+## Components
+
+### Buttons
+- **Primary:** Gradient fill (Royal Blue to Deep Navy) with white text and a soft shadow. 
+- **Emergency:** Solid Crimson Red with high-contrast white text and a pulse animation effect for high-priority alerts.
+- **Secondary/Ghost:** 1.5px border in Navy or Blue with no fill, transitioning to a glass effect on hover.
+
+### Cards
+- Standard cards feature `radius-2xl`, white backgrounds, and a subtle 1px border (`#E2E8F0`). 
+- Emergency cards utilize a thick left-border accent in the semantic color (Red/Yellow/Green).
+
+### Input Fields
+- Inputs should be tall (min-height 48px) with `radius-lg` and a background color of `#F1F5F9`. On focus, the border transitions to Royal Blue with a 3px soft glow.
+
+### Glass Overlays
+- Sidebars and mobile menus must use the `backdrop-filter: blur(16px)` property with a semi-transparent Deep Navy (`#0F172A` at 80% opacity) for a premium, high-tech look.
+
+### Chips & Badges
+- Used for safety categories (e.g., "Fire Safety", "Public Health"). These should use the Royal Blue color at 10% opacity for the background and 100% opacity for the text.
+-->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        try {
+            try {
+                tailwind.config = {
+                    darkMode: "class",
+                    theme: {
+                        extend: {
+                            "colors": {
+                                "primary": "#000000",
+                                "tertiary-fixed": "#ffdf9f",
+                                "surface-variant": "#d3e4fe",
+                                "surface": "#f8f9ff",
+                                "secondary-fixed": "#dbe1ff",
+                                "background": "#f8f9ff",
+                                "on-tertiary-container": "#a87d00",
+                                "surface-dim": "#cbdbf5",
+                                "on-secondary": "#ffffff",
+                                "on-error-container": "#93000a",
+                                "surface-tint": "#565e74",
+                                "tertiary-fixed-dim": "#f9bd22",
+                                "on-tertiary-fixed-variant": "#5c4300",
+                                "on-primary-fixed-variant": "#3f465c",
+                                "on-tertiary-fixed": "#261a00",
+                                "on-secondary-fixed-variant": "#003ea8",
+                                "surface-container-high": "#dce9ff",
+                                "primary-container": "#131b2e",
+                                "inverse-on-surface": "#eaf1ff",
+                                "error": "#ba1a1a",
+                                "primary-fixed": "#dae2fd",
+                                "on-secondary-fixed": "#00174b",
+                                "on-primary-fixed": "#131b2e",
+                                "tertiary-container": "#261a00",
+                                "surface-container-lowest": "#ffffff",
+                                "primary-fixed-dim": "#bec6e0",
+                                "tertiary": "#000000",
+                                "on-error": "#ffffff",
+                                "surface-container-highest": "#d3e4fe",
+                                "on-tertiary": "#ffffff",
+                                "on-surface-variant": "#45464d",
+                                "on-background": "#0b1c30",
+                                "outline": "#76777d",
+                                "on-primary": "#ffffff",
+                                "outline-variant": "#c6c6cd",
+                                "error-container": "#ffdad6",
+                                "surface-container": "#e5eeff",
+                                "on-primary-container": "#7c839b",
+                                "inverse-primary": "#bec6e0",
+                                "surface-container-low": "#eff4ff",
+                                "surface-bright": "#f8f9ff",
+                                "secondary-container": "#316bf3",
+                                "secondary": "#0051d5",
+                                "inverse-surface": "#213145",
+                                "on-surface": "#0b1c30",
+                                "secondary-fixed-dim": "#b4c5ff",
+                                "on-secondary-container": "#fefcff",
+                                "deep-navy": "#0F172A"
+                            },
+                            "borderRadius": {
+                                "DEFAULT": "0.25rem",
+                                "lg": "0.5rem",
+                                "xl": "0.75rem",
+                                "2xl": "1.5rem",
+                                "full": "9999px"
+                            },
+                            "spacing": {
+                                "xl": "80px",
+                                "lg": "48px",
+                                "margin-mobile": "16px",
+                                "base": "8px",
+                                "sm": "12px",
+                                "xs": "4px",
+                                "md": "24px",
+                                "gutter": "24px",
+                                "margin-desktop": "64px"
+                            },
+                            "fontFamily": {
+                                "label-md": ["Inter"],
+                                "display-lg": ["Poppins"],
+                                "body-lg": ["Inter"],
+                                "headline-md": ["Poppins"],
+                                "headline-lg-mobile": ["Poppins"],
+                                "caption": ["Inter"],
+                                "headline-lg": ["Poppins"],
+                                "display-lg-mobile": ["Poppins"],
+                                "body-md": ["Inter"],
+                                "mono": ["JetBrains Mono"]
+                            },
+                            "fontSize": {
+                                "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                                "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                                "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                                "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                                "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                                "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                                "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                                "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                            }
+                        },
+                    },
+                }
+            } catch (_e) {}
+        } catch (_e) {}
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-background antialiased min-h-screen overflow-x-hidden">
+<!-- Page Loader -->
+<div class="fixed inset-0 z-[1000] bg-primary-container/95 backdrop-blur-md flex flex-col items-center justify-center transition-opacity duration-500 pointer-events-none opacity-0" id="page-loader">
+<div class="relative mb-8">
+<div class="w-24 h-24 rounded-full border-4 border-white/20 border-t-tertiary-fixed-dim animate-spin"></div>
+<img alt="Logo" class="absolute inset-0 m-auto w-12 h-12 rounded-full animate-pulse" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbBY2in0KyLaxFGqWWZk9MghAxJAIzYS7jvZ9suNAv26bXBiPJo5j4tpXHH8So5wN2UDDmyr3zpwYXQS-Dl3H3wub0a6RSK5XTd_rcaAolqGowEOiyhH8Py2qHdNzNW9hNYsrsZHAtU0NrjXVMah0Xf4lGL1gezkyMcHNlbtGgvVk1-GWWmcad4FSOAwK7aOf6ypJRMeycVT5b3jFr8vAWd5SEecWvG2MsZYKgrq-5qTggnA1To0kRUCvkv40FYBh-0BZq_JV8mO8"/>
+</div>
+<p class="text-white font-mono text-xs tracking-[0.3em] uppercase opacity-60">Initializing Secure Portal...</p>
+</div>
+<!-- Top Navigation Bar-->
+<header class="fixed top-0 left-0 w-full z-[100] flex justify-between items-center px-4 md:px-margin-desktop h-20 bg-primary-container/90 backdrop-blur-md shadow-md">
+<div class="flex items-center gap-sm"><div class="flex items-center gap-sm"><div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim shadow-sm"><img alt="Barangay Tandang Sora Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbBY2in0KyLaxFGqWWZk9MghAxJAIzYS7jvZ9suNAv26bXBiPJo5j4tpXHH8So5wN2UDDmyr3zpwYXQS-Dl3H3wub0a6RSK5XTd_rcaAolqGowEOiyhH8Py2qHdNzNW9hNYsrsZHAtU0NrjXVMah0Xf4lGL1gezkyMcHNlbtGgvVk1-GWWmcad4FSOAwK7aOf6ypJRMeycVT5b3jFr8vAWd5SEecWvG2MsZYKgrq-5qTggnA1To0kRUCvkv40FYBh-0BZq_JV8mO8"/></div><h1 class="font-headline-md text-base md:text-headline-md font-bold text-surface-bright leading-tight">Barangay Tandang Sora Safety</h1></div></div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="nav-link font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">Home</a>
+<a class="nav-link font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">About</a>
+<a class="nav-link font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">Officials</a>
+<a class="nav-link font-label-md text-label-md text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim pb-1" href="#">Services</a>
+<a class="nav-link font-label-md text-label-md text-on-primary-container hover:text-surface-bright transition-colors duration-200" href="#">Contact</a>
+</nav>
+<div class="flex items-center gap-sm md:gap-md">
+<a class="nav-link bg-secondary text-on-secondary px-4 md:px-md py-2 rounded-lg font-bold hover:shadow-lg transition-all text-xs md:text-sm flex items-center justify-center whitespace-nowrap" href="{{DATA:SCREEN:SCREEN_59}}" id="auth-button">Login/Register</a>
+<button class="md:hidden p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors" id="mobile-menu-button">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</button>
+</div>
+</header>
+<main class="pt-20 w-full flex flex-col">
+<!-- Hero Section -->
+<section class="hero-gradient relative py-12 md:py-xl px-4 md:px-margin-desktop flex flex-col items-center text-center w-full">
+<div class="absolute -top-24 -left-24 w-64 h-64 md:w-96 md:h-96 bg-secondary/10 blur-[80px] md:blur-[100px] rounded-full"></div>
+<div class="absolute -bottom-24 -right-24 w-64 h-64 md:w-96 md:h-96 bg-primary-fixed/30 blur-[80px] md:blur-[100px] rounded-full"></div>
+<div class="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center">
+<span class="inline-block px-md py-xs bg-secondary/10 text-secondary rounded-full font-label-md text-xs md:text-label-md mb-md">
+                Resident Support System
+            </span>
+<h1 class="font-display-lg text-3xl md:text-display-lg text-primary mb-md">Law Enforcement &amp; Public Safety System</h1>
+<p class="font-body-lg text-base md:text-body-lg text-on-surface-variant mb-lg max-w-2xl mx-auto">An integrated platform for real-time incident reporting, tactical coordination, and community enforcement services.</p>
+<div class="flex flex-col sm:flex-row gap-md justify-center items-center w-full max-w-md md:max-w-none">
+<button class="px-lg py-md bg-secondary text-on-secondary rounded-xl font-label-md text-label-md shadow-lg flex items-center justify-center gap-sm transition-transform hover:scale-105 active:scale-95 w-full md:w-auto" id="file-report-trigger">
+<span class="material-symbols-outlined" data-icon="report">report</span>File an Incident Report
+                </button>
+<button class="px-lg py-md border-2 border-secondary text-secondary rounded-xl font-label-md text-label-md bg-white/50 backdrop-blur-sm transition-all hover:bg-secondary/5 w-full md:w-auto">View System Guide</button>
+</div>
+</div>
+</section>
+<!-- Services Grid Section -->
+<section class="py-12 md:py-xl px-4 md:px-margin-desktop bg-surface w-full flex flex-col">
+<div class="flex flex-col md:flex-row justify-between items-center md:items-end mb-lg gap-md w-full">
+<div class="max-w-xl text-center md:text-left">
+<h2 class="font-headline-lg text-2xl md:text-headline-lg text-primary mb-xs">Frontline Assistance</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Quick access to essential barangay programs and regulatory requests.</p>
+</div>
+<div class="hidden md:flex gap-sm">
+<button class="w-12 h-12 rounded-full flex items-center justify-center border border-outline-variant text-secondary hover:bg-secondary hover:text-white transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-12 h-12 rounded-full flex items-center justify-center border border-outline-variant text-secondary hover:bg-secondary hover:text-white transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter w-full">
+<!-- Card 1: Locate Barangay Hall -->
+<div class="glass-card p-md rounded-2xl flex flex-col justify-between w-full border border-outline-variant/30 bg-surface-bright/50 backdrop-blur-sm shadow-sm hover:shadow-lg transition-shadow transition-all duration-700 opacity-100 translate-y-0">
+<div>
+<div class="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-md">
+<span class="material-symbols-outlined service-icon text-[32px] text-secondary" data-icon="location_on" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md text-primary mb-sm">Locate Barangay Hall</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Find the nearest barangay office and get directions for in-person assistance and document processing.</p>
+</div>
+<button class="w-full py-sm border border-secondary text-secondary rounded-lg font-label-md text-label-md flex items-center justify-center gap-sm hover:bg-secondary/5 transition-all">Get Directions</button>
+</div>
+<!-- Card 2: View My Dashboard -->
+<div class="glass-card p-md rounded-2xl flex flex-col justify-between w-full border border-outline-variant/30 bg-surface-bright/50 backdrop-blur-sm shadow-sm hover:shadow-lg transition-shadow transition-all duration-700">
+<div>
+<div class="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-md">
+<span class="material-symbols-outlined service-icon text-[32px] text-secondary" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md text-primary mb-sm">View My Dashboard</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Access your personalized portal to manage reports, view notifications, and update your resident profile.</p>
+</div>
+<button class="w-full py-sm border border-secondary text-secondary rounded-lg font-label-md text-label-md flex items-center justify-center gap-sm hover:bg-secondary/5 transition-all" id="open-dashboard-btn">Open Dashboard</button>
+</div>
+<!-- Card 3: Track My Case -->
+<div class="glass-card p-md rounded-2xl flex flex-col justify-between w-full border border-outline-variant/30 bg-surface-bright/50 backdrop-blur-sm shadow-sm hover:shadow-lg transition-shadow transition-all duration-700">
+<div>
+<div class="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-md">
+<span class="material-symbols-outlined service-icon text-[32px] text-secondary" data-icon="track_changes" style="font-variation-settings: 'FILL' 1;">track_changes</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md text-primary mb-sm">Track My Case</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Monitor the status of filed reports from investigation through to final resolution.</p>
+</div>
+<button class="w-full py-sm border border-secondary text-secondary rounded-lg font-label-md text-label-md flex items-center justify-center gap-sm hover:bg-secondary/5 transition-all">Track Status</button>
+</div>
+<!-- Card 4: Digital Evidence Vault -->
+<div class="glass-card p-md rounded-2xl flex flex-col justify-between w-full border border-outline-variant/30 bg-surface-bright/50 backdrop-blur-sm shadow-sm hover:shadow-lg transition-shadow transition-all duration-700">
+<div>
+<div class="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-md">
+<span class="material-symbols-outlined service-icon text-[32px] text-secondary" data-icon="cloud_upload" style="font-variation-settings: 'FILL' 1;">cloud_upload</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md text-primary mb-sm">Digital Evidence Vault</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Securely upload and manage digital evidence including photos and witness statements.</p>
+</div>
+<button class="w-full py-sm border border-secondary text-secondary rounded-lg font-label-md text-label-md flex items-center justify-center gap-sm hover:bg-secondary/5 transition-all">Access Vault</button>
+</div>
+<!-- Card 5: Command Center Analytics -->
+<div class="glass-card p-md rounded-2xl flex flex-col justify-between w-full border border-outline-variant/30 bg-surface-bright/50 backdrop-blur-sm shadow-sm hover:shadow-lg transition-shadow transition-all duration-700">
+<div>
+<div class="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-md">
+<span class="material-symbols-outlined service-icon text-[32px] text-secondary" data-icon="analytics" style="font-variation-settings: 'FILL' 1;">analytics</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md text-primary mb-sm">Command Center Analytics</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Access data-driven insights on neighborhood safety trends and enforcement performance.</p>
+</div>
+<button class="w-full py-sm border border-secondary text-secondary rounded-lg font-label-md text-label-md flex items-center justify-center gap-sm hover:bg-secondary/5 transition-all">View Data</button>
+</div>
+<!-- Card 6: FAQ -->
+<div class="glass-card p-md rounded-2xl flex flex-col justify-between w-full border border-outline-variant/30 bg-surface-bright/50 backdrop-blur-sm shadow-sm hover:shadow-lg transition-shadow transition-all duration-700">
+<div>
+<div class="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-md">
+<span class="material-symbols-outlined service-icon text-[32px] text-secondary" data-icon="help" style="font-variation-settings: 'FILL' 1;">help</span>
+</div>
+<h3 class="font-headline-md text-xl md:text-headline-md text-primary mb-sm">FAQ</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Find quick answers to common questions about barangay services, safety protocols, and community guidelines.</p>
+</div>
+<button class="w-full py-sm border border-secondary text-secondary rounded-lg font-label-md text-label-md flex items-center justify-center gap-sm hover:bg-secondary/5 transition-all">Browse FAQs</button>
+</div>
+</div>
+</section>
+<!-- Digital E-Services Section -->
+<section class="px-4 md:px-margin-desktop py-12 md:py-xl w-full">
+<div class="qc-services-banner rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row items-stretch w-full bg-on-background relative">
+<div class="absolute -right-20 -top-20 w-64 h-64 bg-secondary rounded-full blur-[100px] opacity-20"></div>
+<div class="flex-1 p-8 md:p-lg flex flex-col justify-center items-center text-center w-full relative z-10">
+<div class="flex items-center gap-sm mb-md">
+<div class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-md">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-[20px]" data-icon="devices">devices</span>
+</div>
+<span class="text-on-primary-container font-label-md text-xs uppercase tracking-widest">Innovation Hub</span>
+</div>
+<h2 class="font-headline-lg text-2xl md:text-headline-lg text-surface-bright mb-md">Tactical Command Integration</h2>
+<p class="font-body-lg text-base md:text-body-lg text-on-primary-container leading-relaxed mb-lg">Our system bridges the gap between citizens and the Barangay Public Safety Officers (BPSO), providing a unified dashboard for localized enforcement and incident management.</p>
+<div class="flex flex-col sm:flex-row gap-md justify-center w-full md:w-auto">
+<a class="nav-link inline-flex items-center justify-center gap-sm bg-white text-primary px-lg py-md rounded-xl font-bold hover:scale-105 transition-transform" href="#">Access Officer Portal <span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span></a>
+<a class="nav-link inline-flex items-center justify-center gap-sm text-surface-bright border border-white/20 px-lg py-md rounded-xl font-label-md text-label-md hover:bg-white/5 transition-colors" href="#">System Documentation</a>
+</div>
+</div>
+<div class="flex-1 min-h-[250px] md:min-h-[300px] relative w-full overflow-hidden">
+<img alt="Strategic Center" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkcLNbdIOG1fgeA-oIU1EIimyYi7WCwgPv49mAXiValBiQsiSXda6sCzLTVBVlOxPzQpq0-eU8UlvxLGFd_YfokLyOZ6PMoTD7jOWi6_taX0EMIzD4z3qRmAigTSiA3AVccVVU_O08Q_u4s7uYWj3GBazw2ZNTgiU_7Pxkv7yMh0pQENPa3AdvErwXRAu15OSaDUqc5mVekrmA4sm149Vucts48v7bAhX_iiSHe3NBwSC0EZJSFZt7"/>
+<div class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-on-background via-transparent to-transparent"></div>
+</div>
+</div>
+</section>
+<!-- FAQ Micro-section -->
+<section class="py-12 md:py-xl px-4 md:px-margin-desktop bg-surface-container-low/30 w-full flex flex-col">
+<div class="max-w-3xl mx-auto text-center mb-lg w-full">
+<h2 class="font-headline-lg text-2xl md:text-headline-lg text-primary mb-sm">Frequently Asked Questions</h2>
+<div class="w-24 h-1.5 bg-secondary mx-auto rounded-full mb-md"></div>
+<p class="font-body-md text-body-md text-on-surface-variant">Quick answers to common service inquiries from the Commonwealth community.</p>
+</div>
+<div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-md w-full">
+<div class="p-lg bg-surface-bright rounded-2xl border border-outline-variant/30 hover:shadow-lg transition-shadow">
+<h4 class="font-label-md text-label-md text-secondary mb-xs uppercase tracking-wider">Processing Time</h4>
+<p class="font-body-md text-body-md text-on-surface font-semibold mb-sm">How long does a Barangay Clearance take?</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Usually processed within 24-48 hours via our digital portal.</p>
+</div>
+<div class="p-lg bg-surface-bright rounded-2xl border border-outline-variant/30 hover:shadow-lg transition-shadow">
+<h4 class="font-label-md text-label-md text-secondary mb-xs uppercase tracking-wider">Service Availability</h4>
+<p class="font-body-md text-body-md text-on-surface font-semibold mb-sm">Is the health center open on weekends?</p>
+<p class="font-body-md text-body-md text-on-surface-variant">The health center is open Mon-Fri, but emergency triage is 24/7.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-xl px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-lowest border-t border-outline-variant">
+<div class="flex flex-col gap-sm text-center md:text-left"><div class="flex flex-col gap-sm text-center md:text-left"><div class="flex items-center justify-center md:justify-start gap-xs"><div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant flex items-center justify-center"><img alt="Barangay Tandang Sora Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbBY2in0KyLaxFGqWWZk9MghAxJAIzYS7jvZ9suNAv26bXBiPJo5j4tpXHH8So5wN2UDDmyr3zpwYXQS-Dl3H3wub0a6RSK5XTd_rcaAolqGowEOiyhH8Py2qHdNzNW9hNYsrsZHAtU0NrjXVMah0Xf4lGL1gezkyMcHNlbtGgvVk1-GWWmcad4FSOAwK7aOf6ypJRMeycVT5b3jFr8vAWd5SEecWvG2MsZYKgrq-5qTggnA1To0kRUCvkv40FYBh-0BZq_JV8mO8"/></div><span class="font-headline-md text-headline-md text-primary">Barangay Tandang Sora</span></div><p class="font-caption text-caption text-on-surface-variant">© 2024 Barangay Tandang Sora Law Enforcement. Public Safety &amp; Transparency Portal.</p></div></div>
+<div class="flex flex-wrap justify-center gap-lg">
+<a class="nav-link font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Privacy Policy</a>
+<a class="nav-link font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Terms of Service</a>
+<a class="nav-link font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">FOI Manual</a>
+<a class="nav-link font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Accessibility</a>
+</div>
+<div class="flex gap-md">
+<div class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span class="material-symbols-outlined">public</span></div>
+<div class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span class="material-symbols-outlined">share</span></div>
+</div>
+</footer>
+<!-- Mobile Navigation Drawer -->
+<div class="fixed inset-0 z-[200] invisible pointer-events-none transition-all duration-300" id="mobile-drawer-container">
+<div class="absolute inset-0 bg-primary-container/60 backdrop-blur-sm opacity-0 transition-opacity duration-300" id="drawer-overlay"></div>
+<div class="absolute right-0 top-0 h-full w-[280px] bg-background shadow-2xl flex flex-col p-lg translate-x-full transition-transform duration-300 ease-in-out" id="mobile-drawer">
+<div class="flex justify-between items-center mb-xl">
+<span class="font-headline-md text-on-surface">Menu</span>
+<button class="text-on-surface-variant hover:text-primary p-2" id="close-drawer">
+<span class="material-symbols-outlined text-3xl">close</span>
+</button>
+</div>
+<nav class="flex flex-col gap-lg">
+<a class="nav-link font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">Home</a>
+<a class="nav-link font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">About</a>
+<a class="nav-link font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">Officials</a>
+<a class="nav-link font-label-md text-lg text-secondary border-l-4 border-secondary pl-4 font-bold" href="#">Services</a>
+<a class="nav-link font-label-md text-lg text-on-surface-variant hover:text-secondary pl-4 transition-colors" href="#">Contact</a>
+</nav>
+<div class="mt-auto pt-lg border-t border-outline-variant">
+<a class="nav-link w-full px-md py-4 bg-secondary text-on-secondary font-bold rounded-xl flex items-center justify-center text-center shadow-lg" href="{{DATA:SCREEN:SCREEN_59}}">Login/Register</a>
+</div>
+</div>
+</div>
+<!-- Integrated Incident Report Modal -->
+<div class="fixed inset-0 z-[300] hidden flex items-center justify-center p-4 md:p-lg" id="incident-modal-container">
+<div class="absolute inset-0 bg-primary-container/80 backdrop-blur-sm" id="modal-overlay"></div>
+<div class="relative bg-background w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-2xl shadow-2xl border border-outline-variant/30 flex flex-col">
+<!-- Modal Header -->
+<div class="bg-primary-container px-6 py-4 flex justify-between items-center sticky top-0 z-20">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary-fixed-dim">verified_user</span>
+<div>
+<h2 class="font-headline-md text-white text-lg md:text-xl">Tactical Incident Reporting</h2>
+<p class="text-on-primary-container text-xs opacity-80">Barangay Commonwealth Enforcement Portal</p>
+</div>
+</div>
+<button class="text-white/70 hover:text-white p-2 bg-white/10 rounded-full transition-colors" id="close-modal-btn">
+<span class="material-symbols-outlined text-2xl">close</span>
+</button>
+</div>
+<!-- Scrollable Form Content -->
+<div class="flex-grow overflow-y-auto p-6 md:p-10 space-y-8 pb-32">
+<!-- Emergency Alert -->
+<div class="bg-error/10 border-l-4 border-error p-4 rounded-xl flex gap-3 items-start">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">report</span>
+<div>
+<p class="font-label-md text-label-md text-error uppercase tracking-wider mb-1">Critical Notice</p>
+<p class="font-body-md text-on-surface text-sm">For immediate life-threatening emergencies, call <span class="font-bold underline">911</span> directly.</p>
+</div>
+</div>
+<!-- Progress Indicator -->
+<div class="flex items-center justify-between px-4 py-4 bg-surface-container-low rounded-2xl max-w-3xl mx-auto">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center font-bold text-sm">1</div>
+<span class="font-label-md text-sm text-secondary font-bold">Classification</span>
+</div>
+<div class="flex-grow h-[2px] bg-secondary/20 mx-4"></div>
+<div class="flex items-center gap-2 opacity-50">
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant bg-surface text-on-surface-variant flex items-center justify-center font-bold text-sm">2</div>
+<span class="font-label-md text-sm text-on-surface-variant">Details</span>
+</div>
+<div class="flex-grow h-[2px] bg-secondary/20 mx-4"></div>
+<div class="flex items-center gap-2 opacity-50">
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant bg-surface text-on-surface-variant flex items-center justify-center font-bold text-sm">3</div>
+<span class="font-label-md text-sm text-on-surface-variant">Review</span>
+</div>
+</div>
+<div class="grid lg:grid-cols-12 gap-8">
+<!-- Left Column -->
+<div class="lg:col-span-7 space-y-8">
+<section class="space-y-4">
+<h3 class="font-headline-md text-lg text-on-surface">Classification</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-3">
+<button class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-secondary bg-secondary/5 text-secondary transition-all">
+<span class="material-symbols-outlined text-3xl mb-1">local_fire_department</span>
+<span class="font-label-md text-xs">Fire Hazard</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-xl border border-outline-variant hover:bg-surface-container-high transition-all text-on-surface-variant">
+<span class="material-symbols-outlined text-3xl mb-1">medical_services</span>
+<span class="font-label-md text-xs">Medical</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-xl border border-outline-variant hover:bg-surface-container-high transition-all text-on-surface-variant">
+<span class="material-symbols-outlined text-3xl mb-1">gavel</span>
+<span class="font-label-md text-xs">Crime</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-xl border border-outline-variant hover:bg-surface-container-high transition-all text-on-surface-variant">
+<span class="material-symbols-outlined text-3xl mb-1">more_horiz</span>
+<span class="font-label-md text-xs">Others</span>
+</button>
+</div>
+<div class="space-y-4 pt-4">
+<div class="space-y-2">
+<label class="font-label-md text-sm text-on-surface-variant">Incident Status</label>
+<div class="flex p-1 bg-surface-container rounded-xl border border-outline-variant/30 w-full">
+<button class="flex-1 py-2 text-xs font-semibold rounded-lg bg-white shadow-sm text-secondary">Ongoing</button>
+<button class="flex-1 py-2 text-xs font-semibold rounded-lg text-on-surface-variant">Happened</button>
+<button class="flex-1 py-2 text-xs font-semibold rounded-lg text-on-surface-variant">Unconfirmed</button>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-md text-sm text-on-surface-variant">Date &amp; Time</label>
+<input class="w-full h-12 rounded-lg border-outline-variant bg-surface-container-low px-4 text-sm" type="datetime-local"/>
+</div>
+</div>
+</section>
+<section class="space-y-4">
+<div class="space-y-2">
+<label class="font-label-md text-sm text-on-surface-variant">Report Title</label>
+<input class="w-full h-12 rounded-lg border-outline-variant bg-surface-container-low px-4" placeholder="e.g. Small brush fire near market" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-md text-sm text-on-surface-variant">Primary Description</label>
+<textarea class="w-full rounded-lg border-outline-variant bg-surface-container-low px-4 py-3" placeholder="Provide as much detail as possible..." rows="4"></textarea>
+</div>
+</section>
+</div>
+<!-- Right Column: Location -->
+<div class="lg:col-span-5">
+<section class="space-y-4 h-full flex flex-col">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-lg text-on-surface">Location</h3>
+<button class="flex items-center gap-1 text-secondary font-label-md text-xs hover:underline">
+<span class="material-symbols-outlined text-sm">my_location</span>
+                                Use GPS
+                            </button>
+</div>
+<div class="relative w-full aspect-square md:flex-grow rounded-2xl overflow-hidden border border-outline-variant/50 shadow-md bg-surface-dim min-h-[250px]">
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCAeU1VLecEVDZkqCZ1Tkw-S3A_1WDTHgz2T6srh9BwFTNVoM7ILpdGyFNysRFMQA47nNfReyKzX6gVMi5xT8D5OgXTPXd7WPbPCuLohNAvrUL9mAyIgXmkybdtTJANKe_3n0BpitHpjj-gVbqd2M8GKT1a_B9b72pkcJuULiH72FpNvft4MmNSH1pn9eEr-wP8g-UFNr-bJAZmYM3qkbm6AbxLao5fdZSF2Wm6BaIRMKdWkQypo19a')"></div>
+<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-full">
+<span class="material-symbols-outlined text-error text-5xl drop-shadow-xl" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<div class="absolute bottom-3 left-3 right-3 bg-white/90 backdrop-blur p-3 rounded-lg flex items-center gap-2 border border-outline-variant/20">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">near_me</span>
+<span class="text-xs font-body-md text-on-surface truncate">Commonwealth Ave, Diliman, Quezon City</span>
+</div>
+</div>
+<p class="text-[10px] text-on-surface-variant px-1 italic">Tap the map to adjust location pin.</p>
+</section>
+</div>
+</div>
+</div>
+<!-- Sticky Footer for Modal -->
+<div class="absolute bottom-0 w-full bg-surface-container/90 backdrop-blur-lg border-t border-outline-variant/30 px-6 py-4 flex gap-4 justify-end z-30">
+<button class="px-6 py-3 border-2 border-secondary text-secondary font-bold rounded-xl text-sm transition-transform hover:bg-secondary/5 active:scale-95" id="save-draft-btn">
+                Save Draft
+            </button>
+<button class="px-8 py-3 bg-secondary text-on-secondary font-bold rounded-xl text-sm shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all">
+                Next Step
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Page Loader Logic
+        const loader = document.getElementById('page-loader');
+        const openDashboardBtn = document.getElementById('open-dashboard-btn');
+
+        // Logic to show loader ONLY when "Open Dashboard" is clicked
+        openDashboardBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Show loader
+            loader.classList.remove('opacity-0', 'pointer-events-none');
+            loader.classList.add('opacity-100');
+            
+            // Simulate navigation to dashboard after a delay
+            setTimeout(() => {
+                // In a real scenario, this would change window.location.href
+                // For this prototype, we'll just hide it and alert or log
+                loader.classList.add('opacity-0', 'pointer-events-none');
+                loader.classList.remove('opacity-100');
+                alert('Success: Secure connection established. Redirecting to your Dashboard...');
+            }, 1500);
+        });
+
+        // Auth State (Simulation)
+        let isLoggedIn = false;
+
+        // Mobile Menu Logic
+        const container = document.getElementById('mobile-drawer-container');
+        const drawer = document.getElementById('mobile-drawer');
+        const openBtn = document.getElementById('mobile-menu-button');
+        const closeBtn = document.getElementById('close-drawer');
+        const overlay = document.getElementById('drawer-overlay');
+
+        function openMenu() {
+            container.classList.remove('invisible');
+            container.classList.add('pointer-events-auto');
+            setTimeout(() => {
+                overlay.classList.add('opacity-100');
+                drawer.classList.remove('translate-x-full');
+            }, 10);
+        }
+
+        function closeMenu() {
+            overlay.classList.remove('opacity-100');
+            drawer.classList.add('translate-x-full');
+            setTimeout(() => {
+                container.classList.add('invisible');
+                container.classList.remove('pointer-events-auto');
+            }, 300);
+        }
+
+        openBtn?.addEventListener('click', openMenu);
+        closeBtn?.addEventListener('click', closeMenu);
+        overlay?.addEventListener('click', closeMenu);
+
+        // Modal Logic
+        const modalContainer = document.getElementById('incident-modal-container');
+        const triggerBtn = document.getElementById('file-report-trigger');
+        const closeIconBtn = document.getElementById('close-modal-btn');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const authBtn = document.getElementById('auth-button');
+
+        function openModal() {
+            if (!isLoggedIn) {
+                alert('Access Restricted: Please login or register to file a formal incident report.');
+                return;
+            }
+            modalContainer.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeModal() {
+            modalContainer.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        triggerBtn?.addEventListener('click', openModal);
+        closeIconBtn?.addEventListener('click', closeModal);
+        modalOverlay?.addEventListener('click', closeModal);
+
+        authBtn?.addEventListener('click', (e) => {
+            if (authBtn.textContent.trim() === 'Login/Register') {
+                e.preventDefault();
+                isLoggedIn = true;
+                authBtn.textContent = 'Account Profile';
+                authBtn.classList.replace('bg-secondary', 'bg-primary-container');
+                alert('Demo: You are now logged in. Try filing a report!');
+            }
+        });
+
+        // Reveal animations
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.classList.add('opacity-0', 'translate-y-10', 'transition-all', 'duration-700');
+            observer.observe(card);
+        });
+    });
+</script>
+</body></html>

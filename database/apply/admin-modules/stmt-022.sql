@@ -1,0 +1,1 @@
+alter table public.inquiries enable row level security

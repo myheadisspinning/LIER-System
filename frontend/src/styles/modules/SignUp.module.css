@@ -1,0 +1,9 @@
+.bgImage {
+  background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAinozEcN_Xg0g3AcMReb5sIncfZCB9wXGI8GVObFUvqlUI87aFgLHhBr9c6WlJPrfU0VWdPlQJWzLcQzNecT14DvKSN3VRvTrs6-XEfZ0jvY_Z3-tH3uAOEqrcOzaBPmTOQHO3pGKuPQL-_HKkDElIveMQADrnTnJfhIXJaResR4Mfud2vdwU8jaG6fDjWHYv1-BMiIbyPtnn9tQRPtg4jE06uDc13-4QPB9JnSHIz0bi_3Hmw4-LY20paeGH-2hMIkg");
+  background-size: cover;
+  background-position: center;
+}
+
+.overlayGradient {
+  background: linear-gradient(to bottom right, rgba(19, 27, 46, 0.9), rgba(0, 81, 213, 0.6));
+}

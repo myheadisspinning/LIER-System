@@ -1,0 +1,1 @@
+grant execute on function public.admin_suspend_user(uuid, boolean) to authenticated

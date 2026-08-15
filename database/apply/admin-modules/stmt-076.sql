@@ -1,0 +1,1 @@
+grant execute on function public.admin_list_users() to authenticated

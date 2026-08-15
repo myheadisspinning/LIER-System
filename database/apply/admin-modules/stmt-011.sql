@@ -1,0 +1,1 @@
+drop policy if exists "officials public read visible" on public.officials

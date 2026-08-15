@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reports &amp; Analytics Center - Barangay Culiat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-surface": "#0b1c30",
+                      "tertiary-fixed-dim": "#f9bd22",
+                      "error-red": "#ef4444",
+                      "primary-container": "#131b2e",
+                      "surface": "#f8f9ff",
+                      "surface-container-low": "#eff4ff",
+                      "secondary-fixed": "#dbe1ff",
+                      "on-background": "#0b1c30",
+                      "secondary-fixed-dim": "#b4c5ff",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-container": "#a87d00",
+                      "surface-bg": "#f8fafc",
+                      "warning-amber": "#f59e0b",
+                      "primary-fixed": "#dae2fd",
+                      "tertiary-container": "#261a00",
+                      "background": "#f8f9ff",
+                      "surface-dim": "#cbdbf5",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#316bf3",
+                      "outline": "#76777d",
+                      "on-tertiary": "#ffffff",
+                      "success-green": "#22c55e",
+                      "surface-tint": "#565e74",
+                      "on-tertiary-fixed": "#261a00",
+                      "sidebar-bg": "#0f172a",
+                      "surface-bright": "#f8f9ff",
+                      "text-on-dark": "#cbd5e1",
+                      "on-secondary-container": "#fefcff",
+                      "border-subtle": "#e2e8f0",
+                      "surface-container-highest": "#d3e4fe",
+                      "tertiary": "#000000",
+                      "on-secondary-fixed-variant": "#003ea8",
+                      "on-surface-variant": "#45464d",
+                      "secondary": "#0051d5",
+                      "surface-container": "#e5eeff",
+                      "on-error": "#ffffff",
+                      "inverse-on-surface": "#eaf1ff",
+                      "error": "#ba1a1a",
+                      "on-primary": "#ffffff",
+                      "primary-fixed-dim": "#bec6e0",
+                      "surface-container-high": "#dce9ff",
+                      "on-primary-fixed": "#131b2e",
+                      "surface-variant": "#d3e4fe",
+                      "tertiary-fixed": "#ffdfa0",
+                      "outline-variant": "#c6c6cd",
+                      "on-primary-container": "#7c839b",
+                      "on-secondary-fixed": "#00174b",
+                      "primary": "#000000",
+                      "on-error-container": "#93000a",
+                      "inverse-primary": "#bec6e0",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-surface": "#213145",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "on-primary-fixed-variant": "#3f465c"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "sm": "12px",
+                      "base": "8px",
+                      "sidebar-width": "256px",
+                      "gutter": "24px",
+                      "md": "24px",
+                      "xs": "4px",
+                      "lg": "48px",
+                      "margin-desktop": "40px"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Poppins"
+                      ],
+                      "headline-md": [
+                              "Poppins"
+                      ],
+                      "display-lg": [
+                              "Poppins"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "caps-xs": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.025em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "15px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "30px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "caps-xs": [
+                              "10px",
+                              {
+                                      "lineHeight": "12px",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface-bg text-on-surface h-screen overflow-hidden flex">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-sidebar-width bg-sidebar-bg flex flex-col h-full py-md z-50">
+<!-- Brand Header -->
+<div class="px-md mb-8 flex items-center gap-3">
+<img alt="Barangay Seal" class="w-10 h-10 rounded-full bg-white p-1 object-cover" data-alt="Official seal of Barangay Culiat, featuring modern authoritative design elements, vector style, deep navy and gold." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzoxOjL6os8dFKi3ZZ0oySE8ZKSp0Tu62YGWacaLrW1PO-P31NciI2Iso0QxDDARxEFLbHM09galyH2bJduFjLeZ0ih9TgpHi3KmAakbdClWgUb3l0flCVh64VfNzaKd51zmutgX9i4Qc84HU4UZtiz3H6m7S9XFCwoJ2ub-oWC6k9NFBCHdLm3z6CTHCKFJ1MMD7hNFCkLA5NUr-1RigpPYDUdxNIhfOluQJpoxgFqyXu9ixwEmbB"/>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary">Commonwealth Command</h1>
+<p class="font-caps-xs text-caps-xs text-text-on-dark/70 uppercase tracking-widest mt-1">Operational HQ</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 overflow-y-auto px-sm space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/5 transition-colors text-text-on-dark/70 hover:text-on-primary" href="#">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<div>
+<div class="font-label-md text-label-md">Command Dashboard</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/5 transition-colors text-text-on-dark/70 hover:text-on-primary" href="#">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">emergency</span>
+<div>
+<div class="font-label-md text-label-md">Incident Reporting</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/5 transition-colors text-text-on-dark/70 hover:text-on-primary" href="#">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<div>
+<div class="font-label-md text-label-md">AI Dispatch</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/5 transition-colors text-text-on-dark/70 hover:text-on-primary" href="#">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">forum</span>
+<div>
+<div class="font-label-md text-label-md">Contacts &amp; Inbox</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/5 transition-colors text-text-on-dark/70 hover:text-on-primary" href="#">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">description</span>
+<div>
+<div class="font-label-md text-label-md">Tracking &amp; Docs</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/5 transition-colors text-text-on-dark/70 hover:text-on-primary" href="#">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<div>
+<div class="font-label-md text-label-md">Evidence Vault</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/5 transition-colors text-text-on-dark/70 hover:text-on-primary" href="#">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+<div>
+<div class="font-label-md text-label-md">Status Notifications</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/5 transition-colors text-text-on-dark/70 hover:text-on-primary" href="#">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">assignment_turned_in</span>
+<div>
+<div class="font-label-md text-label-md">Case Monitoring</div>
+</div>
+</a>
+<!-- Active Tab -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded bg-secondary-container/20 text-on-secondary-container border-l-4 border-secondary opacity-90 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px] text-secondary" data-weight="fill" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<div>
+<div class="font-label-md text-label-md">Reports &amp; Analytics</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/5 transition-colors text-text-on-dark/70 hover:text-on-primary" href="#">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">groups</span>
+<div>
+<div class="font-label-md text-label-md">Officials MGMT</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/5 transition-colors text-text-on-dark/70 hover:text-on-primary" href="#">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">history</span>
+<div>
+<div class="font-label-md text-label-md">Audit Logs</div>
+</div>
+</a>
+</div>
+<!-- CTA & Footer -->
+<div class="px-md mt-6 space-y-4">
+<button class="w-full bg-secondary hover:bg-secondary/90 text-on-secondary font-label-md text-label-md py-3 px-4 rounded-xl shadow-2xl border-4 border-white flex items-center justify-center gap-2 transition-transform hover:scale-95 duration-150">
+<span class="material-symbols-outlined text-[18px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add</span>
+                Quick Dispatch
+            </button>
+<div class="pt-4 border-t border-white/10 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded hover:bg-white/5 transition-colors text-text-on-dark/70 hover:text-on-primary font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined text-[16px]">settings</span>
+                    Settings
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded hover:bg-white/5 transition-colors text-text-on-dark/70 hover:text-on-primary font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined text-[16px]">help</span>
+                    Support
+                </a>
+</div>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="ml-sidebar-width flex-1 flex flex-col h-screen overflow-hidden bg-surface-bg">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-container docked full-width top-0 border-b border-outline-variant flat no shadows flex justify-between items-center w-full h-16 px-gutter flex-shrink-0 z-40">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">Commonwealth Command Center</span>
+</div>
+<div class="flex items-center gap-6">
+<!-- Search -->
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="bg-slate-100 border-none rounded-full py-1.5 pl-10 pr-4 text-body-sm focus:ring-1 focus:ring-secondary focus:outline-none w-64 text-on-surface placeholder:text-on-surface-variant/70" placeholder="Search records, cases..." type="text"/>
+</div>
+<!-- Nav Links -->
+<nav class="hidden md:flex items-center gap-6 font-label-md text-label-md">
+<a class="text-on-surface-variant hover:text-secondary transition-colors py-1" href="#">Live Map</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors py-1" href="#">Unit Status</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors py-1" href="#">Resource Grid</a>
+</nav>
+<!-- Actions -->
+<div class="flex items-center gap-3 border-l border-outline-variant pl-6">
+<button class="bg-error-red/10 text-error-red hover:bg-error-red/20 px-3 py-1.5 rounded-lg font-label-sm text-label-sm flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[16px]">warning</span>
+                        Emergency Alert
+                    </button>
+<button class="text-on-surface-variant hover:text-secondary transition-colors p-1">
+<span class="material-symbols-outlined text-[24px]">account_circle</span>
+</button>
+<button class="text-on-surface-variant hover:text-secondary transition-colors p-1">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+</button>
+<img alt="Administrator Profile" class="w-8 h-8 rounded-full border border-border-subtle object-cover ml-2" data-alt="Profile photo of an authoritative barangay administrator in a professional government setting, clear lighting, confident expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyM5X3thZDz35n2ZWVWv4ecFGhnLDZ0448wUYFEpfRszb0YiPMwep4UEtAvHO6VBdQMpV1QLMa8rMtRB2qhjnMtu8Z8xevXRW1LDFt1YgsEQYqpIGFazDD2kEy9IRd0hPKoVerpoBUxKp-BbVWDmYIlV1NCE_sJc0Iyo0h2IkYNu7eVnSNOo3QHIgTzxQZz2YHO6IeHENT2ki8YOkibGox4VMpHylZoFzzEedzp1HPWww5h3ZP6AQP"/>
+</div>
+</div>
+</header>
+<!-- Main Scrollable Canvas -->
+<main class="flex-1 overflow-y-auto p-margin-desktop">
+<!-- Page Header & Action Bar -->
+<div class="flex flex-col xl:flex-row xl:items-end justify-between gap-6 mb-8">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface mb-2">Reports &amp; Analytics Center</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Generate official statistical summaries, crime incident trends, and barangay safety compliance reports.</p>
+</div>
+<div class="flex items-center gap-3 bg-white p-2 rounded-xl border border-border-subtle shadow-sm shrink-0">
+<div class="relative">
+<select class="appearance-none bg-slate-50 border-none text-body-sm font-label-md rounded-lg py-2 pl-3 pr-8 focus:ring-1 focus:ring-secondary text-on-surface cursor-pointer">
+<option>Custom: Past 30 Days</option>
+<option>This Week</option>
+<option>Year to Date</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">calendar_month</span>
+</div>
+<div class="w-px h-6 bg-border-subtle"></div>
+<div class="relative">
+<select class="appearance-none bg-slate-50 border-none text-body-sm font-label-md rounded-lg py-2 pl-3 pr-8 focus:ring-1 focus:ring-secondary text-on-surface cursor-pointer">
+<option>All Puroks (1-7)</option>
+<option>Purok 1</option>
+<option>Purok 2</option>
+<option>Purok 3</option>
+<option>Purok 4</option>
+<option>Purok 5</option>
+<option>Purok 6</option>
+<option>Purok 7</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">location_on</span>
+</div>
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded-lg font-label-md text-label-md flex items-center gap-2 hover:bg-secondary/90 transition-colors shadow-sm ml-2">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Export Official Report
+                    </button>
+</div>
+</div>
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-gutter">
+<!-- Card 1 -->
+<div class="bg-white rounded-xl p-6 border border-border-subtle shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[64px] text-primary">gavel</span>
+</div>
+<p class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-widest mb-4">Total Incident Volume</p>
+<div class="flex items-end gap-3">
+<h3 class="font-headline-lg text-headline-lg text-on-surface">184</h3>
+<span class="font-body-sm text-body-sm text-success-green flex items-center bg-success-green/10 px-2 py-0.5 rounded-full mb-1">
+<span class="material-symbols-outlined text-[14px]">trending_down</span>
+                            12% vs last mo
+                        </span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-2">Active &amp; Closed Cases</p>
+</div>
+<!-- Card 2 -->
+<div class="bg-white rounded-xl p-6 border border-border-subtle shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[64px] text-secondary">timer</span>
+</div>
+<p class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-widest mb-4">Avg Response Time</p>
+<div class="flex items-end gap-3">
+<h3 class="font-headline-lg text-headline-lg text-on-surface">8.4 <span class="text-headline-md text-on-surface-variant">Mins</span></h3>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-2">Tanod Dispatch Speed</p>
+</div>
+<!-- Card 3 -->
+<div class="bg-white rounded-xl p-6 border border-border-subtle shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[64px] text-success-green">handshake</span>
+</div>
+<p class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-widest mb-4">Mediation Success</p>
+<div class="flex items-end gap-3">
+<h3 class="font-headline-lg text-headline-lg text-on-surface">88.2%</h3>
+<span class="font-body-sm text-body-sm text-success-green flex items-center bg-success-green/10 px-2 py-0.5 rounded-full mb-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                            +3.1%
+                        </span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-2">Lupon Tagapamayapa Settled</p>
+</div>
+<!-- Card 4 -->
+<div class="bg-white rounded-xl p-6 border border-border-subtle shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[64px] text-warning-amber">star</span>
+</div>
+<p class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-widest mb-4">Community Satisfaction</p>
+<div class="flex items-end gap-3">
+<h3 class="font-headline-lg text-headline-lg text-on-surface">4.6 <span class="text-headline-md text-on-surface-variant">/ 5.0</span></h3>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-2">Resident App Feedback</p>
+</div>
+</div>
+<!-- Analytics Row -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-gutter">
+<!-- Stacked Bar Chart Placeholder -->
+<div class="lg:col-span-7 bg-white border border-border-subtle rounded-xl p-6 shadow-sm">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-widest mb-1">Geospatial Distribution</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">Incident Frequency by Purok &amp; Category</h3>
+</div>
+<button class="text-on-surface-variant hover:text-secondary"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<!-- Faux Chart Area -->
+<div class="h-64 flex items-end gap-4 relative mt-8">
+<!-- Y Axis -->
+<div class="absolute left-0 top-0 bottom-8 flex flex-col justify-between text-label-sm text-on-surface-variant">
+<span>40</span><span>30</span><span>20</span><span>10</span><span>0</span>
+</div>
+<!-- Bars -->
+<div class="flex-1 ml-8 flex items-end justify-around h-full pb-8 relative">
+<!-- Grid lines -->
+<div class="absolute inset-0 border-b border-border-subtle"></div>
+<div class="absolute inset-0 top-1/4 border-b border-border-subtle border-dashed"></div>
+<div class="absolute inset-0 top-2/4 border-b border-border-subtle border-dashed"></div>
+<div class="absolute inset-0 top-3/4 border-b border-border-subtle border-dashed"></div>
+<!-- Bar 1 -->
+<div class="w-12 h-[80%] flex flex-col-reverse group relative z-10">
+<div class="bg-primary-container h-[40%] rounded-b-sm group-hover:opacity-90"></div>
+<div class="bg-secondary h-[30%] group-hover:opacity-90"></div>
+<div class="bg-warning-amber h-[20%] group-hover:opacity-90"></div>
+<div class="bg-error-red h-[10%] rounded-t-sm group-hover:opacity-90"></div>
+<div class="absolute -bottom-6 w-full text-center font-label-sm text-on-surface-variant">P1</div>
+</div>
+<!-- Bar 2 -->
+<div class="w-12 h-[60%] flex flex-col-reverse group relative z-10">
+<div class="bg-primary-container h-[50%] rounded-b-sm"></div>
+<div class="bg-secondary h-[20%]"></div>
+<div class="bg-warning-amber h-[30%] rounded-t-sm"></div>
+<div class="absolute -bottom-6 w-full text-center font-label-sm text-on-surface-variant">P2</div>
+</div>
+<!-- Bar 3 -->
+<div class="w-12 h-[90%] flex flex-col-reverse group relative z-10">
+<div class="bg-primary-container h-[30%] rounded-b-sm"></div>
+<div class="bg-secondary h-[40%]"></div>
+<div class="bg-warning-amber h-[10%]"></div>
+<div class="bg-error-red h-[20%] rounded-t-sm"></div>
+<div class="absolute -bottom-6 w-full text-center font-label-sm text-on-surface-variant">P3</div>
+</div>
+<!-- Bar 4 -->
+<div class="w-12 h-[45%] flex flex-col-reverse group relative z-10">
+<div class="bg-primary-container h-[60%] rounded-b-sm"></div>
+<div class="bg-secondary h-[40%] rounded-t-sm"></div>
+<div class="absolute -bottom-6 w-full text-center font-label-sm text-on-surface-variant">P4</div>
+</div>
+<!-- Bar 5 -->
+<div class="w-12 h-[70%] flex flex-col-reverse group relative z-10">
+<div class="bg-primary-container h-[40%] rounded-b-sm"></div>
+<div class="bg-secondary h-[30%]"></div>
+<div class="bg-warning-amber h-[30%] rounded-t-sm"></div>
+<div class="absolute -bottom-6 w-full text-center font-label-sm text-on-surface-variant">P5</div>
+</div>
+<!-- Bar 6 -->
+<div class="w-12 h-[55%] flex flex-col-reverse group relative z-10">
+<div class="bg-primary-container h-[50%] rounded-b-sm"></div>
+<div class="bg-secondary h-[30%]"></div>
+<div class="bg-error-red h-[20%] rounded-t-sm"></div>
+<div class="absolute -bottom-6 w-full text-center font-label-sm text-on-surface-variant">P6</div>
+</div>
+<!-- Bar 7 -->
+<div class="w-12 h-[85%] flex flex-col-reverse group relative z-10">
+<div class="bg-primary-container h-[20%] rounded-b-sm"></div>
+<div class="bg-secondary h-[30%]"></div>
+<div class="bg-warning-amber h-[20%]"></div>
+<div class="bg-error-red h-[30%] rounded-t-sm"></div>
+<div class="absolute -bottom-6 w-full text-center font-label-sm text-on-surface-variant">P7</div>
+</div>
+</div>
+</div>
+<!-- Legend -->
+<div class="flex justify-center gap-6 mt-4 pt-4 border-t border-border-subtle">
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-sm bg-primary-container"></div><span class="font-label-sm text-on-surface-variant">Dispute</span></div>
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-sm bg-secondary"></div><span class="font-label-sm text-on-surface-variant">Noise</span></div>
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-sm bg-warning-amber"></div><span class="font-label-sm text-on-surface-variant">Theft</span></div>
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-sm bg-error-red"></div><span class="font-label-sm text-on-surface-variant">Emergency</span></div>
+</div>
+</div>
+<!-- Donut Chart Placeholder -->
+<div class="lg:col-span-5 bg-white border border-border-subtle rounded-xl p-6 shadow-sm flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-widest mb-1">Operational Metrics</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">Resolution &amp; Dispatch Efficiency</h3>
+</div>
+<button class="text-on-surface-variant hover:text-secondary"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<div class="flex-1 flex flex-col justify-center items-center relative">
+<!-- Circular representation -->
+<div class="w-48 h-48 rounded-full border-[16px] border-slate-100 relative">
+<!-- Faux segments (Visual representation only) -->
+<div class="absolute inset-[-16px] rounded-full border-[16px] border-success-green border-r-transparent border-b-transparent border-l-transparent rotate-45"></div>
+<div class="absolute inset-[-16px] rounded-full border-[16px] border-secondary border-t-transparent border-b-transparent border-l-transparent rotate-12"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="font-headline-lg text-headline-lg text-on-surface">84%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Clearance Rate</span>
+</div>
+</div>
+<!-- Legend List -->
+<div class="w-full mt-8 space-y-3">
+<div class="flex items-center justify-between font-label-sm">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-success-green"></div>
+<span class="text-on-surface">Resolved Locally</span>
+</div>
+<span class="font-bold">62%</span>
+</div>
+<div class="flex items-center justify-between font-label-sm">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+<span class="text-on-surface">Ongoing Mediation</span>
+</div>
+<span class="font-bold">22%</span>
+</div>
+<div class="flex items-center justify-between font-label-sm">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-warning-amber"></div>
+<span class="text-on-surface">Escalated to PNP Station 14</span>
+</div>
+<span class="font-bold">11%</span>
+</div>
+<div class="flex items-center justify-between font-label-sm">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-outline-variant"></div>
+<span class="text-on-surface">Dismissed / Invalid</span>
+</div>
+<span class="font-bold">5%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Reports Archive Table -->
+<div class="bg-white border border-border-subtle rounded-xl shadow-sm overflow-hidden mb-8">
+<div class="p-6 border-b border-border-subtle flex justify-between items-center bg-slate-50/50">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Generated Reports Archive</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Access and manage previously generated official documents.</p>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="bg-white border border-border-subtle rounded-lg py-1.5 pl-9 pr-4 text-body-sm focus:ring-1 focus:ring-secondary focus:outline-none w-48 text-on-surface" placeholder="Search archive..." type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-white border-b border-border-subtle">
+<th class="py-3 px-6 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Report Name</th>
+<th class="py-3 px-6 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Type</th>
+<th class="py-3 px-6 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Date Generated</th>
+<th class="py-3 px-6 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Generated By</th>
+<th class="py-3 px-6 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">File Size</th>
+<th class="py-3 px-6 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm divide-y divide-border-subtle">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 transition-colors group">
+<td class="py-4 px-6 font-medium text-on-surface flex items-center gap-3">
+<span class="material-symbols-outlined text-error-red">picture_as_pdf</span>
+                                    October Monthly Safety Summary
+                                </td>
+<td class="py-4 px-6">
+<span class="bg-surface-container-high text-on-surface px-2.5 py-1 rounded-md text-xs font-medium">Statistical</span>
+</td>
+<td class="py-4 px-6 text-on-surface-variant">Nov 01, 2023 - 08:30 AM</td>
+<td class="py-4 px-6 text-on-surface-variant flex items-center gap-2">
+<img alt="User" class="w-6 h-6 rounded-full object-cover" data-alt="Small avatar of a female clerk in government uniform, professional lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwZGtl81059283iPOIIeFMafIO1nsWpBhhdi6-1if_7bGlCTlbMnZgM5N7cJ-cWQT4DXzgtyaEWiQODcvKRlQ1VMuuFtNpwqNrisx62-cCzSIG993PxwRZcjd675ZTxWE4jtJSXU9uyGDrZBetkcOP1Zj_13AfD2zrHpgM4VhGLrtmN2afZ3z5j1htq-cICxq2B7J3yTAHrJh7ENOdL2OvKRhSG99iOEmW4FjFSZ-ItIqBBjOPijmK"/>
+                                    Admin. Santos
+                                </td>
+<td class="py-4 px-6 text-on-surface-variant">2.4 MB</td>
+<td class="py-4 px-6 text-right space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-secondary" title="Download PDF"><span class="material-symbols-outlined text-[20px]">download</span></button>
+<button class="text-on-surface-variant hover:text-secondary" title="Email to Captain"><span class="material-symbols-outlined text-[20px]">mail</span></button>
+<button class="text-on-surface-variant hover:text-secondary" title="Print"><span class="material-symbols-outlined text-[20px]">print</span></button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 transition-colors group">
+<td class="py-4 px-6 font-medium text-on-surface flex items-center gap-3">
+<span class="material-symbols-outlined text-success-green">table_chart</span>
+                                    Q3 Crime Incident Raw Data
+                                </td>
+<td class="py-4 px-6">
+<span class="bg-surface-container-high text-on-surface px-2.5 py-1 rounded-md text-xs font-medium">Raw Data (Excel)</span>
+</td>
+<td class="py-4 px-6 text-on-surface-variant">Oct 15, 2023 - 14:15 PM</td>
+<td class="py-4 px-6 text-on-surface-variant flex items-center gap-2">
+<img alt="User" class="w-6 h-6 rounded-full object-cover" data-alt="Small avatar of a male analyst in polo barong, well lit office." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlqEJ6CG_uu4cWekfAtUhvGFgQl-LxyvAHsB-NqkptDi18NOjZqxXzSTYPCAZp9OKUpo5MYINI01Bg0zlt9qeN5NegMcyRHV4ulMi1aWG6laHPJZ4LUrLuYOsO3MmwXxclHkAIeyfJ12uXyNsdH-a6PiS2p2X2nSAZ_LAOFAh2YDeXgWOKZcJK-jFlZCQLzRUq-0uhuFRPBD5WPN2IKARJVD_bUJ8TXjJl1WaDh_aI7CCZxR0BvQHW"/>
+                                    Analyst Reyes
+                                </td>
+<td class="py-4 px-6 text-on-surface-variant">5.1 MB</td>
+<td class="py-4 px-6 text-right space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-secondary" title="Download Excel"><span class="material-symbols-outlined text-[20px]">download</span></button>
+<button class="text-on-surface-variant hover:text-secondary" title="Email to Captain"><span class="material-symbols-outlined text-[20px]">mail</span></button>
+<button class="text-on-surface-variant hover:text-secondary" title="Print"><span class="material-symbols-outlined text-[20px]">print</span></button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50 transition-colors group">
+<td class="py-4 px-6 font-medium text-on-surface flex items-center gap-3">
+<span class="material-symbols-outlined text-error-red">picture_as_pdf</span>
+                                    Purok 4 Special Dispute Mediation Report
+                                </td>
+<td class="py-4 px-6">
+<span class="bg-surface-container-high text-on-surface px-2.5 py-1 rounded-md text-xs font-medium">Compliance</span>
+</td>
+<td class="py-4 px-6 text-on-surface-variant">Oct 02, 2023 - 09:00 AM</td>
+<td class="py-4 px-6 text-on-surface-variant flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary-container text-white flex items-center justify-center text-xs font-bold">L</div>
+                                    Lupon Head Cruz
+                                </td>
+<td class="py-4 px-6 text-on-surface-variant">1.1 MB</td>
+<td class="py-4 px-6 text-right space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-secondary" title="Download PDF"><span class="material-symbols-outlined text-[20px]">download</span></button>
+<button class="text-on-surface-variant hover:text-secondary" title="Email to Captain"><span class="material-symbols-outlined text-[20px]">mail</span></button>
+<button class="text-on-surface-variant hover:text-secondary" title="Print"><span class="material-symbols-outlined text-[20px]">print</span></button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50 transition-colors group">
+<td class="py-4 px-6 font-medium text-on-surface flex items-center gap-3">
+<span class="material-symbols-outlined text-error-red">picture_as_pdf</span>
+                                    September Monthly Safety Summary
+                                </td>
+<td class="py-4 px-6">
+<span class="bg-surface-container-high text-on-surface px-2.5 py-1 rounded-md text-xs font-medium">Statistical</span>
+</td>
+<td class="py-4 px-6 text-on-surface-variant">Oct 01, 2023 - 08:15 AM</td>
+<td class="py-4 px-6 text-on-surface-variant flex items-center gap-2">
+<img alt="User" class="w-6 h-6 rounded-full object-cover" data-alt="Small avatar of a female clerk in government uniform, professional lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUnIZThZSIEIW-93OoqajqYrthz6h7-gu1q7nmdkjTYhPvk18LMtWPW4EKRV8AuemIh2SVXWYeqGJgaymVBXHVp86b8sFHIXwKTRWnbxPCX8E4jhtbS8eXS4qT3TUACMADKRkYrNFj8uUT4UE69ty5NMC6nfaU_-_FZBZf2Yj5JI12vqu7tuRbMHrkYx-lF_2eO5xvtOE_kAvfLnRFal7B59JETXls2dTjjqRcIK2Yb2tqsuW4G-SF"/>
+                                    Admin. Santos
+                                </td>
+<td class="py-4 px-6 text-on-surface-variant">2.3 MB</td>
+<td class="py-4 px-6 text-right space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-secondary" title="Download PDF"><span class="material-symbols-outlined text-[20px]">download</span></button>
+<button class="text-on-surface-variant hover:text-secondary" title="Email to Captain"><span class="material-symbols-outlined text-[20px]">mail</span></button>
+<button class="text-on-surface-variant hover:text-secondary" title="Print"><span class="material-symbols-outlined text-[20px]">print</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 border-t border-border-subtle flex items-center justify-between bg-white">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Showing 1 to 4 of 48 reports</span>
+<div class="flex gap-1">
+<button class="px-3 py-1 border border-border-subtle rounded text-on-surface-variant hover:bg-slate-50 disabled:opacity-50"><span class="material-symbols-outlined text-[16px] align-middle">chevron_left</span></button>
+<button class="px-3 py-1 bg-primary-container text-white rounded font-label-sm">1</button>
+<button class="px-3 py-1 border border-border-subtle rounded text-on-surface hover:bg-slate-50 font-label-sm">2</button>
+<button class="px-3 py-1 border border-border-subtle rounded text-on-surface hover:bg-slate-50 font-label-sm">3</button>
+<span class="px-2 py-1 text-on-surface-variant">...</span>
+<button class="px-3 py-1 border border-border-subtle rounded text-on-surface-variant hover:bg-slate-50"><span class="material-symbols-outlined text-[16px] align-middle">chevron_right</span></button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

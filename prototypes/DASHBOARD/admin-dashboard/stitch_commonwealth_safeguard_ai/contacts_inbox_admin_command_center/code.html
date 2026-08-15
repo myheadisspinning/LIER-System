@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Commonwealth Command Center - Contacts &amp; Inbox</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#00174b",
+                        "surface-dim": "#cbdbf5",
+                        "surface-container-high": "#dce9ff",
+                        "outline": "#76777d",
+                        "secondary-container": "#316bf3",
+                        "on-error": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "success-green": "#22c55e",
+                        "surface-variant": "#d3e4fe",
+                        "on-primary-fixed": "#131b2e",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary-fixed": "#261a00",
+                        "secondary": "#0051d5",
+                        "outline-variant": "#c6c6cd",
+                        "background": "#f8f9ff",
+                        "primary-fixed-dim": "#bec6e0",
+                        "primary": "#000000",
+                        "tertiary-fixed-dim": "#f9bd22",
+                        "surface-bright": "#f8f9ff",
+                        "text-on-dark": "#cbd5e1",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#7c839b",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "secondary-fixed": "#dbe1ff",
+                        "error-container": "#ffdad6",
+                        "error-red": "#ef4444",
+                        "on-tertiary-container": "#a87d00",
+                        "inverse-primary": "#bec6e0",
+                        "surface-container": "#e5eeff",
+                        "tertiary-container": "#261a00",
+                        "primary-fixed": "#dae2fd",
+                        "on-surface-variant": "#45464d",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "primary-container": "#131b2e",
+                        "inverse-surface": "#213145",
+                        "on-secondary-container": "#fefcff",
+                        "warning-amber": "#f59e0b",
+                        "sidebar-bg": "#0f172a",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#565e74",
+                        "border-subtle": "#e2e8f0",
+                        "surface-bg": "#f8fafc",
+                        "tertiary-fixed": "#ffdfa0",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-low": "#eff4ff",
+                        "tertiary": "#000000",
+                        "on-error-container": "#93000a",
+                        "on-background": "#0b1c30"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "lg": "48px",
+                        "sidebar-width": "256px",
+                        "base": "8px",
+                        "md": "24px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "sm": "12px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Poppins"],
+                        "caps-xs": ["Inter"],
+                        "headline-lg": ["Poppins"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Poppins"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.025em", "fontWeight": "500" }],
+                        "body-md": ["15px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "caps-xs": ["10px", { "lineHeight": "12px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "headline-lg": ["30px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["36px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-surface-bg text-on-surface h-screen overflow-hidden flex font-body-sm">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-sidebar-width bg-sidebar-bg flex flex-col py-md z-50">
+<!-- Header -->
+<div class="px-md mb-8 flex items-center gap-3">
+<img alt="Barangay Seal" class="w-10 h-10 object-contain" data-alt="A highly detailed illustration of a professional government or barangay command seal, featuring crisp lines, official heraldry, and a modern clean design. The emblem is illuminated by soft, high-key lighting to enhance a tactical yet approachable aesthetic, using deep navy blues and bright gold accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1hR4PlR3J17-wNr-qXZCsJwM9jvCyr1EyAE8jPJnjwrG6xpuRo-cGtLZqZUzpFiMyp63w31yhOT04528Ehfuh3Y51fY0EklbOCwGS8Bh8tFBojhID47bNecAQsaZ_OmZSIS6LhzbcSjUIr52j3R8Y3dhXSYkwLgv2yAxTTZDEPKLNaYXohJp7LsgKciRLqgYV4LYbfT5ncAZOYtU9g7ZA4rKwLJ_jPxq4aVFbeaj8BOLmbDg_4X8M"/>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary">Commonwealth Command</h1>
+<p class="font-caps-xs text-caps-xs text-text-on-dark/70 uppercase">Operational HQ</p>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<div class="flex-1 overflow-y-auto px-xs pb-md">
+<!-- Command Dashboard -->
+<a class="flex items-center gap-3 px-sm py-2 mx-2 mb-1 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<div>
+<div class="font-label-md text-label-md group-hover:text-on-primary">Command Dashboard</div>
+</div>
+</a>
+<!-- Incident Reporting -->
+<a class="flex items-center gap-3 px-sm py-2 mx-2 mb-1 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="emergency">emergency</span>
+<div>
+<div class="font-label-md text-label-md group-hover:text-on-primary">Incident Reporting</div>
+</div>
+</a>
+<!-- AI Dispatch -->
+<a class="flex items-center gap-3 px-sm py-2 mx-2 mb-1 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<div>
+<div class="font-label-md text-label-md group-hover:text-on-primary">AI Dispatch</div>
+</div>
+</a>
+<!-- Contacts & Inbox (Active) -->
+<a class="flex items-center gap-3 px-sm py-2 mx-2 mb-1 rounded-DEFAULT bg-secondary-container/20 text-on-secondary-container border-l-4 border-secondary opacity-90 transition-all" href="#">
+<span class="material-symbols-outlined icon-fill text-secondary" data-icon="forum">forum</span>
+<div>
+<div class="font-label-md text-label-md text-on-secondary-container font-semibold">Contacts &amp; Inbox</div>
+</div>
+</a>
+<!-- Tracking & Docs -->
+<a class="flex items-center gap-3 px-sm py-2 mx-2 mb-1 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<div>
+<div class="font-label-md text-label-md group-hover:text-on-primary">Tracking &amp; Docs</div>
+</div>
+</a>
+<!-- Evidence Vault -->
+<a class="flex items-center gap-3 px-sm py-2 mx-2 mb-1 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<div>
+<div class="font-label-md text-label-md group-hover:text-on-primary">Evidence Vault</div>
+</div>
+</a>
+<!-- Status Notifications -->
+<a class="flex items-center gap-3 px-sm py-2 mx-2 mb-1 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<div>
+<div class="font-label-md text-label-md group-hover:text-on-primary">Status Notifications</div>
+</div>
+</a>
+<!-- Case Monitoring -->
+<a class="flex items-center gap-3 px-sm py-2 mx-2 mb-1 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<div>
+<div class="font-label-md text-label-md group-hover:text-on-primary">Case Monitoring</div>
+</div>
+</a>
+<!-- Reports & Analytics -->
+<a class="flex items-center gap-3 px-sm py-2 mx-2 mb-1 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<div>
+<div class="font-label-md text-label-md group-hover:text-on-primary">Reports &amp; Analytics</div>
+</div>
+</a>
+<!-- Officials MGMT -->
+<a class="flex items-center gap-3 px-sm py-2 mx-2 mb-1 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<div>
+<div class="font-label-md text-label-md group-hover:text-on-primary">Officials MGMT</div>
+</div>
+</a>
+<!-- Audit Logs -->
+<a class="flex items-center gap-3 px-sm py-2 mx-2 mb-1 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<div>
+<div class="font-label-md text-label-md group-hover:text-on-primary">Audit Logs</div>
+</div>
+</a>
+</div>
+<!-- CTA & Footer -->
+<div class="px-md mt-auto pt-4 border-t border-white/10">
+<button class="w-full bg-secondary text-on-secondary font-label-md text-label-md py-3 rounded-full mb-4 shadow-2xl shadow-secondary/50 hover:bg-secondary-fixed-variant transition-colors flex items-center justify-center gap-2 border-[4px] border-surface-bg">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                Quick Dispatch
+            </button>
+<div class="flex gap-2">
+<a class="flex-1 flex items-center justify-center gap-2 px-2 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="settings">settings</span>
+<span class="font-caps-xs text-caps-xs group-hover:text-on-primary uppercase">Settings</span>
+</a>
+<a class="flex-1 flex items-center justify-center gap-2 px-2 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="help">help</span>
+<span class="font-caps-xs text-caps-xs group-hover:text-on-primary uppercase">Support</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-sidebar-width flex flex-col h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full h-16 px-gutter bg-surface dark:bg-surface-container border-b border-outline-variant shrink-0 z-40">
+<!-- Brand / Title -->
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">Commonwealth Command Center</span>
+<span class="text-outline-variant">|</span>
+<span class="font-headline-md text-headline-md font-medium text-on-surface-variant">Contacts &amp; Inbox (Inquiries &amp; Emergency Intake)</span>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 bg-error-container text-on-error-container px-3 py-1.5 rounded-full mr-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="warning">warning</span>
+<span class="font-label-sm text-label-sm font-semibold">4 Unread Messages Require Triage</span>
+</div>
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded-DEFAULT font-label-md text-label-md hover:scale-95 duration-150 transition-transform">
+                    Emergency Alert
+                </button>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<button class="p-2 hover:bg-surface-variant rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="account_circle">account_circle</span></button>
+<button class="p-2 hover:bg-surface-variant rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="settings">settings</span></button>
+</div>
+<img alt="Administrator Profile" class="w-8 h-8 rounded-full border border-border-subtle object-cover ml-2" data-alt="A professional headshot of a female administrator wearing a crisp white collared shirt. She has a neutral but focused expression. The background is a plain light slate color. Soft, even lighting creates a clean, modern corporate feel suitable for an enterprise application avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHrM8iWJM5Kjza9M6AvcT3iu7RbOWhMWtxBHJ8shewec91TEqpftsgA3k4itVjG_CXtsw8OGyG6vyExitNy8dMBb6KGqiJZlqRyDZc4ZTmrwOrVzbR7xtxZAoMYeIhRtuHl_ALCfWQEUJagS8VS8EkaNgyLrVRduZkUwwiWsGiyP-KjeKhjTOFsIDiu9KxGepXaezmB_T0aAXeUV9bbzKMbVCSEw6SHRvQ5SRmAaKiZHYrXlEiDnDE"/>
+</div>
+</header>
+<!-- Workspace Canvas -->
+<main class="flex-1 flex overflow-hidden p-6 bg-surface-bg gap-6">
+<!-- Panel 1: Thread List (Left) -->
+<section class="w-[320px] bg-white border border-border-subtle rounded-xl flex flex-col overflow-hidden shrink-0">
+<div class="p-4 border-b border-border-subtle bg-surface/50">
+<div class="font-caps-xs text-caps-xs text-on-surface-variant uppercase mb-3">Message Threads</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]" data-icon="search">search</span>
+<input class="w-full bg-[#f1f5f9] border-none rounded-DEFAULT py-2 pl-10 pr-3 text-body-sm focus:ring-1 focus:ring-secondary outline-none placeholder-outline" placeholder="Search residents..." type="text"/>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto">
+<!-- Active Thread -->
+<div class="p-4 border-b border-border-subtle bg-surface-variant/30 cursor-pointer border-l-4 border-secondary">
+<div class="flex justify-between items-start mb-1">
+<div class="font-label-md text-label-md font-bold text-on-surface flex items-center gap-1">
+                                Juan Dela Cruz
+                                <div class="w-2 h-2 rounded-full bg-error-red"></div>
+</div>
+<span class="font-label-sm text-label-sm text-outline">10:42 AM</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate mb-2">May nag-aaway po dito sa may court, kailangan po ng tanod.</p>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 bg-surface-dim text-on-surface-variant rounded-DEFAULT font-caps-xs text-caps-xs">APP</span>
+<span class="px-2 py-0.5 bg-error-container text-on-error-container rounded-DEFAULT font-caps-xs text-caps-xs">UNREAD</span>
+</div>
+</div>
+<!-- Read Thread -->
+<div class="p-4 border-b border-border-subtle hover:bg-surface-bg cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-1">
+<div class="font-label-md text-label-md font-medium text-on-surface">Maria Santos</div>
+<span class="font-label-sm text-label-sm text-outline">09:15 AM</span>
+</div>
+<p class="font-body-sm text-body-sm text-outline truncate mb-2">Salamat po sa mabilis na pag-responde kahapon.</p>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 bg-surface-dim text-on-surface-variant rounded-DEFAULT font-caps-xs text-caps-xs">SMS</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Panel 2: Active Chat (Middle) -->
+<section class="flex-1 bg-white border border-border-subtle rounded-xl flex flex-col overflow-hidden shadow-sm">
+<!-- Chat Header -->
+<div class="p-4 border-b border-border-subtle flex justify-between items-center bg-surface/50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-headline-md text-headline-md">
+                            JD
+                        </div>
+<div>
+<div class="flex items-center gap-1">
+<h2 class="font-headline-md text-headline-md text-on-surface">Juan Dela Cruz</h2>
+<span class="material-symbols-outlined text-[16px] text-success-green icon-fill" data-icon="check_circle">check_circle</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Resident, Purok 3</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="p-2 text-on-surface-variant hover:bg-surface-variant rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="call">call</span></button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-variant rounded-full transition-colors"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</div>
+</div>
+<!-- Chat Stream -->
+<div class="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-surface-bg/50">
+<!-- Date Divider -->
+<div class="flex justify-center">
+<span class="px-3 py-1 bg-surface-dim text-on-surface-variant rounded-full font-caps-xs text-caps-xs uppercase tracking-wider">Today</span>
+</div>
+<!-- Resident Bubble -->
+<div class="flex justify-start">
+<div class="max-w-[75%] bg-surface border border-border-subtle rounded-xl rounded-tl-none p-3 shadow-sm">
+<p class="font-body-md text-body-md text-on-surface">Magandang umaga po. May nag-aaway po dito sa may covered court sa Purok 3. Nagkakasakitan na po sila.</p>
+<div class="text-right mt-1">
+<span class="font-label-sm text-label-sm text-outline">10:42 AM</span>
+</div>
+</div>
+</div>
+<!-- Command Bubble -->
+<div class="flex justify-end">
+<div class="max-w-[75%] bg-secondary-fixed border border-secondary-fixed-dim rounded-xl rounded-tr-none p-3 shadow-sm">
+<p class="font-body-md text-body-md text-on-secondary-fixed">Copy, Juan. Naka-receive kami ng report. I-didispatch na namin ang patrol unit ngayon din. Manatiling ligtas at lumayo sa gulo.</p>
+<div class="text-right mt-1 flex items-center justify-end gap-1">
+<span class="font-label-sm text-label-sm text-on-secondary-fixed-variant">10:45 AM</span>
+<span class="material-symbols-outlined text-[14px] text-secondary" data-icon="done_all">done_all</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Response Bar -->
+<div class="p-4 border-t border-border-subtle bg-white">
+<div class="flex items-end gap-2">
+<div class="flex-1 relative">
+<textarea class="w-full bg-[#f1f5f9] border border-transparent rounded-lg py-3 px-4 text-body-md focus:border-secondary focus:ring-0 outline-none resize-none" placeholder="Type a response..." rows="2"></textarea>
+<div class="absolute bottom-2 left-2 flex gap-1">
+<button class="p-1.5 text-outline hover:text-on-surface-variant transition-colors rounded-DEFAULT hover:bg-surface-dim"><span class="material-symbols-outlined text-[20px]" data-icon="attach_file">attach_file</span></button>
+<button class="p-1.5 text-outline hover:text-on-surface-variant transition-colors rounded-DEFAULT hover:bg-surface-dim flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]" data-icon="list_alt">list_alt</span>
+<span class="font-caps-xs text-caps-xs">Templates</span>
+</button>
+</div>
+</div>
+<button class="bg-secondary text-on-secondary h-12 px-6 rounded-lg font-label-md text-label-md font-semibold hover:bg-secondary-fixed-variant transition-colors flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Panel 3: Quick Actions (Right) -->
+<section class="w-[300px] bg-white border border-border-subtle rounded-xl flex flex-col overflow-hidden shrink-0 shadow-sm">
+<div class="p-4 border-b border-border-subtle bg-surface/50">
+<div class="font-caps-xs text-caps-xs text-on-surface-variant uppercase">Context &amp; Actions</div>
+</div>
+<div class="p-4 overflow-y-auto">
+<!-- Resident Details Card -->
+<div class="bg-surface-bg border border-border-subtle rounded-DEFAULT p-4 mb-6">
+<div class="font-caps-xs text-caps-xs text-outline font-bold uppercase mb-2">Resident Profile</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Location:</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">Purok 3</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Contact:</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">0917-123-4567</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Verification:</span>
+<span class="px-2 py-0.5 bg-success-green/10 text-success-green rounded-DEFAULT font-caps-xs text-caps-xs">Level 2</span>
+</div>
+</div>
+</div>
+<!-- History -->
+<div class="mb-6">
+<div class="font-caps-xs text-caps-xs text-outline font-bold uppercase mb-3">Recent Blotter History</div>
+<div class="flex items-start gap-2 mb-2">
+<span class="material-symbols-outlined text-[16px] text-outline mt-0.5" data-icon="history">history</span>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Noise Complaint</div>
+<div class="font-label-sm text-label-sm text-outline">Oct 12, 2023 - Resolved</div>
+</div>
+</div>
+<div class="text-center mt-2">
+<a class="font-label-sm text-label-sm text-secondary hover:underline" href="#">View Full Profile</a>
+</div>
+</div>
+<!-- Tactical Actions -->
+<div class="flex flex-col gap-3">
+<button class="w-full bg-secondary text-on-secondary py-2 px-4 rounded-DEFAULT font-label-md text-label-md font-semibold hover:bg-secondary-fixed-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="add_circle">add_circle</span>
+                            Convert to Formal Report
+                        </button>
+<button class="w-full bg-surface-dim text-on-surface py-2 px-4 rounded-DEFAULT font-label-md text-label-md font-medium hover:bg-outline-variant transition-colors flex items-center justify-center gap-2 border border-border-subtle">
+<span class="material-symbols-outlined text-[18px]" data-icon="check">check</span>
+                            Mark as Resolved
+                        </button>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body></html>

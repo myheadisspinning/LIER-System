@@ -1,0 +1,1 @@
+drop policy if exists "broadcasts public read sent" on public.broadcasts

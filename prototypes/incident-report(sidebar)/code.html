@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Incident Reporting &amp; Case Master Log</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#565e74",
+                    "error-red": "#ef4444",
+                    "outline": "#76777d",
+                    "on-background": "#0b1c30",
+                    "surface-container-high": "#dce9ff",
+                    "tertiary-container": "#261a00",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "surface-container": "#e5eeff",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#213145",
+                    "on-surface": "#0b1c30",
+                    "on-error-container": "#93000a",
+                    "primary-fixed-dim": "#bec6e0",
+                    "primary-container": "#131b2e",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "error": "#ba1a1a",
+                    "surface-bg": "#0B1329",
+                    "primary-fixed": "#dae2fd",
+                    "surface": "#111827",
+                    "tertiary-fixed": "#ffdfa0",
+                    "secondary-container": "#316bf3",
+                    "on-primary-container": "#7c839b",
+                    "outline-variant": "#1F2937",
+                    "on-secondary-container": "#fefcff",
+                    "success-green": "#22c55e",
+                    "error-container": "#ffdad6",
+                    "secondary": "#0051d5",
+                    "inverse-primary": "#bec6e0",
+                    "on-primary-fixed": "#131b2e",
+                    "border-subtle": "#1F2937",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "secondary-fixed": "#dbe1ff",
+                    "on-surface-variant": "#9ca3af",
+                    "warning-amber": "#f59e0b",
+                    "tertiary": "#000000",
+                    "surface-dim": "#cbdbf5",
+                    "primary": "#3b82f6",
+                    "on-tertiary-fixed": "#261a00",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "on-secondary-fixed": "#00174b",
+                    "surface-bright": "#f8f9ff",
+                    "surface-variant": "#1F2937",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#1f2937",
+                    "on-tertiary-container": "#a87d00",
+                    "tertiary-fixed-dim": "#f9bd22",
+                    "surface-container-highest": "#374151",
+                    "background": "#0B1329",
+                    "sidebar-bg": "#0B1329",
+                    "text-on-dark": "#e5e7eb",
+                    "surface-container-lowest": "#000000",
+                    "on-tertiary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "xs": "4px",
+                    "gutter": "24px",
+                    "md": "24px",
+                    "sidebar-width": "256px",
+                    "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "display-lg": ["Poppins"],
+                    "headline-md": ["Poppins"],
+                    "headline-lg": ["Poppins"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "caps-xs": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "display-lg": ["36px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["30px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.025em", "fontWeight": "500"}],
+                    "body-md": ["15px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "caps-xs": ["10px", {"lineHeight": "12px", "letterSpacing": "0.1em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-text-on-dark font-body-md h-screen overflow-hidden flex">
+<!-- SideNavBar -->
+<nav class="flex flex-col w-64 h-full z-50 bg-sidebar-bg border-r border-border-subtle fixed left-0 top-0">
+<div class="p-6 border-b border-border-subtle">
+<h1 class="font-headline-lg text-headline-lg font-black text-white">Commonwealth</h1>
+<p class="font-caps-xs text-caps-xs text-on-surface-variant tracking-wider mt-1">SAFETY COMMAND</p>
+</div>
+<div class="flex-1 overflow-y-auto py-4">
+<ul class="space-y-1">
+<li>
+<a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-label-md text-label-md">Command Dashboard</span>
+</a>
+</li>
+<li>
+<a class="bg-secondary-container/20 text-white border-l-4 border-secondary-container flex items-center px-4 py-3 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">emergency</span>
+<span class="font-label-md text-label-md">Incident Reporting</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">smart_toy</span>
+<span class="font-label-md text-label-md">AI Dispatch</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">mail</span>
+<span class="font-label-md text-label-md flex-1">Contacts &amp; Inbox</span>
+<span class="bg-error-red text-white text-xs px-2 py-0.5 rounded-full">4</span>
+</a>
+</li>
+<li class="px-4 py-2 mt-4">
+<span class="font-caps-xs text-caps-xs text-on-surface-variant uppercase">Case Management</span>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">folder_shared</span>
+<span class="font-label-md text-label-md">Tracking &amp; Docs</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">inventory_2</span>
+<span class="font-label-md text-label-md">Evidence Vault</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">notifications_active</span>
+<span class="font-label-md text-label-md">Status Notifications</span>
+</a>
+</li>
+<li class="px-4 py-2 mt-4">
+<span class="font-caps-xs text-caps-xs text-on-surface-variant uppercase">Intelligence</span>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">monitoring</span>
+<span class="font-label-md text-label-md">Case Monitoring</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">analytics</span>
+<span class="font-label-md text-label-md">Reports &amp; Analytics</span>
+</a>
+</li>
+<li class="px-4 py-2 mt-4">
+<span class="font-caps-xs text-caps-xs text-on-surface-variant uppercase">Administration</span>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">badge</span>
+<span class="font-label-md text-label-md">Officials MGMT</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">security</span>
+<span class="font-label-md text-label-md">Audit Logs</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="font-label-md text-label-md">Account Settings</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="p-4 border-t border-border-subtle">
+<button class="w-full bg-secondary hover:bg-secondary/90 text-white font-label-md text-label-md py-3 px-4 rounded-lg flex items-center justify-center transition-colors shadow-2xl">
+<span class="material-symbols-outlined mr-2 text-[20px]">add</span>
+                New Dispatch
+            </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-sidebar-width flex flex-col h-full bg-background overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex flex-col justify-center min-h-[80px] px-md w-full border-b border-border-subtle bg-sidebar-bg shrink-0">
+<div class="flex justify-between items-center w-full">
+<div>
+<h2 class="font-headline-md text-headline-md font-bold text-white">Incident Reporting &amp; Case Master Log</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Monitor, triage, and update active barangay incident reports and blotter entries.</p>
+</div>
+<div class="flex items-center space-x-4">
+<button class="text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Action Bar -->
+<div class="px-md py-4 border-b border-border-subtle bg-surface flex items-center justify-between shrink-0">
+<div class="flex items-center space-x-4 flex-1">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full bg-surface-container-low border border-border-subtle text-white rounded-md pl-10 pr-3 py-2 font-body-sm text-body-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary" placeholder="Search Incident ID..." type="text"/>
+</div>
+<select class="bg-surface-container-low border border-border-subtle text-white rounded-md px-3 py-2 font-body-sm text-body-sm focus:outline-none focus:border-secondary">
+<option>All Puroks</option>
+<option>Purok 1</option>
+<option>Purok 2</option>
+<option>Purok 3</option>
+<option>Purok 4</option>
+<option>Purok 5</option>
+<option>Purok 6</option>
+<option>Purok 7</option>
+</select>
+<select class="bg-surface-container-low border border-border-subtle text-white rounded-md px-3 py-2 font-body-sm text-body-sm focus:outline-none focus:border-secondary">
+<option>All Statuses</option>
+<option>Pending</option>
+<option>Dispatched</option>
+<option>Resolved</option>
+</select>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white font-label-md text-label-md py-2 px-4 rounded-md flex items-center transition-colors">
+<span class="material-symbols-outlined mr-2 text-[18px]">add</span>
+                Log New Incident
+            </button>
+</div>
+<!-- Split View Content -->
+<div class="flex flex-1 overflow-hidden">
+<!-- Left: Data Table (70%) -->
+<div class="w-[70%] flex flex-col border-r border-border-subtle bg-background overflow-hidden">
+<div class="flex-1 overflow-auto">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface z-10 shadow-sm border-b border-border-subtle">
+<tr>
+<th class="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Case ID</th>
+<th class="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Timestamp</th>
+<th class="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Category</th>
+<th class="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Location</th>
+<th class="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Severity</th>
+<th class="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Responder</th>
+<th class="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Status</th>
+<th class="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-subtle font-body-sm text-body-sm">
+<tr class="hover:bg-white/5 transition-colors cursor-pointer bg-white/5 border-l-4 border-secondary">
+<td class="py-3 px-4 font-medium text-secondary-fixed-dim">#INC-2026-0842</td>
+<td class="py-3 px-4 text-text-on-dark">10:42 AM</td>
+<td class="py-3 px-4 text-text-on-dark">Physical Altercation</td>
+<td class="py-3 px-4 text-on-surface-variant">Purok 4, Market Area</td>
+<td class="py-3 px-4"><span class="bg-error-red/20 text-error-red px-2 py-1 rounded-full text-xs font-semibold">High</span></td>
+<td class="py-3 px-4 text-text-on-dark">Tanod Unit 4</td>
+<td class="py-3 px-4"><span class="bg-warning-amber/20 text-warning-amber px-2 py-1 rounded-full text-xs font-semibold">Dispatched</span></td>
+<td class="py-3 px-4 text-right">
+<button class="text-secondary-fixed-dim hover:text-white mr-2"><span class="material-symbols-outlined text-[18px]">visibility</span></button>
+<button class="text-on-surface-variant hover:text-white"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors cursor-pointer">
+<td class="py-3 px-4 font-medium text-secondary-fixed-dim">#INC-2026-0841</td>
+<td class="py-3 px-4 text-text-on-dark">09:15 AM</td>
+<td class="py-3 px-4 text-text-on-dark">Disturbance</td>
+<td class="py-3 px-4 text-on-surface-variant">Purok 2, Plaza</td>
+<td class="py-3 px-4"><span class="bg-warning-amber/20 text-warning-amber px-2 py-1 rounded-full text-xs font-semibold">Medium</span></td>
+<td class="py-3 px-4 text-on-surface-variant">-</td>
+<td class="py-3 px-4"><span class="bg-surface-container-highest text-text-on-dark px-2 py-1 rounded-full text-xs font-semibold">Pending</span></td>
+<td class="py-3 px-4 text-right">
+<button class="text-secondary-fixed-dim hover:text-white mr-2"><span class="material-symbols-outlined text-[18px]">visibility</span></button>
+<button class="text-on-surface-variant hover:text-white"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors cursor-pointer">
+<td class="py-3 px-4 font-medium text-secondary-fixed-dim">#INC-2026-0840</td>
+<td class="py-3 px-4 text-text-on-dark">08:30 AM</td>
+<td class="py-3 px-4 text-text-on-dark">Theft</td>
+<td class="py-3 px-4 text-on-surface-variant">Purok 1, Main St</td>
+<td class="py-3 px-4"><span class="bg-error-red/20 text-error-red px-2 py-1 rounded-full text-xs font-semibold">High</span></td>
+<td class="py-3 px-4 text-text-on-dark">Tanod Unit 1</td>
+<td class="py-3 px-4"><span class="bg-success-green/20 text-success-green px-2 py-1 rounded-full text-xs font-semibold">Resolved</span></td>
+<td class="py-3 px-4 text-right">
+<button class="text-secondary-fixed-dim hover:text-white mr-2"><span class="material-symbols-outlined text-[18px]">visibility</span></button>
+<button class="text-on-surface-variant hover:text-white"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- RLS Footer -->
+<div class="p-3 bg-surface border-t border-border-subtle flex justify-between items-center text-xs text-on-surface-variant">
+<span>Showing 3 of 42 Incidents</span>
+<div class="flex space-x-2">
+<button class="hover:text-white disabled:opacity-50"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button>
+<button class="hover:text-white"><span class="material-symbols-outlined text-[18px]">chevron_right</span></button>
+</div>
+</div>
+</div>
+<!-- Right: Detail Side Panel (30%) -->
+<div class="w-[30%] bg-surface flex flex-col overflow-hidden">
+<div class="p-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface z-10">
+<h3 class="font-headline-md text-headline-md font-bold text-white">#INC-2026-0842</h3>
+<div class="flex space-x-2">
+<button class="text-on-surface-variant hover:text-white"><span class="material-symbols-outlined">print</span></button>
+<button class="text-on-surface-variant hover:text-white"><span class="material-symbols-outlined">close</span></button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- Status Banner -->
+<div class="bg-warning-amber/10 border border-warning-amber/30 p-4 rounded-lg flex items-start">
+<span class="material-symbols-outlined text-warning-amber mr-3 mt-0.5">local_shipping</span>
+<div>
+<p class="font-label-sm text-label-sm text-warning-amber uppercase tracking-wider mb-1">Dispatch Status</p>
+<p class="font-body-md text-body-md text-white font-medium">Assigned Team: Tanod Unit 4 (In-Transit)</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">ETA: 3 minutes</p>
+</div>
+</div>
+<!-- Details -->
+<div>
+<h4 class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Incident Details</h4>
+<div class="bg-surface-container-low rounded-lg p-4 border border-border-subtle space-y-3">
+<div class="grid grid-cols-2 gap-4">
+<div>
+<p class="text-xs text-on-surface-variant">Category</p>
+<p class="text-sm text-white">Physical Altercation</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant">Severity</p>
+<p class="text-sm text-error-red">High Urgency</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant">Location</p>
+<p class="text-sm text-white">Purok 4, Market Area</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant">Time Reported</p>
+<p class="text-sm text-white">10:42 AM Today</p>
+</div>
+</div>
+<div class="pt-2">
+<p class="text-xs text-on-surface-variant mb-1">Description</p>
+<p class="text-sm text-white">Ongoing fistfight between two vendors near the main entrance. Crowd gathering. Weapon reported but unconfirmed.</p>
+</div>
+</div>
+</div>
+<!-- Complainant Info -->
+<div>
+<h4 class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Complainant Info</h4>
+<div class="bg-surface-container-low rounded-lg p-4 border border-border-subtle flex items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-text-on-dark mr-3">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<p class="text-sm font-medium text-white">Juan Dela Cruz (Resident)</p>
+<p class="text-xs text-on-surface-variant">Contact: 0917-XXX-XXXX</p>
+</div>
+</div>
+</div>
+<!-- Attachments -->
+<div>
+<h4 class="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Attachments</h4>
+<div class="grid grid-cols-3 gap-2">
+<div class="aspect-square bg-surface-container-highest rounded-md border border-border-subtle flex items-center justify-center relative overflow-hidden group">
+<img class="object-cover w-full h-full opacity-70 group-hover:opacity-100 transition-opacity" data-alt="A blurry photo showing a crowd gathered in a busy market area during daytime, tense atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfl55pqU3xvsz4X4d4dexV73-WWkvj6rWfYWt3jFm24QYTtSzAKsh0S8dLVkm3U7d2X0J9UZq3KiZdgTy26LHikVbln46E_D2-jn89XSsMK5dbe7Oro1mqXMzk4qnmzm14EUd0E3Y_R1lRItHRYxxLWkF2TILUixzX9-4V43VWBnjAL8M-kPohbeKmbII8qaBtC_ot43SI170WWb8FPk2cPbNJCF0JFSLoWadv5AI6RZz7QZSVJcla"/>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/50 transition-opacity">
+<span class="material-symbols-outlined text-white">zoom_in</span>
+</div>
+</div>
+<div class="aspect-square bg-surface-container-highest rounded-md border border-border-subtle border-dashed flex items-center justify-center text-on-surface-variant hover:text-white hover:border-white transition-colors cursor-pointer">
+<span class="material-symbols-outlined">add_photo_alternate</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Panel Actions -->
+<div class="p-4 border-t border-border-subtle bg-surface space-y-2 sticky bottom-0">
+<button class="w-full bg-success-green hover:bg-success-green/90 text-white font-label-md text-label-md py-2 px-4 rounded-md transition-colors flex justify-center items-center">
+<span class="material-symbols-outlined mr-2 text-[18px]">check_circle</span>
+                        Mark as Resolved
+                    </button>
+<div class="flex space-x-2">
+<button class="flex-1 bg-surface-container-low hover:bg-surface-container-highest border border-border-subtle text-white font-label-md text-label-md py-2 px-4 rounded-md transition-colors text-sm">
+                            Transfer to Vault
+                        </button>
+<button class="flex-1 bg-surface-container-low hover:bg-surface-container-highest border border-border-subtle text-white font-label-md text-label-md py-2 px-4 rounded-md transition-colors text-sm">
+                            Print Blotter
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

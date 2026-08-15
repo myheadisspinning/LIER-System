@@ -1,0 +1,2 @@
+-- 6a) presence (online / last-seen for portal heartbeat)
+--     Heartbeat upserts own row every 30s

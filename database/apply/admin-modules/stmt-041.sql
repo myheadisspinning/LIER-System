@@ -1,0 +1,1 @@
+grant execute on function public.get_unread_counts() to authenticated

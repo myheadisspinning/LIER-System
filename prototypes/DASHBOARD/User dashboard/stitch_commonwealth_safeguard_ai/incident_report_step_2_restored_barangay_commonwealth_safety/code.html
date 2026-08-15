@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tactical Incident Reporting - Barangay Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Poppins:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#f8f9ff",
+                        "outline-variant": "#c6c6cd",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "on-secondary-fixed": "#00174b",
+                        "surface-variant": "#d3e4fe",
+                        "border-subtle": "#e2e8f0",
+                        "sidebar-bg": "#0f172a",
+                        "tertiary": "#000000",
+                        "on-error-container": "#93000a",
+                        "background": "#f8f9ff",
+                        "inverse-surface": "#213145",
+                        "inverse-primary": "#bec6e0",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#7c839b",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "surface-container": "#e5eeff",
+                        "text-on-dark": "#cbd5e1",
+                        "secondary-container": "#316bf3",
+                        "on-surface-variant": "#45464d",
+                        "surface-bg": "#f8fafc",
+                        "primary-fixed-dim": "#bec6e0",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#0051d5",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-surface": "#0b1c30",
+                        "tertiary-fixed": "#ffdfa0",
+                        "outline": "#76777d",
+                        "tertiary-container": "#261a00",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#0b1c30",
+                        "surface-tint": "#565e74",
+                        "warning-amber": "#f59e0b",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-container": "#131b2e",
+                        "surface-bright": "#f8f9ff",
+                        "tertiary-fixed-dim": "#f9bd22",
+                        "on-primary-fixed": "#131b2e",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "primary-fixed": "#dae2fd",
+                        "on-primary": "#ffffff",
+                        "error-red": "#ef4444",
+                        "on-tertiary-container": "#a87d00",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#fefcff",
+                        "success-green": "#22c55e",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#261a00",
+                        "secondary-fixed": "#dbe1ff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-dim": "#cbdbf5",
+                        "primary": "#000000",
+                        "ai-cyan": "#06b6d4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "margin-desktop": "40px",
+                        "md": "24px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "sidebar-width": "256px",
+                        "lg": "48px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Poppins"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Poppins"],
+                        "caps-xs": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Poppins"]
+                    },
+                    "fontSize": {
+                        "body-md": ["15px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.025em", "fontWeight": "500" }],
+                        "display-lg": ["36px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "caps-xs": ["10px", { "lineHeight": "12px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "36px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+    </style>
+</head>
+<body class="bg-sidebar-bg flex items-center justify-center min-h-screen p-md font-body-md antialiased text-on-surface">
+<div class="bg-surface-container-lowest w-full max-w-5xl rounded-xl shadow-2xl overflow-hidden flex flex-col relative border border-border-subtle h-[90vh]">
+<!-- Header -->
+<header class="bg-sidebar-bg px-md py-sm flex justify-between items-center text-on-secondary shrink-0">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-3xl" style='font-variation-settings: "FILL" 1;'>security</span>
+<div>
+<h1 class="text-headline-md font-headline-md font-bold leading-tight tracking-tight">Tactical Incident Reporting</h1>
+<p class="text-label-sm font-label-sm text-text-on-dark/70 font-medium">Barangay Commonwealth Enforcement Portal</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors border border-white/10">
+<span class="material-symbols-outlined text-sm text-text-on-dark">close</span>
+</button>
+</header>
+<div class="flex-1 overflow-y-auto p-md flex flex-col gap-md">
+<!-- Critical Notice -->
+<div class="bg-error-container border border-error-red/20 rounded-lg p-sm flex items-start gap-sm">
+<span class="material-symbols-outlined text-error-red mt-[2px]" style='font-variation-settings: "FILL" 1;'>error</span>
+<div>
+<h3 class="font-caps-xs text-caps-xs text-error-red font-bold uppercase tracking-widest">CRITICAL NOTICE</h3>
+<p class="font-body-sm text-body-sm text-on-surface">For immediate life-threatening emergencies, call <strong class="underline font-bold">911</strong> directly.</p>
+</div>
+</div>
+<!-- Stepper -->
+<div class="flex items-center justify-center px-lg py-sm"><div class="flex items-center gap-sm"><div class="w-8 h-8 rounded-full bg-success-green text-on-secondary flex items-center justify-center font-label-sm text-label-sm font-bold shadow-sm"><span class="material-symbols-outlined text-sm">check</span></div><span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Classification</span></div><div class="flex-1 h-px bg-success-green mx-sm"></div><div class="flex items-center gap-sm"><div class="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-label-sm text-label-sm font-bold shadow-sm ring-4 ring-secondary/20">2</div><span class="font-label-sm text-label-sm text-secondary font-bold">Details</span></div><div class="flex-1 h-px bg-border-subtle mx-sm"></div><div class="flex items-center gap-sm"><div class="w-8 h-8 rounded-full bg-surface-variant text-outline flex items-center justify-center font-label-sm text-label-sm font-bold border border-border-subtle">3</div><span class="font-label-sm text-label-sm text-outline font-medium">Review</span></div></div>
+<!-- Main Form Content -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-md h-full pb-md relative">
+<div class="flex flex-col gap-md overflow-y-auto pr-xs pb-lg">
+<h2 class="font-headline-md text-headline-md text-on-surface">Step 2: Details &amp; Media</h2>
+<div class="space-y-sm">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs font-bold uppercase tracking-wider text-outline">Primary Description</label>
+<textarea class="w-full min-h-[150px] bg-surface-container-lowest border border-border-subtle rounded-lg p-sm font-label-md text-label-md text-on-surface focus:outline-none focus:border-secondary resize-none placeholder-outline-variant shadow-inner transition-all" placeholder="Provide a detailed account of the incident, including specific actions observed, individuals involved, and immediate risks..."></textarea>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs font-bold uppercase tracking-wider text-outline">Additional Context (Optional)</label>
+<input class="w-full bg-surface-container-lowest border border-border-subtle rounded-lg py-sm px-sm font-label-md text-label-md text-on-surface focus:outline-none focus:border-secondary shadow-inner transition-all" placeholder="e.g. Weather conditions, lighting, or nearby landmarks" type="text"/>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-md pb-lg">
+<div class="bg-surface-container-low rounded-xl border border-border-subtle p-md space-y-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">attachment</span>
+<h3 class="font-label-md text-label-md font-bold text-on-surface">Evidence Upload</h3>
+</div>
+<div class="grid grid-cols-3 gap-xs">
+<button class="flex flex-col items-center gap-1 p-2 rounded-lg border border-border-subtle bg-surface-container-lowest hover:border-secondary transition-all">
+<span class="material-symbols-outlined text-lg">videocam</span>
+<span class="text-[10px] font-bold uppercase">CCTV / Video</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 rounded-lg border-2 border-secondary bg-secondary-fixed/10 text-secondary">
+<span class="material-symbols-outlined text-lg">photo_camera</span>
+<span class="text-[10px] font-bold uppercase">Photo / Image</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 rounded-lg border border-border-subtle bg-surface-container-lowest hover:border-secondary transition-all">
+<span class="material-symbols-outlined text-lg">mic</span>
+<span class="text-[10px] font-bold uppercase">Audio</span>
+</button>
+</div>
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center gap-sm bg-surface-container-lowest/50 hover:bg-surface-container-lowest transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-4xl text-outline-variant">cloud_upload</span>
+<div class="text-center">
+<p class="font-label-sm text-label-sm font-bold text-on-surface">Click to upload or drag and drop</p>
+<p class="text-[10px] text-outline-variant uppercase tracking-tighter">PNG, JPG, MP4 or WAV (Max 50MB)</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="bg-surface-container-low border-t border-border-subtle p-md flex justify-end gap-sm shrink-0"><button class="px-md py-sm rounded-lg border border-secondary text-secondary font-label-md text-label-md hover:bg-secondary-fixed-dim/20 transition-colors bg-surface-container-lowest flex items-center gap-1"><span class="material-symbols-outlined text-sm">arrow_back</span> Back</button><button class="px-md py-sm rounded-lg bg-secondary text-on-secondary font-label-md text-label-md hover:bg-secondary/90 transition-colors shadow-sm flex items-center gap-1">Next: Final Review <span class="material-symbols-outlined text-sm">arrow_forward</span></button></div>
+</div>
+</body></html>

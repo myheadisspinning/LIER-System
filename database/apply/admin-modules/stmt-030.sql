@@ -1,0 +1,1 @@
+alter table public.inquiry_messages enable row level security

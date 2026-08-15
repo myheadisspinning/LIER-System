@@ -1,0 +1,538 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Status Notifications &amp; Public Broadcasting - Commonwealth Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bg": "#f8fafc",
+                    "secondary-container": "#316bf3",
+                    "border-subtle": "#e2e8f0",
+                    "success-green": "#22c55e",
+                    "tertiary-container": "#261a00",
+                    "on-surface-variant": "#45464d",
+                    "background": "#f8f9ff",
+                    "primary-container": "#131b2e",
+                    "on-error-container": "#93000a",
+                    "on-secondary-container": "#fefcff",
+                    "tertiary-fixed-dim": "#f9bd22",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#cbdbf5",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "error-red": "#ef4444",
+                    "primary-fixed": "#dae2fd",
+                    "surface-container-low": "#eff4ff",
+                    "secondary-fixed": "#dbe1ff",
+                    "on-tertiary": "#ffffff",
+                    "surface-tint": "#565e74",
+                    "surface-container-high": "#dce9ff",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#f8f9ff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-variant": "#d3e4fe",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "secondary": "#0051d5",
+                    "surface-container": "#e5eeff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "on-tertiary-container": "#a87d00",
+                    "on-tertiary-fixed": "#261a00",
+                    "inverse-surface": "#213145",
+                    "tertiary-fixed": "#ffdfa0",
+                    "on-error": "#ffffff",
+                    "outline-variant": "#c6c6cd",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "warning-amber": "#f59e0b",
+                    "on-secondary-fixed": "#00174b",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-background": "#0b1c30",
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#bec6e0",
+                    "inverse-on-surface": "#eaf1ff",
+                    "tertiary": "#000000",
+                    "surface-container-highest": "#d3e4fe",
+                    "text-on-dark": "#cbd5e1",
+                    "on-primary-fixed": "#131b2e",
+                    "surface": "#f8f9ff",
+                    "primary": "#000000",
+                    "error": "#ba1a1a",
+                    "on-surface": "#0b1c30",
+                    "outline": "#76777d",
+                    "sidebar-bg": "#0f172a",
+                    "on-primary-container": "#7c839b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "base": "8px",
+                    "sm": "12px",
+                    "md": "24px",
+                    "margin-desktop": "40px",
+                    "lg": "48px",
+                    "xs": "4px",
+                    "sidebar-width": "256px"
+            },
+            "fontFamily": {
+                    "caps-xs": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Poppins"
+                    ],
+                    "body-sm": [
+                            "Inter"
+                    ],
+                    "label-sm": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Poppins"
+                    ],
+                    "headline-md": [
+                            "Poppins"
+                    ]
+            },
+            "fontSize": {
+                    "caps-xs": [
+                            "10px",
+                            {
+                                    "lineHeight": "12px",
+                                    "letterSpacing": "0.1em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "display-lg": [
+                            "36px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-md": [
+                            "15px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.025em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-lg": [
+                            "30px",
+                            {
+                                    "lineHeight": "36px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-md": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-surface-bg text-on-surface font-body-sm overflow-hidden flex h-screen">
+<!-- SideNavBar (Shared Component) -->
+<nav class="fixed left-0 top-0 h-screen w-sidebar-width bg-sidebar-bg flex flex-col py-md z-50">
+<div class="px-md mb-8 flex items-center gap-3">
+<img alt="Barangay Seal" class="w-8 h-8 object-contain rounded-full bg-white/10" data-alt="A stylized minimalist digital crest representing a modern government barangay command center. The logo uses deep navy and silver tones with sharp geometric edges, conveying authority and high-tech security operations. Light mode aesthetic, isolated on dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIPsO6Da9SE1758vL2adHz1wIp0tnjC_MvTK9seU71JfyHZrbYvIeOPbmWG9Kfj_BwlMeAG7uEStXQ0aEFPCK8uyTyvP4eMp7C21_SgS6xfzmobNhvhoCQQ3nlvFwcRNOiv90wdw6zsyKbjRQbXKnjBRrqyamrxdwaPhaH2f129U5EbBj87tXRyeDPKlIQTFp82fLanV44_qgNwEQOBmN2HUAvmoP1crLvBgOFjj5cQVdx5CUCHwEj">
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary">Commonwealth Command</h1>
+<p class="font-caps-xs text-caps-xs text-text-on-dark/70 uppercase">Operational HQ</p>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-sm space-y-1">
+<!-- Navigation Items -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="dashboard">dashboard</span>
+<div>
+<div class="font-label-md text-label-md">Command Dashboard</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="emergency">emergency</span>
+<div>
+<div class="font-label-md text-label-md">Incident Reporting</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="smart_toy">smart_toy</span>
+<div>
+<div class="font-label-md text-label-md">AI Dispatch</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="forum">forum</span>
+<div>
+<div class="font-label-md text-label-md">Contacts &amp; Inbox</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="description">description</span>
+<div>
+<div class="font-label-md text-label-md">Tracking &amp; Docs</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="inventory_2">inventory_2</span>
+<div>
+<div class="font-label-md text-label-md">Evidence Vault</div>
+</div>
+</a>
+<!-- Active State Navigation Item -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT bg-secondary-container/20 text-on-secondary-container border-l-4 border-secondary opacity-90 transition-all group" href="#">
+<span class="material-symbols-outlined text-lg fill-icon text-secondary" data-icon="notifications_active" data-weight="fill">notifications_active</span>
+<div>
+<div class="font-label-md text-label-md font-bold text-white">Status Notifications</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="assignment_turned_in">assignment_turned_in</span>
+<div>
+<div class="font-label-md text-label-md">Case Monitoring</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="analytics">analytics</span>
+<div>
+<div class="font-label-md text-label-md">Reports &amp; Analytics</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="groups">groups</span>
+<div>
+<div class="font-label-md text-label-md">Officials MGMT</div>
+</div>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="history">history</span>
+<div>
+<div class="font-label-md text-label-md">Audit Logs</div>
+</div>
+</a>
+</div>
+<div class="px-md mt-auto pt-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-text-on-dark/70 hover:text-on-primary hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+<div class="px-md mt-6">
+<button class="w-full bg-secondary hover:bg-secondary/90 text-on-secondary font-label-md text-label-md py-3 rounded-full flex items-center justify-center gap-2 shadow-2xl transition-transform hover:scale-105">
+<span class="material-symbols-outlined text-lg fill-icon" data-icon="bolt">bolt</span>
+                 Quick Dispatch
+             </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-sidebar-width flex-1 flex flex-col h-screen overflow-hidden bg-surface-bg relative">
+<!-- TopAppBar (Shared Component) -->
+<header class="flex justify-between items-center w-full h-16 px-gutter bg-surface dark:bg-surface-container border-b border-outline-variant z-40 shrink-0">
+<div class="flex items-center gap-8">
+<!-- Search (on_left configuration) -->
+<div class="relative w-64 hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm" data-icon="search">search</span>
+<input class="w-full bg-[#f1f5f9] border-none rounded-md pl-9 pr-3 py-1.5 font-body-sm text-body-sm focus:ring-1 focus:ring-secondary focus:outline-none transition-all text-on-surface" placeholder="Search operations..." type="text">
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors py-4" href="#">Live Map</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors py-4" href="#">Unit Status</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors py-4" href="#">Resource Grid</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="bg-error-red text-white font-label-sm text-label-sm px-4 py-1.5 rounded-full hover:bg-error-red/90 transition-colors shadow-sm font-bold flex items-center gap-1.5 click:scale-95 duration-150">
+<span class="material-symbols-outlined text-sm" data-icon="warning">warning</span>
+                    Emergency Alert
+                </button>
+<div class="flex items-center gap-2 border-l border-border-subtle pl-4">
+<button class="text-on-surface-variant hover:text-secondary transition-colors p-1 rounded-full hover:bg-slate-100 click:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+<button class="text-on-surface-variant hover:text-secondary transition-colors p-1 rounded-full hover:bg-slate-100 click:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<div class="flex-1 overflow-y-auto p-margin-desktop">
+<div class="max-w-7xl mx-auto space-y-6">
+<!-- Page Header Section -->
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Status Notifications &amp; Public Broadcasting</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 max-w-2xl">Publish real-time neighborhood alerts, weather/disaster notices, and incident updates to resident app users.</p>
+</div>
+<button class="bg-error-red text-white font-label-md text-label-md px-5 py-2.5 rounded-DEFAULT shadow-lg hover:bg-error-red/90 transition-all hover:-translate-y-0.5 flex items-center gap-2 shrink-0">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                        Create New Broadcast Alert
+                    </button>
+</div>
+<!-- Main Workspace Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-220px)] min-h-[600px]">
+<!-- Left Panel: Composer (Approx 55% -> 7 cols) -->
+<div class="lg:col-span-7 bg-white rounded-xl border border-border-subtle shadow-sm flex flex-col overflow-hidden">
+<div class="p-gutter border-b border-border-subtle bg-slate-50/50 flex justify-between items-center shrink-0">
+<h3 class="font-label-md text-label-md font-bold text-on-surface uppercase tracking-wider text-[11px] text-slate-500">New Public Announcement</h3>
+<div class="flex items-center gap-2">
+<span class="flex h-2 w-2 rounded-full bg-success-green"></span>
+<span class="font-caps-xs text-caps-xs text-on-surface-variant">System Ready</span>
+</div>
+</div>
+<div class="p-gutter flex-1 overflow-y-auto space-y-6">
+<!-- Alert Title -->
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-1.5">Alert Title</label>
+<input class="w-full bg-[#f1f5f9] border border-border-subtle rounded-md px-3 py-2 font-body-sm text-body-sm focus:ring-1 focus:ring-secondary focus:border-secondary focus:outline-none transition-all text-on-surface" placeholder="e.g., Heavy Rainfall Advisory - Orange Warning" type="text">
+</div>
+<!-- Severity & Channels Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-1.5">Target Severity</label>
+<div class="space-y-2">
+<label class="flex items-center gap-2 p-2 rounded border border-border-subtle hover:bg-slate-50 cursor-pointer transition-colors">
+<input class="text-secondary focus:ring-secondary h-4 w-4 border-outline-variant" name="severity" type="radio">
+<span class="material-symbols-outlined text-sm text-slate-500" data-icon="info">info</span>
+<span class="font-body-sm text-body-sm text-on-surface">General Info</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded border border-warning-amber/30 bg-warning-amber/5 hover:bg-warning-amber/10 cursor-pointer transition-colors">
+<input class="text-warning-amber focus:ring-warning-amber h-4 w-4 border-warning-amber/50" name="severity" type="radio">
+<span class="material-symbols-outlined text-sm text-warning-amber" data-icon="warning">warning</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Advisory</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded border border-error-red/30 bg-error-red/5 hover:bg-error-red/10 cursor-pointer transition-colors">
+<input class="text-error-red focus:ring-error-red h-4 w-4 border-error-red/50" name="severity" type="radio">
+<span class="material-symbols-outlined text-sm text-error-red fill-icon" data-icon="campaign">campaign</span>
+<span class="font-body-sm text-body-sm text-on-surface font-bold text-error-red">Emergency Alert</span>
+</label>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-1.5">Broadcast Channels</label>
+<div class="space-y-2">
+<label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer transition-colors border border-transparent">
+<input checked="" class="text-secondary focus:ring-secondary h-4 w-4 border-outline-variant rounded-sm" type="checkbox">
+<span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="smartphone">smartphone</span>
+<span class="font-body-sm text-body-sm text-on-surface">Resident Mobile App Push</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer transition-colors border border-transparent">
+<input class="text-secondary focus:ring-secondary h-4 w-4 border-outline-variant rounded-sm" type="checkbox">
+<span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="sms">sms</span>
+<span class="font-body-sm text-body-sm text-on-surface">SMS Blast (Registered Only)</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer transition-colors border border-transparent">
+<input checked="" class="text-secondary focus:ring-secondary h-4 w-4 border-outline-variant rounded-sm" type="checkbox">
+<span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="web">web</span>
+<span class="font-body-sm text-body-sm text-on-surface">Public Landing Page Banner</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Targeting -->
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-1.5 flex justify-between">
+<span class="">Geographic Targeting</span>
+<a class="text-secondary hover:underline text-xs" href="#">View Map</a>
+</label>
+<div class="relative">
+<select class="w-full bg-[#f1f5f9] border border-border-subtle rounded-md px-3 py-2 font-body-sm text-body-sm focus:ring-1 focus:ring-secondary focus:border-secondary focus:outline-none appearance-none pr-10 text-on-surface">
+<option>All Barangay Culiat</option>
+<option>Purok 1 &amp; 2 Only</option>
+<option>Purok 3 &amp; 4 Only</option>
+<option>Purok 5 &amp; 6 Only</option>
+<option>Custom Polygon (Map Select)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline-variant pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div><div><label class="block font-label-sm text-label-sm text-on-surface mb-1.5">Announcement Image</label><div class="border-2 border-dashed border-outline-variant rounded-lg p-6 flex flex-col items-center justify-center bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer group"><span class="material-symbols-outlined text-outline text-3xl mb-2 group-hover:text-secondary transition-colors" data-icon="add_photo_alternate">add_photo_alternate</span><p class="font-label-sm text-label-sm text-on-surface-variant">Drag &amp; drop image or <span class="text-secondary font-bold">browse</span></p><p class="text-[10px] text-outline mt-1">JPG, PNG or WEBP (Max 2MB)</p></div></div>
+<!-- Message Body -->
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-1.5 flex justify-between">
+<span class="">Message Body</span>
+<span class="text-xs text-on-surface-variant"><span class="text-primary font-medium">124</span> / 500 chars</span>
+</label>
+<textarea class="w-full bg-[#f1f5f9] border border-border-subtle rounded-md px-3 py-2 font-body-sm text-body-sm focus:ring-1 focus:ring-secondary focus:border-secondary focus:outline-none resize-none text-on-surface" placeholder="Type official announcement here..." rows="4"></textarea>
+</div>
+<!-- Mobile Preview (Simplified inline for layout) -->
+<div class="mt-4 bg-slate-50 p-4 rounded-lg border border-border-subtle">
+<h4 class="font-caps-xs text-caps-xs text-on-surface-variant mb-3 uppercase">Live Preview (Push Notification)</h4>
+<div class="bg-white rounded-xl shadow-md p-3 max-w-sm border border-slate-100 flex flex-col"><div class="w-full h-24 bg-slate-100 rounded-lg mb-3 flex items-center justify-center border border-slate-200 overflow-hidden shrink-0"><span class="material-symbols-outlined text-slate-300 text-4xl" data-icon="image">image</span></div><div class="flex gap-3"><div class="bg-error-red/10 p-2 rounded-lg shrink-0 h-fit"><span class="material-symbols-outlined text-error-red text-sm" data-icon="campaign">campaign</span></div><div><div class="flex justify-between items-start mb-1"><span class="font-label-sm text-label-sm font-bold text-on-surface">Brgy. Culiat Alert</span><span class="text-[10px] text-outline">Just now</span></div><p class="font-body-sm text-body-sm text-on-surface font-medium mb-0.5">Heavy Rainfall Advisory - Orange Warning</p><p class="text-xs text-on-surface-variant line-clamp-2">Please be advised that localized flooding may occur in low-lying areas of Purok 5 &amp; 6. Evacuation centers are on standby.</p></div></div></div>
+</div>
+</div>
+<div class="p-gutter border-t border-border-subtle bg-slate-50/50 flex justify-end gap-3 shrink-0">
+<button class="px-4 py-2 rounded-DEFAULT font-label-md text-label-md text-on-surface-variant border border-border-subtle hover:bg-slate-100 transition-colors bg-white">
+                                Schedule Announcement
+                            </button>
+<button class="px-5 py-2 rounded-DEFAULT font-label-md text-label-md text-white bg-error-red hover:bg-error-red/90 transition-colors shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="send">send</span>
+                                Send Immediate Broadcast
+                            </button>
+</div>
+</div>
+<!-- Right Panel: History (Approx 45% -> 5 cols) -->
+<div class="lg:col-span-5 bg-white rounded-xl border border-border-subtle shadow-sm flex flex-col overflow-hidden">
+<div class="p-gutter border-b border-border-subtle bg-slate-50/50 flex justify-between items-center shrink-0">
+<h3 class="font-label-md text-label-md font-bold text-on-surface uppercase tracking-wider text-[11px] text-slate-500">Broadcast History</h3>
+<button class="text-secondary text-sm hover:underline font-medium">View All</button>
+</div>
+<div class="flex-1 overflow-y-auto">
+<ul class="divide-y divide-slate-100">
+<!-- History Item 1: Emergency -->
+<li class="p-4 hover:bg-slate-50 transition-colors group cursor-pointer relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error-red"></div>
+<div class="flex justify-between items-start mb-2 pl-2">
+<div class="flex items-center gap-2">
+<span class="bg-error-red/10 text-error-red font-caps-xs text-[9px] px-2 py-0.5 rounded uppercase tracking-wider font-bold">Emergency</span>
+<span class="text-xs text-outline font-medium">Today, 08:42 AM</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm group-hover:text-secondary transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+<h4 class="font-label-sm text-label-sm text-on-surface font-bold pl-2 mb-1">Flash Flood Warning - Creek Area</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-xs line-clamp-1 pl-2 mb-3">Immediate evacuation advised for residents living within 50m of the main creek.</p>
+<div class="flex gap-4 pl-2 mt-2 pt-2 border-t border-slate-100/50">
+<div>
+<p class="font-caps-xs text-[9px] text-outline uppercase mb-0.5">Reach</p>
+<p class="font-label-sm text-sm text-on-surface font-semibold">1,240 <span class="text-xs font-normal text-on-surface-variant">Res.</span></p>
+</div>
+<div>
+<p class="font-caps-xs text-[9px] text-outline uppercase mb-0.5">Delivery</p>
+<p class="font-label-sm text-sm text-success-green font-semibold">94.2%</p>
+</div>
+<div class="ml-auto text-right">
+<p class="font-caps-xs text-[9px] text-outline uppercase mb-0.5">Sent By</p>
+<p class="font-label-sm text-xs text-on-surface-variant">Off. J. Santos</p>
+</div>
+</div>
+</li>
+<!-- History Item 2: Advisory -->
+<li class="p-4 hover:bg-slate-50 transition-colors group cursor-pointer relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-warning-amber"></div>
+<div class="flex justify-between items-start mb-2 pl-2">
+<div class="flex items-center gap-2">
+<span class="bg-warning-amber/10 text-warning-amber font-caps-xs text-[9px] px-2 py-0.5 rounded uppercase tracking-wider font-bold">Advisory</span>
+<span class="text-xs text-outline font-medium">Yesterday, 14:15 PM</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm group-hover:text-secondary transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+<h4 class="font-label-sm text-label-sm text-on-surface font-bold pl-2 mb-1">Scheduled Power Interruption</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-xs line-clamp-1 pl-2 mb-3">Meralco maintenance will cause a 4-hour blackout in Purok 1 to 3 tomorrow.</p>
+<div class="flex gap-4 pl-2 mt-2 pt-2 border-t border-slate-100/50">
+<div>
+<p class="font-caps-xs text-[9px] text-outline uppercase mb-0.5">Reach</p>
+<p class="font-label-sm text-sm text-on-surface font-semibold">3,810 <span class="text-xs font-normal text-on-surface-variant">Res.</span></p>
+</div>
+<div>
+<p class="font-caps-xs text-[9px] text-outline uppercase mb-0.5">Delivery</p>
+<p class="font-label-sm text-sm text-success-green font-semibold">98.9%</p>
+</div>
+<div class="ml-auto text-right">
+<p class="font-caps-xs text-[9px] text-outline uppercase mb-0.5">Sent By</p>
+<p class="font-label-sm text-xs text-on-surface-variant">Admin Dept.</p>
+</div>
+</div>
+</li>
+<!-- History Item 3: Info -->
+<li class="p-4 hover:bg-slate-50 transition-colors group cursor-pointer relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary"></div>
+<div class="flex justify-between items-start mb-2 pl-2">
+<div class="flex items-center gap-2">
+<span class="bg-secondary/10 text-secondary font-caps-xs text-[9px] px-2 py-0.5 rounded uppercase tracking-wider font-bold">General Info</span>
+<span class="text-xs text-outline font-medium">Oct 12, 09:00 AM</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm group-hover:text-secondary transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+<h4 class="font-label-sm text-label-sm text-on-surface font-bold pl-2 mb-1">Barangay Medical Mission 2023</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-xs line-clamp-1 pl-2 mb-3">Free checkups and basic medicines available at the covered court this weekend.</p>
+<div class="flex gap-4 pl-2 mt-2 pt-2 border-t border-slate-100/50">
+<div>
+<p class="font-caps-xs text-[9px] text-outline uppercase mb-0.5">Reach</p>
+<p class="font-label-sm text-sm text-on-surface font-semibold">4,210 <span class="text-xs font-normal text-on-surface-variant">Res.</span></p>
+</div>
+<div>
+<p class="font-caps-xs text-[9px] text-outline uppercase mb-0.5">Delivery</p>
+<p class="font-label-sm text-sm text-success-green font-semibold">99.1%</p>
+</div>
+<div class="ml-auto text-right">
+<p class="font-caps-xs text-[9px] text-outline uppercase mb-0.5">Sent By</p>
+<p class="font-label-sm text-xs text-on-surface-variant">Health Ofc.</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+
+</body></html>

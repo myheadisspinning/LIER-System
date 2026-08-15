@@ -1,0 +1,1 @@
+grant execute on function public.admin_set_role(uuid, text) to authenticated

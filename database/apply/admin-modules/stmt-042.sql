@@ -1,0 +1,1 @@
+revoke all on function public.mark_inquiries_read() from public

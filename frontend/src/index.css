@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@import "./auth.css";
+@import "./styles/modules.css";
+
+@layer base {
+  body {
+    font-family: 'Ranade', 'Inter', 'Outfit', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

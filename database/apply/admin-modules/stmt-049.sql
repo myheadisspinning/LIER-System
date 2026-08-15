@@ -1,0 +1,1 @@
+drop policy if exists "presence own all" on public.presence

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Barangay Culiat Command Center - AI Dispatch</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#f8f9ff",
+                    "on-background": "#0b1c30",
+                    "on-primary": "#ffffff",
+                    "surface-dim": "#cbdbf5",
+                    "on-primary-fixed": "#131b2e",
+                    "on-secondary": "#ffffff",
+                    "surface-bright": "#f8f9ff",
+                    "surface-container-high": "#dce9ff",
+                    "on-error": "#ffffff",
+                    "surface-container": "#e5eeff",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-container": "#a87d00",
+                    "primary-fixed": "#dae2fd",
+                    "surface-variant": "#d3e4fe",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-container": "#131b2e",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#7c839b",
+                    "error-red": "#ef4444",
+                    "success-green": "#22c55e",
+                    "on-secondary-container": "#fefcff",
+                    "surface-bg": "#f8fafc",
+                    "secondary": "#0051d5",
+                    "inverse-surface": "#213145",
+                    "on-surface-variant": "#45464d",
+                    "tertiary": "#000000",
+                    "surface-container-highest": "#d3e4fe",
+                    "tertiary-fixed": "#ffdfa0",
+                    "secondary-container": "#316bf3",
+                    "on-error-container": "#93000a",
+                    "border-subtle": "#e2e8f0",
+                    "error-container": "#ffdad6",
+                    "warning-amber": "#f59e0b",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "surface-tint": "#565e74",
+                    "primary": "#000000",
+                    "on-secondary-fixed": "#00174b",
+                    "on-surface": "#0b1c30",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "on-tertiary-fixed": "#261a00",
+                    "tertiary-container": "#261a00",
+                    "tertiary-fixed-dim": "#f9bd22",
+                    "outline": "#76777d",
+                    "primary-fixed-dim": "#bec6e0",
+                    "surface-container-low": "#eff4ff",
+                    "sidebar-bg": "#0f172a",
+                    "outline-variant": "#c6c6cd",
+                    "surface": "#f8f9ff",
+                    "secondary-fixed": "#dbe1ff",
+                    "text-on-dark": "#cbd5e1",
+                    "inverse-primary": "#bec6e0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "sm": "12px",
+                    "lg": "48px",
+                    "xs": "4px",
+                    "sidebar-width": "256px",
+                    "margin-desktop": "40px",
+                    "gutter": "24px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Poppins", "sans-serif"],
+                    "headline-lg": ["Poppins", "sans-serif"],
+                    "caps-xs": ["Inter", "sans-serif"],
+                    "body-lg": ["Inter", "sans-serif"],
+                    "label-md": ["Inter", "sans-serif"],
+                    "label-sm": ["Inter", "sans-serif"],
+                    "body-sm": ["Inter", "sans-serif"],
+                    "body-md": ["Inter", "sans-serif"],
+                    "display-lg": ["Poppins", "sans-serif"]
+            },
+            "fontSize": {
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["30px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "caps-xs": ["10px", {"lineHeight": "12px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.025em", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["15px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["36px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined', sans-serif !important; }
+        .blinking-dot { animation: blink 1.5s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body class="bg-surface-bg text-on-surface font-body-sm h-screen overflow-hidden flex selection:bg-secondary selection:text-white">
+<!-- SideNavBar (from JSON) -->
+<nav class="fixed left-0 top-0 h-screen w-sidebar-width bg-sidebar-bg border-r border-white/10 flex flex-col z-50 shadow-none">
+<div class="p-6 border-b border-white/10">
+<div class="flex items-center gap-3 mb-6">
+<img alt="Barangay Culiat Seal" class="w-10 h-10 rounded-full bg-white/20 object-cover" data-alt="Official seal or logo for Barangay Culiat Command Center, tactical minimalist style, light mode design context, high contrast, detailed crest." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDv_kjMHegNls73_2XVmYTLRFAepaXVP9LJHqYr3satDG9V48cwRfHH2E4Zqh7FRaNeOU1_eFRwaU_pqlublbRjvs_9kY8dQD1uhjpZu_Na6SG5Nun_TRS3ACXLQHCKURu9WfOrzeNQT7zVXD6Hlh3wokgwrfucaVqymMmdfeEdu0OeI2_t45aYO_mvwmpk465ZwniaaaemJnSYmwsrBszQmlu7q6RR0O7Jl6vuuZ99ewZZccBVNJA3"/>
+<div>
+<h1 class="font-headline-lg text-headline-lg font-black text-white">Commonwealth</h1>
+<p class="font-caps-xs text-caps-xs text-text-on-dark uppercase">SAFETY COMMAND</p>
+</div>
+</div>
+<button class="w-full bg-secondary text-white py-3 px-4 rounded font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-secondary-container transition-colors shadow-2xl relative overflow-hidden group">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+                New Dispatch
+                <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform"></div>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto py-4">
+<ul class="space-y-1">
+<li><a class="text-on-primary-container flex items-center px-4 py-3 hover:bg-white/5 transition-all group font-label-md text-label-md" href="#"><span class="material-symbols-outlined mr-3 text-lg opacity-70 group-hover:opacity-100">dashboard</span>Command Dashboard</a></li>
+<li><a class="text-on-primary-container flex items-center px-4 py-3 hover:bg-white/5 transition-all group font-label-md text-label-md" href="#"><span class="material-symbols-outlined mr-3 text-lg opacity-70 group-hover:opacity-100">emergency</span>Incident Reporting</a></li>
+<!-- Active Item: AI Dispatch -->
+<li><a class="bg-secondary-container/20 text-white border-l-4 border-secondary-container flex items-center px-4 py-3 font-label-md text-label-md scale-102" href="#"><span class="material-symbols-outlined mr-3 text-lg" style="font-variation-settings: 'FILL' 1;">smart_toy</span>AI Dispatch</a></li>
+<li><a class="text-on-primary-container flex items-center px-4 py-3 hover:bg-white/5 transition-all group font-label-md text-label-md" href="#"><span class="material-symbols-outlined mr-3 text-lg opacity-70 group-hover:opacity-100">mail</span>Contacts &amp; Inbox</a></li>
+<li><a class="text-on-primary-container flex items-center px-4 py-3 hover:bg-white/5 transition-all group font-label-md text-label-md" href="#"><span class="material-symbols-outlined mr-3 text-lg opacity-70 group-hover:opacity-100">folder_shared</span>Tracking &amp; Docs</a></li>
+<li><a class="text-on-primary-container flex items-center px-4 py-3 hover:bg-white/5 transition-all group font-label-md text-label-md" href="#"><span class="material-symbols-outlined mr-3 text-lg opacity-70 group-hover:opacity-100">inventory_2</span>Evidence Vault</a></li>
+<li><a class="text-on-primary-container flex items-center px-4 py-3 hover:bg-white/5 transition-all group font-label-md text-label-md" href="#"><span class="material-symbols-outlined mr-3 text-lg opacity-70 group-hover:opacity-100">notifications_active</span>Status Notifications</a></li>
+<li><a class="text-on-primary-container flex items-center px-4 py-3 hover:bg-white/5 transition-all group font-label-md text-label-md" href="#"><span class="material-symbols-outlined mr-3 text-lg opacity-70 group-hover:opacity-100">monitoring</span>Case Monitoring</a></li>
+<li><a class="text-on-primary-container flex items-center px-4 py-3 hover:bg-white/5 transition-all group font-label-md text-label-md" href="#"><span class="material-symbols-outlined mr-3 text-lg opacity-70 group-hover:opacity-100">analytics</span>Reports &amp; Analytics</a></li>
+<li><a class="text-on-primary-container flex items-center px-4 py-3 hover:bg-white/5 transition-all group font-label-md text-label-md" href="#"><span class="material-symbols-outlined mr-3 text-lg opacity-70 group-hover:opacity-100">badge</span>Officials MGMT</a></li>
+<li><a class="text-on-primary-container flex items-center px-4 py-3 hover:bg-white/5 transition-all group font-label-md text-label-md" href="#"><span class="material-symbols-outlined mr-3 text-lg opacity-70 group-hover:opacity-100">security</span>Audit Logs</a></li>
+</ul>
+</div>
+<div class="border-t border-white/10 p-4">
+<a class="text-on-primary-container flex items-center px-4 py-2 hover:bg-white/5 transition-all group font-label-md text-label-md rounded" href="#"><span class="material-symbols-outlined mr-3 text-lg opacity-70 group-hover:opacity-100">settings</span>Account Settings</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-sidebar-width flex-1 flex flex-col h-screen">
+<!-- TopAppBar (from JSON + Custom Requirements) -->
+<header class="flex justify-between items-center h-16 px-md w-full bg-surface border-b border-border-subtle shadow-none z-10 shrink-0">
+<div class="flex items-center gap-4">
+<h2 class="font-headline-md text-headline-md font-bold text-primary">Admin Command Center</h2>
+<div class="h-6 w-px bg-border-subtle mx-2"></div>
+<div class="flex items-center gap-2 px-3 py-1.5 bg-[#eff4ff] rounded border border-blue-200">
+<span class="w-2 h-2 rounded-full bg-cyan-500 blinking-dot shadow-[0_0_8px_rgba(6,182,212,0.8)]"></span>
+<span class="font-label-sm text-label-sm text-[#0051d5] font-semibold">AI Dispatch Rule Engine: Active - Confidence Score 94%</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<!-- Controls -->
+<div class="flex items-center gap-4 bg-surface-container-lowest border border-border-subtle p-2 rounded shadow-sm">
+<label class="flex items-center cursor-pointer gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Automated Unit Suggestions</span>
+<div class="relative">
+<input checked="" class="sr-only" type="checkbox"/>
+<div class="block bg-secondary w-10 h-6 rounded-full"></div>
+<div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition translate-x-4"></div>
+</div>
+</label>
+<div class="h-4 w-px bg-border-subtle"></div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Override Threshold</span>
+<input class="w-24 h-1 bg-border-subtle rounded-lg appearance-none cursor-pointer accent-secondary" max="100" min="0" type="range" value="85"/>
+<span class="font-caps-xs text-caps-xs text-secondary font-bold">85%</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors relative"><span class="material-symbols-outlined">notifications</span><span class="absolute top-1 right-1 w-2 h-2 bg-error-red rounded-full"></span></button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</div>
+</header>
+<!-- Dashboard Grid -->
+<div class="flex-1 overflow-hidden p-gutter">
+<div class="grid grid-cols-12 gap-gutter h-full">
+<!-- Left Column: Pending Queue (30% approx 4 cols) -->
+<section class="col-span-4 flex flex-col h-full bg-surface-container-lowest border border-border-subtle rounded-xl shadow-sm overflow-hidden">
+<div class="p-4 border-b border-border-subtle bg-surface-bg flex justify-between items-center shrink-0">
+<h3 class="font-label-md text-label-md font-bold text-on-surface uppercase tracking-wider">Pending AI Dispatch Queue</h3>
+<span class="bg-surface-container-low text-secondary px-2 py-0.5 rounded text-xs font-bold">12 Waiting</span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-3 bg-[#f8fafc]">
+<!-- Card 1 (Active) -->
+<div class="bg-white border-2 border-secondary rounded p-3 shadow-md cursor-pointer relative overflow-hidden transition-all">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary"></div>
+<div class="flex justify-between items-start mb-2 pl-2">
+<div class="flex items-center gap-2">
+<span class="bg-error-red/10 text-error-red px-2 py-0.5 rounded font-caps-xs text-caps-xs border border-error-red/20"><span class="material-symbols-outlined text-[10px] mr-1 align-text-bottom">warning</span>PRIORITY 1: HIGH RISK</span>
+</div>
+<span class="font-caps-xs text-caps-xs text-error-red font-bold flex items-center"><span class="material-symbols-outlined text-[12px] mr-1">timer</span>02:14</span>
+</div>
+<h4 class="font-label-md text-label-md font-bold pl-2 mb-1">Suspicious Gathering - Armed</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant pl-2 flex items-center mb-2"><span class="material-symbols-outlined text-[14px] mr-1 opacity-70">location_on</span>Purok 6, near Basketball Court</p>
+<div class="flex justify-between items-center pl-2 pt-2 border-t border-slate-50">
+<span class="text-xs text-slate-500">AI Score: <span class="text-secondary font-bold">98/100</span></span>
+<span class="text-xs font-medium text-secondary flex items-center"><span class="material-symbols-outlined text-[14px] mr-1">smart_toy</span>Assessing...</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white border border-border-subtle rounded p-3 shadow-sm hover:border-secondary/50 hover:shadow cursor-pointer transition-all">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="bg-warning-amber/10 text-warning-amber px-2 py-0.5 rounded font-caps-xs text-caps-xs border border-warning-amber/20">PRIORITY 2: MODERATE</span>
+</div>
+<span class="font-caps-xs text-caps-xs text-slate-500 flex items-center"><span class="material-symbols-outlined text-[12px] mr-1">timer</span>05:41</span>
+</div>
+<h4 class="font-label-md text-label-md font-bold mb-1">Noise Complaint / Disturbance</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center mb-2"><span class="material-symbols-outlined text-[14px] mr-1 opacity-70">location_on</span>Luzon Ave. Intersection</p>
+<div class="flex justify-between items-center pt-2 border-t border-slate-50">
+<span class="text-xs text-slate-500">AI Score: <span class="text-slate-700 font-bold">72/100</span></span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white border border-border-subtle rounded p-3 shadow-sm hover:border-secondary/50 hover:shadow cursor-pointer transition-all">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-caps-xs text-caps-xs border border-blue-200">PRIORITY 3: LOW</span>
+</div>
+<span class="font-caps-xs text-caps-xs text-slate-500 flex items-center"><span class="material-symbols-outlined text-[12px] mr-1">timer</span>12:05</span>
+</div>
+<h4 class="font-label-md text-label-md font-bold mb-1">Stray Animal Report</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center mb-2"><span class="material-symbols-outlined text-[14px] mr-1 opacity-70">location_on</span>Tandang Sora ext.</p>
+<div class="flex justify-between items-center pt-2 border-t border-slate-50">
+<span class="text-xs text-slate-500">AI Score: <span class="text-slate-700 font-bold">45/100</span></span>
+</div>
+</div>
+</div>
+</section>
+<!-- Middle Column: AI Terminal (45% approx 5 cols) -->
+<section class="col-span-5 flex flex-col h-full bg-surface-container-lowest border border-border-subtle rounded-xl shadow-sm overflow-hidden">
+<div class="p-4 border-b border-border-subtle bg-surface-bg flex justify-between items-center shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">memory</span>
+<h3 class="font-label-md text-label-md font-bold text-on-surface uppercase tracking-wider">AI Recommendation Terminal</h3>
+</div>
+<span class="font-caps-xs text-caps-xs text-slate-400">INCIDENT ID: #BRG-9921-A</span>
+</div>
+<div class="flex-1 overflow-y-auto p-6 bg-white relative">
+<!-- PNP Escalation Banner -->
+<div class="mb-6 bg-error-red/5 border border-error-red/20 rounded-lg p-3 flex items-start gap-3">
+<span class="material-symbols-outlined text-error-red mt-0.5" style="font-variation-settings: 'FILL' 1;">local_police</span>
+<div>
+<h4 class="font-label-md text-label-md font-bold text-error-red uppercase">PNP Escalation Flag</h4>
+<p class="text-sm text-slate-700 mt-1">Rule Engine detected keyword 'Armed' and high density area. Protocols suggest immediate parallel notification to QC Station 3.</p>
+</div>
+</div>
+<!-- Incident Context -->
+<div class="mb-6">
+<h4 class="font-caps-xs text-caps-xs text-slate-400 mb-2">INCIDENT CONTEXT</h4>
+<div class="bg-[#f8fafc] border border-border-subtle rounded p-4">
+<h2 class="font-headline-md text-headline-md font-bold mb-2">Suspicious Gathering - Armed</h2>
+<div class="grid grid-cols-2 gap-4 text-sm">
+<div><span class="text-slate-500 block text-xs uppercase">Location</span><span class="font-medium">Purok 6, Basketball Court</span></div>
+<div><span class="text-slate-500 block text-xs uppercase">Reporter Confidence</span><span class="font-medium">Verified Citizen (Tier 2)</span></div>
+<div><span class="text-slate-500 block text-xs uppercase">Time Logged</span><span class="font-medium">14:02 PHT</span></div>
+<div><span class="text-slate-500 block text-xs uppercase">Density</span><span class="font-medium text-warning-amber">High (Public Space)</span></div>
+</div>
+</div>
+</div>
+<!-- AI Breakdown -->
+<div class="mb-6">
+<h4 class="font-caps-xs text-caps-xs text-slate-400 mb-2">AI ASSESSMENT BREAKDOWN</h4>
+<div class="space-y-3">
+<div class="flex items-start gap-3">
+<div class="mt-1 w-2 h-2 rounded-full bg-secondary"></div>
+<p class="text-sm text-slate-700"><strong class="text-slate-900">Proximity Match:</strong> Tanod Patrol Unit 2 is currently 400m away on routine patrol.</p>
+</div>
+<div class="flex items-start gap-3">
+<div class="mt-1 w-2 h-2 rounded-full bg-warning-amber"></div>
+<p class="text-sm text-slate-700"><strong class="text-slate-900">Historical Data:</strong> Area has 3 prior incidents of similar nature this month. Caution advised.</p>
+</div>
+<div class="flex items-start gap-3">
+<div class="mt-1 w-2 h-2 rounded-full bg-error-red"></div>
+<p class="text-sm text-slate-700"><strong class="text-slate-900">Risk Profile:</strong> Presence of potential weapons necessitates multi-unit response or PNP backup.</p>
+</div>
+</div>
+</div>
+<!-- Recommended Action -->
+<div class="mt-8 border-2 border-secondary/20 rounded-lg bg-surface-container-low p-5 text-center relative overflow-hidden">
+<div class="absolute -right-4 -top-4 opacity-5"><span class="material-symbols-outlined text-[100px]">smart_toy</span></div>
+<h4 class="font-caps-xs text-caps-xs text-secondary mb-2 tracking-widest">PRIMARY RECOMMENDATION</h4>
+<p class="font-headline-md text-headline-md font-bold text-[#00174b] mb-4">Dispatch Tanod Patrol Unit 2 &amp; Request PNP Backup</p>
+<div class="flex gap-4 justify-center">
+<button class="bg-success-green hover:bg-green-600 text-white font-label-md text-label-md px-6 py-3 rounded shadow-md transition flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+                                    Accept &amp; Dispatch Unit 2
+                                </button>
+<button class="border border-error-red text-error-red hover:bg-error-red/5 font-label-md text-label-md px-6 py-3 rounded transition flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">block</span>
+                                    Manual Override
+                                </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Radar (25% approx 3 cols) -->
+<section class="col-span-3 flex flex-col h-full bg-surface-container-lowest border border-border-subtle rounded-xl shadow-sm overflow-hidden">
+<div class="p-4 border-b border-border-subtle bg-surface-bg flex justify-between items-center shrink-0">
+<h3 class="font-label-md text-label-md font-bold text-on-surface uppercase tracking-wider">Live Unit Radar</h3>
+<button class="text-secondary hover:bg-secondary/10 p-1 rounded transition"><span class="material-symbols-outlined text-sm">filter_list</span></button>
+</div>
+<!-- Map Placeholder -->
+<div class="h-48 bg-slate-200 border-b border-border-subtle relative" data-alt="A tactical map view of Barangay Culiat in Quezon City, light mode color scheme, showing streets in crisp white and off-white, with glowing cyan and blue markers indicating active patrol units, minimalist high-tech UI overlay style." data-location="Quezon City, Barangay Culiat" style="">
+<img alt="Map View" class="w-full h-full object-cover opacity-80" data-alt="A tactical map view of Barangay Culiat in Quezon City, light mode color scheme, showing streets in crisp white and off-white, with glowing cyan and blue markers indicating active patrol units, minimalist high-tech UI overlay style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjcM2_3Ik-zbUCV_kPoKZRha5aEMtiKM9554PolarzqKMp6YnwVDgo5bi_h_E8lYX4Nr33XN_-vCXUOG3ahm5GGrFyPCipjBoOE4jK2cihzxu2siEQiYSb_GqS91tChKeZO0isbid_TLJSOovL07BH31nGXdJUF4KpVPMpSVZcnt9Y8FnAGNKJtXXCk1kWpSJpvlg6d8_jzNNHk9dsJlJn61vACvfm1He4qUp8L01dE433JA3JdyHf"/>
+<div class="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent pointer-events-none"></div>
+<div class="absolute bottom-2 left-2 right-2 flex justify-between px-2 text-[10px] font-bold text-slate-600 bg-white/80 rounded backdrop-blur py-1 border border-white/50">
+<span>Sector A: Clear</span>
+<span>Sector B: Busy</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-3 space-y-2 bg-[#f8fafc]">
+<h4 class="font-caps-xs text-caps-xs text-slate-400 mb-2 pl-1">ON-DUTY TEAMS BY PROXIMITY</h4>
+<!-- Unit 1 -->
+<div class="bg-white border border-secondary rounded p-3 shadow-sm relative overflow-hidden group hover:bg-slate-50 transition cursor-pointer">
+<div class="absolute right-0 top-0 bottom-0 w-8 bg-secondary/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"><span class="material-symbols-outlined text-secondary text-sm">arrow_forward_ios</span></div>
+<div class="flex justify-between items-center mb-1">
+<h5 class="font-label-md text-label-md font-bold">Tanod Patrol Unit 2</h5>
+<span class="bg-success-green/10 text-success-green px-2 py-0.5 rounded text-[10px] font-bold border border-success-green/20">AVAILABLE</span>
+</div>
+<div class="text-xs text-slate-500 flex justify-between items-center">
+<span class="flex items-center"><span class="material-symbols-outlined text-[12px] mr-1">directions_run</span>400m away</span>
+<span>ETA: 2 mins</span>
+</div>
+</div>
+<!-- Unit 2 -->
+<div class="bg-white border border-border-subtle rounded p-3 shadow-sm opacity-70">
+<div class="flex justify-between items-center mb-1">
+<h5 class="font-label-md text-label-md font-bold">Tanod Patrol Unit 5</h5>
+<span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[10px] font-bold border border-slate-200">BUSY - CASE #841</span>
+</div>
+<div class="text-xs text-slate-500 flex justify-between items-center">
+<span class="flex items-center"><span class="material-symbols-outlined text-[12px] mr-1">directions_run</span>1.2km away</span>
+<span>Luzon Ave</span>
+</div>
+</div>
+<!-- Unit 3 -->
+<div class="bg-white border border-border-subtle rounded p-3 shadow-sm hover:border-slate-300 transition cursor-pointer">
+<div class="flex justify-between items-center mb-1">
+<h5 class="font-label-md text-label-md font-bold">Mobile Alpha (PNP)</h5>
+<span class="bg-success-green/10 text-success-green px-2 py-0.5 rounded text-[10px] font-bold border border-success-green/20">AVAILABLE</span>
+</div>
+<div class="text-xs text-slate-500 flex justify-between items-center">
+<span class="flex items-center"><span class="material-symbols-outlined text-[12px] mr-1">directions_car</span>2.5km away</span>
+<span>ETA: 8 mins</span>
+</div>
+</div>
+<!-- Unit 4 -->
+<div class="bg-white border border-border-subtle rounded p-3 shadow-sm opacity-50 bg-slate-50">
+<div class="flex justify-between items-center mb-1">
+<h5 class="font-label-md text-label-md font-bold text-slate-400">Tanod Patrol Unit 1</h5>
+<span class="bg-slate-200 text-slate-500 px-2 py-0.5 rounded text-[10px] font-bold">OFF-DUTY</span>
+</div>
+<div class="text-xs text-slate-400 flex justify-between items-center">
+<span>Shift ended 06:00</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Footer (from JSON) -->
+<footer class="fixed bottom-0 left-64 right-0 px-md flex justify-between items-center bg-surface-container-lowest border-t border-border-subtle z-40 h-8">
+<span class="font-caps-xs text-caps-xs text-success-green font-bold">© 2024 Command Systems</span>
+<div class="flex gap-4">
+<a class="font-caps-xs text-caps-xs text-on-surface-variant hover:underline" href="#">Cloud Engine: Optimal</a>
+<a class="font-caps-xs text-caps-xs text-on-surface-variant hover:underline" href="#">DB Sync: Live</a>
+<a class="font-caps-xs text-caps-xs text-on-surface-variant hover:underline" href="#">Encryption: AES-256</a>
+</div>
+</footer>
+</main>
+</body></html>

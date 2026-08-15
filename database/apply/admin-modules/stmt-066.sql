@@ -1,0 +1,1 @@
+drop policy if exists "officials photos public read" on storage.objects

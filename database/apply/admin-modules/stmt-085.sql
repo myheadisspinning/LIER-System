@@ -1,0 +1,3 @@
+-- ------------------------------------------------------------------
+-- 10b) ai_audit_logs: allow staff to write audit entries from the app
+--      (frontend logAudit() inserts directly

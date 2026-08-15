@@ -1,0 +1,1 @@
+revoke all on function public.admin_set_role(uuid, text) from public
