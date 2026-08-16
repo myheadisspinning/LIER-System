@@ -100,8 +100,8 @@ async function callGemini(
             user_actions: { type: 'ARRAY', items: { type: 'STRING' } },
             actions: { type: 'ARRAY', items: { type: 'STRING' } },
             dispatch: { type: 'STRING' },
-            unit: { type: ['STRING', 'NULL'] },
-            eta: { type: ['STRING', 'NULL'] },
+            unit: { type: 'STRING', nullable: true },
+            eta: { type: 'STRING', nullable: true },
           },
           required: ['category', 'confidence', 'priority', 'threat', 'user_actions', 'actions', 'dispatch'],
         },
@@ -243,7 +243,7 @@ Deno.serve(async (req) => {
         const msg = e instanceof Error ? e.message : String(e);
         aiError = /429|RESOURCE_EXHAUSTED|quota/i.test(msg)
           ? 'Gemini quota reached (free tier 20/day) — using configured rule-based management.'
-          : msg;
+          : 'Gemini request failed — using configured rule-based management.';
         result = await fallbackRules(supabase, reportText);
       }
     } else {

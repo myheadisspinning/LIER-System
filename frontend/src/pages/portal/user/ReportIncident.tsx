@@ -259,7 +259,6 @@ export default function ReportIncident({ className = '' }: { className?: string 
   const [tile, setTile] = useState<'street' | 'satellite'>('street');
   const [analysis, setAnalysis] = useState<AiAnalysis | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
-  const [analysisError, setAnalysisError] = useState<string | null>(null);
   const [analyzeTick, setAnalyzeTick] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [confirm1, setConfirm1] = useState(false);
@@ -377,14 +376,12 @@ export default function ReportIncident({ className = '' }: { className?: string 
       const cached = analysisCache.current.get(key);
       if (cached) {
         setAnalysis(cached);
-        setAnalysisError(null);
         setAnalyzing(false);
         return;
       }
     }
     const timer = setTimeout(async () => {
       setAnalyzing(true);
-      setAnalysisError(null);
       try {
         const res = await classifyIncident({
           title: reportTitle,
@@ -393,14 +390,11 @@ export default function ReportIncident({ className = '' }: { className?: string 
           lng: location[1],
         });
         if (analysisSeq.current !== seq) return;
-        analysisCache.current.set(key, res);
+        if (res.source === 'gemini') analysisCache.current.set(key, res);
         setAnalysis(res);
-      } catch (e) {
+        setAnalyzing(false);
+      } catch {
         if (analysisSeq.current !== seq) return;
-        setAnalysisError(e instanceof Error ? e.message : 'AI service unavailable.');
-        setAnalysis(localFallback(category));
-      } finally {
-        if (analysisSeq.current === seq) setAnalyzing(false);
       }
     }, forced ? 0 : 1500);
     return () => clearTimeout(timer);
@@ -767,18 +761,8 @@ export default function ReportIncident({ className = '' }: { className?: string 
                             <span className="material-symbols-outlined text-[13px]">progress_activity</span> Analyzing live…
                           </p>
                         )}
-                        {analysisError && (
-                          <p className="text-[10px] text-cc-red font-semibold flex items-start gap-1.5">
-                            <span className="material-symbols-outlined text-[13px] mt-[1px]">warning</span>
-                            <span>AI offline — showing rule-based fallback. {analysisError}</span>
-                          </p>
-                        )}
-                        {ai.source === 'fallback' && ai.aiError && (
-                          <p className="text-[10px] text-cc-accent font-semibold flex items-start gap-1.5">
-                            <span className="material-symbols-outlined text-[13px] mt-[1px]">info</span>
-                            <span>Rule-based estimate: {ai.aiError}</span>
-                          </p>
-                        )}
+                        {!analyzing && analysis != null && (
+                        <>
                         {reportTitle.trim() && (
                           <div className="flex items-start gap-1.5">
                             <span className="material-symbols-outlined text-[13px] text-cc-accent mt-[1px]">summarize</span>
@@ -849,6 +833,8 @@ export default function ReportIncident({ className = '' }: { className?: string 
                           </button>
                           <span className="text-[9px] text-cc-muted font-bold uppercase tracking-wider">Tactical AI {ai.source === 'gemini' ? 'v5 (Gemini)' : 'v4.2 (Rules)'}</span>
                         </div>
+                        </>
+                        )}
                       </div>
                     </div>
                   </div>
