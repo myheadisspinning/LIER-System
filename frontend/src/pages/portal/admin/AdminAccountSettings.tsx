@@ -12,6 +12,8 @@ type Acct = {
   suspended: boolean;
   phone: string | null;
   address: string | null;
+  dob: string | null;
+  gender: string | null;
 };
 
 type Filter = 'All' | 'Active' | 'Pending' | 'Suspended';
@@ -44,6 +46,9 @@ export default function AdminAccountSettings() {
   const [form, setForm] = useState({ email: '', password: '', fullname: '', role: 'user' });
   const [tempPw, setTempPw] = useState<{ name: string; pw: string } | null>(null);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editForm, setEditForm] = useState({ fullname: '', phone: '', address: '', dob: '', gender: '' });
+  const [deleteConfirm, setDeleteConfirm] = useState<Acct | null>(null);
 
   const fetchUsers = async () => {
     const res = await supabase.rpc('admin_list_users', { p_scope: 'residents' });
@@ -140,13 +145,68 @@ export default function AdminAccountSettings() {
     }
   };
 
+  const openEdit = (u: Acct) => {
+    setEditForm({
+      fullname: u.fullname,
+      phone: u.phone || '',
+      address: u.address || '',
+      dob: u.dob || '',
+      gender: u.gender || '',
+    });
+    setEditOpen(true);
+  };
+
+  const saveEdit = async () => {
+    if (!active) return;
+    if (!editForm.fullname.trim()) {
+      setToast({ type: 'error', message: 'Full name is required.' });
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await supabase.rpc('admin_update_user', {
+        p_user_id: active.id,
+        p_fullname: editForm.fullname.trim(),
+        p_phone: editForm.phone.trim() || null,
+        p_address: editForm.address.trim() || null,
+        p_dob: editForm.dob || null,
+        p_gender: editForm.gender || null,
+      });
+      if (res.error) throw new Error(res.error.message);
+      await logAudit('Update user', `Updated profile for ${editForm.fullname.trim()}.`);
+      setToast({ type: 'success', message: 'User information updated successfully.' });
+      setEditOpen(false);
+      const rows = await fetchUsers();
+      setUsers(rows);
+    } catch (e) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : 'Failed to update user.' });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteConfirm) return;
+    setBusyId(deleteConfirm.id);
+    try {
+      const res = await supabase.rpc('admin_delete_user', { p_user_id: deleteConfirm.id });
+      if (res.error) throw new Error(res.error.message);
+      await logAudit('Delete user', `Deleted user ${deleteConfirm.fullname} (${deleteConfirm.email}).`);
+      setToast({ type: 'success', message: `${deleteConfirm.fullname} has been deleted.` });
+      setDeleteConfirm(null);
+      setActiveId(null);
+      const rows = await fetchUsers();
+      setUsers(rows);
+      if (rows.length > 0) setActiveId(rows[0].id);
+    } catch (e) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : 'Failed to delete user.' });
+    } finally {
+      setBusyId(null);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div className="mb-2">
-        <h2 className="font-headline-lg text-headline-lg text-on-surface mb-2">Account Settings &amp; User Management</h2>
-        <p className="font-body-md text-body-md text-on-surface-variant max-w-3xl">Manage registered barangay resident user accounts. Staff account roles are handled by the Superadmin.</p>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-surface-container-lowest p-6 rounded-xl border border-border-subtle flex flex-col justify-between">
           <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Total User Accounts</div>
@@ -299,15 +359,70 @@ export default function AdminAccountSettings() {
               </div>
               <div className="flex-1 overflow-y-auto p-6 bg-surface-bg/30 space-y-5">
                 <div>
-                  <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-bold mb-3">Role</h4>
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${ROLE_BADGE[active.role] ?? 'bg-surface-container-high text-on-surface-variant'}`}>
-                    {ROLE_LABEL[active.role] ?? active.role}
-                  </span>
-                  <p className="text-[11px] text-on-surface-variant mt-1.5">Staff roles are managed by the Superadmin.</p>
+                  <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-bold mb-3">Personal Information</h4>
+                  <div className="space-y-3">
+                    <div>
+                      <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Full Name</div>
+                      <div className="font-body-sm text-body-sm text-on-surface font-medium">{active.fullname}</div>
+                    </div>
+                    <div>
+                      <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Date of Birth</div>
+                      <div className="font-body-sm text-body-sm text-on-surface font-medium">{active.dob ? fmtDate(active.dob, 'short') : '—'}</div>
+                    </div>
+                    <div>
+                      <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Gender</div>
+                      <div className="font-body-sm text-body-sm text-on-surface font-medium capitalize">{active.gender || '—'}</div>
+                    </div>
+                    <div>
+                      <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Phone</div>
+                      <div className="font-body-sm text-body-sm text-on-surface font-medium">{active.phone || '—'}</div>
+                    </div>
+                    <div>
+                      <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Address</div>
+                      <div className="font-body-sm text-body-sm text-on-surface font-medium">{active.address || '—'}</div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-bold mb-3">Account Information</h4>
+                  <div className="space-y-3">
+                    <div>
+                      <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Role</div>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${ROLE_BADGE[active.role] ?? 'bg-surface-container-high text-on-surface-variant'}`}>
+                        {ROLE_LABEL[active.role] ?? active.role}
+                      </span>
+                      <p className="text-[11px] text-on-surface-variant mt-1.5">Staff roles are managed by the Superadmin.</p>
+                    </div>
+                    <div>
+                      <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Email Verification</div>
+                      <div className="font-body-sm text-body-sm font-medium">
+                        {active.email_confirmed_at ? (
+                          <span className="inline-flex items-center gap-1.5 text-success-green">
+                            <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                            Verified on {fmtDate(active.email_confirmed_at, 'short')}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 text-warning-amber">
+                            <span className="material-symbols-outlined text-[16px]">pending</span>
+                            Pending Verification
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-bold mb-3">Account Actions</h4>
                   <div className="space-y-2">
+                    <button
+                      type="button"
+                      disabled={busyId === active.id}
+                      onClick={() => openEdit(active)}
+                      className="w-full py-2 px-4 rounded-lg border border-outline-variant text-on-surface font-label-md text-label-md hover:bg-surface-bg transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">edit</span>
+                      Edit User Information
+                    </button>
                     <button
                       type="button"
                       disabled={busyId === active.id}
@@ -325,6 +440,15 @@ export default function AdminAccountSettings() {
                     >
                       <span className="material-symbols-outlined text-[18px]">{active.suspended ? 'check_circle' : 'block'}</span>
                       {active.suspended ? 'Re-activate Account' : 'Suspend Account Access'}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={busyId === active.id}
+                      onClick={() => setDeleteConfirm(active)}
+                      className="w-full py-2 px-4 rounded-lg border border-error-red/30 text-error-red font-label-md text-label-md hover:bg-error-red/5 transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">delete</span>
+                      Delete Account
                     </button>
                   </div>
                 </div>
@@ -381,6 +505,86 @@ export default function AdminAccountSettings() {
               <p className="text-sm text-on-surface-variant mb-3">Share this temporary password securely with <span className="font-semibold text-on-surface">{tempPw.name}</span>. They must change it on next sign-in.</p>
               <div className="bg-surface-container-low border border-border-subtle rounded-lg px-4 py-3 font-mono text-lg text-on-surface text-center tracking-wider">{tempPw.pw}</div>
               <button type="button" onClick={() => setTempPw(null)} className="mt-4 w-full bg-secondary hover:bg-secondary/90 text-on-secondary rounded-lg py-2 text-label-md font-medium transition-colors">Done</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editOpen && active && (
+        <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10">
+              <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Edit User Information</h3>
+              <button type="button" onClick={() => setEditOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div>
+                <label className="block text-xs text-on-surface-variant mb-1.5">Full Name *</label>
+                <input className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={editForm.fullname} onChange={(e) => setEditForm({ ...editForm, fullname: e.target.value })} placeholder="Full name" />
+              </div>
+              <div>
+                <label className="block text-xs text-on-surface-variant mb-1.5">Phone</label>
+                <input className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={editForm.phone} onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })} placeholder="Phone number" />
+              </div>
+              <div>
+                <label className="block text-xs text-on-surface-variant mb-1.5">Address</label>
+                <textarea className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary resize-none" rows={2} value={editForm.address} onChange={(e) => setEditForm({ ...editForm, address: e.target.value })} placeholder="Address" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs text-on-surface-variant mb-1.5">Date of Birth</label>
+                  <input type="date" className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={editForm.dob} onChange={(e) => setEditForm({ ...editForm, dob: e.target.value })} />
+                </div>
+                <div>
+                  <label className="block text-xs text-on-surface-variant mb-1.5">Gender</label>
+                  <select className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={editForm.gender} onChange={(e) => setEditForm({ ...editForm, gender: e.target.value })}>
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button type="button" onClick={() => setEditOpen(false)} className="flex-1 bg-surface-container-low border border-border-subtle text-on-surface rounded-lg py-2 text-label-md font-medium hover:bg-surface-bg transition-colors">
+                  Cancel
+                </button>
+                <button type="button" disabled={saving} onClick={saveEdit} className="flex-1 bg-secondary hover:bg-secondary/90 text-on-secondary rounded-lg py-2 text-label-md font-medium disabled:opacity-50 transition-colors">
+                  {saving ? 'Saving…' : 'Save Changes'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deleteConfirm && (
+        <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-md">
+            <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
+              <h3 className="font-headline-md text-headline-md font-bold text-error-red">Delete Account</h3>
+              <button type="button" onClick={() => setDeleteConfirm(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
+            </div>
+            <div className="p-5">
+              <div className="flex items-start gap-3 mb-4">
+                <span className="material-symbols-outlined text-error-red text-3xl">warning</span>
+                <div className="flex-1">
+                  <p className="text-sm text-on-surface mb-2">Are you sure you want to delete this account?</p>
+                  <div className="bg-surface-container-low border border-border-subtle rounded-lg p-3">
+                    <p className="font-semibold text-on-surface">{deleteConfirm.fullname}</p>
+                    <p className="text-xs text-on-surface-variant">{deleteConfirm.email}</p>
+                  </div>
+                  <p className="text-xs text-error-red mt-3 font-medium">⚠️ This action cannot be undone. All user data will be permanently deleted.</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <button type="button" onClick={() => setDeleteConfirm(null)} className="flex-1 bg-surface-container-low border border-border-subtle text-on-surface rounded-lg py-2 text-label-md font-medium hover:bg-surface-bg transition-colors">
+                  Cancel
+                </button>
+                <button type="button" disabled={busyId === deleteConfirm.id} onClick={confirmDelete} className="flex-1 bg-error-red hover:bg-error-red/90 text-on-error rounded-lg py-2 text-label-md font-medium disabled:opacity-50 transition-colors">
+                  {busyId === deleteConfirm.id ? 'Deleting…' : 'Delete Account'}
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -33,7 +33,17 @@ export default function SignIn() {
     setResending(false);
 
     if (error) {
-      setToast({ type: 'error', message: error.message });
+      console.error('Resend confirmation error:', error);
+      const errorObj = error as { message?: string; error_description?: string };
+      const raw = errorObj.message || errorObj.error_description || '';
+      const isUseless = !raw.trim() || raw.trim() === '{}' || raw.trim() === '""';
+      
+      setToast({ 
+        type: 'error', 
+        message: isUseless 
+          ? 'Failed to resend confirmation email. Please wait a moment and try again.' 
+          : raw 
+      });
     } else {
       setToast({ type: 'success', message: 'Confirmation email sent! Please check your inbox.' });
       setShowResendOption(false);
@@ -53,12 +63,23 @@ export default function SignIn() {
     setLoading(false);
 
     if (error) {
-      if (error.message.toLowerCase().includes('email not confirmed')) {
+      console.error('Signin error:', error);
+      const errorObj = error as { message?: string; error_description?: string };
+      const raw = errorObj.message || errorObj.error_description || '';
+      const isUseless = !raw.trim() || raw.trim() === '{}' || raw.trim() === '""';
+      
+      if (!isUseless && raw.toLowerCase().includes('email not confirmed')) {
         setToast({ type: 'error', message: 'Please confirm your email first. Check your inbox for the confirmation link.' });
         setShowResendOption(true);
-      } else {
-        setToast({ type: 'error', message: error.message });
+        return;
       }
+      
+      setToast({ 
+        type: 'error', 
+        message: isUseless 
+          ? 'Login failed. Please check your credentials and try again.' 
+          : raw 
+      });
       return;
     }
 

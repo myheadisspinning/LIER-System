@@ -22,6 +22,8 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [tos, setTos] = useState(false);
+  const [signupSuccess, setSignupSuccess] = useState(false);
+  const [resending, setResending] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,7 +49,10 @@ export default function SignUp() {
       p_email: email,
     });
 
-    if (!rpcError && emailExists) {
+    if (rpcError) {
+      console.error('Email check RPC error:', rpcError);
+      // Continue with signup even if RPC fails - Supabase will catch duplicate emails
+    } else if (emailExists) {
       setLoading(false);
       setToast({
         type: 'error',
@@ -73,7 +78,33 @@ export default function SignUp() {
     setLoading(false);
 
     if (error) {
-      setToast({ type: 'error', message: error.message });
+      console.error('Supabase signup error:', error);
+      console.error('Error keys:', Object.keys(error));
+      console.error('Error stringified:', JSON.stringify(error));
+      
+      const status = (error as { status?: number }).status;
+      if (status === 500) {
+        setToast({ 
+          type: 'error', 
+          message: 'Registration failed due to a server error. Please contact support or try again later.' 
+        });
+        return;
+      }
+      
+      const errorObj = error as { message?: string; error_description?: string; msg?: string };
+      const raw = errorObj.message || errorObj.error_description || errorObj.msg || '';
+      const isUseless = !raw.trim() || raw.trim() === '{}' || raw.trim() === '""';
+      
+      if (isUseless) {
+        if (data?.user?.identities?.length === 0) {
+          setToast({ type: 'error', message: 'This email is already used with an existing account. Please sign in instead.' });
+        } else {
+          setToast({ type: 'error', message: 'Registration failed. This email may already be registered or the service is temporarily unavailable.' });
+        }
+        return;
+      }
+      
+      setToast({ type: 'error', message: raw });
       return;
     }
 
@@ -85,12 +116,54 @@ export default function SignUp() {
       return;
     }
 
-    setToast({
-      type: 'success',
-      message: 'Account successfully submitted for verification. Please sign in.',
+    // Check if email confirmation is required
+    if (!data.session) {
+      // Email confirmation required - show verification screen
+      setSignupSuccess(true);
+      setToast({
+        type: 'success',
+        message: 'Account created! Please check your email to verify your account.',
+      });
+    } else {
+      // Email confirmation not required - proceed to login
+      setToast({
+        type: 'success',
+        message: 'Account successfully created. Please sign in.',
+      });
+      setTimeout(() => setShowLoading(true), 1200);
+      setTimeout(() => navigate('/signin'), 3000);
+    }
+  };
+
+  const handleResendConfirmation = async () => {
+    if (!email) {
+      setToast({ type: 'error', message: 'Please enter your email address first.' });
+      return;
+    }
+
+    setResending(true);
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email: email,
     });
-    setTimeout(() => setShowLoading(true), 1200);
-    setTimeout(() => navigate('/signin'), 3000);
+
+    setResending(false);
+
+    if (error) {
+      console.error('Resend confirmation error:', error);
+      const errorObj = error as { message?: string; error_description?: string };
+      const raw = errorObj.message || errorObj.error_description || '';
+      const isUseless = !raw.trim() || raw.trim() === '{}' || raw.trim() === '""';
+      
+      setToast({ 
+        type: 'error', 
+        message: isUseless 
+          ? 'Failed to resend confirmation email. Please wait a moment and try again.' 
+          : raw 
+      });
+    } else {
+      setToast({ type: 'success', message: 'Confirmation email sent! Please check your inbox.' });
+    }
   };
 
   return (
@@ -154,7 +227,7 @@ export default function SignUp() {
             <img
               alt="Seal"
               className="h-12 w-12"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNsqxKdZ1m2rjivCl7XKixK_FNwUc6iPQhIbnMS1DlRobXY24s17u4dwlItsTXDM4aya_hUhZfgfWgpg4As6XinNm1Bwwv8x9chy60Nr7xhc5yn8nPpqQsoqglpcZLHX9nHw_uQoKg44dKy1YdczY0DYS8pcVY93ck2rBEUkHDZhG6lGZV2UC3wHqH977SeastlefOcZCxRFaPy38Uit3zQmA5db8iP8XCT9S1S2kPAwJUIqFBGbIIwPqdHeqzbAOB_Rx2GUEAXak"
+              src="/image/culiat-logo.png"
             />
           </div>
           <div className="max-w-2xl w-full mx-auto my-auto py-2">
@@ -234,7 +307,7 @@ export default function SignUp() {
                   Address in Barangay Culiat
                 </label>
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute left-4 top-4 text-outline">location_on</span>
+                  <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">location_on</span>
                   <textarea
                     className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface resize-none py-1.5"
                     id="address"
@@ -371,14 +444,59 @@ export default function SignUp() {
               </button>
             </form>
 
-            <div className="text-center mt-1">
-              <p className="text-body-md text-on-surface-variant">
-                Already have an account?{' '}
-                <Link className="text-secondary font-semibold hover:underline" to="/signin">
-                  Login here
-                </Link>
-              </p>
-            </div>
+            {/* Email Verification Success Screen */}
+            {signupSuccess && (
+              <div className="mt-6 p-6 bg-secondary/5 border border-secondary/20 rounded-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="material-symbols-outlined text-secondary text-3xl">mark_email_read</span>
+                  <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Verify Your Email</h3>
+                </div>
+                <p className="text-body-sm text-on-surface mb-4">
+                  We've sent a confirmation link to <strong className="text-secondary">{email}</strong>. Please check your inbox and click the link to activate your account.
+                </p>
+                <div className="space-y-3">
+                  <button
+                    type="button"
+                    onClick={handleResendConfirmation}
+                    disabled={resending}
+                    className="w-full bg-secondary text-on-secondary rounded-lg font-semibold text-body-sm shadow-sm hover:bg-secondary/90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 py-2 disabled:opacity-50"
+                  >
+                    {resending ? (
+                      <>
+                        <span className="material-symbols-outlined animate-spin">hourglass_empty</span>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <span className="material-symbols-outlined">mark_email_unread</span>
+                        Resend Confirmation Email
+                      </>
+                    )}
+                  </button>
+                  <Link
+                    to="/signin"
+                    className="w-full bg-surface-container-lowest border border-outline text-on-surface rounded-lg font-semibold text-body-sm shadow-sm hover:bg-surface-container-low transition-all active:scale-[0.98] flex items-center justify-center gap-2 py-2"
+                  >
+                    <span className="material-symbols-outlined">login</span>
+                    Go to Login
+                  </Link>
+                </div>
+                <p className="text-caption text-on-surface-variant mt-4 text-center">
+                  Didn't receive the email? Check your spam folder or click resend above.
+                </p>
+              </div>
+            )}
+
+            {!signupSuccess && (
+              <div className="text-center mt-1">
+                <p className="text-body-md text-on-surface-variant">
+                  Already have an account?{' '}
+                  <Link className="text-secondary font-semibold hover:underline" to="/signin">
+                    Login here
+                  </Link>
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="mt-auto border-t border-outline-variant/10 flex items-center justify-center gap-base text-on-surface-variant/40 pt-2">
