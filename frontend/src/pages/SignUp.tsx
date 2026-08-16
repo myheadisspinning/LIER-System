@@ -96,7 +96,8 @@ export default function SignUp() {
       const isUseless = !raw.trim() || raw.trim() === '{}' || raw.trim() === '""';
       
       if (isUseless) {
-        if (data?.user?.identities?.length === 0) {
+        const existingIdentities = (data?.user as { identities?: unknown[] } | null)?.identities;
+        if (existingIdentities?.length === 0) {
           setToast({ type: 'error', message: 'This email is already used with an existing account. Please sign in instead.' });
         } else {
           setToast({ type: 'error', message: 'Registration failed. This email may already be registered or the service is temporarily unavailable.' });
