@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import SiteHeader from '../components/SiteHeader';
+import SiteFooter from '../components/SiteFooter';
 
 const kagawads = [
   { name: 'Dante Arga', committee: 'Peace and Order', icon: 'security', img: 'AB6AXuBXukd8qzbX81JCXuMfIH0xhReNVT4cIoVSKQ7yq0VFRQhbmKtUmA1Tw2h0Em7dHfqTZrl-3hQRrrcmNFc9a0JsKZkWf23eM88IwhjI502kFLdPFl87Hw-egK6Hl_Vvo_E8Z8SDdggYNo0Mz5vQeMgnELL-_czrXz_IhW9R4m3yApqGAF2wesGzQ5UBO0QkNQ13IveiNDIrF8_HF47wzkZcjwVlJ15rFMkxOE_kVxw9F0KynDeP_kTU' },
@@ -179,27 +179,7 @@ export default function Officials() {
         </section>
       </main>
 
-      <footer className="w-full py-xl px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-lowest border-t border-outline-variant">
-        <div className="flex flex-col gap-sm text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-xs">
-            <div className="w-10 h-10 rounded-full overflow-hidden border border-outline-variant flex items-center justify-center">
-              <img src="/image/culiat-logo.png" alt="Barangay Culiat Logo" className="w-full h-full object-cover" />
-            </div>
-            <span className="font-headline-md text-headline-md text-primary">Barangay Culiat</span>
-          </div>
-          <p className="font-caption text-caption text-on-surface-variant">&copy; 2024 Barangay Culiat. Public Safety &amp; Transparency Portal.</p>
-        </div>
-        <div className="flex flex-wrap justify-center gap-lg">
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Privacy Policy</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Terms of Service</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">FOI Manual</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Accessibility</Link>
-        </div>
-        <div className="flex gap-md">
-          <div className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span className="material-symbols-outlined">public</span></div>
-          <div className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span className="material-symbols-outlined">share</span></div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

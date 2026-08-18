@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import SiteHeader from '../components/SiteHeader';
+import SiteFooter from '../components/SiteFooter';
 
 
 export default function ElderGuide() {
+  const navigate = useNavigate();
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
@@ -37,7 +39,7 @@ export default function ElderGuide() {
               <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-6 leading-tight">Senior Safety Guide: <br /><span className="text-secondary">Barangay Culiat</span></h1>
               <p className="text-body-lg text-on-surface-variant mb-8 max-w-2xl">A dedicated resource for our elders in Barangay Culiat. We are committed to providing a secure environment, continuing the legacy of community service through easy-to-use digital tools and local support.</p>
               <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                <button className="bg-secondary text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 text-lg">
+                <button onClick={() => navigate('/signin')} className="bg-secondary text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 text-lg">
                   <span className="material-symbols-outlined">shield_person</span> Get Started
                 </button>
                 <button className="bg-surface-container-high border-2 border-outline-variant text-on-surface font-bold py-4 px-8 rounded-2xl hover:bg-surface-container-highest transition-all text-lg">
@@ -56,7 +58,7 @@ export default function ElderGuide() {
             <div className="text-center mb-16">
               <span className="text-secondary font-bold tracking-widest uppercase text-sm mb-2 block">Quick Action</span>
               <h2 className="font-headline-lg text-headline-lg text-on-surface">How to Report an Incident</h2>
-              <p className="text-on-surface-variant max-w-xl mx-auto">Simple steps to get help when you need it most. Our system is designed for clarity and speed for all Barangay Culiat residents.</p>
+              <p className="text-on-surface-variant max-w-2xl mx-auto">Simple steps to get help when you need it most. Our system is designed for clarity and speed for all Barangay Culiat residents.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
               {[
@@ -129,7 +131,7 @@ export default function ElderGuide() {
                   </div>
                   <div>
                     <h4 className="font-bold text-2xl mb-1 text-white">Call our Digital Help Desk</h4>
-                    <p className="text-on-primary-container/70 text-lg">Direct support line: (02) 8922-8224 (Public Safety Office).</p>
+                    <p className="text-on-primary-container/70 text-lg">Direct support line: 0962-582-1531 (Barangay Hotline) or 856-722-60.</p>
                   </div>
                 </div>
               </div>
@@ -142,27 +144,7 @@ export default function ElderGuide() {
         </section>
       </main>
 
-      <footer className="w-full py-xl md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-lowest border-t border-outline-variant px-margin-desktop">
-        <div className="flex flex-col gap-sm text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-xs">
-            <div className="w-10 h-10 rounded-full overflow-hidden border border-outline-variant flex items-center justify-center">
-              <img alt="Barangay Culiat Logo" className="w-full h-full object-cover" src="/image/culiat-logo.png" />
-            </div>
-            <span className="font-headline-md text-headline-md text-primary">Barangay Culiat</span>
-          </div>
-          <p className="font-caption text-caption text-on-surface-variant">&copy; 2024 Barangay Culiat Law Enforcement. Public Safety &amp; Transparency Portal.</p>
-        </div>
-        <div className="flex flex-wrap justify-center gap-lg">
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Privacy Policy</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Terms of Service</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">FOI Manual</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Accessibility</Link>
-        </div>
-        <div className="flex gap-md">
-          <div className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span className="material-symbols-outlined">public</span></div>
-          <div className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span className="material-symbols-outlined">share</span></div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

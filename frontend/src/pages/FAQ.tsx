@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import SiteHeader from '../components/SiteHeader';
+import SiteFooter from '../components/SiteFooter';
 
 interface FaqItem {
   q: string;
@@ -42,7 +43,7 @@ const faqSections: FaqSection[] = [
       },
       {
         q: 'Is the health center open on weekends?',
-        a: 'The health center is open Monday through Friday. Emergency triage is available 24/7 — call the emergency hotline or use the Emergency SOS feature for urgent medical needs.',
+        a: 'The health center is open Monday through Friday. Emergency triage is available 24/7 — call the Barangay Hotline at 0962-582-1531, QC Emergency at 122, or use the Emergency SOS feature for urgent medical needs.',
       },
       {
         q: 'What are the office hours of the Barangay Hall?',
@@ -56,7 +57,7 @@ const faqSections: FaqSection[] = [
     items: [
       {
         q: 'What should I do in an emergency?',
-        a: 'Call 911 for life-threatening emergencies, then use the Emergency SOS button in your portal to alert barangay responders. Provide your exact location and describe what is happening clearly and calmly.',
+        a: 'Call 911 for life-threatening emergencies, then use the Emergency SOS button in your portal to alert barangay responders. You can also reach the Barangay Hotline directly at 0962-582-1531 or 856-722-60. Provide your exact location and describe what is happening clearly and calmly.',
       },
       {
         q: 'How does the AI dispatcher decide priority?',
@@ -176,27 +177,7 @@ export default function FAQ() {
         </section>
       </main>
 
-      <footer className="w-full py-xl md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-lowest border-t border-outline-variant px-margin-desktop">
-        <div className="flex flex-col gap-sm text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-xs">
-            <div className="w-10 h-10 rounded-full overflow-hidden border border-outline-variant flex items-center justify-center">
-              <img alt="Barangay Culiat Logo" className="w-full h-full object-cover" src="/image/culiat-logo.png" />
-            </div>
-            <span className="font-headline-md text-headline-md text-primary">Barangay Culiat</span>
-          </div>
-          <p className="font-caption text-caption text-on-surface-variant">&copy; 2024 Barangay Culiat Law Enforcement. Public Safety &amp; Transparency Portal.</p>
-        </div>
-        <div className="flex flex-wrap justify-center gap-lg">
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Privacy Policy</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Terms of Service</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">FOI Manual</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Accessibility</Link>
-        </div>
-        <div className="flex gap-md">
-          <div className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span className="material-symbols-outlined">public</span></div>
-          <div className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span className="material-symbols-outlined">share</span></div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

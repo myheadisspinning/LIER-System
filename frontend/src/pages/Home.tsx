@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
 import { supabase } from '../supabaseClient';
 import SiteHeader from '../components/SiteHeader';
+import SiteFooter from '../components/SiteFooter';
 import ConfirmDialog from '../components/ConfirmDialog';
 import LoadingScreen from '../components/LoadingScreen';
 import styles from '../styles/modules/Home.module.css';
@@ -206,17 +207,22 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
             {[
-              { icon: 'report_problem', title: 'Report an Incident', desc: 'Submit detailed reports for security concerns in your area.', hoverBorder: 'hover:border-secondary' },
-              { icon: 'call', title: 'Emergency Hotline', desc: 'Quick access to local police, fire department, and medical EMS.', hoverBorder: 'hover:border-error' },
-              { icon: 'local_police', title: 'Police Assistance', desc: 'Request non-emergency patrol or police presence in your zone.', hoverBorder: 'hover:border-secondary' },
-              { icon: 'forum', title: 'Contact Barangay', desc: 'Direct messaging line to Barangay officials and safety officers.', hoverBorder: 'hover:border-secondary' },
+              { icon: 'report_problem', title: 'Report an Incident', desc: 'Submit detailed reports for security concerns in your area.', hoverBorder: 'hover:border-secondary', img: '/image/culiat-brgy.jpg' },
+              { icon: 'call', title: 'Emergency Hotline', desc: 'Quick access to local police, fire department, and medical EMS.', hoverBorder: 'hover:border-error', img: '/image/tandangsora.jfif' },
+              { icon: 'local_police', title: 'Police Assistance', desc: 'Request non-emergency patrol or police presence in your zone.', hoverBorder: 'hover:border-secondary', img: '/image/barangayhalltandangsora.jfif' },
+              { icon: 'forum', title: 'Contact Barangay', desc: 'Direct messaging line to Barangay officials and safety officers.', hoverBorder: 'hover:border-secondary', img: '/image/tandangsorashrine.jpg' },
             ].map((svc, i) => (
-              <div key={i} className={`group bg-surface p-lg rounded-2xl border border-outline-variant ${svc.hoverBorder} hover:shadow-xl transition-all cursor-pointer touch-manipulation hover:-translate-y-2`} data-section="services">
-                <div className="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary mb-md group-hover:bg-secondary group-hover:text-white transition-colors duration-300">
-                  <span className="material-symbols-outlined text-3xl">{svc.icon}</span>
+              <div key={i} className={`group bg-surface rounded-2xl border border-outline-variant overflow-hidden ${svc.hoverBorder} hover:shadow-xl transition-all cursor-pointer touch-manipulation hover:-translate-y-2`} data-section="services">
+                <div className="h-32 overflow-hidden">
+                  <img alt={svc.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={svc.img} />
                 </div>
-                <h3 className="font-headline-md text-xl md:text-headline-md mb-xs text-on-surface">{svc.title}</h3>
-                <p className="font-body-md text-on-surface-variant">{svc.desc}</p>
+                <div className="p-lg">
+                  <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary mb-sm group-hover:bg-secondary group-hover:text-white transition-colors duration-300">
+                    <span className="material-symbols-outlined text-2xl">{svc.icon}</span>
+                  </div>
+                  <h3 className="font-headline-md text-lg md:text-headline-md mb-xs text-on-surface">{svc.title}</h3>
+                  <p className="font-body-md text-on-surface-variant text-sm">{svc.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -321,45 +327,78 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-gutter">
             {[
-              { title: "Elders' Guide: Navigating the Portal", desc: 'A step-by-step guide for our seniors on how to use digital tools to report incidents and access services safely.', btn: 'View Guide' },
-              { title: 'Public Safety & Protocols', desc: 'Learn the official procedures for reporting emergencies and how to coordinate with our public safety officers during critical incidents.', btn: 'Learn More' },
-              { title: 'Building a Resilient Community', desc: 'Discover community initiatives, neighborhood watch programs, and best practices for maintaining a safe environment.', btn: 'Get Involved' },
+              { title: "Elders' Guide: Navigating the Portal", desc: 'A step-by-step guide for our seniors on how to use digital tools to report incidents and access services safely.', btn: 'View Guide', link: '/elder-guide', img: '/image/culiat-brgy.jpg' },
+              { title: 'Public Safety & Protocols', desc: 'Learn the official procedures for reporting emergencies and how to coordinate with our public safety officers during critical incidents.', btn: 'Learn More', link: '/services', img: '/image/tandangsora.jfif' },
+              { title: 'Building a Resilient Community', desc: 'Discover community initiatives, neighborhood watch programs, and best practices for maintaining a safe environment.', btn: 'Get Involved', link: '/contact', img: '/image/tandangsorashrine.jpg' },
             ].map((guide, i) => (
-              <div key={i} className="bg-surface-container-low p-6 md:p-lg rounded-2xl border border-outline-variant/30 flex flex-col h-full hover:shadow-2xl hover:-translate-y-2 transition-all" data-section="guides">
-                <h3 className="font-headline-md text-lg md:text-headline-md text-on-surface mb-sm">{guide.title}</h3>
-                <p className="font-body-md text-on-surface-variant mb-lg flex-grow">{guide.desc}</p>
-                <button className="w-full py-3 border border-secondary text-secondary font-label-md rounded-lg hover:bg-secondary hover:text-white transition-all">{guide.btn}</button>
+              <div key={i} className="bg-surface-container-low rounded-2xl border border-outline-variant/30 flex flex-col overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all" data-section="guides">
+                <div className="h-44 overflow-hidden">
+                  <img alt={guide.title} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src={guide.img} />
+                </div>
+                <div className="p-6 md:p-lg flex flex-col flex-grow">
+                  <h3 className="font-headline-md text-lg md:text-headline-md text-on-surface mb-sm">{guide.title}</h3>
+                  <p className="font-body-md text-on-surface-variant mb-lg flex-grow">{guide.desc}</p>
+                  <Link to={guide.link} className="w-full py-3 border border-secondary text-secondary font-label-md rounded-lg hover:bg-secondary hover:text-white transition-all text-center inline-block">{guide.btn}</Link>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <footer className="w-full py-xl md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-lowest border-t border-outline-variant px-margin-desktop">
-        <div className="flex flex-col gap-sm text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-xs">
-            <div className="w-10 h-10 rounded-full overflow-hidden border border-outline-variant flex items-center justify-center">
-              <img alt="Barangay Culiat Logo" className="w-full h-full object-cover" src="/image/culiat-logo.png" />
+      <section ref={(el) => { sectionRefs.current[6] = el; }} className="py-xl bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-700">
+        <div className="container mx-auto px-4 md:px-margin-desktop">
+          <div className="text-center mb-xl" data-section="hotlines">
+            <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">Emergency Hotlines</h2>
+            <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Save these numbers for quick access during emergencies. Our responders are ready to assist 24/7.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-gutter">
+            <div className="bg-white p-lg rounded-2xl border-l-4 border-l-secondary shadow-md hover:shadow-xl hover:-translate-y-1 transition-all" data-section="hotlines">
+              <div className="flex items-center gap-md mb-md">
+                <div className="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-secondary text-3xl" style={{ fontVariationSettings: '"FILL" 1' }}>local_police</span>
+                </div>
+                <div>
+                  <h3 className="font-headline-md text-lg text-on-surface">Barangay Hotline</h3>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse mr-1"></span> 24/7 Active
+                  </span>
+                </div>
+              </div>
+              <p className="font-body-md text-on-surface font-bold text-lg mb-xs">0962-582-1531</p>
+              <p className="font-body-sm text-on-surface-variant">Landline: 856-722-60</p>
             </div>
-            <span className="font-headline-md text-headline-md text-primary">Barangay Culiat</span>
+            <div className="bg-white p-lg rounded-2xl border-l-4 border-l-error shadow-md hover:shadow-xl hover:-translate-y-1 transition-all" data-section="hotlines">
+              <div className="flex items-center gap-md mb-md">
+                <div className="w-14 h-14 rounded-xl bg-error/10 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-error text-3xl" style={{ fontVariationSettings: '"FILL" 1' }}>emergency</span>
+                </div>
+                <div>
+                  <h3 className="font-headline-md text-lg text-on-surface">PNP Helpline</h3>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-xs font-bold">Nationwide</span>
+                </div>
+              </div>
+              <p className="font-body-md text-on-surface font-bold text-lg mb-xs">911</p>
+              <p className="font-body-sm text-on-surface-variant">Philippine National Police</p>
+            </div>
+            <div className="bg-white p-lg rounded-2xl border-l-4 border-l-tertiary shadow-md hover:shadow-xl hover:-translate-y-1 transition-all" data-section="hotlines">
+              <div className="flex items-center gap-md mb-md">
+                <div className="w-14 h-14 rounded-xl bg-tertiary/10 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-tertiary text-3xl" style={{ fontVariationSettings: '"FILL" 1' }}>apartment</span>
+                </div>
+                <div>
+                  <h3 className="font-headline-md text-lg text-on-surface">QC Emergency</h3>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-bold">Quezon City</span>
+                </div>
+              </div>
+              <p className="font-body-md text-on-surface font-bold text-lg mb-xs">122</p>
+              <p className="font-body-sm text-on-surface-variant">Quezon City Emergency Hotline</p>
+            </div>
           </div>
-          <p className="font-caption text-caption text-on-surface-variant">&copy; 2024 Barangay Culiat Law Enforcement. Public Safety &amp; Transparency Portal.</p>
         </div>
-        <div className="flex flex-wrap justify-center gap-lg">
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Privacy Policy</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Terms of Service</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">FOI Manual</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Accessibility</Link>
-        </div>
-        <div className="flex gap-md">
-          <div className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer">
-            <span className="material-symbols-outlined">public</span>
-          </div>
-          <div className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer">
-            <span className="material-symbols-outlined">share</span>
-          </div>
-        </div>
-      </footer>
+      </section>
+
+      <SiteFooter />
 
       <ConfirmDialog
         open={confirmOpen}

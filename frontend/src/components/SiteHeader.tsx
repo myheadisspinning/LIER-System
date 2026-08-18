@@ -102,7 +102,7 @@ export default function SiteHeader({
   };
 
   const loginButtonClass =
-    'bg-secondary text-on-secondary px-4 md:px-md py-2 rounded-lg font-bold hover:bg-secondary-container hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all text-xs md:text-sm flex items-center justify-center whitespace-nowrap';
+    'group hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary text-white font-semibold text-xs tracking-wide shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-250 cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-primary-container';
 
   return (
     <>
@@ -204,8 +204,9 @@ export default function SiteHeader({
               </div>
             </>
           ) : (
-            <Link className={loginButtonClass} to="/signin">
-              Login/Register
+            <Link className={loginButtonClass} to="/signin" aria-label="Login">
+              <span className="material-symbols-outlined text-sm leading-none" style={{ fontVariationSettings: "'FILL' 1" }}>login</span>
+              <span className="uppercase">Login</span>
             </Link>
           )}
 
@@ -259,11 +260,13 @@ export default function SiteHeader({
               </div>
             ) : (
               <Link
-                className="w-full px-md py-4 bg-secondary text-on-secondary font-bold rounded-xl flex items-center justify-center text-center shadow-lg transition-transform hover:scale-[1.02]"
+                className="group inline-flex items-center justify-center gap-1.5 w-full px-3 py-2.5 rounded-lg bg-secondary text-white font-semibold text-xs tracking-wide shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-250 cursor-pointer focus:outline-none focus:ring-2 focus:ring-secondary/50"
                 to="/signin"
                 onClick={() => setDrawerOpen(false)}
+                aria-label="Login"
               >
-                Login/Register
+                <span className="material-symbols-outlined text-sm leading-none" style={{ fontVariationSettings: "'FILL' 1" }}>login</span>
+                <span className="uppercase">Login</span>
               </Link>
             )}
           </div>

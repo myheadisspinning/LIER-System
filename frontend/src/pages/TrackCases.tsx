@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import SiteHeader from '../components/SiteHeader';
+import SiteFooter from '../components/SiteFooter';
 
 
 interface CaseData {
@@ -198,27 +198,7 @@ export default function TrackCases() {
 
       <div className="h-24 md:hidden"></div>
 
-      <footer className="w-full py-xl px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-lowest border-t border-outline-variant">
-        <div className="flex flex-col gap-sm text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-xs">
-            <div className="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
-              <img alt="Logo" className="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW74s2nearQNN4blA0X_4FiQV6ofHdltCHlWXwSzWpVbbPZZ5GbXxuYcIx5V0SHV1VoBueZmm4kEivwk9nzaTC5vcrz3mG4P5ZpB52v-6lo8U_Zx9-kXfVVj713jx01IPNIhpa7j6CWKWRwsyIXkoiUFCSp5kDQPtyJa2kF7zPHfauLcwLYGWBC5yjbSG6KYnpYOu2on2ficRRg9JqDILgPgyN3ocKl6Aa_sUnDRAAwzyUGNioF9-3tL4vKnnKe4CAcg" />
-            </div>
-            <span className="font-headline-md text-headline-md text-primary">Barangay Culiat</span>
-          </div>
-          <p className="font-caption text-caption text-on-surface-variant">&copy; 2024 Barangay Culiat Law Enforcement. Public Safety &amp; Transparency Portal.</p>
-        </div>
-        <div className="flex flex-wrap justify-center gap-lg">
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Privacy Policy</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Terms of Service</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">FOI Manual</Link>
-          <Link className="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" to="#">Accessibility</Link>
-        </div>
-        <div className="flex gap-md">
-          <div className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span className="material-symbols-outlined">public</span></div>
-          <div className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-secondary hover:text-white transition-all cursor-pointer"><span className="material-symbols-outlined">share</span></div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
