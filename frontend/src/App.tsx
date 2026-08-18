@@ -2,12 +2,16 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import AuthCallback from './pages/AuthCallback';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import About from './pages/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
 import Officials from './pages/Officials';
 import ElderGuide from './pages/ElderGuide';
 import TrackCases from './pages/TrackCases';
+import FAQ from './pages/FAQ';
 import Profile from './pages/portal/Profile';
 import RoleGuard from './components/RoleGuard';
 import AdminLayout from './pages/portal/layouts/AdminLayout';
@@ -59,8 +63,12 @@ const router = createBrowserRouter([
   { path: "/officials", element: <Officials /> },
   { path: "/elder-guide", element: <ElderGuide /> },
   { path: "/track-cases", element: <TrackCases /> },
+  { path: "/faq", element: <FAQ /> },
   { path: "/signin", element: <SignIn /> },
   { path: "/signup", element: <SignUp /> },
+  { path: "/forgot-password", element: <ForgotPassword /> },
+  { path: "/reset-password", element: <ResetPassword /> },
+  { path: "/auth/callback", element: <AuthCallback /> },
   { path: "/profile", element: <Profile /> },
   {
     path: "/admin",

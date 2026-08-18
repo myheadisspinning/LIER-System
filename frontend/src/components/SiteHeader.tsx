@@ -88,9 +88,17 @@ export default function SiteHeader({
   };
 
   const getInitial = () => {
-    const name = user?.user_metadata?.fullname;
+    const name = user?.user_metadata?.fullname || user?.user_metadata?.full_name || user?.user_metadata?.name;
     if (typeof name === 'string' && name.trim()) return name.trim().charAt(0).toUpperCase();
     return (user?.email?.[0] ?? 'U').toUpperCase();
+  };
+
+  const getAvatarUrl = () => {
+    return user?.user_metadata?.avatar_url || user?.user_metadata?.picture || null;
+  };
+
+  const getDisplayName = () => {
+    return user?.user_metadata?.fullname || user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email;
   };
 
   const loginButtonClass =
@@ -160,8 +168,12 @@ export default function SiteHeader({
                     setNotifOpen(false);
                   }}
                 >
-                  <span className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary font-bold text-sm">
-                    {getInitial()}
+                  <span className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary font-bold text-sm overflow-hidden">
+                    {getAvatarUrl() ? (
+                      <img src={getAvatarUrl()} alt="Avatar" className="w-full h-full object-cover" />
+                    ) : (
+                      getInitial()
+                    )}
                   </span>
                   <span className="material-symbols-outlined text-xl text-surface-bright">{profileOpen ? 'expand_less' : 'expand_more'}</span>
                 </button>
@@ -169,7 +181,7 @@ export default function SiteHeader({
                   <div className="absolute right-0 mt-2 w-52 bg-background rounded-lg shadow-2xl border border-outline-variant/30 overflow-hidden">
                     <div className="px-4 py-3 border-b border-outline-variant/30">
                       <p className="font-label-md text-label-md font-bold text-on-surface truncate">
-                        {typeof user.user_metadata?.fullname === 'string' ? user.user_metadata.fullname : user.email}
+                        {getDisplayName()}
                       </p>
                       <p className="text-caption text-on-surface-variant truncate">{user.email}</p>
                     </div>

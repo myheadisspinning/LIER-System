@@ -41,7 +41,9 @@ export default function Profile() {
 
       const meta = currentUser.user_metadata ?? {};
       setProfile({
-        fullname: typeof meta.fullname === 'string' ? meta.fullname : '',
+        fullname: (typeof meta.fullname === 'string' && meta.fullname) ||
+          (typeof meta.full_name === 'string' && meta.full_name) ||
+          (typeof meta.name === 'string' && meta.name) || '',
         dob: typeof meta.dob === 'string' ? meta.dob : null,
         gender: typeof meta.gender === 'string' ? meta.gender : null,
         address: typeof meta.address === 'string' ? meta.address : null,
@@ -117,8 +119,12 @@ export default function Profile() {
         <main className="min-h-screen flex items-center justify-center px-4 pt-24 pb-10">
           <div className="w-full max-w-2xl bg-surface-container-lowest rounded-2xl shadow-2xl border border-outline-variant/30 overflow-hidden">
             <div className="bg-primary-container p-md md:p-lg text-center">
-              <div className="mx-auto w-20 h-20 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-3xl font-bold border-4 border-surface-bright shadow-lg">
-                {getInitial()}
+              <div className="mx-auto w-20 h-20 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-3xl font-bold border-4 border-surface-bright shadow-lg overflow-hidden">
+                {(user?.user_metadata?.avatar_url || user?.user_metadata?.picture) ? (
+                  <img src={user.user_metadata.avatar_url || user.user_metadata.picture} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  getInitial()
+                )}
               </div>
               <h2 className="font-headline-md text-headline-md text-surface-bright mt-4 truncate">
                 {profile?.fullname || 'Your Profile'}

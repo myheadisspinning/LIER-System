@@ -10,6 +10,7 @@ type Acct = {
   email_confirmed_at: string | null;
   created_at: string;
   suspended: boolean;
+  avatar_url: string | null;
 };
 
 type Filter = 'All' | 'Staff' | 'Officers';
@@ -269,8 +270,12 @@ export default function SuperadminAdminManagement() {
                       className={`hover:bg-surface-container-lowest/80 transition-colors cursor-pointer ${activeId === u.id ? 'bg-secondary/5 border-l-4 border-l-secondary-container' : ''} ${u.suspended ? 'opacity-75' : ''}`}
                     >
                       <td className="py-3 px-md">
-                        <div className="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center text-secondary font-bold text-xs">
-                          {initials(u.fullname)}
+                        <div className="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center text-secondary font-bold text-xs overflow-hidden">
+                          {u.avatar_url ? (
+                            <img src={u.avatar_url} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            initials(u.fullname)
+                          )}
                         </div>
                       </td>
                       <td className="py-3 px-md">
@@ -311,10 +316,14 @@ export default function SuperadminAdminManagement() {
                 <span className="material-symbols-outlined">close</span>
               </button>
               <div className="relative flex items-center gap-4 translate-y-8">
-                <div className="w-20 h-20 rounded-xl bg-white p-1 shadow-md flex items-center justify-center">
-                  <div className="w-full h-full rounded-lg bg-secondary/20 flex items-center justify-center text-secondary font-headline-lg text-headline-lg">
-                    {initials(active.fullname)}
-                  </div>
+                <div className="w-20 h-20 rounded-xl bg-white p-1 shadow-md flex items-center justify-center overflow-hidden">
+                  {active.avatar_url ? (
+                    <img src={active.avatar_url} alt="" className="w-full h-full object-cover rounded-lg" />
+                  ) : (
+                    <div className="w-full h-full rounded-lg bg-secondary/20 flex items-center justify-center text-secondary font-headline-lg text-headline-lg">
+                      {initials(active.fullname)}
+                    </div>
+                  )}
                 </div>
                 <div>
                   <h3 className="font-headline-md text-headline-md text-on-background mt-8">{active.fullname}</h3>
@@ -373,7 +382,7 @@ export default function SuperadminAdminManagement() {
                   <button type="button" disabled={busyId === active.id} onClick={() => toggleSuspend(active)} className={`w-full flex justify-between items-center px-4 py-3 border rounded-xl transition-colors text-left group disabled:opacity-50 ${active.suspended ? 'bg-success-green/5 border-success-green/30 hover:bg-success-green/10' : 'bg-error-container/20 border-error/30 hover:bg-error-container/40'}`}>
                     <div>
                       <div className={`font-label-md text-label-md ${active.suspended ? 'text-success-green' : 'text-error'}`}>{active.suspended ? 'Re-activate Account' : 'Suspend Account Access'}</div>
-                      <div className={`text-caption ${active.suspended ? 'text-on-surface-variant' : 'text-on-error-container/70'} mt-0.5`}>{active.suspended ? 'Restore account access.' : 'Log out from all active devices immediately.'}</div>
+                       <div className={`text-caption ${active.suspended ? 'text-on-surface-variant' : 'text-on-error-container/70'} mt-0.5`}>{active.suspended ? 'Restore account access.' : 'Block user from signing in.'}</div>
                     </div>
                     <span className={`material-symbols-outlined ${active.suspended ? 'text-success-green' : 'text-error'}`}>{active.suspended ? 'check_circle' : 'block'}</span>
                   </button>

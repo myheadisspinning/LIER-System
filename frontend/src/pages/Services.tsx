@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
 import { supabase } from '../supabaseClient';
-import { getRole, dashboardPathFor } from '../lib/role';
+import { getRole, dashboardPathFor, type Role } from '../lib/role';
 import SiteHeader from '../components/SiteHeader';
 import Toast, { type ToastData } from '../components/Toast';
 import ReportIncident from './portal/user/ReportIncident';
@@ -10,6 +10,7 @@ import ReportIncident from './portal/user/ReportIncident';
 
 export default function Services() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(() => (location.state as { openIncident?: boolean } | null)?.openIncident === true);
   const [user, setUser] = useState<User | null>(null);
   const [opening, setOpening] = useState(false);
@@ -51,6 +52,18 @@ export default function Services() {
       loader?.classList.add('pointer-events-none', 'opacity-0');
       setOpening(false);
     }, 2000);
+  };
+
+  const openGated = async (pathFor: Record<Role, string>) => {
+    if (!user) {
+      setToast({ type: 'error', message: 'Access Restricted: Please login or register to access this service.' });
+      return;
+    }
+    if (opening) return;
+    setOpening(true);
+    const role = await getRole(user.id);
+    window.open(pathFor[role], '_blank', 'noopener,noreferrer');
+    setOpening(false);
   };
 
   useEffect(() => {
@@ -146,12 +159,12 @@ export default function Services() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter w-full">
             {[
-              { icon: 'location_on', title: 'Locate Barangay Hall', desc: 'Find the nearest barangay office and get directions for in-person assistance and document processing.', btn: 'Get Directions' },
-              { icon: 'dashboard', title: 'View My Dashboard', desc: 'Access your personalized portal to manage reports, view notifications, and update your resident profile.', btn: 'Open Dashboard', dashboard: true },
-              { icon: 'track_changes', title: 'Track My Case', desc: 'Monitor the status of filed reports from investigation through to final resolution.', btn: 'Track Status' },
-              { icon: 'cloud_upload', title: 'Digital Evidence Vault', desc: 'Securely upload and manage digital evidence including photos and witness statements.', btn: 'Access Vault' },
-              { icon: 'analytics', title: 'Command Center Analytics', desc: 'Access data-driven insights on neighborhood safety trends and enforcement performance.', btn: 'View Data' },
-              { icon: 'help', title: 'FAQ', desc: 'Find quick answers to common questions about barangay services, safety protocols, and community guidelines.', btn: 'Browse FAQs' },
+              { icon: 'location_on', title: 'Locate Barangay Hall', desc: 'Find the nearest barangay office and get directions for in-person assistance and document processing.', btn: 'Get Directions', action: () => window.open('https://www.google.com/maps/search/?api=1&query=467+Tandang+Sora+Ave+Quezon+City', '_blank', 'noopener,noreferrer') },
+              { icon: 'dashboard', title: 'View My Dashboard', desc: 'Access your personalized portal to manage reports, view notifications, and update your resident profile.', btn: 'Open Dashboard', action: () => void handleDashboardClick() },
+              { icon: 'track_changes', title: 'Track My Case', desc: 'Monitor the status of filed reports from investigation through to final resolution.', btn: 'Track Status', action: () => navigate('/track-cases') },
+              { icon: 'cloud_upload', title: 'Digital Evidence Vault', desc: 'Securely upload and manage digital evidence including photos and witness statements.', btn: 'Access Vault', action: () => void openGated({ user: '/user/evidence-vault', officer: '/officer/dashboard', admin: '/admin/evidence-vault', superadmin: '/superadmin/dashboard' }) },
+              { icon: 'analytics', title: 'Command Center Analytics', desc: 'Access data-driven insights on neighborhood safety trends and enforcement performance.', btn: 'View Data', action: () => void openGated({ user: '/user/dashboard', officer: '/officer/dashboard', admin: '/admin/reports', superadmin: '/superadmin/dashboard' }) },
+              { icon: 'help', title: 'FAQ', desc: 'Find quick answers to common questions about barangay services, safety protocols, and community guidelines.', btn: 'Browse FAQs', action: () => navigate('/faq') },
             ].map((svc, i) => (
               <div key={i} className="glass-card p-md rounded-2xl flex flex-col justify-between w-full border border-outline-variant/30 bg-surface-bright/50 backdrop-blur-sm shadow-sm hover:shadow-lg transition-all duration-700">
                 <div>
@@ -161,7 +174,7 @@ export default function Services() {
                   <h3 className="font-headline-md text-xl md:text-headline-md text-primary mb-sm">{svc.title}</h3>
                   <p className="font-body-md text-body-md text-on-surface-variant mb-lg">{svc.desc}</p>
                 </div>
-                <button className="w-full py-sm border border-secondary text-secondary rounded-lg font-label-md text-label-md flex items-center justify-center gap-sm hover:bg-secondary/5 transition-all" type="button" onClick={svc.dashboard ? () => void handleDashboardClick() : undefined}>{svc.btn}</button>
+                <button className="w-full py-sm border border-secondary text-secondary rounded-lg font-label-md text-label-md flex items-center justify-center gap-sm hover:bg-secondary/5 transition-all" type="button" onClick={() => svc.action()}>{svc.btn}</button>
               </div>
             ))}
           </div>

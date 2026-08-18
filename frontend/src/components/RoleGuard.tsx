@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-import { getRole, type Role } from '../lib/role';
+import { getRole, checkUserAccess, type Role } from '../lib/role';
 import LoadingScreen from './LoadingScreen';
 
 interface RoleGuardProps {
@@ -23,6 +23,19 @@ export default function RoleGuard({ allowed, children }: RoleGuardProps) {
         if (mounted) navigate('/signin');
         return;
       }
+
+      const access = await checkUserAccess(user.id);
+      if (!mounted) return;
+
+      if (!access.allowed) {
+        await supabase.auth.signOut();
+        const error = access.reason === 'deleted'
+          ? 'Your account has been removed.'
+          : 'Your account has been suspended.';
+        navigate('/signin', { state: { error } });
+        return;
+      }
+
       const role = await getRole(user.id);
       if (mounted) {
         if (allowed.includes(role)) setStatus('granted');

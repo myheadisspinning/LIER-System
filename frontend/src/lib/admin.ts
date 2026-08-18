@@ -16,7 +16,7 @@ export async function getAdminProfile(): Promise<AdminProfile> {
   const profile = await supabase.from('public_users').select('fullname, role').eq('id', user?.id ?? '').maybeSingle();
   return {
     id: user?.id ?? '',
-    fullname: (profile.data?.fullname as string) ?? (user?.user_metadata?.fullname as string) ?? user?.email ?? 'Staff',
+    fullname: (profile.data?.fullname as string) ?? (user?.user_metadata?.fullname as string) ?? (user?.user_metadata?.full_name as string) ?? (user?.user_metadata?.name as string) ?? user?.email ?? 'Staff',
     email: user?.email,
     role: (profile.data?.role as string) ?? null,
   };

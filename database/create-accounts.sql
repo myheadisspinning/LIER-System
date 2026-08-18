@@ -13,16 +13,22 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  insert into public.public_users (id, fullname, dob, gender, address, phone, email_confirmed_at, role)
+  insert into public.public_users (id, fullname, dob, gender, address, phone, email_confirmed_at, role, avatar_url)
   values (
     new.id,
-    coalesce(nullif(new.raw_user_meta_data ->> 'fullname', ''), 'Unknown Resident'),
+    coalesce(
+      nullif(new.raw_user_meta_data ->> 'fullname', ''),
+      nullif(new.raw_user_meta_data ->> 'full_name', ''),
+      nullif(new.raw_user_meta_data ->> 'name', ''),
+      'Unknown Resident'
+    ),
     nullif(new.raw_user_meta_data ->> 'dob', '')::date,
     new.raw_user_meta_data ->> 'gender',
     new.raw_user_meta_data ->> 'address',
     new.raw_user_meta_data ->> 'phone',
     new.email_confirmed_at,
-    coalesce(new.raw_user_meta_data ->> 'role', 'user')
+    coalesce(new.raw_user_meta_data ->> 'role', 'user'),
+    new.raw_user_meta_data ->> 'avatar_url'
   );
   return new;
 end;

@@ -390,7 +390,8 @@ returns table (
   phone text,
   address text,
   dob date,
-  gender text
+  gender text,
+  avatar_url text
 )
 language plpgsql
 security definer
@@ -418,7 +419,8 @@ begin
       p.phone,
       p.address,
       p.dob,
-      p.gender
+      p.gender,
+      p.avatar_url
     from auth.users u
     left join public.public_users p on p.id = u.id
     where

@@ -22,6 +22,18 @@ export async function getRole(userId: string): Promise<Role> {
   return 'user';
 }
 
+export interface AccessCheck {
+  allowed: boolean;
+  reason: 'deleted' | 'suspended' | 'ok';
+}
+
+export async function checkUserAccess(userId: string): Promise<AccessCheck> {
+  const { data } = await supabase.rpc('check_user_access', { p_user_id: userId }).maybeSingle();
+  if (!data || !data.user_exists) return { allowed: false, reason: 'deleted' };
+  if (data.is_suspended) return { allowed: false, reason: 'suspended' };
+  return { allowed: true, reason: 'ok' };
+}
+
 export function dashboardPathFor(role: Role): string {
   if (role === 'superadmin') return '/superadmin/dashboard';
   if (role === 'admin') return '/admin/dashboard';

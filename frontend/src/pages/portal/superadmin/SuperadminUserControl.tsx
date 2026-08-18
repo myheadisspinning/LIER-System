@@ -14,6 +14,7 @@ type Acct = {
   address: string | null;
   dob: string | null;
   gender: string | null;
+  avatar_url: string | null;
 };
 
 const initials = (name: string) =>
@@ -280,8 +281,12 @@ export default function SuperadminUserControl() {
                     >
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-full ${u.suspended ? 'bg-error-container text-on-error-container' : 'bg-secondary-container text-on-secondary-container'} flex items-center justify-center font-bold relative`}>
-                            {initials(u.fullname)}
+                          <div className={`w-10 h-10 rounded-full ${u.suspended ? 'bg-error-container text-on-error-container' : 'bg-secondary-container text-on-secondary-container'} flex items-center justify-center font-bold relative overflow-hidden`}>
+                            {u.avatar_url ? (
+                              <img src={u.avatar_url} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              initials(u.fullname)
+                            )}
                             <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-surface-container-lowest ${u.suspended ? 'bg-error' : u.email_confirmed_at ? 'bg-[#16a34a]' : 'bg-outline'}`}></div>
                           </div>
                           <div>
@@ -341,10 +346,14 @@ export default function SuperadminUserControl() {
           {active ? (
             <div className="p-md pt-lg relative z-10 flex-1 overflow-y-auto no-scrollbar">
               <div className="flex flex-col items-center mb-6 text-center">
-                <div className="w-20 h-20 rounded-full bg-surface shadow-md border-4 border-surface p-1 mb-3 relative">
-                  <div className={`w-full h-full rounded-full ${active.suspended ? 'bg-error-container text-on-error-container' : 'bg-secondary-container text-on-secondary-container'} flex items-center justify-center text-xl font-bold`}>
-                    {initials(active.fullname)}
-                  </div>
+                <div className="w-20 h-20 rounded-full bg-surface shadow-md border-4 border-surface p-1 mb-3 relative overflow-hidden">
+                  {active.avatar_url ? (
+                    <img src={active.avatar_url} alt="" className="w-full h-full object-cover rounded-full" />
+                  ) : (
+                    <div className={`w-full h-full rounded-full ${active.suspended ? 'bg-error-container text-on-error-container' : 'bg-secondary-container text-on-secondary-container'} flex items-center justify-center text-xl font-bold`}>
+                      {initials(active.fullname)}
+                    </div>
+                  )}
                   <div className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-surface ${active.suspended ? 'bg-error' : 'bg-[#16a34a]'}`}></div>
                 </div>
                 <h3 className="font-headline-md text-headline-md text-on-surface m-0">{active.fullname}</h3>

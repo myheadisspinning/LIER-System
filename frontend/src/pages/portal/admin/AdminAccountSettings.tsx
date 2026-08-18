@@ -14,6 +14,7 @@ type Acct = {
   address: string | null;
   dob: string | null;
   gender: string | null;
+  avatar_url: string | null;
 };
 
 type Filter = 'All' | 'Active' | 'Pending' | 'Suspended';
@@ -289,7 +290,13 @@ export default function AdminAccountSettings() {
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center text-secondary font-bold text-xs">{initials(u.fullname)}</div>
+                          <div className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center text-secondary font-bold text-xs overflow-hidden">
+                            {u.avatar_url ? (
+                              <img src={u.avatar_url} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              initials(u.fullname)
+                            )}
+                          </div>
                           <div>
                             <div className="font-medium text-on-surface">{u.fullname}</div>
                             <div className="text-on-surface-variant text-xs">{u.email}</div>
@@ -332,8 +339,12 @@ export default function AdminAccountSettings() {
               <div className="p-6 border-b border-border-subtle flex-shrink-0">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center text-secondary font-headline-lg text-headline-lg border-2 border-secondary/20">
-                      {initials(active.fullname)}
+                    <div className="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center text-secondary font-headline-lg text-headline-lg border-2 border-secondary/20 overflow-hidden">
+                      {active.avatar_url ? (
+                        <img src={active.avatar_url} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        initials(active.fullname)
+                      )}
                     </div>
                     <div>
                       <h3 className="font-headline-md text-headline-md text-on-surface leading-tight">{active.fullname}</h3>
@@ -497,7 +508,7 @@ export default function AdminAccountSettings() {
 
       {tempPw && (
         <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-md">
+          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl">
             <div className="px-5 py-4 border-b border-border-subtle">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Temporary Password</h3>
             </div>
@@ -560,7 +571,7 @@ export default function AdminAccountSettings() {
 
       {deleteConfirm && (
         <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-md">
+          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl">
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
               <h3 className="font-headline-md text-headline-md font-bold text-error-red">Delete Account</h3>
               <button type="button" onClick={() => setDeleteConfirm(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><span className="material-symbols-outlined">close</span></button>

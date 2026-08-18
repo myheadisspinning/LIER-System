@@ -54,17 +54,19 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  const displayName = () => {
+  const getFullName = () => {
     const meta = user?.user_metadata as Record<string, unknown> | undefined;
-    const fullname = meta?.fullname;
-    if (typeof fullname === 'string' && fullname.trim()) return fullname.trim();
-    if (user?.email) return user.email;
-    return nav.brandSub;
+    return (typeof meta?.fullname === 'string' && meta.fullname.trim()) ||
+      (typeof meta?.full_name === 'string' && meta.full_name.trim()) ||
+      (typeof meta?.name === 'string' && meta.name.trim()) || null;
+  };
+
+  const displayName = () => {
+    return getFullName() || user?.email || nav.brandSub;
   };
 
   const initials = () => {
-    const name = user?.user_metadata as Record<string, unknown> | undefined;
-    const fullname = typeof name?.fullname === 'string' ? name.fullname.trim() : '';
+    const fullname = getFullName() || '';
     if (fullname) {
       const parts = fullname.split(/\s+/);
       const first = parts[0]?.[0] ?? '';

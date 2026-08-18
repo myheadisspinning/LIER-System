@@ -120,7 +120,9 @@ export default function UserDashboard() {
         return;
       }
       const meta = session.user.user_metadata as Record<string, unknown> | undefined;
-      const fullname = typeof meta?.fullname === 'string' ? meta.fullname.trim() : '';
+      const fullname = (typeof meta?.fullname === 'string' && meta.fullname.trim()) ||
+        (typeof meta?.full_name === 'string' && meta.full_name.trim()) ||
+        (typeof meta?.name === 'string' && meta.name.trim()) || '';
       if (!cancelled) setName(fullname || session.user.email || '');
       const { data, error: err } = await supabase
         .from('incident_reports')

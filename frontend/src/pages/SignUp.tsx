@@ -5,10 +5,30 @@ import Toast, { type ToastData } from '../components/Toast';
 import LoadingScreen from '../components/LoadingScreen';
 import styles from '../styles/modules/SignUp.module.css';
 
+interface PasswordStrength {
+  score: number;
+  label: string;
+  color: string;
+  barColor: string;
+}
+
+function getPasswordStrength(pw: string): PasswordStrength {
+  let score = 0;
+  if (pw.length >= 8 && pw.length <= 20) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (!/\s/.test(pw) && pw.length > 0) score++;
+
+  if (score <= 1) return { score, label: 'Weak', color: 'text-error', barColor: 'bg-error' };
+  if (score <= 2) return { score, label: 'Medium', color: 'text-[#E65100]', barColor: 'bg-[#E65100]' };
+  return { score, label: 'Strong', color: 'text-success-green', barColor: 'bg-success-green' };
+}
+
 export default function SignUp() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<ToastData | null>(null);
   const [showLoading, setShowLoading] = useState(false);
@@ -24,6 +44,10 @@ export default function SignUp() {
   const [tos, setTos] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
   const [resending, setResending] = useState(false);
+
+  const thirteenYearsAgo = new Date();
+  thirteenYearsAgo.setFullYear(thirteenYearsAgo.getFullYear() - 13);
+  const maxDob = thirteenYearsAgo.toISOString().split('T')[0];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -232,235 +256,305 @@ export default function SignUp() {
             />
           </div>
           <div className="max-w-2xl w-full mx-auto my-auto py-2">
-            <header className="text-center lg:text-left mb-4">
-              <h2 className="font-headline-md text-headline-md text-on-background mb-0">Create Official Account</h2>
-              <p className="text-caption text-on-surface-variant">Please provide accurate information for verification.</p>
-            </header>
-            <form className="space-y-1" id="registrationForm" onSubmit={handleSubmit}>
-              <div className="space-y-xs">
-                <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="fullname">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">person</span>
-                  <input
-                    className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
-                    id="fullname"
-                    name="fullname"
-                    placeholder="Juan Dela Cruz"
-                    required
-                    type="text"
-                    value={fullname}
-                    onChange={(e) => setFullname(e.target.value)}
-                  />
-                </div>
-              </div>
+            {!signupSuccess ? (
+              <>
+                <header className="text-center lg:text-left mb-4">
+                  <h2 className="font-headline-md text-headline-md text-on-background mb-0">Create Official Account</h2>
+                  <p className="text-caption text-on-surface-variant">Please provide accurate information for verification.</p>
+                </header>
+                <form className="space-y-1" id="registrationForm" onSubmit={handleSubmit}>
+                  <div className="space-y-xs">
+                    <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="fullname">
+                      Full Name
+                    </label>
+                    <div className="relative">
+                      <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">person</span>
+                      <input
+                        className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
+                        id="fullname"
+                        name="fullname"
+                        placeholder="Juan Dela Cruz"
+                        required
+                        type="text"
+                        value={fullname}
+                        onChange={(e) => setFullname(e.target.value)}
+                      />
+                    </div>
+                  </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-xs">
-                  <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="dob">
-                    Date of Birth
-                  </label>
-                  <div className="relative">
-                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">calendar_today</span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-xs">
+                      <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="dob">
+                        Date of Birth
+                      </label>
+                      <div className="relative">
+                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">calendar_today</span>
+                        <input
+                          className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
+                          id="dob"
+                          name="dob"
+                          required
+                          type="date"
+                          max={maxDob}
+                          value={dob || maxDob}
+                          onChange={(e) => setDob(e.target.value)}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-xs">
+                      <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="gender">
+                        Gender
+                      </label>
+                      <div className="relative">
+                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">group</span>
+                        <select
+                          className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface appearance-none py-1.5"
+                          id="gender"
+                          name="gender"
+                          required
+                          value={gender}
+                          onChange={(e) => setGender(e.target.value)}
+                        >
+                          <option value="" disabled>
+                            Select Gender
+                          </option>
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                          <option value="other">Other</option>
+                        </select>
+                        <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline pointer-events-none">
+                          expand_more
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-xs">
+                    <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="address">
+                      Address in Barangay Culiat
+                    </label>
+                    <div className="relative">
+                      <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">location_on</span>
+                      <textarea
+                        className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface resize-none py-1.5"
+                        id="address"
+                        name="address"
+                        placeholder="House No., Street, Purok/Area"
+                        required
+                        rows={1}
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                      ></textarea>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-xs">
+                      <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="phone">
+                        Mobile Number
+                      </label>
+                      <div className="relative flex">
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-outline font-semibold border-r border-outline-variant/30 pr-2">+63</span>
+                        <input
+                          className="w-full pl-16 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
+                          id="phone"
+                          name="phone"
+                          placeholder="9XX XXX XXXX"
+                          required
+                          type="tel"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-xs">
+                      <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="email">
+                        Email Address
+                      </label>
+                      <div className="relative">
+                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">mail</span>
+                        <input
+                          className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
+                          id="email"
+                          name="email"
+                          placeholder="name@example.com"
+                          required
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-xs">
+                      <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="password">
+                        Password
+                      </label>
+                      <div className="relative">
+                        {password.length > 0 && (() => {
+                          const strength = getPasswordStrength(password);
+                          const pct = Math.round((strength.score / 4) * 100);
+                          return (
+                            <div className="absolute inset-0 rounded-lg overflow-hidden pointer-events-none z-0">
+                              <div
+                                className={`h-full ${strength.barColor} opacity-20 transition-all duration-300 rounded-lg`}
+                                style={{ width: `${pct}%` }}
+                              />
+                              <span className={`absolute right-12 top-1/2 -translate-y-1/2 text-caption font-semibold ${strength.color} pointer-events-none`}>
+                                {strength.label}
+                              </span>
+                            </div>
+                          );
+                        })()}
+                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline z-20">lock</span>
+                        <input
+                          className="relative w-full pl-12 pr-12 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5 z-10"
+                          id="password"
+                          name="password"
+                          placeholder="••••••••"
+                          required
+                          type={showPassword ? 'text' : 'password'}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          onFocus={() => setPasswordFocused(true)}
+                          onBlur={() => setPasswordFocused(false)}
+                        />
+                        <button
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface z-10"
+                          type="button"
+                          onClick={() => setShowPassword((prev) => !prev)}
+                        >
+                          <span className="material-symbols-outlined" id="eye-icon-password">
+                            {showPassword ? 'visibility_off' : 'visibility'}
+                          </span>
+                        </button>
+                        {passwordFocused && (
+                          <div className="absolute top-full left-0 right-0 mt-1 z-30">
+                            <div className="absolute -top-2 left-6 w-3 h-3 bg-surface-container-low border-l border-t border-outline-variant/20 rotate-45 z-10" />
+                            <div className="relative bg-surface-container-low rounded-xl shadow-lg border border-outline-variant/20 p-3 z-20">
+                              <p className="text-body-sm font-semibold text-on-surface mb-2">Password must include:</p>
+                              <div className="space-y-1.5">
+                                {[
+                                  { label: '8-20', keyword: 'Characters', met: password.length >= 8 && password.length <= 20 },
+                                  { label: 'At least one', keyword: 'capital letter', met: /[A-Z]/.test(password) },
+                                  { label: 'At least one', keyword: 'number', met: /[0-9]/.test(password) },
+                                  { label: 'No', keyword: 'spaces', met: !/\s/.test(password) && password.length > 0 },
+                                ].map((req) => (
+                                  <div key={req.keyword} className={`flex items-center gap-2 text-caption ${req.met ? 'text-[#1B5E20]' : 'text-error'}`}>
+                                    <span className="text-[14px]">{req.met ? '✔' : '❌'}</span>
+                                    <span>
+                                      {req.label} <strong>{req.keyword}</strong>
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-xs">
+                      <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="confirm_password">
+                        Confirm Password
+                      </label>
+                      <div className="relative">
+                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
+                        <input
+                          className="w-full pl-12 pr-12 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
+                          id="confirm_password"
+                          name="confirm_password"
+                          placeholder="••••••••"
+                          required
+                          type={showConfirmPassword ? 'text' : 'password'}
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                        <button
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface"
+                          type="button"
+                          onClick={() => setShowConfirmPassword((prev) => !prev)}
+                        >
+                          <span className="material-symbols-outlined" id="eye-icon-confirm">
+                            {showConfirmPassword ? 'visibility_off' : 'visibility'}
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-xs py-2">
                     <input
-                      className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
-                      id="dob"
-                      name="dob"
+                      className="w-5 h-5 rounded border-outline-variant text-secondary focus:ring-secondary/20 py-1.5"
+                      id="tos"
                       required
-                      type="date"
-                      value={dob}
-                      onChange={(e) => setDob(e.target.value)}
+                      type="checkbox"
+                      checked={tos}
+                      onChange={(e) => setTos(e.target.checked)}
                     />
+                    <label className="text-caption text-on-surface-variant cursor-pointer select-none" htmlFor="tos">
+                      I agree to the <a className="text-secondary font-semibold hover:underline" href="#">Terms of Service</a> and{' '}
+                      <a className="text-secondary font-semibold hover:underline" href="#">Privacy Policy</a>.
+                    </label>
                   </div>
+
+                  <button
+                    className="w-full bg-secondary rounded-lg text-white font-semibold text-body-lg shadow-lg hover:bg-secondary/90 transition-all active:scale-[0.98] flex items-center justify-center gap-base py-1.5"
+                    type="submit"
+                    disabled={loading}
+                  >
+                    {loading ? 'Processing...' : 'Register Now'}
+                    <span className="material-symbols-outlined">arrow_forward</span>
+                  </button>
+                </form>
+
+                <div className="text-center mt-1">
+                  <p className="text-body-md text-on-surface-variant">
+                    Already have an account?{' '}
+                    <Link className="text-secondary font-semibold hover:underline" to="/signin">
+                      Login here
+                    </Link>
+                  </p>
                 </div>
 
-                <div className="space-y-xs">
-                  <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="gender">
-                    Gender
-                  </label>
-                  <div className="relative">
-                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">group</span>
-                    <select
-                      className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface appearance-none py-1.5"
-                      id="gender"
-                      name="gender"
-                      required
-                      value={gender}
-                      onChange={(e) => setGender(e.target.value)}
-                    >
-                      <option value="" disabled>
-                        Select Gender
-                      </option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
-                    </select>
-                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline pointer-events-none">
-                      expand_more
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-xs">
-                <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="address">
-                  Address in Barangay Culiat
-                </label>
-                <div className="relative">
-                  <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">location_on</span>
-                  <textarea
-                    className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface resize-none py-1.5"
-                    id="address"
-                    name="address"
-                    placeholder="House No., Street, Purok/Area"
-                    required
-                    rows={1}
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                  ></textarea>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-xs">
-                  <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="phone">
-                    Mobile Number
-                  </label>
-                  <div className="relative flex">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-outline font-semibold border-r border-outline-variant/30 pr-2">+63</span>
-                    <input
-                      className="w-full pl-16 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
-                      id="phone"
-                      name="phone"
-                      placeholder="9XX XXX XXXX"
-                      required
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                    />
-                  </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center text-center">
+                <div className="w-full flex items-center gap-2 mb-8">
+                  <button
+                    type="button"
+                    onClick={() => setSignupSuccess(false)}
+                    className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-low transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-on-surface">arrow_back</span>
+                  </button>
+                  <h2 className="font-headline-md text-headline-md text-on-background">Verify Your Email</h2>
                 </div>
 
-                <div className="space-y-xs">
-                  <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="email">
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">mail</span>
-                    <input
-                      className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
-                      id="email"
-                      name="email"
-                      placeholder="name@example.com"
-                      required
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-xs">
-                  <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="password">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
-                    <input
-                      className="w-full pl-12 pr-12 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
-                      id="password"
-                      name="password"
-                      placeholder="••••••••"
-                      required
-                      type={showPassword ? 'text' : 'password'}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface"
-                      type="button"
-                      onClick={() => setShowPassword((prev) => !prev)}
-                    >
-                      <span className="material-symbols-outlined" id="eye-icon-password">
-                        {showPassword ? 'visibility_off' : 'visibility'}
-                      </span>
-                    </button>
-                  </div>
+                <div className="w-20 h-20 rounded-full bg-secondary/10 flex items-center justify-center mb-6">
+                  <span className="material-symbols-outlined text-secondary text-5xl">mark_email_read</span>
                 </div>
 
-                <div className="space-y-xs">
-                  <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="confirm_password">
-                    Confirm Password
-                  </label>
-                  <div className="relative">
-                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
-                    <input
-                      className="w-full pl-12 pr-12 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
-                      id="confirm_password"
-                      name="confirm_password"
-                      placeholder="••••••••"
-                      required
-                      type={showConfirmPassword ? 'text' : 'password'}
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-                    <button
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface"
-                      type="button"
-                      onClick={() => setShowConfirmPassword((prev) => !prev)}
-                    >
-                      <span className="material-symbols-outlined" id="eye-icon-confirm">
-                        {showConfirmPassword ? 'visibility_off' : 'visibility'}
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-xs py-2">
-                <input
-                  className="w-5 h-5 rounded border-outline-variant text-secondary focus:ring-secondary/20 py-1.5"
-                  id="tos"
-                  required
-                  type="checkbox"
-                  checked={tos}
-                  onChange={(e) => setTos(e.target.checked)}
-                />
-                <label className="text-caption text-on-surface-variant cursor-pointer select-none" htmlFor="tos">
-                  I agree to the <a className="text-secondary font-semibold hover:underline" href="#">Terms of Service</a> and{' '}
-                  <a className="text-secondary font-semibold hover:underline" href="#">Privacy Policy</a>.
-                </label>
-              </div>
-
-              <button
-                className="w-full bg-secondary rounded-lg text-white font-semibold text-body-lg shadow-lg hover:bg-secondary/90 transition-all active:scale-[0.98] flex items-center justify-center gap-base py-1.5"
-                type="submit"
-                disabled={loading}
-              >
-                {loading ? 'Processing...' : 'Register Now'}
-                <span className="material-symbols-outlined">arrow_forward</span>
-              </button>
-            </form>
-
-            {/* Email Verification Success Screen */}
-            {signupSuccess && (
-              <div className="mt-6 p-6 bg-secondary/5 border border-secondary/20 rounded-lg">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="material-symbols-outlined text-secondary text-3xl">mark_email_read</span>
-                  <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Verify Your Email</h3>
-                </div>
-                <p className="text-body-sm text-on-surface mb-4">
-                  We've sent a confirmation link to <strong className="text-secondary">{email}</strong>. Please check your inbox and click the link to activate your account.
+                <p className="text-body-lg text-on-surface mb-2">
+                  We've sent a confirmation link to
                 </p>
-                <div className="space-y-3">
+                <p className="text-body-lg font-semibold text-secondary mb-6">
+                  {email}
+                </p>
+                <p className="text-body-sm text-on-surface-variant mb-8 max-w-2xl">
+                  Please check your inbox and click the link to activate your account.
+                </p>
+
+                <div className="w-full max-w-2xl space-y-3">
                   <button
                     type="button"
                     onClick={handleResendConfirmation}
                     disabled={resending}
-                    className="w-full bg-secondary text-on-secondary rounded-lg font-semibold text-body-sm shadow-sm hover:bg-secondary/90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 py-2 disabled:opacity-50"
+                    className="w-full  bg-secondary text-on-secondary rounded-lg font-semibold text-body-sm shadow-sm hover:bg-secondary/90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 py-2.5 disabled:opacity-50"
                   >
                     {resending ? (
                       <>
@@ -476,25 +570,15 @@ export default function SignUp() {
                   </button>
                   <Link
                     to="/signin"
-                    className="w-full bg-surface-container-lowest border border-outline text-on-surface rounded-lg font-semibold text-body-sm shadow-sm hover:bg-surface-container-low transition-all active:scale-[0.98] flex items-center justify-center gap-2 py-2"
+                    className="w-full bg-surface-container-lowest border border-outline text-on-surface rounded-lg font-semibold text-body-sm shadow-sm hover:bg-surface-container-low transition-all active:scale-[0.98] flex items-center justify-center gap-2 py-2.5"
                   >
                     <span className="material-symbols-outlined">login</span>
                     Go to Login
                   </Link>
                 </div>
-                <p className="text-caption text-on-surface-variant mt-4 text-center">
-                  Didn't receive the email? Check your spam folder or click resend above.
-                </p>
-              </div>
-            )}
 
-            {!signupSuccess && (
-              <div className="text-center mt-1">
-                <p className="text-body-md text-on-surface-variant">
-                  Already have an account?{' '}
-                  <Link className="text-secondary font-semibold hover:underline" to="/signin">
-                    Login here
-                  </Link>
+                <p className="text-caption text-on-surface-variant mt-6">
+                  Didn't receive the email? Check your spam folder or click resend above.
                 </p>
               </div>
             )}
@@ -502,7 +586,7 @@ export default function SignUp() {
 
           <div className="mt-auto border-t border-outline-variant/10 flex items-center justify-center gap-base text-on-surface-variant/40 pt-2">
             <span className="material-symbols-outlined text-sm">verified_user</span>
-            <span className="font-caption text-[10px] uppercase tracking-widest font-bold">OFFICIAL TANDANG SORA GOV PORTAL • ENCRYPTED</span>
+            <span className="font-caption text-[10px] uppercase tracking-widest font-bold">OFFICIAL BARANGAY CULIAT GOV PORTAL • ENCRYPTED</span>
           </div>
         </section>
       </main>
