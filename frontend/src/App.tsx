@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
-import ScrollToTop from './components/ScrollToTop';
+import PageLoader from './components/PageLoader';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -57,7 +57,7 @@ import OfficerAlerts from './pages/portal/officer/OfficerAlerts';
 
 const router = createBrowserRouter([
   {
-    element: <><ScrollToTop /><Outlet /></>,
+    element: <><PageLoader /><Outlet /></>,
     children: [
       { path: "/", element: <Home /> },
       { path: "/about", element: <About /> },
