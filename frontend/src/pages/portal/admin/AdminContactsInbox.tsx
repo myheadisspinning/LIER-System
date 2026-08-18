@@ -184,10 +184,10 @@ export default function AdminContactsInbox() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const meta = session?.user?.user_metadata as Record<string, unknown> | undefined;
-      const staffName = (typeof meta?.fullname === 'string' && meta.fullname) ||
+      const staffName = ((typeof meta?.fullname === 'string' && meta.fullname) ||
         (typeof meta?.full_name === 'string' && meta.full_name) ||
         (typeof meta?.name === 'string' && meta.name) ||
-        session?.user?.email ?? 'Barangay Staff';
+        session?.user?.email) ?? 'Barangay Staff';
       const { error } = await supabase.from('inquiry_messages').insert({
         inquiry_id: active.id,
         sender_role: 'staff',

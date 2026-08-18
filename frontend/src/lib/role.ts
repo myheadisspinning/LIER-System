@@ -28,7 +28,7 @@ export interface AccessCheck {
 }
 
 export async function checkUserAccess(userId: string): Promise<AccessCheck> {
-  const { data } = await supabase.rpc('check_user_access', { p_user_id: userId }).maybeSingle();
+  const { data } = await supabase.rpc('check_user_access', { p_user_id: userId }).maybeSingle<{ user_exists: boolean; is_suspended: boolean }>();
   if (!data || !data.user_exists) return { allowed: false, reason: 'deleted' };
   if (data.is_suspended) return { allowed: false, reason: 'suspended' };
   return { allowed: true, reason: 'ok' };
