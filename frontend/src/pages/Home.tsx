@@ -46,6 +46,73 @@ function CountUp({ target, suffix = '', duration = 2000 }: { target: number; suf
   );
 }
 
+const feedItems = [
+  { icon: 'notifications_active', iconBg: 'bg-amber-100', iconColor: 'text-amber-600', title: 'Noise complaint resolved', location: 'Tandang Sora Ave', time: '2 min ago', status: 'Resolved', statusBg: 'bg-emerald-100 text-emerald-700' },
+  { icon: 'local_police', iconBg: 'bg-blue-100', iconColor: 'text-blue-600', title: 'Suspicious activity reported', location: 'Blk 3, Lot 12', time: '5 min ago', status: 'Dispatched', statusBg: 'bg-blue-100 text-blue-700' },
+  { icon: 'lightbulb', iconBg: 'bg-orange-100', iconColor: 'text-orange-600', title: 'Street light outage', location: 'Corner Main St', time: '8 min ago', status: 'Investigating', statusBg: 'bg-orange-100 text-orange-700' },
+  { icon: 'directions_car', iconBg: 'bg-red-100', iconColor: 'text-red-600', title: 'Minor vehicle accident', location: 'QC Highway', time: '12 min ago', status: 'Resolved', statusBg: 'bg-emerald-100 text-emerald-700' },
+  { icon: 'pets', iconBg: 'bg-purple-100', iconColor: 'text-purple-600', title: 'Lost pet reported', location: 'Phase 2, Block 7', time: '15 min ago', status: 'Open', statusBg: 'bg-gray-100 text-gray-600' },
+  { icon: 'water_drop', iconBg: 'bg-cyan-100', iconColor: 'text-cyan-600', title: 'Water leak reported', location: 'Blk 5, Lot 8', time: '18 min ago', status: 'Dispatched', statusBg: 'bg-blue-100 text-blue-700' },
+  { icon: 'groups', iconBg: 'bg-green-100', iconColor: 'text-green-600', title: 'Community patrol completed', location: 'Zone 3 perimeter', time: '22 min ago', status: 'Resolved', statusBg: 'bg-emerald-100 text-emerald-700' },
+];
+
+function LiveActivityFeed() {
+  const [visibleCount, setVisibleCount] = useState(0);
+  const [items, setItems] = useState(feedItems.slice(0, 5));
+
+  useEffect(() => {
+    const initialTimer = setTimeout(() => setVisibleCount(5), 300);
+    return () => clearTimeout(initialTimer);
+  }, []);
+
+  useEffect(() => {
+    if (visibleCount < 5) return;
+    const interval = setInterval(() => {
+      setItems((prev) => {
+        const nextIdx = (feedItems.indexOf(prev[0]) + 1) % feedItems.length;
+        const newFirst = { ...feedItems[nextIdx], time: 'just now' };
+        return [newFirst, ...prev.slice(0, 4)];
+      });
+      setVisibleCount(0);
+      setTimeout(() => setVisibleCount(5), 100);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [visibleCount]);
+
+  return (
+    <div className="bg-white p-6 md:p-lg rounded-3xl shadow-xl border border-outline-variant transition-transform hover:scale-[1.01]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-lg gap-sm">
+        <h3 className="font-headline-lg text-xl md:text-headline-lg text-on-surface">Live Activity Feed</h3>
+        <span className="inline-flex items-center gap-1.5 text-xs font-bold bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full self-start">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          LIVE
+        </span>
+      </div>
+      <div className="space-y-3 overflow-hidden h-[340px] md:h-[380px]">
+        {items.map((item, i) => (
+          <div
+            key={`${item.title}-${i}-${items.indexOf(item)}`}
+            className="flex items-center gap-3 p-3 rounded-xl bg-surface-container-lowest border border-outline-variant/30 transition-all duration-500"
+            style={{ opacity: i < visibleCount ? 1 : 0, transform: i < visibleCount ? 'translateY(0)' : 'translateY(12px)' }}
+          >
+            <div className={`w-10 h-10 rounded-lg ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0`}>
+              <span className="material-symbols-outlined text-xl">{item.icon}</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-label-md text-sm font-semibold text-on-surface truncate">{item.title}</p>
+              <p className="text-xs text-on-surface-variant truncate">{item.location}</p>
+            </div>
+            <div className="text-right shrink-0">
+              <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${item.statusBg}`}>{item.status}</span>
+              <p className="text-[10px] text-on-surface-variant mt-0.5">{item.time}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const navigate = useNavigate();
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -233,25 +300,7 @@ export default function Home() {
         <div className="container mx-auto px-4 md:px-margin-desktop">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-xl items-center">
             <div data-section="highlights">
-              <div className="bg-white p-6 md:p-lg rounded-3xl shadow-xl border border-outline-variant transition-transform hover:scale-[1.01]">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-lg gap-sm">
-                  <h3 className="font-headline-lg text-xl md:text-headline-lg text-on-surface">Recent Incident Summary</h3>
-                  <span className="text-on-surface-variant font-label-md text-xs bg-surface-container-high px-md py-xs rounded-full self-start">Last 30 Days</span>
-                </div>
-                <div className="w-full h-64 md:h-80 bg-surface-container-lowest rounded-xl flex items-center justify-center overflow-hidden border border-outline-variant/30 relative">
-                  <div className={`absolute inset-0 ${styles.chartGradient}`}></div>
-                  <div className="flex flex-col items-center gap-md p-4">
-                    <div className="flex gap-2 md:gap-md items-end h-40">
-                      <div className="w-6 md:w-10 bg-secondary/80 rounded-t-lg transition-all duration-1000 origin-bottom" data-height="60%" style={{ height: '0%' }}></div>
-                      <div className="w-6 md:w-10 bg-secondary/80 rounded-t-lg transition-all duration-1000 delay-100 origin-bottom" data-height="40%" style={{ height: '0%' }}></div>
-                      <div className="w-6 md:w-10 bg-secondary/80 rounded-t-lg transition-all duration-1000 delay-200 origin-bottom" data-height="85%" style={{ height: '0%' }}></div>
-                      <div className="w-6 md:w-10 bg-secondary/80 rounded-t-lg transition-all duration-1000 delay-300 origin-bottom" data-height="55%" style={{ height: '0%' }}></div>
-                      <div className="w-6 md:w-10 bg-secondary/80 rounded-t-lg transition-all duration-1000 delay-400 origin-bottom" data-height="30%" style={{ height: '0%' }}></div>
-                    </div>
-                    <p className="text-on-surface-variant font-caption text-caption text-center">Interactive data visualization loading...</p>
-                  </div>
-                </div>
-              </div>
+              <LiveActivityFeed />
             </div>
             <div className="space-y-6 md:space-y-lg" data-section="highlights-right">
               <div className="bg-white p-6 md:p-lg rounded-3xl border-l-8 border-l-secondary shadow-lg border border-outline-variant/20 hover:shadow-xl transition-all">
