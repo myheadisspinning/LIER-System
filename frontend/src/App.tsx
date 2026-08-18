@@ -1,4 +1,5 @@
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -41,7 +42,6 @@ import SuperadminAiDispatch from './pages/portal/superadmin/SuperadminAiDispatch
 import SuperadminAiRuleManagement from './pages/portal/superadmin/SuperadminAiRuleManagement';
 import SuperadminAuditLogs from './pages/portal/superadmin/SuperadminAuditLogs';
 import SuperadminSecurityCenter from './pages/portal/superadmin/SuperadminSecurityCenter';
-import SuperadminReportRegistry from './pages/portal/superadmin/SuperadminReportRegistry';
 import UserDashboard from './pages/portal/user/UserDashboard';
 import ReportIncident from './pages/portal/user/ReportIncident';
 import MyIncidentReports from './pages/portal/user/MyIncidentReports';
@@ -56,98 +56,102 @@ import OfficerTeam from './pages/portal/officer/OfficerTeam';
 import OfficerAlerts from './pages/portal/officer/OfficerAlerts';
 
 const router = createBrowserRouter([
-  { path: "/", element: <Home /> },
-  { path: "/about", element: <About /> },
-  { path: "/services", element: <Services /> },
-  { path: "/contact", element: <Contact /> },
-  { path: "/officials", element: <Officials /> },
-  { path: "/elder-guide", element: <ElderGuide /> },
-  { path: "/track-cases", element: <TrackCases /> },
-  { path: "/faq", element: <FAQ /> },
-  { path: "/signin", element: <SignIn /> },
-  { path: "/signup", element: <SignUp /> },
-  { path: "/forgot-password", element: <ForgotPassword /> },
-  { path: "/reset-password", element: <ResetPassword /> },
-  { path: "/auth/callback", element: <AuthCallback /> },
-  { path: "/profile", element: <Profile /> },
   {
-    path: "/admin",
-    element: (
-      <RoleGuard allowed={['admin']}>
-        <AdminLayout />
-      </RoleGuard>
-    ),
+    element: <><ScrollToTop /><Outlet /></>,
     children: [
-      { index: true, element: <Navigate to="/admin/dashboard" replace /> },
-      { path: "dashboard", element: <AdminDashboard /> },
-      { path: "incident-reporting", element: <AdminIncidentReporting /> },
-      { path: "ai-dispatch-terminal", element: <AdminAiDispatchTerminal /> },
-      { path: "contacts-inbox", element: <AdminContactsInbox /> },
-      { path: "tanod-roster", element: <AdminTanodRoster /> },
-      { path: "blotter-tracking", element: <AdminBlotterTracking /> },
-      { path: "evidence-vault", element: <AdminEvidenceVault /> },
-      { path: "status-notifications", element: <AdminStatusNotifications /> },
-      { path: "case-monitoring", element: <AdminCaseMonitoring /> },
-      { path: "reports", element: <AdminReportsAnalytics /> },
-      { path: "officials", element: <AdminOfficialsManagement /> },
-      { path: "audit-logs", element: <AdminAuditLogs /> },
-      { path: "account-settings", element: <AdminAccountSettings /> },
-    ],
-  },
-  {
-    path: "/superadmin",
-    element: (
-      <RoleGuard allowed={['superadmin']}>
-        <SuperadminLayout />
-      </RoleGuard>
-    ),
-    children: [
-      { index: true, element: <Navigate to="/superadmin/dashboard" replace /> },
-      { path: "dashboard", element: <SuperadminDashboard /> },
-      { path: "admin-management", element: <SuperadminAdminManagement /> },
-      { path: "user-control", element: <SuperadminUserControl /> },
-      { path: "role-permissions", element: <SuperadminRolePermissions /> },
-      { path: "database", element: <SuperadminDatabaseManagement /> },
-      { path: "ai-config", element: <SuperadminAiConfig /> },
-      { path: "ai-dispatch", element: <SuperadminAiDispatch /> },
-      { path: "ai-rule-management", element: <SuperadminAiRuleManagement /> },
-      { path: "report-registry", element: <SuperadminReportRegistry /> },
-      { path: "audit-logs", element: <SuperadminAuditLogs /> },
-      { path: "security-center", element: <SuperadminSecurityCenter /> },
-    ],
-  },
-  {
-    path: "/officer",
-    element: (
-      <RoleGuard allowed={['officer']}>
-        <OfficerLayout />
-      </RoleGuard>
-    ),
-    children: [
-      { index: true, element: <Navigate to="/officer/dashboard" replace /> },
-      { path: "dashboard", element: <OfficerDashboard /> },
-      { path: "my-incidents", element: <OfficerMyIncidents /> },
-      { path: "team", element: <OfficerTeam /> },
-      { path: "alerts", element: <OfficerAlerts /> },
-    ],
-  },
-  {
-    path: "/user",
-    element: (
-      <RoleGuard allowed={['user']}>
-        <UserLayout />
-      </RoleGuard>
-    ),
-    children: [
-      { index: true, element: <Navigate to="/user/dashboard" replace /> },
-      { path: "dashboard", element: <UserDashboard /> },
-      { path: "report-incident", element: <ReportIncident /> },
-      { path: "my-incident-reports", element: <MyIncidentReports /> },
-      { path: "emergency-sos", element: <EmergencySos /> },
-      { path: "case-chat", element: <CaseChat /> },
-      { path: "evidence-vault", element: <EvidenceVault /> },
-      { path: "advisories", element: <Advisories /> },
-      { path: "account-settings", element: <AccountSettings /> },
+      { path: "/", element: <Home /> },
+      { path: "/about", element: <About /> },
+      { path: "/services", element: <Services /> },
+      { path: "/contact", element: <Contact /> },
+      { path: "/officials", element: <Officials /> },
+      { path: "/elder-guide", element: <ElderGuide /> },
+      { path: "/track-cases", element: <TrackCases /> },
+      { path: "/faq", element: <FAQ /> },
+      { path: "/signin", element: <SignIn /> },
+      { path: "/signup", element: <SignUp /> },
+      { path: "/forgot-password", element: <ForgotPassword /> },
+      { path: "/reset-password", element: <ResetPassword /> },
+      { path: "/auth/callback", element: <AuthCallback /> },
+      { path: "/profile", element: <Profile /> },
+      {
+        path: "/admin",
+        element: (
+          <RoleGuard allowed={['admin']}>
+            <AdminLayout />
+          </RoleGuard>
+        ),
+        children: [
+          { index: true, element: <Navigate to="/admin/dashboard" replace /> },
+          { path: "dashboard", element: <AdminDashboard /> },
+          { path: "incident-reporting", element: <AdminIncidentReporting /> },
+          { path: "ai-dispatch-terminal", element: <AdminAiDispatchTerminal /> },
+          { path: "contacts-inbox", element: <AdminContactsInbox /> },
+          { path: "tanod-roster", element: <AdminTanodRoster /> },
+          { path: "blotter-tracking", element: <AdminBlotterTracking /> },
+          { path: "evidence-vault", element: <AdminEvidenceVault /> },
+          { path: "status-notifications", element: <AdminStatusNotifications /> },
+          { path: "case-monitoring", element: <AdminCaseMonitoring /> },
+          { path: "reports", element: <AdminReportsAnalytics /> },
+          { path: "officials", element: <AdminOfficialsManagement /> },
+          { path: "audit-logs", element: <AdminAuditLogs /> },
+          { path: "account-settings", element: <AdminAccountSettings /> },
+        ],
+      },
+      {
+        path: "/superadmin",
+        element: (
+          <RoleGuard allowed={['superadmin']}>
+            <SuperadminLayout />
+          </RoleGuard>
+        ),
+        children: [
+          { index: true, element: <Navigate to="/superadmin/dashboard" replace /> },
+          { path: "dashboard", element: <SuperadminDashboard /> },
+          { path: "admin-management", element: <SuperadminAdminManagement /> },
+          { path: "user-control", element: <SuperadminUserControl /> },
+          { path: "role-permissions", element: <SuperadminRolePermissions /> },
+          { path: "database", element: <SuperadminDatabaseManagement /> },
+          { path: "ai-config", element: <SuperadminAiConfig /> },
+          { path: "ai-dispatch", element: <SuperadminAiDispatch /> },
+          { path: "ai-rule-management", element: <SuperadminAiRuleManagement /> },
+          { path: "audit-logs", element: <SuperadminAuditLogs /> },
+          { path: "security-center", element: <SuperadminSecurityCenter /> },
+        ],
+      },
+      {
+        path: "/officer",
+        element: (
+          <RoleGuard allowed={['officer']}>
+            <OfficerLayout />
+          </RoleGuard>
+        ),
+        children: [
+          { index: true, element: <Navigate to="/officer/dashboard" replace /> },
+          { path: "dashboard", element: <OfficerDashboard /> },
+          { path: "my-incidents", element: <OfficerMyIncidents /> },
+          { path: "team", element: <OfficerTeam /> },
+          { path: "alerts", element: <OfficerAlerts /> },
+        ],
+      },
+      {
+        path: "/user",
+        element: (
+          <RoleGuard allowed={['user']}>
+            <UserLayout />
+          </RoleGuard>
+        ),
+        children: [
+          { index: true, element: <Navigate to="/user/dashboard" replace /> },
+          { path: "dashboard", element: <UserDashboard /> },
+          { path: "report-incident", element: <ReportIncident /> },
+          { path: "my-incident-reports", element: <MyIncidentReports /> },
+          { path: "emergency-sos", element: <EmergencySos /> },
+          { path: "case-chat", element: <CaseChat /> },
+          { path: "evidence-vault", element: <EvidenceVault /> },
+          { path: "advisories", element: <Advisories /> },
+          { path: "account-settings", element: <AccountSettings /> },
+        ],
+      },
     ],
   },
 ]);
