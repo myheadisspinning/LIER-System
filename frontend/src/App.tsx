@@ -9,6 +9,7 @@ import ResetPassword from './pages/ResetPassword';
 import About from './pages/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
+import AdvisoriesPage from './pages/AdvisoriesPage';
 import Officials from './pages/Officials';
 import ElderGuide from './pages/ElderGuide';
 import TrackCases from './pages/TrackCases';
@@ -32,6 +33,7 @@ import AdminReportsAnalytics from './pages/portal/admin/AdminReportsAnalytics';
 import AdminOfficialsManagement from './pages/portal/admin/AdminOfficialsManagement';
 import AdminAuditLogs from './pages/portal/admin/AdminAuditLogs';
 import AdminAccountSettings from './pages/portal/admin/AdminAccountSettings';
+import AdminCommunityGallery from './pages/portal/admin/AdminCommunityGallery';
 import SuperadminDashboard from './pages/portal/superadmin/SuperadminDashboard';
 import SuperadminAdminManagement from './pages/portal/superadmin/SuperadminAdminManagement';
 import SuperadminUserControl from './pages/portal/superadmin/SuperadminUserControl';
@@ -64,6 +66,7 @@ const router = createBrowserRouter([
       { path: "/services", element: <Services /> },
       { path: "/contact", element: <Contact /> },
       { path: "/officials", element: <Officials /> },
+      { path: "/advisories", element: <AdvisoriesPage /> },
       { path: "/elder-guide", element: <ElderGuide /> },
       { path: "/track-cases", element: <TrackCases /> },
       { path: "/faq", element: <FAQ /> },
@@ -93,6 +96,7 @@ const router = createBrowserRouter([
           { path: "case-monitoring", element: <AdminCaseMonitoring /> },
           { path: "reports", element: <AdminReportsAnalytics /> },
           { path: "officials", element: <AdminOfficialsManagement /> },
+          { path: "community-gallery", element: <AdminCommunityGallery /> },
           { path: "audit-logs", element: <AdminAuditLogs /> },
           { path: "account-settings", element: <AdminAccountSettings /> },
         ],

@@ -21,6 +21,7 @@ export default function AdminReportsAnalytics() {
   const [archives, setArchives] = useState<Archive[]>([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<Archive | null>(null);
 
   useEffect(() => {
     void (async () => {
@@ -266,7 +267,7 @@ export default function AdminReportsAnalytics() {
                         <td className="py-3 px-4 text-on-surface-variant">{a.period_label ?? '—'}</td>
                         <td className="py-3 px-4 text-on-surface-variant">{fmtDate(a.created_at, 'short')}</td>
                         <td className="py-3 px-4 text-right">
-                          <button type="button" onClick={() => deleteArchive(a.id)} className="text-error-red hover:opacity-70" aria-label="Delete archive">
+                          <button type="button" onClick={() => setConfirmDelete(a)} className="text-error-red hover:opacity-70" aria-label="Delete archive">
                             <span className="material-symbols-outlined text-[18px]">delete</span>
                           </button>
                         </td>
@@ -279,6 +280,32 @@ export default function AdminReportsAnalytics() {
           </div>
         </>
       )}
+      {confirmDelete && (
+        <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-md p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-10 h-10 rounded-full bg-error-red/10 flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-[20px] text-error-red">warning</span>
+              </span>
+              <div>
+                <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Delete Archive</h3>
+                <p className="text-body-sm text-on-surface-variant">This action cannot be undone.</p>
+              </div>
+            </div>
+            <p className="text-body-sm text-on-surface-variant mb-1">Are you sure you want to delete this archived report?</p>
+            <p className="text-body-sm text-on-surface font-semibold mb-6">{confirmDelete.title}</p>
+            <div className="flex gap-2 justify-end">
+              <button type="button" onClick={() => setConfirmDelete(null)} className="px-4 py-2 border border-border-subtle rounded-lg text-sm font-medium text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                Cancel
+              </button>
+              <button type="button" onClick={async () => { await deleteArchive(confirmDelete.id); setConfirmDelete(null); }} className="px-4 py-2 bg-error-red text-white rounded-lg text-sm font-medium hover:bg-error-red/90 transition-colors">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {toast && <div className="fixed bottom-8 right-8 bg-surface-container-high text-on-surface px-4 py-3 rounded-lg shadow-lg text-sm z-[150]">{toast.message}</div>}
     </div>
   );

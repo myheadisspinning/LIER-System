@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
-import { fmtDate, logAudit } from '../../../lib/admin';
+import { fmtDate, isOnlineSince, logAudit, timeAgo } from '../../../lib/admin';
 
 type Acct = {
   id: string;
@@ -50,11 +50,21 @@ export default function AdminAccountSettings() {
   const [editOpen, setEditOpen] = useState(false);
   const [editForm, setEditForm] = useState({ fullname: '', phone: '', address: '', dob: '', gender: '' });
   const [deleteConfirm, setDeleteConfirm] = useState<Acct | null>(null);
+  const [presenceMap, setPresenceMap] = useState<Map<string, string>>(new Map());
 
   const fetchUsers = async () => {
     const res = await supabase.rpc('admin_list_users', { p_scope: 'residents' });
     if (res.error) throw new Error(res.error.message);
     return (res.data ?? []) as Acct[];
+  };
+
+  const fetchPresence = async () => {
+    const { data } = await supabase.from('presence').select('user_id, last_seen_at');
+    const map = new Map<string, string>();
+    for (const row of (data ?? []) as { user_id: string; last_seen_at: string }[]) {
+      map.set(row.user_id, row.last_seen_at);
+    }
+    setPresenceMap(map);
   };
 
   useEffect(() => {
@@ -63,12 +73,15 @@ export default function AdminAccountSettings() {
         const rows = await fetchUsers();
         setUsers(rows);
         if (rows.length > 0) setActiveId(rows[0].id);
+        await fetchPresence();
       } catch (e) {
         setToast({ type: 'error', message: e instanceof Error ? e.message : 'Failed to load accounts.' });
       } finally {
         setLoading(false);
       }
     })();
+    const interval = window.setInterval(fetchPresence, 15_000);
+    return () => window.clearInterval(interval);
   }, []);
 
   const active = users.find((u) => u.id === activeId) ?? null;
@@ -79,8 +92,9 @@ export default function AdminAccountSettings() {
       verified: users.filter((u) => u.email_confirmed_at).length,
       pending: users.filter((u) => !u.email_confirmed_at).length,
       suspended: users.filter((u) => u.suspended).length,
+      onlineNow: users.filter((u) => isOnlineSince(presenceMap.get(u.id))).length,
     }),
-    [users]
+    [users, presenceMap]
   );
 
   const visible = users.filter((u) => {
@@ -208,7 +222,7 @@ export default function AdminAccountSettings() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         <div className="bg-surface-container-lowest p-6 rounded-xl border border-border-subtle flex flex-col justify-between">
           <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Total User Accounts</div>
           <div className="font-display-lg text-display-lg text-on-surface">{stats.total}</div>
@@ -224,6 +238,16 @@ export default function AdminAccountSettings() {
         <div className="bg-surface-container-lowest p-6 rounded-xl border border-border-subtle flex flex-col justify-between">
           <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Suspended Accounts</div>
           <div className="font-display-lg text-display-lg text-error-red">{stats.suspended}</div>
+        </div>
+        <div className="bg-surface-container-lowest p-6 rounded-xl border border-border-subtle flex flex-col justify-between">
+          <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Online Now</div>
+          <div className="flex items-center gap-2">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success-green opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-success-green"></span>
+            </span>
+            <span className="font-display-lg text-display-lg text-success-green">{stats.onlineNow}</span>
+          </div>
         </div>
       </div>
 
@@ -278,6 +302,7 @@ export default function AdminAccountSettings() {
                     <th className="px-6 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-medium">Account Holder</th>
                     <th className="px-6 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-medium">Type/Role</th>
                     <th className="px-6 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-medium">Registered</th>
+                    <th className="px-6 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-medium">Online</th>
                     <th className="px-6 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-medium">Status</th>
                   </tr>
                 </thead>
@@ -309,6 +334,22 @@ export default function AdminAccountSettings() {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-on-surface-variant">{fmtDate(u.created_at, 'short')}</td>
+                      <td className="px-6 py-4">
+                        {isOnlineSince(presenceMap.get(u.id)) ? (
+                          <span className="inline-flex items-center gap-1.5 text-success-green text-xs font-medium">
+                            <span className="relative flex h-2 w-2">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success-green opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-success-green"></span>
+                            </span>
+                            Online
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 text-on-surface-variant text-xs">
+                            <span className="w-2 h-2 rounded-full bg-outline/40"></span>
+                            {timeAgo(presenceMap.get(u.id)) !== '—' ? timeAgo(presenceMap.get(u.id)) : 'Offline'}
+                          </span>
+                        )}
+                      </td>
                       <td className="px-6 py-4">
                         {u.suspended ? (
                           <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-error-red/10 text-error-red border border-error-red/20">
@@ -416,6 +457,24 @@ export default function AdminAccountSettings() {
                           <span className="inline-flex items-center gap-1.5 text-warning-amber">
                             <span className="material-symbols-outlined text-[16px]">pending</span>
                             Pending Verification
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Last Seen</div>
+                      <div className="font-body-sm text-body-sm font-medium">
+                        {isOnlineSince(presenceMap.get(active.id)) ? (
+                          <span className="inline-flex items-center gap-1.5 text-success-green">
+                            <span className="relative flex h-2 w-2">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success-green opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-success-green"></span>
+                            </span>
+                            Online Now
+                          </span>
+                        ) : (
+                          <span className="text-on-surface-variant">
+                            {timeAgo(presenceMap.get(active.id)) !== '—' ? timeAgo(presenceMap.get(active.id)) : 'No activity recorded'}
                           </span>
                         )}
                       </div>

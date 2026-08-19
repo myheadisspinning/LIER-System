@@ -114,6 +114,29 @@ drop policy if exists "staff manage broadcasts" on public.broadcasts;
 create policy "staff manage broadcasts" on public.broadcasts
   for all using (public.is_staff());
 
+-- Optional image attachment for broadcasts
+alter table public.broadcasts add column if not exists image_url text;
+
+-- Storage bucket for broadcast images
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'broadcasts',
+  'broadcasts',
+  true,
+  10485760,
+  array['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/gif']
+) on conflict (id) do update set public = true;
+
+drop policy if exists "broadcasts storage public read" on storage.objects;
+create policy "broadcasts storage public read" on storage.objects
+  for select using (bucket_id = 'broadcasts');
+
+drop policy if exists "broadcasts storage authenticated write" on storage.objects;
+create policy "broadcasts storage authenticated write" on storage.objects
+  for all to authenticated
+  using (bucket_id = 'broadcasts')
+  with check (bucket_id = 'broadcasts');
+
 -- ------------------------------------------------------------------
 -- 6) inquiries + inquiry_messages (admin Contacts Inbox)
 -- ------------------------------------------------------------------
@@ -842,3 +865,57 @@ union all select 'inquiries', count(*) from public.inquiries
 union all select 'inquiry_messages', count(*) from public.inquiry_messages
 union all select 'blotters', count(*) from public.blotters
 union all select 'report_archives', count(*) from public.report_archives;
+
+-- ------------------------------------------------------------------
+-- 11b) Storage bucket for community gallery images
+-- ------------------------------------------------------------------
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'community_gallery',
+  'community_gallery',
+  true,
+  10485760,
+  array['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/gif']
+) on conflict (id) do update set public = true;
+
+drop policy if exists "gallery storage public read" on storage.objects;
+create policy "gallery storage public read" on storage.objects
+  for select using (bucket_id = 'community_gallery');
+
+drop policy if exists "gallery storage authenticated write" on storage.objects;
+create policy "gallery storage authenticated write" on storage.objects
+  for all to authenticated
+  using (bucket_id = 'community_gallery')
+  with check (bucket_id = 'community_gallery');
+
+-- ------------------------------------------------------------------
+-- 12) Community Gallery (homepage carousel images)
+-- ------------------------------------------------------------------
+create table if not exists public.community_gallery (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  image_url text not null,
+  sort_order integer not null default 0,
+  visible boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
+alter table public.community_gallery enable row level security;
+
+drop policy if exists "gallery public read" on public.community_gallery;
+create policy "gallery public read" on public.community_gallery
+  for select using (visible = true);
+
+drop policy if exists "gallery staff manage" on public.community_gallery;
+create policy "gallery staff manage" on public.community_gallery
+  for all using (public.is_staff()) with check (public.is_staff());
+
+-- Seed default carousel items (local paths used as initial fallback;
+-- run scripts/migrate-gallery-to-storage.js to upload to Supabase Storage)
+insert into public.community_gallery (title, image_url, sort_order, visible) values
+  ('Local Toda Drivers Patrol Training', '/image/tandangsora.jfif', 1, true),
+  ('Zone 4 Tree Planting Event', '/image/tandangsorashrine.jpg', 2, true),
+  ('Salaam Compound Health Fair', '/image/barangayhalltandangsora.jfif', 3, true),
+  ('Community Clean-Up Drive', '/image/tandangsora.jpg', 4, true),
+  ('Barangay Safety Orientation', '/image/culiat-brgy.jpg', 5, true)
+on conflict do nothing;

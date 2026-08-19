@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
+import { LogIn } from 'lucide-react';
 import { supabase } from '../supabaseClient';
 import { useUnreadCounts } from '../lib/admin';
 import Toast, { type ToastData } from './Toast';
@@ -21,6 +22,7 @@ const navItems = [
   { path: '/about', label: 'About' },
   { path: '/officials', label: 'Officials' },
   { path: '/services', label: 'Services' },
+  { path: '/advisories', label: 'Advisories' },
   { path: '/contact', label: 'Contact' },
 ];
 
@@ -102,7 +104,7 @@ export default function SiteHeader({
   };
 
   const loginButtonClass =
-    'group hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary text-white font-semibold text-xs tracking-wide shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-250 cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-primary-container';
+    'group hidden md:inline-flex items-center gap-2 px-4 py-1.5 rounded-lg border border-white/30 bg-transparent text-white font-medium text-sm tracking-wider uppercase cursor-pointer transition-all duration-200 ease-in-out hover:bg-white/10 hover:border-slate-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50';
 
   return (
     <>
@@ -205,8 +207,8 @@ export default function SiteHeader({
             </>
           ) : (
             <Link className={loginButtonClass} to="/signin" aria-label="Login">
-              <span className="material-symbols-outlined text-sm leading-none" style={{ fontVariationSettings: "'FILL' 1" }}>login</span>
-              <span className="uppercase">Login</span>
+              <LogIn className="w-4 h-4 text-white" />
+              Login
             </Link>
           )}
 

@@ -101,6 +101,12 @@ export const adminNav: RoleNav = {
       section: 'Administration',
     },
     {
+      label: 'Community Gallery',
+      subLabel: 'Manage homepage carousel images',
+      icon: 'photo_library',
+      to: '/admin/community-gallery',
+    },
+    {
       label: 'Audit Logs',
       subLabel: 'System activity and security logs',
       icon: 'security',

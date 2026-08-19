@@ -6,6 +6,8 @@ type Official = {
   id: string;
   fullname: string;
   title: string;
+  committee: string | null;
+  icon: string | null;
   term: string | null;
   phone: string | null;
   email: string | null;
@@ -19,6 +21,8 @@ type Official = {
 const EMPTY: Omit<Official, 'id'> = {
   fullname: '',
   title: 'Kagawad',
+  committee: '',
+  icon: 'person',
   term: '2023 - 2026',
   phone: '',
   email: '',
@@ -38,6 +42,7 @@ export default function AdminOfficialsManagement() {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<Official | null>(null);
 
   const fetchAll = async () => {
     const res = await supabase.from('officials').select('*').order('sort_order').order('fullname');
@@ -163,7 +168,7 @@ export default function AdminOfficialsManagement() {
                 <p className="text-xs text-on-surface-variant mt-1">{o.term ?? '—'}</p>
                 <div className="flex justify-between items-center mt-3 pt-3 border-t border-border-subtle">
                   <button type="button" onClick={() => startEdit(o)} className="text-secondary hover:underline text-sm font-medium">Edit</button>
-                  <button type="button" onClick={() => remove(o)} className="text-error-red hover:underline text-sm font-medium">Remove</button>
+                  <button type="button" onClick={() => setConfirmDelete(o)} className="text-error-red hover:underline text-sm font-medium">Remove</button>
                 </div>
               </div>
             </div>
@@ -193,6 +198,17 @@ export default function AdminOfficialsManagement() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
+                  <label className="block text-xs text-on-surface-variant mb-1.5">Committee</label>
+                  <input className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={form.committee ?? ''} onChange={(e) => setForm({ ...form, committee: e.target.value })} placeholder="Peace and Order" />
+                </div>
+                <div>
+                  <label className="block text-xs text-on-surface-variant mb-1.5">Icon</label>
+                  <input className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={form.icon ?? ''} onChange={(e) => setForm({ ...form, icon: e.target.value })} placeholder="security, school, medical_services…" />
+                  <p className="text-[11px] text-on-surface-variant mt-1">Material Symbol name (e.g. security, construction, school)</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
                   <label className="block text-xs text-on-surface-variant mb-1.5">Term</label>
                   <input className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={form.term ?? ''} onChange={(e) => setForm({ ...form, term: e.target.value })} placeholder="2023 - 2026" />
                 </div>
@@ -217,10 +233,26 @@ export default function AdminOfficialsManagement() {
                 <label className="block text-xs text-on-surface-variant mb-1.5">Facebook Profile</label>
                 <input className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={form.facebook ?? ''} onChange={(e) => setForm({ ...form, facebook: e.target.value })} placeholder="https://facebook.com/..." />
               </div>
-              <div>
-                <label className="block text-xs text-on-surface-variant mb-1.5">Photo</label>
-                <input type="file" accept="image/*" onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)} className="w-full text-body-sm" />
-                {form.photo_url && !photoFile && <p className="text-[11px] text-on-surface-variant mt-1">Current photo set. Choose a file to replace it.</p>}
+              <div className="space-y-2">
+                <label className="block text-xs text-on-surface-variant">Photo</label>
+                {(photoFile || form.photo_url) && (
+                  <div className="rounded-lg overflow-hidden border border-border-subtle h-36">
+                    <img src={photoFile ? URL.createObjectURL(photoFile) : form.photo_url!} alt="Preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="official-photo"
+                  onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)}
+                  className="hidden"
+                />
+                <label htmlFor="official-photo" className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 text-secondary rounded-lg text-sm font-medium hover:bg-secondary/20 cursor-pointer transition-colors">
+                  <span className="material-symbols-outlined text-[18px]">upload</span>
+                  Choose File
+                </label>
+                {photoFile && <span className="text-xs text-on-surface-variant ml-2">{photoFile.name}</span>}
+                {editing && !photoFile && <p className="text-[11px] text-on-surface-variant">Current photo set. Choose a file to replace it.</p>}
               </div>
               <label className="flex items-center gap-2 text-sm text-on-surface">
                 <input type="checkbox" checked={form.visible} onChange={(e) => setForm({ ...form, visible: e.target.checked })} className="w-4 h-4 text-secondary rounded" />
@@ -228,6 +260,32 @@ export default function AdminOfficialsManagement() {
               </label>
               <button type="button" disabled={saving || !form.fullname.trim() || !form.title.trim()} onClick={save} className="w-full bg-secondary text-on-secondary rounded-lg py-2 text-label-md font-medium hover:bg-secondary/90 disabled:opacity-50 transition-colors">
                 {saving ? 'Saving…' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmDelete && (
+        <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-10 h-10 rounded-full bg-error-red/10 flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-[20px] text-error-red">warning</span>
+              </span>
+              <div>
+                <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Remove Official</h3>
+                <p className="text-body-sm text-on-surface-variant">This action cannot be undone.</p>
+              </div>
+            </div>
+            <p className="text-body-sm text-on-surface-variant mb-1">Are you sure you want to remove this official from the public website?</p>
+            <p className="text-body-sm text-on-surface font-semibold mb-6">{confirmDelete.fullname} — {confirmDelete.title}</p>
+            <div className="flex gap-2 justify-end">
+              <button type="button" onClick={() => setConfirmDelete(null)} className="px-4 py-2 border border-border-subtle rounded-lg text-sm font-medium text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                Cancel
+              </button>
+              <button type="button" onClick={async () => { await remove(confirmDelete); setConfirmDelete(null); }} className="px-4 py-2 bg-error-red text-white rounded-lg text-sm font-medium hover:bg-error-red/90 transition-colors">
+                Remove
               </button>
             </div>
           </div>

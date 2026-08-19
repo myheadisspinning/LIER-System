@@ -46,69 +46,120 @@ function CountUp({ target, suffix = '', duration = 2000 }: { target: number; suf
   );
 }
 
-const feedItems = [
-  { icon: 'notifications_active', iconBg: 'bg-amber-100', iconColor: 'text-amber-600', title: 'Noise complaint resolved', location: 'Tandang Sora Ave', time: '2 min ago', status: 'Resolved', statusBg: 'bg-emerald-100 text-emerald-700' },
-  { icon: 'local_police', iconBg: 'bg-blue-100', iconColor: 'text-blue-600', title: 'Suspicious activity reported', location: 'Blk 3, Lot 12', time: '5 min ago', status: 'Dispatched', statusBg: 'bg-blue-100 text-blue-700' },
-  { icon: 'lightbulb', iconBg: 'bg-orange-100', iconColor: 'text-orange-600', title: 'Street light outage', location: 'Corner Main St', time: '8 min ago', status: 'Investigating', statusBg: 'bg-orange-100 text-orange-700' },
-  { icon: 'directions_car', iconBg: 'bg-red-100', iconColor: 'text-red-600', title: 'Minor vehicle accident', location: 'QC Highway', time: '12 min ago', status: 'Resolved', statusBg: 'bg-emerald-100 text-emerald-700' },
-  { icon: 'pets', iconBg: 'bg-purple-100', iconColor: 'text-purple-600', title: 'Lost pet reported', location: 'Phase 2, Block 7', time: '15 min ago', status: 'Open', statusBg: 'bg-gray-100 text-gray-600' },
-  { icon: 'water_drop', iconBg: 'bg-cyan-100', iconColor: 'text-cyan-600', title: 'Water leak reported', location: 'Blk 5, Lot 8', time: '18 min ago', status: 'Dispatched', statusBg: 'bg-blue-100 text-blue-700' },
-  { icon: 'groups', iconBg: 'bg-green-100', iconColor: 'text-green-600', title: 'Community patrol completed', location: 'Zone 3 perimeter', time: '22 min ago', status: 'Resolved', statusBg: 'bg-emerald-100 text-emerald-700' },
+interface GalleryImage {
+  title: string;
+  image_url: string;
+}
+
+const FALLBACK_GALLERY: GalleryImage[] = [
+  { title: 'Local Toda Drivers Patrol Training', image_url: '/image/tandangsora.jfif' },
+  { title: 'Zone 4 Tree Planting Event', image_url: '/image/tandangsorashrine.jpg' },
+  { title: 'Salaam Compound Health Fair', image_url: '/image/barangayhalltandangsora.jfif' },
+  { title: 'Community Clean-Up Drive', image_url: '/image/tandangsora.jpg' },
+  { title: 'Barangay Safety Orientation', image_url: '/image/culiat-brgy.jpg' },
 ];
 
-function LiveActivityFeed() {
-  const [visibleCount, setVisibleCount] = useState(0);
-  const [items, setItems] = useState(feedItems.slice(0, 5));
+function CommunityGallery() {
+  const [items, setItems] = useState<GalleryImage[]>(FALLBACK_GALLERY);
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    const initialTimer = setTimeout(() => setVisibleCount(5), 300);
-    return () => clearTimeout(initialTimer);
+    void (async () => {
+      const { data } = await supabase
+        .from('community_gallery')
+        .select('title, image_url')
+        .eq('visible', true)
+        .order('sort_order');
+      if (data && data.length > 0) setItems(data as GalleryImage[]);
+    })();
   }, []);
 
   useEffect(() => {
-    if (visibleCount < 5) return;
-    const interval = setInterval(() => {
-      setItems((prev) => {
-        const nextIdx = (feedItems.indexOf(prev[0]) + 1) % feedItems.length;
-        const newFirst = { ...feedItems[nextIdx], time: 'just now' };
-        return [newFirst, ...prev.slice(0, 4)];
-      });
-      setVisibleCount(0);
-      setTimeout(() => setVisibleCount(5), 100);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [visibleCount]);
+    if (paused || items.length <= 1) return;
+    const timer = setInterval(() => {
+      setActive((prev) => (prev + 1) % items.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [paused, items.length]);
+
+  const go = (dir: number) => {
+    setActive((prev) => (prev + dir + items.length) % items.length);
+  };
+
+  const getVisible = () => {
+    if (items.length <= 3) return items.map((item, i) => ({ ...item, _center: i === Math.min(active, items.length - 1) }));
+    const result = [];
+    for (let offset = -1; offset <= 1; offset++) {
+      const idx = (active + offset + items.length) % items.length;
+      result.push({ ...items[idx], _center: offset === 0 });
+    }
+    return result;
+  };
 
   return (
-    <div className="bg-white p-6 md:p-lg rounded-3xl shadow-xl border border-outline-variant transition-transform hover:scale-[1.01]">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-lg gap-sm">
-        <h3 className="font-headline-lg text-xl md:text-headline-lg text-on-surface">Live Activity Feed</h3>
-        <span className="inline-flex items-center gap-1.5 text-xs font-bold bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full self-start">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          LIVE
-        </span>
-      </div>
-      <div className="space-y-3 overflow-hidden h-[340px] md:h-[380px]">
-        {items.map((item, i) => (
-          <div
-            key={`${item.title}-${i}-${items.indexOf(item)}`}
-            className="flex items-center gap-3 p-3 rounded-xl bg-surface-container-lowest border border-outline-variant/30 transition-all duration-500"
-            style={{ opacity: i < visibleCount ? 1 : 0, transform: i < visibleCount ? 'translateY(0)' : 'translateY(12px)' }}
-          >
-            <div className={`w-10 h-10 rounded-lg ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0`}>
-              <span className="material-symbols-outlined text-xl">{item.icon}</span>
+    <div
+      className="relative"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="flex gap-4 md:gap-6 overflow-hidden">
+        {getVisible().map((item, i) => (
+            <div
+              key={`${item.title}-${i}`}
+              className={`relative h-72 shrink-0 w-full md:w-[calc((100%-2*1.5rem)/3)] rounded-xl overflow-hidden cursor-pointer transition-all duration-1000 ease-in-out ${
+                item._center ? 'ring-2 ring-secondary shadow-xl scale-[1.02]' : 'shadow-md scale-100 opacity-80'
+              }`}
+            >
+              <img
+                src={item.image_url}
+                alt={item.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4">
+                <p className="text-white font-semibold text-lg leading-snug drop-shadow-lg">{item.title}</p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-label-md text-sm font-semibold text-on-surface truncate">{item.title}</p>
-              <p className="text-xs text-on-surface-variant truncate">{item.location}</p>
-            </div>
-            <div className="text-right shrink-0">
-              <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full ${item.statusBg}`}>{item.status}</span>
-              <p className="text-[10px] text-on-surface-variant mt-0.5">{item.time}</p>
-            </div>
-          </div>
         ))}
       </div>
+
+      {items.length > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={() => go(-1)}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 hidden md:flex w-10 h-10 rounded-full bg-white shadow-lg items-center justify-center text-on-surface hover:bg-surface-container-low transition-colors z-10"
+            aria-label="Previous"
+          >
+            <span className="material-symbols-outlined text-xl">chevron_left</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => go(1)}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 hidden md:flex w-10 h-10 rounded-full bg-white shadow-lg items-center justify-center text-on-surface hover:bg-surface-container-low transition-colors z-10"
+            aria-label="Next"
+          >
+            <span className="material-symbols-outlined text-xl">chevron_right</span>
+          </button>
+        </>
+      )}
+
+      {items.length > 1 && (
+        <div className="flex justify-center gap-2 mt-4">
+          {items.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setActive(i)}
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                i === active ? 'bg-secondary w-6' : 'bg-outline-variant/50 hover:bg-outline-variant'
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -201,7 +252,7 @@ export default function Home() {
           <div className="absolute inset-0 hero-overlay"></div>
         </div>
         <div className="container mx-auto px-4 md:px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-xl relative z-10 py-xl">
-          <div ref={(el) => { sectionRefs.current[0] = el; }} className="flex flex-col justify-center items-center lg:items-start text-center lg:text-center space-y-md opacity-0 translate-y-10 transition-all duration-700" data-section="hero">
+          <div ref={(el) => { sectionRefs.current[0] = el; }} className="flex flex-col justify-center items-center lg:items-start text-center lg:text-center space-y-md opacity-0 translate-y-10 transition-all duration-1000" data-section="hero">
             <div className="inline-flex items-center gap-sm bg-secondary-container/30 backdrop-blur-md px-md py-xs rounded-full border border-secondary-fixed/30 mb-sm">
               <span className="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
               <span className="text-white font-label-md text-xs md:text-label-md tracking-wider uppercase font-bold">Tactical Command Center</span>
@@ -241,7 +292,7 @@ export default function Home() {
         </div>
       </header>
 
-      <section ref={(el) => { sectionRefs.current[1] = el; }} className="py-md md:py-xl -mt-8 md:-mt-xl relative z-20 opacity-0 translate-y-10 transition-all duration-700">
+      <section ref={(el) => { sectionRefs.current[1] = el; }} className="py-md md:py-xl -mt-8 md:-mt-xl relative z-20 opacity-0 translate-y-10 transition-all duration-1000 delay-100">
         <div className="container mx-auto px-4 md:px-margin-desktop grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
           <div className="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
             <span className="material-symbols-outlined text-secondary text-2xl md:text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>assignment</span>
@@ -266,7 +317,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[2] = el; }} className="py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-700">
+      <section ref={(el) => { sectionRefs.current[2] = el; }} className="py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-1000 delay-200">
         <div className="container mx-auto px-4 md:px-margin-desktop">
           <div className="text-center mb-xl" data-section="services-title">
             <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">LGU Public Safety Services</h2>
@@ -296,51 +347,17 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[3] = el; }} className="py-xl opacity-0 translate-y-10 transition-all duration-700">
+      <section ref={(el) => { sectionRefs.current[3] = el; }} className="py-xl opacity-0 translate-y-10 transition-all duration-1000 delay-100">
         <div className="container mx-auto px-4 md:px-margin-desktop">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-xl items-center">
-            <div data-section="highlights">
-              <LiveActivityFeed />
-            </div>
-            <div className="space-y-6 md:space-y-lg" data-section="highlights-right">
-              <div className="bg-white p-6 md:p-lg rounded-3xl border-l-8 border-l-secondary shadow-lg border border-outline-variant/20 hover:shadow-xl transition-all">
-                <div className="flex flex-col sm:flex-row items-start gap-md">
-                  <div className="p-sm bg-secondary/10 rounded-xl text-secondary">
-                    <span className="material-symbols-outlined text-3xl">psychology</span>
-                  </div>
-                  <div>
-                    <h3 className="font-headline-md text-lg md:text-headline-md text-on-surface mb-xs">AI Dispatch Statistics</h3>
-                    <p className="font-body-md text-on-surface-variant mb-md">Our AI-driven routing has reduced average response times by 35% across all sectors.</p>
-                    <div className="flex items-center gap-8 md:gap-xl">
-                      <div>
-                        <p className="font-display-lg text-secondary text-2xl md:text-headline-lg">4.2m</p>
-                        <p className="font-caption text-caption text-on-surface-variant">Avg Response</p>
-                      </div>
-                      <div className="h-10 w-[1px] bg-outline-variant"></div>
-                      <div>
-                        <p className="font-display-lg text-secondary text-2xl md:text-headline-lg">98%</p>
-                        <p className="font-caption text-caption text-on-surface-variant">Accuracy</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>  
-              </div>
-              <div className="bg-primary-container p-6 md:p-lg rounded-3xl text-white shadow-lg relative overflow-hidden group hover:shadow-2xl transition-all">
-                <div className="absolute inset-0 bg-secondary opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-                <div className="relative z-10">
-                  <h4 className="font-headline-md text-lg md:text-headline-md mb-base">Command Center Visibility</h4>
-                  <p className="font-body-md text-on-primary-container mb-md">Monitor live incidents and resource allocation through a unified interface.</p>
-                  <button className="flex items-center gap-xs font-label-md text-tertiary-fixed-dim uppercase tracking-wider group-hover:translate-x-2 transition-transform">
-                    VIEW MY DASHBOARD <span className="material-symbols-outlined">arrow_right_alt</span>
-                  </button>
-                </div>
-              </div>
-            </div>
+          <div className="text-center mb-xl">
+            <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">Barangay Culiat in Action</h2>
+            <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">A glimpse into the programs, events, and community efforts that make our barangay safer and more connected.</p>
           </div>
+          <CommunityGallery />
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[4] = el; }} className="py-xl bg-surface-container-highest/30 opacity-0 translate-y-10 transition-all duration-700">
+      <section ref={(el) => { sectionRefs.current[4] = el; }} className="py-xl bg-surface-container-highest/30 opacity-0 translate-y-10 transition-all duration-1000 delay-200">
         <div className="container mx-auto px-4 md:px-margin-desktop">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-xl items-center">
             <div className="order-2 lg:order-1 text-center lg:text-left" data-section="impact">
@@ -368,7 +385,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[5] = el; }} className="py-xl bg-surface opacity-0 translate-y-10 transition-all duration-700">
+      <section ref={(el) => { sectionRefs.current[5] = el; }} className="py-xl bg-surface opacity-0 translate-y-10 transition-all duration-1000 delay-100">
         <div className="container mx-auto px-4 md:px-margin-desktop">
           <div className="text-center mb-xl" data-section="guides">
             <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">Community Safety Guides</h2>
@@ -395,7 +412,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[6] = el; }} className="py-xl bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-700">
+      <section ref={(el) => { sectionRefs.current[6] = el; }} className="py-xl bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-1000 delay-200">
         <div className="container mx-auto px-4 md:px-margin-desktop">
           <div className="text-center mb-xl" data-section="hotlines">
             <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">Emergency Hotlines</h2>
