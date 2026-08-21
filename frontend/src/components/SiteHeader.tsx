@@ -195,8 +195,8 @@ export default function SiteHeader({
                       <span className="material-symbols-outlined text-lg">notifications</span> Notifications
                     </button>
                     {notifOpen && (
-                      <div className="px-4 pb-4 flex flex-col items-center gap-sm text-on-surface-variant border-b border-outline-variant/30 md:hidden">
-                        <span className="material-symbols-outlined text-3xl">notifications_off</span>
+                      <div className="px-4 py-2.5 flex flex-col items-center gap-sm text-on-surface-variant border-b border-outline-variant/30 md:hidden">
+                        <span className="material-symbols-outlined text-xl">notifications_off</span>
                         <p className="text-caption text-center">No new notifications yet.</p>
                       </div>
                     )}
