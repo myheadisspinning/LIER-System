@@ -8,7 +8,7 @@ import { BARANGAY_HALL_CENTER } from '../../../lib/geo';
 
 const incidentPin = divIcon({
   className: '',
-  html: '<div class="relative w-6 h-6"><span class="absolute inset-0 rounded-full bg-red-500 animate-ping opacity-70"></span><span class="absolute inset-0 m-auto w-4 h-4 rounded-full bg-red-600 border-2 border-white"></span></div>',
+  html: '<div class="relative w-6 h-6"><span class="incident-radar-ring" style="--radar-color:#dc2626"></span><span class="incident-radar-ring incident-radar-ring--delayed" style="--radar-color:#dc2626"></span><span class="absolute inset-0 m-auto w-4 h-4 rounded-full bg-red-600 border-2 border-white"></span></div>',
   iconSize: [24, 24],
   iconAnchor: [12, 12],
 });

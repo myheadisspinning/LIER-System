@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import Toast, { type ToastData } from '../components/Toast';
 import LoadingScreen from '../components/LoadingScreen';
+import OTPVerificationModal from '../components/OTPVerificationModal';
 import { getRole, dashboardPathFor, checkUserAccess } from '../lib/role';
 import styles from '../styles/modules/SignIn.module.css';
 
@@ -18,6 +19,13 @@ export default function SignIn() {
   const [showLoading, setShowLoading] = useState(false);
   const [showResendOption, setShowResendOption] = useState(false);
   const [resending, setResending] = useState(false);
+
+  // OTP state
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otpUserId, setOtpUserId] = useState('');
+  const [otpEmail, setOtpEmail] = useState('');
+  const [otpPhone, setOtpPhone] = useState('');
+  const [otpDestination, setOtpDestination] = useState('');
 
   useEffect(() => {
     const state = location.state as { error?: string } | null;
@@ -111,9 +119,50 @@ export default function SignIn() {
     const role = data.user ? await getRole(data.user.id) : 'user';
     const destination = role === 'user' ? '/' : dashboardPathFor(role);
 
+    // For admin/superadmin, require OTP verification
+    if (role === 'admin' || role === 'superadmin') {
+      const metaPhone = data.user!.user_metadata?.phone || '';
+      let phone = metaPhone;
+      if (!phone) {
+        const { data: profile } = await supabase
+          .from('public_users')
+          .select('phone')
+          .eq('id', data.user!.id)
+          .maybeSingle();
+        phone = profile?.phone || '';
+      }
+      setOtpUserId(data.user!.id);
+      setOtpEmail(identity);
+      setOtpPhone(phone);
+      setOtpDestination(destination);
+      setShowOtpModal(true);
+      setLoading(false);
+      return;
+    }
+
+    // For regular users/officers, direct access
     setToast({ type: 'success', message: 'Login successful. Welcome back!' });
     setTimeout(() => setShowLoading(true), 1200);
     setTimeout(() => navigate(destination), 3000);
+  };
+
+  const handleOtpVerified = () => {
+    setShowOtpModal(false);
+    setToast({ type: 'success', message: 'Verification successful. Welcome back!' });
+    setTimeout(() => setShowLoading(true), 1200);
+    setTimeout(() => navigate(otpDestination), 3000);
+  };
+
+  const handleOtpCancel = () => {
+    setShowOtpModal(false);
+    setOtpUserId('');
+    setOtpEmail('');
+    setOtpPhone('');
+    setOtpDestination('');
+  };
+
+  const handleOtpError = (message: string) => {
+    setToast({ type: 'error', message });
   };
 
   return (
@@ -302,6 +351,16 @@ export default function SignIn() {
 
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
       {showLoading && <LoadingScreen message="Logging you in..." />}
+      {showOtpModal && (
+        <OTPVerificationModal
+          userId={otpUserId}
+          email={otpEmail}
+          phone={otpPhone}
+          onVerified={handleOtpVerified}
+          onCancel={handleOtpCancel}
+          onError={handleOtpError}
+        />
+      )}
     </div>
   );
 }

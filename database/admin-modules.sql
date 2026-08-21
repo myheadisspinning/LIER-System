@@ -150,6 +150,7 @@ create table if not exists public.inquiries (
   status text not null default 'Open'
     check (status in ('Open', 'In Progress', 'Resolved', 'Closed')),
   created_by uuid references public.public_users (id) on delete set null,
+  incident_id uuid references public.incident_reports (id) on delete set null,
   created_at timestamptz default now()
 );
 
@@ -399,7 +400,7 @@ create policy "officials photos authenticated upload" on storage.objects
 --   p_scope = 'staff'     -> admin/officer/superadmin (Superadmin Admin Management; superadmin only)
 --   p_scope = 'all'       -> everything
 -- Staff may list residents; only a superadmin may list staff accounts.
-drop function if exists public.admin_list_users();
+drop function if exists public.admin_list_users(text);
 
 create or replace function public.admin_list_users(p_scope text default 'all')
 returns table (
@@ -414,7 +415,10 @@ returns table (
   address text,
   dob date,
   gender text,
-  avatar_url text
+  avatar_url text,
+  emergency_contact_name text,
+  emergency_contact_relationship text,
+  emergency_contact_phone text
 )
 language plpgsql
 security definer
@@ -443,7 +447,14 @@ begin
       p.address,
       p.dob,
       p.gender,
-      p.avatar_url
+      coalesce(
+        p.avatar_url,
+        nullif(u.raw_user_meta_data ->> 'avatar_url', ''),
+        nullif(u.raw_user_meta_data ->> 'picture', '')
+      ) as avatar_url,
+      p.emergency_contact_name,
+      p.emergency_contact_relationship,
+      p.emergency_contact_phone
     from auth.users u
     left join public.public_users p on p.id = u.id
     where

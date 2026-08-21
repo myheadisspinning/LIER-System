@@ -28,7 +28,10 @@ begin
     new.raw_user_meta_data ->> 'phone',
     new.email_confirmed_at,
     coalesce(new.raw_user_meta_data ->> 'role', 'user'),
-    new.raw_user_meta_data ->> 'avatar_url'
+    coalesce(
+      nullif(new.raw_user_meta_data ->> 'avatar_url', ''),
+      nullif(new.raw_user_meta_data ->> 'picture', '')
+    )
   );
   return new;
 end;
@@ -39,6 +42,7 @@ create trigger on_auth_user_created
   for each row execute function public.handle_new_user();
 
 -- 2) Create the accounts (bcrypt-hashed passwords)
+-- SECURITY: Admin/superadmin accounts require OTP 2FA on login.
 insert into auth.users (
   instance_id, id, aud, role,
   email, encrypted_password,
@@ -51,11 +55,11 @@ insert into auth.users (
   '00000000-0000-0000-0000-000000000000',
   extensions.gen_random_uuid(),
   'authenticated', 'authenticated',
-  'admin@culiat.ph',
-  extensions.crypt('REPLACE_WITH_STRONG_ADMIN_PASSWORD', extensions.gen_salt('bf', 10)),
+  'culiatadmin@gmail.com',
+  extensions.crypt('CULIATLEIRS547712', extensions.gen_salt('bf', 10)),
   now(),
   '{"provider":"email","providers":["email"]}',
-  '{"role":"admin","fullname":"Admin Desk Officer"}',
+  '{"role":"admin","fullname":"Admin Desk Officer","phone":"9943159360"}',
   now(), now(), '', '', '', ''
 ),
 (
@@ -77,7 +81,7 @@ select
   coalesce(nullif(raw_user_meta_data ->> 'fullname', ''), 'Unknown Resident'),
   coalesce(raw_user_meta_data ->> 'role', 'user')
 from auth.users
-where email in ('admin@culiat.ph', 'superadmin@culiat.ph')
+where email in ('culiatadmin@gmail.com', 'superadmin@culiat.ph')
 on conflict (id) do update
   set role = excluded.role, fullname = excluded.fullname;
 
@@ -85,4 +89,4 @@ on conflict (id) do update
 select u.email, u.email_confirmed_at is not null as confirmed, p.role, p.fullname
 from auth.users u
 left join public.public_users p on p.id = u.id
-where u.email in ('admin@culiat.ph', 'superadmin@culiat.ph');
+where u.email in ('culiatadmin@gmail.com', 'superadmin@culiat.ph');

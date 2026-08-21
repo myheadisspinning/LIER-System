@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { uploadEvidence } from '../../../lib/ai';
+import Toast from '../../../components/Toast';
 
 type Filter = 'All Files' | 'CCTV / Video' | 'Photos' | 'Audio / Voice';
 
@@ -65,55 +66,57 @@ export default function EvidenceVault() {
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   useEffect(() => {
-    fetchEvidence();
-  }, []);
-
-  const fetchEvidence = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        setLoading(false);
-        return;
-      }
-
-      const { data: reports, error } = await supabase
-        .from('incident_reports')
-        .select('id, report_no, title, status, evidence, created_at')
-        .eq('user_id', session.user.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      const evidenceItems: VaultItem[] = [];
-      (reports || []).forEach((report: ReportEvidence) => {
-        if (report.evidence && report.evidence.length > 0) {
-          report.evidence.forEach((file) => {
-            evidenceItems.push({
-              name: file.name,
-              size: formatSize(file.size),
-              uploaded: `Uploaded: ${formatDate(report.created_at)}`,
-              kind: getKind(file.type),
-              linked: true,
-              linkedCase: report.report_no,
-              linkedReportTitle: report.title,
-              linkedReportStatus: report.status,
-              thumb: file.type.startsWith('image/') ? file.url : '',
-              url: file.url,
-              reportId: report.id,
-              fileSize: file.size,
-            });
-          });
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          if (!cancelled) setLoading(false);
+          return;
         }
-      });
 
-      setItems(evidenceItems);
-    } catch (error) {
-      console.error('Error fetching evidence:', error);
-      setToast({ type: 'error', message: 'Failed to load evidence files' });
-    } finally {
-      setLoading(false);
-    }
-  };
+        const { data: reports, error } = await supabase
+          .from('incident_reports')
+          .select('id, report_no, title, status, evidence, created_at')
+          .eq('user_id', session.user.id)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        const evidenceItems: VaultItem[] = [];
+        (reports || []).forEach((report: ReportEvidence) => {
+          if (report.evidence && report.evidence.length > 0) {
+            report.evidence.forEach((file) => {
+              evidenceItems.push({
+                name: file.name,
+                size: formatSize(file.size),
+                uploaded: `Uploaded: ${formatDate(report.created_at)}`,
+                kind: getKind(file.type),
+                linked: true,
+                linkedCase: report.report_no,
+                linkedReportTitle: report.title,
+                linkedReportStatus: report.status,
+                thumb: file.type.startsWith('image/') ? file.url : '',
+                url: file.url,
+                reportId: report.id,
+                fileSize: file.size,
+              });
+            });
+          }
+        });
+
+        if (!cancelled) setItems(evidenceItems);
+      } catch (error) {
+        console.error('Error fetching evidence:', error);
+        if (!cancelled) setToast({ type: 'error', message: 'Failed to load evidence files' });
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -187,17 +190,7 @@ export default function EvidenceVault() {
 
   return (
     <div className="w-full">
-      {toast && (
-        <div className="fixed top-4 right-4 z-50 bg-surface-container-lowest border border-border-subtle rounded-lg shadow-lg p-4 flex items-center gap-3">
-          <span className="material-symbols-outlined text-secondary">
-            {toast.type === 'success' ? 'check_circle' : 'error'}
-          </span>
-          <span className="font-body-sm text-body-sm">{toast.message}</span>
-          <button onClick={() => setToast(null)} className="text-on-surface-variant hover:text-on-surface">
-            <span className="material-symbols-outlined text-[18px]">close</span>
-          </button>
-        </div>
-      )}
+      {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
 
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <div className="relative flex-1">

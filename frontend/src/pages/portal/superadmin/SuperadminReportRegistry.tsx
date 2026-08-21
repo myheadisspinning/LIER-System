@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
+import IncidentDetailModal from '../../../components/IncidentDetailModal';
 import Toast from '../../../components/Toast';
 
 type EvidenceItem = { name: string; type: string; size: number; url: string };
@@ -27,6 +28,9 @@ type Profile = {
   fullname: string;
   phone: string | null;
   address: string | null;
+  emergency_contact_name: string | null;
+  emergency_contact_relationship: string | null;
+  emergency_contact_phone: string | null;
 };
 
 const PRIORITY_STYLES: Record<string, string> = {
@@ -45,11 +49,16 @@ const STATUS_STYLES: Record<string, string> = {
   Rejected: 'bg-cc-red/15 text-cc-red',
 };
 
+const ACTIVE_STATUSES = ['Pending', 'Verifying', 'Assigned', 'Progress'];
+const ARCHIVED_STATUSES = ['Resolved', 'Rejected'];
+
 export default function SuperadminReportRegistry() {
   const [reports, setReports] = useState<RegistryRow[]>([]);
   const [users, setUsers] = useState<Record<string, Profile>>({});
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
+  const [tab, setTab] = useState<'active' | 'archive'>('active');
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
@@ -61,7 +70,7 @@ export default function SuperadminReportRegistry() {
         .select('id, report_no, title, category, priority, status, incident_time, created_at, lat, lng, address, anonymous, user_id, evidence, confidence')
         .order('created_at', { ascending: false })
         .limit(100),
-      supabase.from('public_users').select('id, fullname, phone, address').limit(1000),
+      supabase.from('public_users').select('id, fullname, phone, address, emergency_contact_name, emergency_contact_relationship, emergency_contact_phone').limit(1000),
     ]);
     const userMap: Record<string, Profile> = {};
     (userRes.data ?? []).forEach((u) => {
@@ -95,7 +104,9 @@ export default function SuperadminReportRegistry() {
     });
   };
 
-  const filtered = reports.filter((r) => {
+  const tabFiltered = reports.filter((r) => (tab === 'archive' ? ARCHIVED_STATUSES : ACTIVE_STATUSES).includes(r.status));
+
+  const filtered = tabFiltered.filter((r) => {
     if (!search.trim()) return true;
     const q = search.trim().toLowerCase();
     return (
@@ -105,14 +116,29 @@ export default function SuperadminReportRegistry() {
     );
   });
 
+  const activeCount = reports.filter((r) => ACTIVE_STATUSES.includes(r.status)).length;
+  const archivedCount = reports.length - activeCount;
+
   const reporterLabel = (r: RegistryRow) => {
     const profile = r.user_id ? users[r.user_id] : undefined;
     return profile?.fullname ?? 'Unknown Resident';
   };
 
   const renderReporter = (r: RegistryRow) => {
+    const profile = r.user_id ? users[r.user_id] : undefined;
     if (!r.anonymous) {
-      return <span className="text-sm text-cc-heading">uploaded by <span className="font-semibold">{reporterLabel(r)}</span></span>;
+      return (
+        <div className="flex flex-col gap-0.5 items-start">
+          <span className="text-sm text-cc-heading">uploaded by <span className="font-semibold">{reporterLabel(r)}</span></span>
+          {profile?.phone && <span className="text-[11px] text-cc-muted">+63 {profile.phone}</span>}
+          {profile?.emergency_contact_name && (
+            <span className="text-[10px] text-cc-red flex items-center gap-1">
+              <span className="material-symbols-outlined text-[11px]">emergency</span>
+              {profile.emergency_contact_name} ({profile.emergency_contact_relationship}) — +63 {profile.emergency_contact_phone}
+            </span>
+          )}
+        </div>
+      );
     }
     const isRevealed = revealed.has(r.id);
     return (
@@ -121,6 +147,17 @@ export default function SuperadminReportRegistry() {
           <span className="text-sm text-cc-body">uploaded by <span className="font-semibold text-cc-heading">{isRevealed ? reporterLabel(r) : 'Anonymous'}</span></span>
           <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-cc-accent/15 text-cc-accent border border-cc-accent/25">Anonymous</span>
         </div>
+        {isRevealed && profile && (
+          <div className="flex flex-col gap-0.5">
+            {profile.phone && <span className="text-[11px] text-cc-muted">+63 {profile.phone}</span>}
+            {profile.emergency_contact_name && (
+              <span className="text-[10px] text-cc-red flex items-center gap-1">
+                <span className="material-symbols-outlined text-[11px]">emergency</span>
+                {profile.emergency_contact_name} ({profile.emergency_contact_relationship}) — +63 {profile.emergency_contact_phone}
+              </span>
+            )}
+          </div>
+        )}
         <button
           type="button"
           onClick={() => toggleReveal(r.id)}
@@ -143,15 +180,33 @@ export default function SuperadminReportRegistry() {
           </h3>
           <p className="text-sm text-cc-body mt-1">Every submitted incident report with reporter attribution. Anonymous identities are visible only to the superadmin.</p>
         </div>
-        <div className="relative">
-          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-cc-muted text-lg">search</span>
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search report no, title, category..."
-            className="pl-10 pr-4 py-2 bg-cc-input border border-cc-border rounded-lg focus:ring-1 focus:ring-cc-accent w-72 text-sm text-cc-heading placeholder:text-cc-muted focus:outline-none"
-          />
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex rounded-lg border border-cc-border overflow-hidden text-[11px] font-bold uppercase tracking-wider">
+            <button
+              type="button"
+              onClick={() => setTab('active')}
+              className={`px-3.5 py-2 transition-colors ${tab === 'active' ? 'bg-cc-accent text-white' : 'bg-cc-input text-cc-muted hover:text-cc-heading'}`}
+            >
+              Active ({activeCount})
+            </button>
+            <button
+              type="button"
+              onClick={() => setTab('archive')}
+              className={`px-3.5 py-2 transition-colors ${tab === 'archive' ? 'bg-cc-accent text-white' : 'bg-cc-input text-cc-muted hover:text-cc-heading'}`}
+            >
+              Archive ({archivedCount})
+            </button>
+          </div>
+          <div className="relative">
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-cc-muted text-lg">search</span>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search report no, title, category..."
+              className="pl-10 pr-4 py-2 bg-cc-input border border-cc-border rounded-lg focus:ring-1 focus:ring-cc-accent w-72 text-sm text-cc-heading placeholder:text-cc-muted focus:outline-none"
+            />
+          </div>
         </div>
       </div>
 
@@ -179,7 +234,7 @@ export default function SuperadminReportRegistry() {
               </thead>
               <tbody className="divide-y divide-cc-border">
                 {filtered.map((r) => (
-                  <tr key={r.id} className="hover:bg-cc-hover transition-colors">
+                  <tr key={r.id} onClick={() => setSelectedId(r.id)} className="hover:bg-cc-hover transition-colors cursor-pointer">
                     <td className="px-6 py-4">
                       <span className="text-xs font-bold text-cc-accent font-mono">{r.report_no ?? '—'}</span>
                     </td>
@@ -213,7 +268,7 @@ export default function SuperadminReportRegistry() {
         </div>
         {!loading && !error && filtered.length > 0 && (
           <div className="px-6 py-3 border-t border-cc-border text-[11px] text-cc-muted">
-            Showing {filtered.length} of {reports.length} reports.
+            Showing {filtered.length} of {tabFiltered.length} {tab} reports.
           </div>
         )}
       </div>
@@ -221,9 +276,11 @@ export default function SuperadminReportRegistry() {
       <div className="bg-cc-card border border-cc-border rounded-xl p-4 flex items-start gap-3">
         <span className="material-symbols-outlined text-cc-accent">verified_user</span>
         <p className="text-xs text-cc-body leading-relaxed">
-          Reports posted anonymously are labeled "Anonymous" by default. Only the superadmin can reveal the real reporter identity using the Reveal identity action.
+          Reports posted anonymously are labeled "Anonymous" by default. Only the superadmin can reveal the real reporter identity — click any row for full details or use the Reveal identity action.
         </p>
       </div>
+
+      <IncidentDetailModal reportId={selectedId} onClose={() => setSelectedId(null)} unmaskAnonymous />
 
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
     </div>

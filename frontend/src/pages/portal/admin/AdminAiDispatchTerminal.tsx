@@ -27,6 +27,17 @@ type ReportRow = {
   incident_time: string | null;
   evidence: EvidenceFile[] | null;
   created_at: string;
+  user_id: string | null;
+};
+
+type ReporterProfile = {
+  id: string;
+  fullname: string;
+  phone: string | null;
+  address: string | null;
+  emergency_contact_name: string | null;
+  emergency_contact_relationship: string | null;
+  emergency_contact_phone: string | null;
 };
 
 type UnitRow = {
@@ -78,6 +89,7 @@ const formatElapsed = (from: string, now: number) => {
 export default function AdminAiDispatchTerminal() {
   const [reports, setReports] = useState<ReportRow[]>([]);
   const [units, setUnits] = useState<UnitRow[]>([]);
+  const [reporterMap, setReporterMap] = useState<Record<string, ReporterProfile>>({});
   const [openAssignments, setOpenAssignments] = useState<Record<string, string[]>>({});
   const [selectedId, setSelectedId] = useState('');
   const [targetUnitId, setTargetUnitId] = useState('');
@@ -90,7 +102,7 @@ export default function AdminAiDispatchTerminal() {
     const [repRes, unitRes, openMap] = await Promise.all([
       supabase
         .from('incident_reports')
-        .select('id, report_no, title, description, additional_context, category, priority, threat, confidence, status, incident_status, address, ai_dispatch, ai_actions, incident_time, evidence, dispatch_unit:dispatch_unit_id(name), created_at')
+        .select('id, report_no, title, description, additional_context, category, priority, threat, confidence, status, incident_status, address, ai_dispatch, ai_actions, incident_time, evidence, dispatch_unit:dispatch_unit_id(name), created_at, user_id')
         .in('status', ['Pending', 'Verifying', 'Assigned'])
         .order('created_at', { ascending: false })
         .limit(30),
@@ -101,10 +113,24 @@ export default function AdminAiDispatchTerminal() {
       ...r,
       dispatch_unit_name: (r as unknown as { dispatch_unit: { name: string } | null }).dispatch_unit?.name ?? null,
     })) as ReportRow[];
+
+    const userIds = [...new Set(mapped.map((r) => r.user_id).filter(Boolean))] as string[];
+    let reporterMap: Record<string, ReporterProfile> = {};
+    if (userIds.length > 0) {
+      const { data: reporterRows } = await supabase
+        .from('public_users')
+        .select('id, fullname, phone, address, emergency_contact_name, emergency_contact_relationship, emergency_contact_phone')
+        .in('id', userIds);
+      for (const row of (reporterRows ?? []) as ReporterProfile[]) {
+        reporterMap[row.id] = row;
+      }
+    }
+
     return {
       reports: mapped,
       units: (unitRes.data ?? []) as UnitRow[],
       openAssignments: openMap,
+      reporterMap,
       repError: repRes.error?.message ?? null,
       unitError: unitRes.error?.message ?? null,
     };
@@ -112,19 +138,21 @@ export default function AdminAiDispatchTerminal() {
 
   const load = async () => {
     setLoading(true);
-    const { reports, units, openAssignments } = await fetchAll();
+    const { reports, units, openAssignments, reporterMap } = await fetchAll();
     setReports(reports);
     setUnits(units);
     setOpenAssignments(openAssignments);
+    setReporterMap(reporterMap);
     setLoading(false);
   };
 
   useEffect(() => {
     void (async () => {
-      const { reports, units, openAssignments } = await fetchAll();
+      const { reports, units, openAssignments, reporterMap } = await fetchAll();
       setReports(reports);
       setUnits(units);
       setOpenAssignments(openAssignments);
+      setReporterMap(reporterMap);
       setLoading(false);
     })();
   }, []);
@@ -202,7 +230,7 @@ export default function AdminAiDispatchTerminal() {
             <div
               key={r.id}
               onClick={() => setSelectedId(r.id)}
-              className={`${selected?.id === r.id ? 'border-2 border-secondary shadow-md' : 'border border-border-subtle shadow-sm hover:border-secondary/50 hover:shadow'} bg-white rounded p-3 cursor-pointer transition-all relative overflow-hidden`}
+              className={`${selected?.id === r.id ? 'border-2 border-secondary shadow-md' : 'border-2 border-transparent shadow-sm hover:border-secondary/50 hover:shadow'} bg-white rounded p-3 cursor-pointer transition-all relative overflow-hidden`}
             >
               {selected?.id === r.id && <div className="absolute left-0 top-0 bottom-0 w-1 bg-secondary"></div>}
               <div className="flex justify-between items-start mb-2 pl-2">
@@ -301,6 +329,49 @@ export default function AdminAiDispatchTerminal() {
                   )}
                 </div>
               </div>
+              {selected.user_id && reporterMap[selected.user_id] && (
+                <div className="mb-6">
+                  <h4 className="font-caps-xs text-caps-xs text-slate-400 mb-2">REPORTER INFO</h4>
+                  <div className="bg-surface-bg border border-border-subtle rounded p-4">
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="text-slate-500 block text-xs uppercase">Name</span>
+                        <span className="font-medium">{reporterMap[selected.user_id].fullname}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-500 block text-xs uppercase">Phone</span>
+                        <span className="font-medium">{reporterMap[selected.user_id].phone ? `+63 ${reporterMap[selected.user_id].phone}` : '—'}</span>
+                      </div>
+                      <div className="col-span-2">
+                        <span className="text-slate-500 block text-xs uppercase">Address</span>
+                        <span className="font-medium">{reporterMap[selected.user_id].address || '—'}</span>
+                      </div>
+                    </div>
+                    {reporterMap[selected.user_id].emergency_contact_name && (
+                      <div className="mt-3 pt-3 border-t border-border-subtle">
+                        <span className="text-error-red font-caps-xs text-caps-xs uppercase tracking-wider flex items-center gap-1 mb-2">
+                          <span className="material-symbols-outlined text-[14px]">emergency</span>
+                          Emergency Contact
+                        </span>
+                        <div className="grid grid-cols-3 gap-4 text-sm">
+                          <div>
+                            <span className="text-slate-500 block text-xs uppercase">Name</span>
+                            <span className="font-medium">{reporterMap[selected.user_id].emergency_contact_name}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block text-xs uppercase">Relationship</span>
+                            <span className="font-medium capitalize">{reporterMap[selected.user_id].emergency_contact_relationship}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block text-xs uppercase">Phone</span>
+                            <span className="font-medium">{reporterMap[selected.user_id].emergency_contact_phone ? `+63 ${reporterMap[selected.user_id].emergency_contact_phone}` : '—'}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
               <div className="mb-6">
                 <h4 className="font-caps-xs text-caps-xs text-slate-400 mb-2">AI ASSESSMENT BREAKDOWN</h4>
                 <div className="space-y-3">

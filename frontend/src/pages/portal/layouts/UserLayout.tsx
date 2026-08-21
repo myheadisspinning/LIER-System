@@ -113,8 +113,8 @@ export default function UserLayout() {
       <aside className="h-screen w-72 fixed left-0 top-0 bg-cc-sidebar text-cc-body flex flex-col border-r border-cc-border z-50 hidden lg:flex">
         <div className="p-6 pb-5 border-b border-cc-border">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-cc-accent flex items-center justify-center shrink-0 shadow-cc-card">
-              <span className="material-symbols-outlined text-cc-on-accent" style={{ fontSize: 24 }}>security</span>
+            <div className="w-11 h-11 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-cc-card flex items-center justify-center">
+              <img src="/image/culiat-logo.png" alt="Barangay Culiat Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <h1 className="text-lg font-bold text-cc-heading leading-tight tracking-tight">{userNav.brand}</h1>
@@ -287,8 +287,8 @@ export default function UserLayout() {
           <div className="p-6 pb-4 border-b border-cc-border">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl bg-cc-accent flex items-center justify-center shrink-0 shadow-cc-card">
-                  <span className="material-symbols-outlined text-cc-on-accent" style={{ fontSize: 24 }}>security</span>
+                <div className="w-11 h-11 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-cc-card flex items-center justify-center">
+                  <img src="/image/culiat-logo.png" alt="Barangay Culiat Logo" className="w-full h-full object-contain" />
                 </div>
                 <div>
                   <h1 className="text-lg font-bold text-cc-heading leading-tight tracking-tight">{userNav.brand}</h1>

@@ -136,7 +136,7 @@ export default function SiteHeader({
         <div className="flex items-center gap-sm md:gap-md" ref={actionsRef}>
           {user ? (
             <>
-              <div className="relative">
+              <div className="relative hidden md:block">
                 <button
                   className="p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors relative"
                   type="button"
@@ -187,6 +187,19 @@ export default function SiteHeader({
                       </p>
                       <p className="text-caption text-on-surface-variant truncate">{user.email}</p>
                     </div>
+                    <button
+                      type="button"
+                      className="w-full flex items-center gap-3 px-4 py-3 text-on-surface hover:bg-surface-container-low transition-colors font-label-md text-label-md md:hidden"
+                      onClick={() => setNotifOpen((v) => !v)}
+                    >
+                      <span className="material-symbols-outlined text-lg">notifications</span> Notifications
+                    </button>
+                    {notifOpen && (
+                      <div className="px-4 pb-4 flex flex-col items-center gap-sm text-on-surface-variant border-b border-outline-variant/30 md:hidden">
+                        <span className="material-symbols-outlined text-3xl">notifications_off</span>
+                        <p className="text-caption text-center">No new notifications yet.</p>
+                      </div>
+                    )}
                     <Link
                       to="/profile"
                       className="flex items-center gap-3 px-4 py-3 text-on-surface hover:bg-surface-container-low transition-colors font-label-md text-label-md"

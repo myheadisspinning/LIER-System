@@ -22,6 +22,7 @@ import UserLayout from './pages/portal/layouts/UserLayout';
 import OfficerLayout from './pages/portal/layouts/OfficerLayout';
 import AdminDashboard from './pages/portal/admin/AdminDashboard';
 import AdminIncidentReporting from './pages/portal/admin/AdminIncidentReporting';
+import AdminIncidentArchive from './pages/portal/admin/AdminIncidentArchive';
 import AdminAiDispatchTerminal from './pages/portal/admin/AdminAiDispatchTerminal';
 import AdminContactsInbox from './pages/portal/admin/AdminContactsInbox';
 import AdminTanodRoster from './pages/portal/admin/AdminTanodRoster';
@@ -44,6 +45,7 @@ import SuperadminAiDispatch from './pages/portal/superadmin/SuperadminAiDispatch
 import SuperadminAiRuleManagement from './pages/portal/superadmin/SuperadminAiRuleManagement';
 import SuperadminAuditLogs from './pages/portal/superadmin/SuperadminAuditLogs';
 import SuperadminSecurityCenter from './pages/portal/superadmin/SuperadminSecurityCenter';
+import SuperadminReportRegistry from './pages/portal/superadmin/SuperadminReportRegistry';
 import UserDashboard from './pages/portal/user/UserDashboard';
 import ReportIncident from './pages/portal/user/ReportIncident';
 import MyIncidentReports from './pages/portal/user/MyIncidentReports';
@@ -87,6 +89,7 @@ const router = createBrowserRouter([
           { index: true, element: <Navigate to="/admin/dashboard" replace /> },
           { path: "dashboard", element: <AdminDashboard /> },
           { path: "incident-reporting", element: <AdminIncidentReporting /> },
+          { path: "incident-archive", element: <AdminIncidentArchive /> },
           { path: "ai-dispatch-terminal", element: <AdminAiDispatchTerminal /> },
           { path: "contacts-inbox", element: <AdminContactsInbox /> },
           { path: "tanod-roster", element: <AdminTanodRoster /> },
@@ -120,6 +123,7 @@ const router = createBrowserRouter([
           { path: "ai-rule-management", element: <SuperadminAiRuleManagement /> },
           { path: "audit-logs", element: <SuperadminAuditLogs /> },
           { path: "security-center", element: <SuperadminSecurityCenter /> },
+          { path: "report-registry", element: <SuperadminReportRegistry /> },
         ],
       },
       {

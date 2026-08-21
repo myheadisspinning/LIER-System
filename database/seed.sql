@@ -136,7 +136,10 @@ begin
     new.raw_user_meta_data ->> 'phone',
     new.email_confirmed_at,
     coalesce(new.raw_user_meta_data ->> 'role', 'user'),
-    new.raw_user_meta_data ->> 'avatar_url'
+    coalesce(
+      nullif(new.raw_user_meta_data ->> 'avatar_url', ''),
+      nullif(new.raw_user_meta_data ->> 'picture', '')
+    )
   );
   return new;
 end;

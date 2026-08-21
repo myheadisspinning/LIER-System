@@ -1,11 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { getRole, dashboardPathFor, checkUserAccess } from '../lib/role';
 import LoadingScreen from '../components/LoadingScreen';
+import OTPVerificationModal from '../components/OTPVerificationModal';
 
 export default function AuthCallback() {
   const navigate = useNavigate();
+
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otpUserId, setOtpUserId] = useState('');
+  const [otpEmail, setOtpEmail] = useState('');
+  const [otpPhone, setOtpPhone] = useState('');
+  const [otpDestination, setOtpDestination] = useState('');
+
+  const handleOtpVerified = useCallback(() => {
+    setShowOtpModal(false);
+    setTimeout(() => navigate(otpDestination, { replace: true }), 1500);
+  }, [navigate, otpDestination]);
+
+  const handleOtpCancel = useCallback(() => {
+    setShowOtpModal(false);
+    setOtpUserId('');
+    setOtpEmail('');
+    setOtpPhone('');
+    setOtpDestination('');
+    navigate('/signin', { replace: true });
+  }, [navigate]);
+
+  const handleOtpError = useCallback(() => {}, []);
 
   useEffect(() => {
     let mounted = true;
@@ -57,7 +80,29 @@ export default function AuthCallback() {
 
       const role = await getRole(user.id);
       const destination = role === 'user' ? '/' : dashboardPathFor(role);
-      navigate(destination, { replace: true });
+
+      if ((role === 'admin' || role === 'superadmin') && mounted) {
+        const metaPhone = user.user_metadata?.phone || '';
+        let phone = metaPhone;
+        if (!phone) {
+          const { data: profile } = await supabase
+            .from('public_users')
+            .select('phone')
+            .eq('id', user.id)
+            .maybeSingle();
+          phone = profile?.phone || '';
+        }
+        setOtpUserId(user.id);
+        setOtpEmail(email || '');
+        setOtpPhone(phone);
+        setOtpDestination(destination);
+        setShowOtpModal(true);
+        return;
+      }
+
+      if (mounted) {
+        navigate(destination, { replace: true });
+      }
     };
 
     handleCallback();
@@ -66,6 +111,19 @@ export default function AuthCallback() {
       mounted = false;
     };
   }, [navigate]);
+
+  if (showOtpModal) {
+    return (
+      <OTPVerificationModal
+        userId={otpUserId}
+        email={otpEmail}
+        phone={otpPhone}
+        onVerified={handleOtpVerified}
+        onCancel={handleOtpCancel}
+        onError={handleOtpError}
+      />
+    );
+  }
 
   return <LoadingScreen message="Signing you in..." />;
 }

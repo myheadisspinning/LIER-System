@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { downloadCsv, fmtBytes, logAudit, timeAgo } from '../../../lib/admin';
 import type { EvidenceFile } from '../../../lib/ai';
+import Toast from '../../../components/Toast';
 
 type Report = {
   id: string;
@@ -290,7 +291,7 @@ export default function AdminEvidenceVault() {
           <button type="button" onClick={() => setSelectedId(null)} className="ml-3 text-on-surface-variant hover:text-on-surface">✕</button>
         </div>
       )}
-      {toast && <div className="fixed bottom-8 right-8 bg-surface-container-high text-on-surface px-4 py-3 rounded-lg shadow-lg text-sm z-[150]">{toast.message}</div>}
+      {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
     </div>
   );
 }

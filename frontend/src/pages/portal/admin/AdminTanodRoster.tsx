@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { logAudit, DUTY_DAYS, dutyDaysLabel, deriveUnitStatus, fetchOpenUnitAssignments, isOnDutyToday, UNIT_STATUS_BADGE, UNIT_STATUS_DOT, UNIT_STATUS_CHOICES } from '../../../lib/admin';
+import Toast from '../../../components/Toast';
 
 type UnitRow = {
   id: string;
@@ -565,7 +566,7 @@ export default function AdminTanodRoster() {
         </div>
       )}
 
-      {toast && <div className="fixed bottom-8 right-8 bg-surface-container-high text-on-surface px-4 py-3 rounded-lg shadow-lg text-sm z-[150]">{toast.message}</div>}
+      {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
     </div>
   );
 }

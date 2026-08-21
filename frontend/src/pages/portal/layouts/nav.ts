@@ -43,6 +43,13 @@ export const adminNav: RoleNav = {
       section: 'Core Operations',
     },
     {
+      label: 'Incident Archive',
+      subLabel: 'Browse resolved and rejected reports',
+      icon: 'archive',
+      to: '/admin/incident-archive',
+      section: 'Core Operations',
+    },
+    {
       label: 'Dispatch Terminal',
       subLabel: 'Accept or override AI dispatch',
       icon: 'bolt',

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { downloadCsv, fmtDate, logAudit } from '../../../lib/admin';
+import Toast from '../../../components/Toast';
 
 type Row = {
   id: string;
@@ -306,7 +307,7 @@ export default function AdminReportsAnalytics() {
         </div>
       )}
 
-      {toast && <div className="fixed bottom-8 right-8 bg-surface-container-high text-on-surface px-4 py-3 rounded-lg shadow-lg text-sm z-[150]">{toast.message}</div>}
+      {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { fmtDate, isOnlineSince, logAudit, timeAgo } from '../../../lib/admin';
+import Toast from '../../../components/Toast';
 
 type Acct = {
   id: string;
@@ -15,6 +16,9 @@ type Acct = {
   dob: string | null;
   gender: string | null;
   avatar_url: string | null;
+  emergency_contact_name: string | null;
+  emergency_contact_relationship: string | null;
+  emergency_contact_phone: string | null;
 };
 
 type Filter = 'All' | 'Active' | 'Pending' | 'Suspended';
@@ -435,6 +439,28 @@ export default function AdminAccountSettings() {
                     </div>
                   </div>
                 </div>
+                {(active.emergency_contact_name || active.emergency_contact_phone) && (
+                  <div>
+                    <h4 className="font-caps-xs text-caps-xs text-error-red uppercase tracking-wider font-bold mb-3 flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[14px]">emergency</span>
+                      Emergency Contact
+                    </h4>
+                    <div className="space-y-3">
+                      <div>
+                        <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Contact Name</div>
+                        <div className="font-body-sm text-body-sm text-on-surface font-medium">{active.emergency_contact_name}</div>
+                      </div>
+                      <div>
+                        <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Relationship</div>
+                        <div className="font-body-sm text-body-sm text-on-surface font-medium capitalize">{active.emergency_contact_relationship || '—'}</div>
+                      </div>
+                      <div>
+                        <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Emergency Phone</div>
+                        <div className="font-body-sm text-body-sm text-on-surface font-medium">{active.emergency_contact_phone ? `+63 ${active.emergency_contact_phone}` : '—'}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <div>
                   <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-bold mb-3">Account Information</h4>
                   <div className="space-y-3">
@@ -660,7 +686,7 @@ export default function AdminAccountSettings() {
         </div>
       )}
 
-      {toast && <div className="fixed bottom-8 right-8 bg-surface-container-high text-on-surface px-4 py-3 rounded-lg shadow-lg text-sm z-[150]">{toast.message}</div>}
+      {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
     </div>
   );
 }

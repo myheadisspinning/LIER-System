@@ -1,10 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import { divIcon, latLngBounds, type Marker as LeafletMarker } from 'leaflet';
+import { latLngBounds, type Marker as LeafletMarker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { supabase } from '../../../supabaseClient';
 import Toast from '../../../components/Toast';
 import { BARANGAY_HALL_CENTER } from '../../../lib/geo';
+import { PRIORITY_COLORS, pinIconFor } from '../../../lib/mapPins';
 
 type EvidenceItem = { name: string; type: string; size: number; url: string };
 
@@ -28,16 +30,21 @@ type ReportRow = {
   confidence: number | null;
   evidence: EvidenceItem[] | null;
   dispatch_unit_name: string | null;
+  user_id: string | null;
+  anonymous: boolean;
 };
 
-const STATUS_OPTIONS = ['Pending', 'Verifying', 'Assigned', 'Progress', 'Resolved', 'Rejected'];
-
-const PRIORITY_COLORS: Record<string, string> = {
-  CRITICAL: '#dc2626',
-  HIGH: '#f59e0b',
-  MEDIUM: '#0d9488',
-  LOW: '#0d9488',
+type ReporterProfile = {
+  id: string;
+  fullname: string;
+  phone: string | null;
+  address: string | null;
+  emergency_contact_name: string | null;
+  emergency_contact_relationship: string | null;
+  emergency_contact_phone: string | null;
 };
+
+const STATUS_OPTIONS = ['Pending', 'Verifying', 'Assigned', 'Progress'];
 
 const PRIORITY_STYLES: Record<string, string> = {
   CRITICAL: 'bg-error-red/10 text-error-red',
@@ -59,16 +66,6 @@ const INCIDENT_STATUS_STYLES: Record<string, string> = {
   Ongoing: 'bg-error-red/10 text-error-red',
   Happened: 'bg-warning-amber/10 text-warning-amber',
   Unconfirmed: 'bg-slate-100 text-slate-600',
-};
-
-const pinIconFor = (priority: string) => {
-  const c = PRIORITY_COLORS[priority] ?? '#0d9488';
-  return divIcon({
-    className: '',
-    html: `<div style="position:relative;width:32px;height:32px"><span style="position:absolute;inset:0;margin:auto;width:18px;height:18px;border-radius:9999px;background:${c};opacity:.25;border:2px solid #0b1220"></span><span style="position:absolute;inset:0;margin:auto;width:10px;height:10px;border-radius:9999px;background:${c}"></span></div>`,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
-  });
 };
 
 function RecenterControl({ trigger }: { trigger: number }) {
@@ -144,7 +141,9 @@ function PinsLayer({
 }
 
 export default function AdminIncidentReporting() {
+  const navigate = useNavigate();
   const [reports, setReports] = useState<ReportRow[]>([]);
+  const [reporterMap, setReporterMap] = useState<Record<string, ReporterProfile>>({});
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -154,26 +153,45 @@ export default function AdminIncidentReporting() {
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [tile, setTile] = useState<'street' | 'satellite'>('street');
   const [recenterTrigger, setRecenterTrigger] = useState(0);
+  const [searchParams] = useSearchParams();
+  const initialCaseRef = useRef(searchParams.get('case'));
 
   const fetchAll = async () => {
     const res = await supabase
       .from('incident_reports')
-      .select('id, report_no, title, description, additional_context, category, priority, status, incident_status, address, lat, lng, incident_time, created_at, ai_dispatch, ai_actions, confidence, evidence, dispatch_unit:dispatch_unit_id(name)')
+      .select('id, report_no, title, description, additional_context, category, priority, status, incident_status, address, lat, lng, incident_time, created_at, ai_dispatch, ai_actions, confidence, evidence, anonymous, dispatch_unit:dispatch_unit_id(name), user_id')
       .order('created_at', { ascending: false })
       .limit(200);
-    const mapped = (res.data ?? []).map((r) => ({
-      ...r,
-      dispatch_unit_name: (r as unknown as { dispatch_unit: { name: string }[] | null }).dispatch_unit?.[0]?.name ?? null,
-    })) as ReportRow[];
-    return { reports: mapped, error: res.error?.message ?? null };
+    const mapped = (res.data ?? []).map((r) => {
+      const embed = (r as unknown as { dispatch_unit: { name: string } | { name: string }[] | null }).dispatch_unit;
+      return {
+        ...r,
+        dispatch_unit_name: (Array.isArray(embed) ? embed[0]?.name : embed?.name) ?? null,
+      };
+    }) as ReportRow[];
+
+    const userIds = [...new Set(mapped.map((r) => r.user_id).filter(Boolean))] as string[];
+    const rMap: Record<string, ReporterProfile> = {};
+    if (userIds.length > 0) {
+      const { data: reporterRows } = await supabase
+        .from('public_users')
+        .select('id, fullname, phone, address, emergency_contact_name, emergency_contact_relationship, emergency_contact_phone')
+        .in('id', userIds);
+      for (const row of (reporterRows ?? []) as ReporterProfile[]) {
+        rMap[row.id] = row;
+      }
+    }
+
+    return { reports: mapped, reporterMap: rMap, error: res.error?.message ?? null };
   };
 
   useEffect(() => {
     void (async () => {
-      const { reports, error } = await fetchAll();
+      const { reports, reporterMap: rMap, error } = await fetchAll();
       if (error) setError(error);
       setReports(reports);
-      setSelectedId((prev) => prev ?? reports[0]?.id ?? null);
+      setReporterMap(rMap);
+      setSelectedId((prev) => prev ?? initialCaseRef.current ?? reports[0]?.id ?? null);
       setLoading(false);
     })();
   }, []);
@@ -181,6 +199,7 @@ export default function AdminIncidentReporting() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return reports.filter((r) => {
+      if (r.status === 'Resolved' || r.status === 'Rejected') return false;
       if (statusFilter !== 'All' && r.status !== statusFilter) return false;
       if (!q) return true;
       return (
@@ -192,11 +211,11 @@ export default function AdminIncidentReporting() {
     });
   }, [reports, search, statusFilter]);
 
-  const mapPins = useMemo(() => filtered.filter((r) => r.lat != null && r.lng != null && r.status !== 'Rejected' && r.status !== 'Resolved'), [filtered]);
+  const mapPins = useMemo(() => filtered.filter((r) => r.lat != null && r.lng != null), [filtered]);
 
   const selected = useMemo(
-    () => filtered.find((r) => r.id === selectedId) ?? filtered[0] ?? null,
-    [filtered, selectedId],
+    () => reports.find((r) => r.id === selectedId) ?? filtered[0] ?? null,
+    [reports, filtered, selectedId],
   );
 
   useEffect(() => {
@@ -300,10 +319,20 @@ export default function AdminIncidentReporting() {
           </select>
           <span className="text-xs text-on-surface-variant font-medium">Showing {filtered.length} of {reports.length}</span>
         </div>
-        <button type="button" className="bg-secondary hover:bg-secondary/90 text-on-secondary font-label-md text-label-md py-2 px-4 rounded-md flex items-center transition-colors shrink-0">
-          <span className="material-symbols-outlined mr-2 text-[18px]">add</span>
-          Log New Incident
-        </button>
+        <div className="flex items-center gap-3 shrink-0">
+          <button
+            type="button"
+            onClick={() => navigate('/admin/incident-archive')}
+            className="bg-surface-container-low hover:bg-surface-container-high border border-border-subtle text-on-surface font-label-md text-label-md py-2 px-4 rounded-md flex items-center transition-colors"
+          >
+            <span className="material-symbols-outlined mr-2 text-[18px]">archive</span>
+            Open Archive
+          </button>
+          <button type="button" className="bg-secondary hover:bg-secondary/90 text-on-secondary font-label-md text-label-md py-2 px-4 rounded-md flex items-center transition-colors">
+            <span className="material-symbols-outlined mr-2 text-[18px]">add</span>
+            Log New Incident
+          </button>
+        </div>
       </div>
 
       {/* Split View Content */}
@@ -435,6 +464,57 @@ export default function AdminIncidentReporting() {
                     )}
                   </div>
                 </div>
+                {selected.anonymous ? (
+                  <div>
+                    <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Reporter Info</h4>
+                    <div className="bg-surface-container-low rounded-lg border border-border-subtle p-4 flex items-center gap-2 text-sm text-on-surface-variant">
+                      <span className="material-symbols-outlined text-[18px]">visibility_off</span>
+                      Anonymous report — reporter identity withheld.
+                    </div>
+                  </div>
+                ) : selected.user_id && reporterMap[selected.user_id] && (
+                  <div>
+                    <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Reporter Info</h4>
+                    <div className="bg-surface-container-low rounded-lg p-4 border border-border-subtle space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-xs text-on-surface-variant">Name</p>
+                          <p className="text-sm text-on-surface font-medium">{reporterMap[selected.user_id].fullname}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-on-surface-variant">Phone</p>
+                          <p className="text-sm text-on-surface font-medium">{reporterMap[selected.user_id].phone ? `+63 ${reporterMap[selected.user_id].phone}` : '—'}</p>
+                        </div>
+                        <div className="col-span-2">
+                          <p className="text-xs text-on-surface-variant">Address</p>
+                          <p className="text-sm text-on-surface font-medium">{reporterMap[selected.user_id].address || '—'}</p>
+                        </div>
+                      </div>
+                      {reporterMap[selected.user_id].emergency_contact_name && (
+                        <div className="pt-3 border-t border-border-subtle">
+                          <p className="text-xs text-error-red font-semibold uppercase mb-2 flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[14px]">emergency</span>
+                            Emergency Contact
+                          </p>
+                          <div className="grid grid-cols-3 gap-4">
+                            <div>
+                              <p className="text-xs text-on-surface-variant">Name</p>
+                              <p className="text-sm text-on-surface font-medium">{reporterMap[selected.user_id].emergency_contact_name}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-on-surface-variant">Relationship</p>
+                              <p className="text-sm text-on-surface font-medium capitalize">{reporterMap[selected.user_id].emergency_contact_relationship}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-on-surface-variant">Phone</p>
+                              <p className="text-sm text-on-surface font-medium">{reporterMap[selected.user_id].emergency_contact_phone ? `+63 ${reporterMap[selected.user_id].emergency_contact_phone}` : '—'}</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
                 <div>
                   <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Evidence ({selected.evidence?.length ?? 0})</h4>
                   {(selected.evidence ?? []).length > 0 ? (
