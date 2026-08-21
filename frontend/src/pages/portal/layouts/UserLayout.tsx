@@ -43,6 +43,15 @@ export default function UserLayout() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [drawerOpen]);
+
   const getFullName = () => {
     const meta = user?.user_metadata as Record<string, unknown> | undefined;
     return (typeof meta?.fullname === 'string' && meta.fullname.trim()) ||
