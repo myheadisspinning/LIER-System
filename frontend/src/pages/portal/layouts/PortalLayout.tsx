@@ -76,6 +76,12 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
     return (user?.email?.[0] ?? 'A').toUpperCase();
   };
 
+  const avatarUrl = () => {
+    const meta = user?.user_metadata as Record<string, unknown> | undefined;
+    return (typeof meta?.avatar_url === 'string' && meta.avatar_url) ||
+      (typeof meta?.picture === 'string' && meta.picture) || null;
+  };
+
   const handleSignOut = () => setConfirmOpen(true);
 
   const confirmSignOut = () => {
@@ -125,7 +131,9 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
         </nav>
         <div className="mt-auto p-4 border-t border-cc-border">
           <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-cc-hover border border-cc-border">
-            <div className="w-9 h-9 rounded-full bg-cc-accent flex items-center justify-center text-cc-on-accent text-xs font-bold shrink-0">{initials()}</div>
+            <div className="w-9 h-9 rounded-full bg-cc-accent flex items-center justify-center text-cc-on-accent text-xs font-bold shrink-0 overflow-hidden">
+              {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : initials()}
+            </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-semibold text-cc-heading leading-tight truncate">{displayName()}</p>
               <p className="text-[10px] text-cc-muted uppercase tracking-wider flex items-center gap-1">
@@ -182,8 +190,8 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
               <button type="button" className="p-2 text-cc-muted hover:text-cc-heading hover:bg-cc-hover rounded-full transition-colors">
                 <span className="material-symbols-outlined">help_outline</span>
               </button>
-              <div className="w-9 h-9 rounded-full bg-cc-accent/15 ring-1 ring-cc-border-strong flex items-center justify-center">
-                <span className="text-xs font-bold text-cc-accent">{initials()}</span>
+              <div className="w-9 h-9 rounded-full bg-cc-accent/15 ring-1 ring-cc-border-strong flex items-center justify-center overflow-hidden">
+                {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-cc-accent">{initials()}</span>}
               </div>
             </div>
           </div>

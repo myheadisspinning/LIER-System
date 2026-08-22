@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { fmtDate, logAudit } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
+import { useScrollLock } from '../../../lib/useScrollLock';
 
 type Blotter = {
   id: string;
@@ -49,6 +50,8 @@ export default function AdminBlotterTracking() {
   const [formOpen, setFormOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [hearingOpen, setHearingOpen] = useState(false);
+
+  useScrollLock(formOpen || (hearingOpen && activeId != null));
   const [hearing, setHearing] = useState({ title: '', date: '', outcome: '' });
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [form, setForm] = useState({

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { logAudit } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
+import { useScrollLock } from '../../../lib/useScrollLock';
 
 type GalleryItem = {
   id: string;
@@ -25,6 +26,8 @@ export default function AdminCommunityGallery() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<GalleryItem | null>(null);
+
+  useScrollLock(creating || editing != null || confirmDelete != null);
 
   const fetchAll = async () => {
     const res = await supabase.from('community_gallery').select('*').order('sort_order');

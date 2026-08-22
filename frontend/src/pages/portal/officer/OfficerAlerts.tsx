@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
+import { useScrollLock } from '../../../lib/useScrollLock';
 
 type Broadcast = {
   id: string;
@@ -40,6 +41,8 @@ export default function OfficerAlerts() {
   const [broadcasts, setBroadcasts] = useState<Broadcast[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedBroadcast, setSelectedBroadcast] = useState<Broadcast | null>(null);
+
+  useScrollLock(selectedBroadcast != null);
 
   useEffect(() => {
     void (async () => {

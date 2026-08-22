@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { downloadCsv, fmtDate, logAudit } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
+import { useScrollLock } from '../../../lib/useScrollLock';
 
 type Row = {
   id: string;
@@ -23,6 +24,8 @@ export default function AdminReportsAnalytics() {
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Archive | null>(null);
+
+  useScrollLock(confirmDelete != null);
 
   useEffect(() => {
     void (async () => {

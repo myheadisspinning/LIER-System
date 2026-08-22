@@ -77,6 +77,12 @@ export default function UserLayout() {
     return (user?.email?.[0] ?? 'U').toUpperCase();
   };
 
+  const avatarUrl = () => {
+    const meta = user?.user_metadata as Record<string, unknown> | undefined;
+    return (typeof meta?.avatar_url === 'string' && meta.avatar_url) ||
+      (typeof meta?.picture === 'string' && meta.picture) || null;
+  };
+
   const handleSignOut = () => {
     setProfileOpen(false);
     setConfirmOpen(true);
@@ -139,7 +145,9 @@ export default function UserLayout() {
 
         <div className="mt-auto p-4 border-t border-cc-border">
           <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-cc-hover border border-cc-border">
-            <div className="w-9 h-9 rounded-full bg-cc-accent flex items-center justify-center text-cc-on-accent text-xs font-bold shrink-0">{initials()}</div>
+            <div className="w-9 h-9 rounded-full bg-cc-accent flex items-center justify-center text-cc-on-accent text-xs font-bold shrink-0 overflow-hidden">
+              {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : initials()}
+            </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-semibold text-cc-heading leading-tight truncate">{displayName()}</p>
               <p className="text-[10px] text-cc-muted uppercase tracking-wider flex items-center gap-1">
@@ -208,10 +216,10 @@ export default function UserLayout() {
                 <button
                   type="button"
                   onClick={() => setProfileOpen((v) => !v)}
-                  className="w-9 h-9 rounded-full bg-cc-accent/15 ring-1 ring-cc-border-strong flex items-center justify-center hover:ring-cc-accent transition-colors"
+                  className="w-9 h-9 rounded-full bg-cc-accent/15 ring-1 ring-cc-border-strong flex items-center justify-center hover:ring-cc-accent transition-colors overflow-hidden"
                   aria-label="Profile menu"
                 >
-                  <span className="text-xs font-bold text-cc-accent">{initials()}</span>
+                  {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-cc-accent">{initials()}</span>}
                 </button>
                 {profileOpen && (
                   <div className="absolute right-0 mt-2 w-60 bg-cc-card border border-cc-border rounded-lg shadow-cc-card overflow-hidden z-50">
@@ -320,7 +328,9 @@ export default function UserLayout() {
           <nav className="flex-1 min-h-0 flex flex-col overflow-y-auto scroll-hide px-3 pt-3 pb-6">{renderGroups(() => setDrawerOpen(false))}</nav>
           <div className="mt-auto p-4 border-t border-cc-border">
             <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-cc-hover border border-cc-border">
-              <div className="w-9 h-9 rounded-full bg-cc-accent flex items-center justify-center text-cc-on-accent text-xs font-bold shrink-0">{initials()}</div>
+              <div className="w-9 h-9 rounded-full bg-cc-accent flex items-center justify-center text-cc-on-accent text-xs font-bold shrink-0 overflow-hidden">
+                {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : initials()}
+              </div>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-cc-heading leading-tight truncate">{displayName()}</p>
                 <p className="text-[10px] text-cc-muted uppercase tracking-wider flex items-center gap-1">

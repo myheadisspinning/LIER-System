@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { uploadEvidence } from '../../../lib/ai';
 import Toast from '../../../components/Toast';
+import { useScrollLock } from '../../../lib/useScrollLock';
 
 type Filter = 'All Files' | 'CCTV / Video' | 'Photos' | 'Audio / Voice';
 
@@ -60,6 +61,8 @@ export default function EvidenceVault() {
   const [filter, setFilter] = useState<Filter>('All Files');
   const [search, setSearch] = useState('');
   const [inspect, setInspect] = useState<VaultItem | null>(null);
+
+  useScrollLock(inspect != null);
   const [items, setItems] = useState<VaultItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);

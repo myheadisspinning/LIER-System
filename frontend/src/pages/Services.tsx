@@ -7,6 +7,7 @@ import SiteHeader from '../components/SiteHeader';
 import SiteFooter from '../components/SiteFooter';
 import Toast, { type ToastData } from '../components/Toast';
 import ReportIncident from './portal/user/ReportIncident';
+import { useScrollLock } from '../lib/useScrollLock';
 
 
 export default function Services() {
@@ -28,14 +29,7 @@ export default function Services() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (!modalOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [modalOpen]);
+  useScrollLock(modalOpen);
 
   const handleDashboardClick = async () => {
     if (!user) {

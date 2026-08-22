@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { fmtDate, logAudit } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
+import { useScrollLock } from '../../../lib/useScrollLock';
 
 type Broadcast = {
   id: string;
@@ -40,6 +41,8 @@ export default function AdminStatusNotifications() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Broadcast | null>(null);
+
+  useScrollLock(composerOpen || confirmDelete != null);
 
   const fetchAll = async () => {
     const res = await supabase.from('broadcasts').select('*').order('created_at', { ascending: false }).limit(100);

@@ -14,6 +14,7 @@ type UserProfile = {
   emergency_contact_name: string;
   emergency_contact_relationship: string;
   emergency_contact_phone: string;
+  avatar_url: string | null;
 };
 
 type Preferences = {
@@ -63,6 +64,7 @@ export default function AccountSettings() {
   const [profile, setProfile] = useState<UserProfile>({
     fullname: '', dob: '', gender: '', address: '', phone: '', email: '',
     emergency_contact_name: '', emergency_contact_relationship: '', emergency_contact_phone: '',
+    avatar_url: null,
   });
 
   const [prefs, setPrefs] = useState<Preferences>({
@@ -89,7 +91,7 @@ export default function AccountSettings() {
       const [profileRes, prefsRes] = await Promise.all([
         supabase
           .from('public_users')
-          .select('fullname, dob, gender, address, phone, emergency_contact_name, emergency_contact_relationship, emergency_contact_phone')
+          .select('fullname, dob, gender, address, phone, emergency_contact_name, emergency_contact_relationship, emergency_contact_phone, avatar_url')
           .eq('id', user.id)
           .single(),
         supabase
@@ -101,6 +103,9 @@ export default function AccountSettings() {
 
       if (profileRes.data) {
         const d = profileRes.data;
+        const meta = user.user_metadata as Record<string, unknown> | undefined;
+        const metaAvatar = (typeof meta?.avatar_url === 'string' && meta.avatar_url) ||
+          (typeof meta?.picture === 'string' && meta.picture) || null;
         setProfile({
           fullname: d.fullname || '',
           dob: d.dob || '',
@@ -111,6 +116,7 @@ export default function AccountSettings() {
           emergency_contact_name: d.emergency_contact_name || '',
           emergency_contact_relationship: d.emergency_contact_relationship || '',
           emergency_contact_phone: d.emergency_contact_phone || '',
+          avatar_url: d.avatar_url || metaAvatar,
         });
       }
 
@@ -250,8 +256,12 @@ export default function AccountSettings() {
           <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-6 relative overflow-hidden">
             <div className="absolute right-0 top-0 w-64 h-full bg-gradient-to-l from-surface-container/50 to-transparent pointer-events-none"></div>
             <div className="flex items-center gap-6 relative z-10">
-              <div className="w-20 h-20 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-headline-lg text-headline-lg shadow-md border-4 border-surface-container-lowest">
-                {profile.fullname.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase() ?? '').join('') || '?'}
+              <div className="w-20 h-20 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-headline-lg text-headline-lg shadow-md border-4 border-surface-container-lowest overflow-hidden">
+                {profile.avatar_url ? (
+                  <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  profile.fullname.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase() ?? '').join('') || '?'
+                )}
               </div>
               <div>
                 <h3 className="font-headline-md text-headline-md text-on-background">{profile.fullname}</h3>

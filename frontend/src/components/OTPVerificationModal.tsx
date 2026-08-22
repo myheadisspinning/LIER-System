@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from '../supabaseClient';
+import { useScrollLock } from '../lib/useScrollLock';
 
 type Channel = 'email' | 'sms';
 
@@ -20,6 +21,7 @@ export default function OTPVerificationModal({
   onCancel,
   onError,
 }: OTPVerificationModalProps) {
+  useScrollLock(true);
   const [channel, setChannel] = useState<Channel>('email');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);

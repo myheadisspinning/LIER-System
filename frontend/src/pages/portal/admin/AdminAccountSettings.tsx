@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { fmtDate, isOnlineSince, logAudit, timeAgo } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
+import { useScrollLock } from '../../../lib/useScrollLock';
 
 type Acct = {
   id: string;
@@ -55,6 +56,8 @@ export default function AdminAccountSettings() {
   const [editForm, setEditForm] = useState({ fullname: '', phone: '', address: '', dob: '', gender: '' });
   const [deleteConfirm, setDeleteConfirm] = useState<Acct | null>(null);
   const [presenceMap, setPresenceMap] = useState<Map<string, string>>(new Map());
+
+  useScrollLock(formOpen || tempPw != null || (editOpen && activeId != null) || deleteConfirm != null);
 
   const fetchUsers = async () => {
     const res = await supabase.rpc('admin_list_users', { p_scope: 'residents' });

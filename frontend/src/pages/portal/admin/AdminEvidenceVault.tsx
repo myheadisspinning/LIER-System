@@ -3,6 +3,7 @@ import { supabase } from '../../../supabaseClient';
 import { downloadCsv, fmtBytes, logAudit, timeAgo } from '../../../lib/admin';
 import type { EvidenceFile } from '../../../lib/ai';
 import Toast from '../../../components/Toast';
+import { useScrollLock } from '../../../lib/useScrollLock';
 
 type Report = {
   id: string;
@@ -24,6 +25,8 @@ export default function AdminEvidenceVault() {
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+
+  useScrollLock(modalOpen);
   const [targetId, setTargetId] = useState('');
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);

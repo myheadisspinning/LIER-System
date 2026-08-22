@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { fmtDate, logAudit } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
+import { useScrollLock } from '../../../lib/useScrollLock';
 
 type Acct = {
   id: string;
@@ -38,6 +39,8 @@ export default function SuperadminUserControl() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [tempPw, setTempPw] = useState<{ name: string; pw: string } | null>(null);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
+  useScrollLock(tempPw != null);
 
   const fetchUsers = async () => {
     const res = await supabase.rpc('admin_list_users', { p_scope: 'residents' });

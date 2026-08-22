@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import SiteHeader from '../components/SiteHeader';
 import SiteFooter from '../components/SiteFooter';
+import { useScrollLock } from '../lib/useScrollLock';
 
 type Category = 'All' | 'Emergency & Crime' | 'Weather & Floods' | 'Barangay Services' | 'Public Safety';
 
@@ -63,6 +64,8 @@ export default function AdvisoriesPage() {
   const [category, setCategory] = useState<Category>('All');
   const [query, setQuery] = useState('');
   const [selectedAdvisory, setSelectedAdvisory] = useState<Advisory | null>(null);
+
+  useScrollLock(selectedAdvisory != null);
 
   useEffect(() => {
     void (async () => {

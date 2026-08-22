@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { logAudit } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
+import { useScrollLock } from '../../../lib/useScrollLock';
 
 type Official = {
   id: string;
@@ -44,6 +45,8 @@ export default function AdminOfficialsManagement() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Official | null>(null);
+
+  useScrollLock(creating || editing != null || confirmDelete != null);
 
   const fetchAll = async () => {
     const res = await supabase.from('officials').select('*').order('sort_order').order('fullname');

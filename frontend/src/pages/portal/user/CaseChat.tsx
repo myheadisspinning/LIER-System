@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { getAdminProfile, fetchStaffPresence, isOnlineSince, markInquiriesRead, type PresenceRow } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
+import { useScrollLock } from '../../../lib/useScrollLock';
 
 type Inquiry = {
   id: string;
@@ -64,6 +65,8 @@ export default function CaseChat() {
   const [draft, setDraft] = useState('');
   const [composerOpen, setComposerOpen] = useState(false);
   const [pastChatsOpen, setPastChatsOpen] = useState(false);
+
+  useScrollLock(composerOpen || pastChatsOpen);
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [newTopic, setNewTopic] = useState('');
   const [newSubject, setNewSubject] = useState('');

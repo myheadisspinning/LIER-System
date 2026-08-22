@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { fmtDate, PRIORITY_BADGE, STATUS_BADGE } from '../lib/admin';
+import { useScrollLock } from '../lib/useScrollLock';
 
 type EvidenceItem = { name: string; type: string; size: number; url: string };
 
@@ -131,6 +132,8 @@ export default function IncidentDetailModal({
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [reportId, onClose]);
+
+  useScrollLock(!!reportId);
 
   if (!reportId) return null;
 
