@@ -142,38 +142,34 @@ export default function AccountSettings() {
       return;
     }
     setSaving(true);
-    const { error } = await supabase
-      .from('public_users')
-      .update({
-        fullname: profile.fullname.trim(),
-        dob: profile.dob || null,
-        gender: profile.gender || null,
-        address: profile.address.trim(),
-        phone: profile.phone.trim(),
-        emergency_contact_name: profile.emergency_contact_name.trim() || null,
-        emergency_contact_relationship: profile.emergency_contact_relationship || null,
-        emergency_contact_phone: profile.emergency_contact_phone.trim() || null,
-      })
-      .eq('id', userId);
-    setSaving(false);
+    const { error } = await supabase.rpc('update_own_profile', {
+      p_fullname: profile.fullname.trim(),
+      p_dob: profile.dob || null,
+      p_gender: profile.gender || null,
+      p_address: profile.address.trim(),
+      p_phone: profile.phone.trim(),
+      p_ec_name: profile.emergency_contact_name.trim() || null,
+      p_ec_rel: profile.emergency_contact_relationship || null,
+      p_ec_phone: profile.emergency_contact_phone.trim() || null,
+    });
     if (error) {
+      setSaving(false);
       setToast({ type: 'error', message: `Failed to update profile: ${error.message}` });
-    } else {
-      setToast({ type: 'success', message: 'Personal info updated.' });
+      return;
     }
+    await supabase.auth.updateUser({ data: { fullname: profile.fullname.trim() } });
+    setSaving(false);
+    setToast({ type: 'success', message: 'Personal info updated.' });
   }, [userId, profile]);
 
   const saveEmergencyContact = useCallback(async () => {
     if (!userId) return;
     setSaving(true);
-    const { error } = await supabase
-      .from('public_users')
-      .update({
-        emergency_contact_name: profile.emergency_contact_name.trim() || null,
-        emergency_contact_relationship: profile.emergency_contact_relationship || null,
-        emergency_contact_phone: profile.emergency_contact_phone.trim() || null,
-      })
-      .eq('id', userId);
+    const { error } = await supabase.rpc('update_own_profile', {
+      p_ec_name: profile.emergency_contact_name.trim() || null,
+      p_ec_rel: profile.emergency_contact_relationship || null,
+      p_ec_phone: profile.emergency_contact_phone.trim() || null,
+    });
     setSaving(false);
     if (error) {
       setToast({ type: 'error', message: `Failed to save emergency contact: ${error.message}` });
@@ -253,25 +249,25 @@ export default function AccountSettings() {
         <div className="p-10 text-center text-sm text-on-surface-variant">No profile data available.</div>
       ) : (
         <>
-          <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-6 relative overflow-hidden">
+          <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 mb-6 relative overflow-hidden text-center sm:text-left">
             <div className="absolute right-0 top-0 w-64 h-full bg-gradient-to-l from-surface-container/50 to-transparent pointer-events-none"></div>
-            <div className="flex items-center gap-6 relative z-10">
-              <div className="w-20 h-20 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-headline-lg text-headline-lg shadow-md border-4 border-surface-container-lowest overflow-hidden">
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 min-w-0 flex-1 relative z-10">
+              <div className="w-20 h-20 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-headline-lg text-headline-lg shadow-md border-4 border-surface-container-lowest overflow-hidden shrink-0">
                 {profile.avatar_url ? (
                   <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
                 ) : (
                   profile.fullname.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase() ?? '').join('') || '?'
                 )}
               </div>
-              <div>
-                <h3 className="font-headline-md text-headline-md text-on-background">{profile.fullname}</h3>
-                <div className="flex items-center gap-2 mt-1 text-on-surface-variant font-body-sm text-body-sm">
-                  <span className="material-symbols-outlined text-[16px]">location_on</span>
-                  <p>{profile.address || 'House No., Street, Purok/Area, Barangay Culiat'}</p>
+              <div className="min-w-0">
+                <h3 className="font-headline-md text-headline-md text-on-background break-words text-center sm:text-left">{profile.fullname}</h3>
+                <div className="flex items-start justify-center sm:justify-start gap-1.5 mt-1 text-on-surface-variant font-body-sm text-body-sm max-w-2xl mx-auto sm:mx-0">
+                  <span className="material-symbols-outlined text-[16px] shrink-0 mt-0.5">location_on</span>
+                  <p className="min-w-0 break-words">{profile.address || 'House No., Street, Purok/Area, Barangay Culiat'}</p>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col items-end gap-2 relative z-10">
+            <div className="flex flex-col items-center sm:items-end gap-2 relative z-10">
               <div className="flex items-center gap-2 px-3 py-1 bg-success-green/10 text-success-green border border-success-green/20 rounded-full font-label-sm text-label-sm">
                 <div className="w-1.5 h-1.5 rounded-full bg-success-green"></div>
                 Account Active

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { supabase } from '../../../supabaseClient';
 import { uploadEvidence } from '../../../lib/ai';
 import Toast from '../../../components/Toast';
@@ -350,7 +351,7 @@ export default function EvidenceVault() {
         </div>
       )}
 
-      {inspect && (
+      {inspect && createPortal(
         <div className="fixed inset-0 bg-on-surface/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
           <div className="bg-surface-container-lowest w-full max-w-4xl rounded-lg shadow-2xl flex flex-col border border-outline-variant max-h-[90vh]">
             <div className="flex justify-between items-center p-4 border-b border-outline-variant">
@@ -438,7 +439,8 @@ export default function EvidenceVault() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -930,3 +930,55 @@ insert into public.community_gallery (title, image_url, sort_order, visible) val
   ('Community Clean-Up Drive', '/image/tandangsora.jpg', 4, true),
   ('Barangay Safety Orientation', '/image/culiat-brgy.jpg', 5, true)
 on conflict do nothing;
+
+-- ------------------------------------------------------------------
+-- 13) Resident self-service profile update (RPC)
+-- ------------------------------------------------------------------
+-- Secure RPC for residents to update their own profile fields.
+-- public_users has RLS policies for "owner read own" and "superadmin manage"
+-- but NO owner-update policy. Instead of adding a permissive update policy
+-- (which would expose role/avatar_url to self-modification), this RPC
+-- whitelists only the safe columns. Nullable args use coalesce(arg, existing)
+-- so only passed fields change.
+drop function if exists public.update_own_profile(text, date, text, text, text, text, text, text);
+
+create or replace function public.update_own_profile(
+  p_fullname text default null,
+  p_dob date default null,
+  p_gender text default null,
+  p_address text default null,
+  p_phone text default null,
+  p_ec_name text default null,
+  p_ec_rel text default null,
+  p_ec_phone text default null
+)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if p_fullname is not null and trim(p_fullname) = '' then
+    raise exception 'Full name cannot be empty.';
+  end if;
+
+  if not exists (select 1 from public.public_users where id = auth.uid()) then
+    raise exception 'Profile not found for current user.';
+  end if;
+
+  update public.public_users
+  set
+    fullname = coalesce(nullif(trim(p_fullname), ''), fullname),
+    dob = coalesce(p_dob, dob),
+    gender = coalesce(p_gender, gender),
+    address = coalesce(p_address, address),
+    phone = coalesce(p_phone, phone),
+    emergency_contact_name = coalesce(p_ec_name, emergency_contact_name),
+    emergency_contact_relationship = coalesce(p_ec_rel, emergency_contact_relationship),
+    emergency_contact_phone = coalesce(p_ec_phone, emergency_contact_phone)
+  where id = auth.uid();
+end;
+$$;
+
+revoke all on function public.update_own_profile(text, date, text, text, text, text, text, text) from public;
+grant execute on function public.update_own_profile(text, date, text, text, text, text, text, text) to authenticated;

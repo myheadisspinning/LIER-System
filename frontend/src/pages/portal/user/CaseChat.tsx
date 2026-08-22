@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { supabase } from '../../../supabaseClient';
 import { getAdminProfile, fetchStaffPresence, isOnlineSince, markInquiriesRead, type PresenceRow } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
@@ -527,7 +528,7 @@ export default function CaseChat() {
         </>
       )}
 
-      {composerOpen && (
+      {composerOpen && createPortal(
         <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
           <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl">
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
@@ -571,10 +572,11 @@ export default function CaseChat() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
-      {pastChatsOpen && (
+      {pastChatsOpen && createPortal(
         <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
           <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl max-h-[80vh] flex flex-col">
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
@@ -610,7 +612,8 @@ export default function CaseChat() {
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}

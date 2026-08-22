@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { supabase } from '../../../supabaseClient';
 import { useScrollLock } from '../../../lib/useScrollLock';
 
@@ -174,7 +175,7 @@ export default function Advisories() {
         </div>
       )}
 
-      {selectedAdvisory && (
+      {selectedAdvisory && createPortal(
         <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-lg">
           <div className="absolute inset-0 bg-black/50" onClick={() => setSelectedAdvisory(null)} />
           <div className="relative bg-surface-container-lowest w-full max-w-3xl max-h-[85vh] overflow-hidden rounded-2xl shadow-2xl border border-border-subtle flex flex-col">
@@ -209,7 +210,8 @@ export default function Advisories() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
