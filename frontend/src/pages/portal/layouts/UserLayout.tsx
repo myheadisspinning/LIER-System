@@ -116,7 +116,7 @@ export default function UserLayout() {
         section = item.section;
         nodes.push(
           <div key={`section-${section}`} className="mt-5 mb-1.5 px-3">
-            <p className="text-[10px] text-cc-muted uppercase font-bold tracking-widest">{section}</p>
+            <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">{section}</p>
           </div>,
         );
       }
@@ -128,33 +128,33 @@ export default function UserLayout() {
   return (
     <div className="min-h-screen bg-background text-on-surface font-body-md portal-dark">
       {/* Side Navigation */}
-      <aside className="h-screen w-72 fixed left-0 top-0 bg-cc-sidebar text-cc-body flex flex-col border-r border-cc-border z-50 hidden lg:flex">
-        <div className="p-6 pb-5 border-b border-cc-border">
+      <aside className="h-screen w-72 fixed left-0 top-0 bg-white text-on-surface-variant flex flex-col border-r border-outline-variant/30 z-50 hidden lg:flex">
+        <div className="p-6 pb-5 border-b border-outline-variant/30">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-cc-card flex items-center justify-center">
+            <div className="w-11 h-11 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
               <img src="/image/culiat-logo.png" alt="Barangay Culiat Logo" className="w-full h-full object-contain" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-cc-heading leading-tight tracking-tight">{userNav.brand}</h1>
-              <p className="text-[10px] text-cc-muted uppercase tracking-widest font-bold mt-0.5">{userNav.brandSub}</p>
+              <h1 className="text-lg font-bold text-on-surface leading-tight tracking-tight">{userNav.brand}</h1>
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold mt-0.5">{userNav.brandSub}</p>
             </div>
           </div>
         </div>
 
         <nav className="flex-1 flex flex-col overflow-y-auto scroll-hide px-3 pt-3 pb-8">{renderGroups()}</nav>
 
-        <div className="mt-auto p-4 border-t border-cc-border">
-          <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-cc-hover border border-cc-border">
-            <div className="w-9 h-9 rounded-full bg-cc-accent flex items-center justify-center text-cc-on-accent text-xs font-bold shrink-0 overflow-hidden">
+        <div className="mt-auto p-4 border-t border-outline-variant/30">
+          <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-low border border-outline-variant/30">
+            <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs font-bold shrink-0 overflow-hidden">
               {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : initials()}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-cc-heading leading-tight truncate">{displayName()}</p>
-              <p className="text-[10px] text-cc-muted uppercase tracking-wider flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-cc-emerald animate-pulse"></span>System Online
+              <p className="text-sm font-semibold text-on-surface leading-tight truncate">{displayName()}</p>
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span>System Online
               </p>
             </div>
-            <button type="button" onClick={handleSignOut} className="text-cc-muted hover:text-cc-heading transition-colors" aria-label="Sign out">
+            <button type="button" onClick={handleSignOut} className="text-on-surface-variant hover:text-on-surface transition-colors" aria-label="Sign out">
               <span className="material-symbols-outlined" style={{ fontSize: 20 }}>logout</span>
             </button>
           </div>
@@ -163,69 +163,69 @@ export default function UserLayout() {
 
       {/* Main Content */}
       <div className="ml-0 lg:ml-72 flex-1 w-auto min-w-auto">
-        <header className="h-16 bg-cc-header/90 backdrop-blur border-b border-cc-border sticky top-0 z-40 px-4 lg:px-8 flex justify-between items-center w-full">
+        <header className="h-16 bg-white/90 backdrop-blur border-b border-outline-variant/30 sticky top-0 z-40 px-4 lg:px-8 flex justify-between items-center w-full">
           <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
               onClick={() => setDrawerOpen(true)}
-              className="lg:hidden p-2 text-cc-muted hover:text-cc-heading hover:bg-cc-hover rounded-full transition-colors"
+              className="lg:hidden p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors"
               aria-label="Open menu"
             >
               <span className="material-symbols-outlined">menu</span>
             </button>
             <div className="min-w-0">
-              <h2 className="text-xl font-bold text-cc-heading leading-tight truncate">{pageTitle}</h2>
-              <p className="text-[10px] text-cc-muted uppercase tracking-widest font-bold">{userNav.brandSub}</p>
+              <h2 className="text-xl font-bold text-on-surface leading-tight truncate">{pageTitle}</h2>
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">{userNav.brandSub}</p>
             </div>
           </div>
           <div className="flex items-center gap-5">
             <div className="relative hidden md:block">
               <span
-                className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-cc-muted"
+                className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant"
                 style={{ fontSize: 18 }}
               >
                 search
               </span>
               <input
-                className="pl-9 pr-4 py-2 bg-cc-input border border-cc-border rounded-lg focus:ring-1 focus:ring-cc-accent w-72 text-sm text-cc-heading placeholder:text-cc-muted focus:outline-none"
+                className="pl-9 pr-4 py-2 bg-white border border-outline-variant/30 rounded-lg focus:ring-1 focus:ring-cc-accent w-72 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none"
                 placeholder={userNav.searchPlaceholder}
                 type="text"
               />
             </div>
-            <div className="flex items-center gap-3 border-l border-cc-border pl-5">
+            <div className="flex items-center gap-3 border-l border-outline-variant/30 pl-5">
               <button
                 type="button"
                 onClick={toggleTheme}
-                className="p-2 text-cc-muted hover:text-cc-heading hover:bg-cc-hover rounded-full transition-colors"
+                className="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors"
                 title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
                 aria-label="Toggle color theme"
               >
                 <span className="material-symbols-outlined">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
               </button>
-              <span className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cc-emerald/10 text-cc-emerald border border-cc-emerald/20 text-xs font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-cc-emerald animate-pulse"></span> LIVE
+              <span className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-green/10 text-success-green border border-cc-emerald/20 text-xs font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span> LIVE
               </span>
-              <button type="button" className="hidden sm:inline-flex p-2 text-cc-muted hover:text-cc-heading hover:bg-cc-hover rounded-full relative transition-colors">
+              <button type="button" className="hidden sm:inline-flex p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full relative transition-colors">
                 <span className="material-symbols-outlined">notifications</span>
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-cc-red rounded-full border-2 border-cc-header"></span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full border-2 border-cc-header"></span>
               </button>
-              <button type="button" className="hidden sm:inline-flex p-2 text-cc-muted hover:text-cc-heading hover:bg-cc-hover rounded-full transition-colors">
+              <button type="button" className="hidden sm:inline-flex p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors">
                 <span className="material-symbols-outlined">help_outline</span>
               </button>
               <div className="relative" ref={profileRef}>
                 <button
                   type="button"
                   onClick={() => setProfileOpen((v) => !v)}
-                  className="w-9 h-9 rounded-full bg-cc-accent/15 ring-1 ring-cc-border-strong flex items-center justify-center hover:ring-cc-accent transition-colors overflow-hidden"
+                  className="w-9 h-9 rounded-full bg-secondary/15 ring-1 ring-cc-border-strong flex items-center justify-center hover:ring-cc-accent transition-colors overflow-hidden"
                   aria-label="Profile menu"
                 >
-                  {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-cc-accent">{initials()}</span>}
+                  {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-secondary">{initials()}</span>}
                 </button>
                 {profileOpen && (
-                  <div className="absolute right-0 mt-2 w-60 bg-cc-card border border-cc-border rounded-lg shadow-cc-card overflow-hidden z-50">
-                    <div className="px-4 py-3 border-b border-cc-border">
-                      <p className="text-sm font-bold text-cc-heading truncate">{displayName()}</p>
-                      <p className="text-[10px] text-cc-muted uppercase tracking-wider truncate">{user?.email}</p>
+                  <div className="absolute right-0 mt-2 w-60 bg-white border border-outline-variant/30 rounded-lg shadow-sm overflow-hidden z-50">
+                    <div className="px-4 py-3 border-b border-outline-variant/30">
+                      <p className="text-sm font-bold text-on-surface truncate">{displayName()}</p>
+                      <p className="text-[10px] text-on-surface-variant uppercase tracking-wider truncate">{user?.email}</p>
                     </div>
                     <button
                       type="button"
@@ -233,9 +233,9 @@ export default function UserLayout() {
                         setProfileOpen(false);
                         navigate('/profile');
                       }}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-cc-body hover:bg-cc-hover transition-colors text-left"
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors text-left"
                     >
-                      <span className="material-symbols-outlined text-lg text-cc-accent">person</span> Profile
+                      <span className="material-symbols-outlined text-lg text-secondary">person</span> Profile
                     </button>
                     <button
                       type="button"
@@ -243,14 +243,14 @@ export default function UserLayout() {
                         setProfileOpen(false);
                         navigate('/');
                       }}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-cc-body hover:bg-cc-hover transition-colors text-left"
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors text-left"
                     >
-                      <span className="material-symbols-outlined text-lg text-cc-accent">home</span> Home
+                      <span className="material-symbols-outlined text-lg text-secondary">home</span> Home
                     </button>
                     <button
                       type="button"
                       onClick={handleSignOut}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-cc-red hover:bg-cc-hover transition-colors text-left border-t border-cc-border"
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-error hover:bg-surface-container-low transition-colors text-left border-t border-outline-variant/30"
                     >
                       <span className="material-symbols-outlined text-lg">logout</span> Sign Out
                     </button>
@@ -274,7 +274,7 @@ export default function UserLayout() {
               <div className="flex items-center gap-4">
               </div>
               {active?.badge && (
-                <span className="w-fit px-3 py-1 rounded-full bg-cc-accent/10 text-cc-accent font-label-md text-label-md border border-cc-accent/20">
+                <span className="w-fit px-3 py-1 rounded-full bg-secondary/10 text-secondary font-label-md text-label-md border border-secondary/20">
                   {active.badge}
                 </span>
               )}
@@ -296,29 +296,29 @@ export default function UserLayout() {
       {/* Mobile Drawer */}
       <div className={`fixed inset-0 z-[200] transition-all duration-300 lg:hidden ${drawerOpen ? '' : 'invisible pointer-events-none'}`}>
         <div
-          className={`absolute inset-0 bg-cc-sidebar/80 backdrop-blur-sm transition-opacity duration-300 ${drawerOpen ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 bg-white/80 backdrop-blur-sm transition-opacity duration-300 ${drawerOpen ? 'opacity-100' : 'opacity-0'}`}
           onClick={() => setDrawerOpen(false)}
         ></div>
         <div
-          className={`absolute left-0 top-0 h-full w-[280px] bg-cc-sidebar text-cc-body flex flex-col transition-transform duration-300 ease-in-out ${
+          className={`absolute left-0 top-0 h-full w-[280px] bg-white text-on-surface-variant flex flex-col transition-transform duration-300 ease-in-out ${
             drawerOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
-          <div className="p-6 pb-4 border-b border-cc-border">
+          <div className="p-6 pb-4 border-b border-outline-variant/30">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-cc-card flex items-center justify-center">
+                <div className="w-11 h-11 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
                   <img src="/image/culiat-logo.png" alt="Barangay Culiat Logo" className="w-full h-full object-contain" />
                 </div>
                 <div>
-                  <h1 className="text-lg font-bold text-cc-heading leading-tight tracking-tight">{userNav.brand}</h1>
-                  <p className="text-[10px] text-cc-muted uppercase tracking-widest font-bold mt-0.5">{userNav.brandSub}</p>
+                  <h1 className="text-lg font-bold text-on-surface leading-tight tracking-tight">{userNav.brand}</h1>
+                  <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold mt-0.5">{userNav.brandSub}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setDrawerOpen(false)}
-                className="p-2 text-cc-muted hover:text-cc-heading rounded-full transition-transform hover:rotate-90"
+                className="p-2 text-on-surface-variant hover:text-on-surface rounded-full transition-transform hover:rotate-90"
                 aria-label="Close menu"
               >
                 <span className="material-symbols-outlined">close</span>
@@ -326,18 +326,18 @@ export default function UserLayout() {
             </div>
           </div>
           <nav className="flex-1 min-h-0 flex flex-col overflow-y-auto scroll-hide px-3 pt-3 pb-6">{renderGroups(() => setDrawerOpen(false))}</nav>
-          <div className="mt-auto p-4 border-t border-cc-border">
-            <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-cc-hover border border-cc-border">
-              <div className="w-9 h-9 rounded-full bg-cc-accent flex items-center justify-center text-cc-on-accent text-xs font-bold shrink-0 overflow-hidden">
+          <div className="mt-auto p-4 border-t border-outline-variant/30">
+            <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-low border border-outline-variant/30">
+              <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs font-bold shrink-0 overflow-hidden">
                 {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : initials()}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-cc-heading leading-tight truncate">{displayName()}</p>
-                <p className="text-[10px] text-cc-muted uppercase tracking-wider flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cc-emerald animate-pulse"></span>System Online
+                <p className="text-sm font-semibold text-on-surface leading-tight truncate">{displayName()}</p>
+                <p className="text-[10px] text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span>System Online
                 </p>
               </div>
-              <button type="button" onClick={handleSignOut} className="text-cc-muted hover:text-cc-heading transition-colors" aria-label="Sign out">
+              <button type="button" onClick={handleSignOut} className="text-on-surface-variant hover:text-on-surface transition-colors" aria-label="Sign out">
                 <span className="material-symbols-outlined" style={{ fontSize: 20 }}>logout</span>
               </button>
             </div>
@@ -367,19 +367,20 @@ function SidebarLink({ item, pathname, unreadCounts, onNavigate }: { item: NavIt
       onClick={onNavigate}
       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg relative transition-all ${
         isActive
-          ? 'bg-cc-accent-soft text-cc-heading border border-cc-border-strong'
-          : 'text-cc-body hover:bg-cc-hover hover:text-cc-heading'
+          ? 'bg-secondary/10 text-on-surface border border-outline-variant'
+          : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface'
       }`}
     >
-      {isActive && <span className="w-1 h-7 rounded-full bg-cc-accent absolute -left-0.5"></span>}
-      <span className={`material-symbols-outlined text-[20px] shrink-0 ${isActive ? 'text-cc-accent' : 'text-cc-muted'}`}>
+      {isActive && <span className="w-1 h-7 rounded-full bg-secondary absolute -left-0.5"></span>}
+      <span className={`material-symbols-outlined text-[20px] shrink-0 ${isActive ? 'text-secondary' : 'text-on-surface-variant'}`}>
         {item.icon ?? 'radio_button_unchecked'}
       </span>
       <span className="flex flex-col min-w-0">
         <span className={`text-sm truncate ${isActive ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>
-        {item.subLabel && <span className="text-[10px] text-cc-muted truncate">{item.subLabel}</span>}
+        {item.subLabel && <span className="text-[10px] text-on-surface-variant truncate">{item.subLabel}</span>}
       </span>
-      {unread > 0 && !isActive && <UnreadBadge count={unread} className="bg-cc-red" />}
+      {unread > 0 && !isActive && <UnreadBadge count={unread} className="bg-error" />}
     </NavLink>
   );
 }
+

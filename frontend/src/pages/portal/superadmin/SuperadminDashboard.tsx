@@ -26,14 +26,14 @@ export default function SuperadminDashboard() {
                     <span className="text-on-surface-variant">CPU Load</span>
                     <span className="font-semibold text-on-surface">24%</span>
                   </div>
-                  <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden"><div className="bg-teal-500 h-full" style={{ width: '24%' }}></div></div>
+                  <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden"><div className="bg-tertiary h-full" style={{ width: '24%' }}></div></div>
                 </div>
                 <div>
                   <div className="flex justify-between text-sm mb-1.5">
                     <span className="text-on-surface-variant">Memory</span>
                     <span className="font-semibold text-on-surface">4.2 / 16 GB</span>
                   </div>
-                  <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden"><div className="bg-teal-500 h-full" style={{ width: '35%' }}></div></div>
+                  <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden"><div className="bg-tertiary h-full" style={{ width: '35%' }}></div></div>
                 </div>
               </div>
             </div>
@@ -73,11 +73,11 @@ export default function SuperadminDashboard() {
                   <span className="font-bold text-on-surface">12.8 Mb/s</span>
                 </div>
                 <div className="h-10 flex items-end gap-1 mt-2">
-                  <div className="flex-1 bg-teal-500/20 h-4 rounded-t-sm"></div>
-                  <div className="flex-1 bg-teal-500/40 h-6 rounded-t-sm"></div>
-                  <div className="flex-1 bg-teal-500/60 h-8 rounded-t-sm"></div>
-                  <div className="flex-1 bg-teal-500 h-10 rounded-t-sm"></div>
-                  <div className="flex-1 bg-teal-500/80 h-7 rounded-t-sm"></div>
+                  <div className="flex-1 bg-tertiary/20 h-4 rounded-t-sm"></div>
+                  <div className="flex-1 bg-tertiary/40 h-6 rounded-t-sm"></div>
+                  <div className="flex-1 bg-tertiary/60 h-8 rounded-t-sm"></div>
+                  <div className="flex-1 bg-tertiary h-10 rounded-t-sm"></div>
+                  <div className="flex-1 bg-tertiary/80 h-7 rounded-t-sm"></div>
                 </div>
               </div>
             </div>
@@ -140,14 +140,14 @@ export default function SuperadminDashboard() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4"><span className="text-xs font-medium px-2 py-1 bg-sky-500/15 text-sky-600 rounded">Superadmin</span></td>
+                    <td className="px-6 py-4"><span className="text-xs font-medium px-2 py-1 bg-secondary/15 text-secondary rounded">Superadmin</span></td>
                     <td className="px-6 py-4 text-xs text-on-surface-variant">2 mins ago</td>
                     <td className="px-6 py-4"><div className="flex items-center gap-1.5 text-xs text-success-green font-medium"><span className="w-1.5 h-1.5 bg-success-green rounded-full"></span> Active</div></td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
                         <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-lg">edit</span></button>
                         <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-lg">key</span></button>
-                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-error-red transition-colors"><span className="material-symbols-outlined text-lg">block</span></button>
+                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-error transition-colors"><span className="material-symbols-outlined text-lg">block</span></button>
                       </div>
                     </td>
                   </tr>
@@ -189,7 +189,7 @@ export default function SuperadminDashboard() {
                       <div className="flex justify-end gap-2">
                         <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-lg">edit</span></button>
                         <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-lg">key</span></button>
-                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-error-red transition-colors"><span className="material-symbols-outlined text-lg">block</span></button>
+                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-error transition-colors"><span className="material-symbols-outlined text-lg">block</span></button>
                       </div>
                     </td>
                   </tr>
@@ -224,13 +224,13 @@ export default function SuperadminDashboard() {
                     <td className="px-6 py-4 text-xs text-on-surface-variant font-medium">2023-10-24 14:22:01</td>
                     <td className="px-6 py-4"><span className="text-[10px] font-bold uppercase text-on-surface-variant">Security</span></td>
                     <td className="px-6 py-4 text-sm text-on-surface-variant">Failed login attempt from IP 192.168.1.45</td>
-                    <td className="px-6 py-4"><span className="px-2 py-1 bg-error-red/15 text-error-red text-[10px] font-bold rounded uppercase">Critical</span></td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 bg-error/15 text-error text-[10px] font-bold rounded uppercase">Critical</span></td>
                   </tr>
                   <tr className="hover:bg-surface-container-low transition-colors">
                     <td className="px-6 py-4 text-xs text-on-surface-variant font-medium">2023-10-24 14:15:30</td>
                     <td className="px-6 py-4"><span className="text-[10px] font-bold uppercase text-on-surface-variant">Config</span></td>
                     <td className="px-6 py-4 text-sm text-on-surface-variant">System backup completed successfully</td>
-                    <td className="px-6 py-4"><span className="px-2 py-1 bg-sky-500/15 text-sky-600 text-[10px] font-bold rounded uppercase">Info</span></td>
+                    <td className="px-6 py-4"><span className="px-2 py-1 bg-secondary/15 text-secondary text-[10px] font-bold rounded uppercase">Info</span></td>
                   </tr>
                   <tr className="hover:bg-surface-container-low transition-colors">
                     <td className="px-6 py-4 text-xs text-on-surface-variant font-medium">2023-10-24 13:50:12</td>
@@ -247,6 +247,7 @@ export default function SuperadminDashboard() {
     </div>
   );
 }
+
 
 
 

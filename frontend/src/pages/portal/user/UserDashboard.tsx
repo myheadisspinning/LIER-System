@@ -58,10 +58,10 @@ const ADVISORIES: Advisory[] = [
 ];
 
 const toneClasses: Record<Advisory['tone'], string> = {
-  red: 'bg-error-red/10 text-error-red border border-error-red/30',
-  blue: 'bg-sky-500/10 text-sky-600 border border-sky-500/30',
+  red: 'bg-error/10 text-error border border-error/30',
+  blue: 'bg-secondary/10 text-secondary border border-secondary/30',
   green: 'bg-success-green/10 text-success-green border border-success-green/30',
-  safety: 'bg-teal-500/10 text-teal-600 border border-teal-500/30',
+  safety: 'bg-tertiary/10 text-tertiary border border-tertiary/30',
 };
 
 const VAULT_ITEMS: VaultItem[] = [
@@ -84,9 +84,9 @@ const VAULT_ITEMS: VaultItem[] = [
 ];
 
 const priorityChip = (priority: string) => {
-  if (priority === 'CRITICAL') return 'bg-error-red/15 text-error-red border-error-red/30';
+  if (priority === 'CRITICAL') return 'bg-error/15 text-error border-error/30';
   if (priority === 'HIGH') return 'bg-secondary/15 text-secondary border-secondary/30';
-  if (priority === 'MEDIUM') return 'bg-teal-500/15 text-teal-600 border-teal-500/30';
+  if (priority === 'MEDIUM') return 'bg-tertiary/15 text-tertiary border-tertiary/30';
   return 'bg-surface-container-low text-on-surface-variant border-border-subtle';
 };
 
@@ -94,7 +94,7 @@ const statusMeta = (status: string) => {
   if (status === 'Resolved')
     return { label: 'Resolved', chip: 'bg-success-green/15 text-success-green border-success-green/30', dot: 'bg-success-green' };
   if (status === 'Rejected')
-    return { label: 'Rejected', chip: 'bg-error-red/15 text-error-red border-error-red/30', dot: 'bg-error-red' };
+    return { label: 'Rejected', chip: 'bg-error/15 text-error border-error/30', dot: 'bg-error' };
   return { label: 'Under Investigation', chip: 'bg-secondary/15 text-secondary border-secondary/30', dot: 'bg-secondary' };
 };
 
@@ -171,7 +171,7 @@ export default function UserDashboard() {
           <div className="flex items-center gap-3">
             <Link
               to="/user/emergency-sos"
-              className="inline-flex items-center gap-2 bg-error-red text-white px-4 py-2.5 rounded-lg font-bold text-sm hover:opacity-90 transition-all active:scale-[0.98]"
+              className="inline-flex items-center gap-2 bg-error text-white px-4 py-2.5 rounded-lg font-bold text-sm hover:opacity-90 transition-all active:scale-[0.98]"
             >
               <span className="material-symbols-outlined text-[18px]">sos</span> Emergency SOS
             </Link>
@@ -201,10 +201,10 @@ export default function UserDashboard() {
           </div>
           <div className="bg-white p-6 rounded-2xl border border-border-subtle border-t-2 border-t-cc-blue shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <div className="w-10 h-10 rounded-xl bg-sky-500/15 flex items-center justify-center">
-                <span className="material-symbols-outlined text-sky-600" style={{ fontSize: 22 }}>folder_open</span>
+              <div className="w-10 h-10 rounded-xl bg-secondary/15 flex items-center justify-center">
+                <span className="material-symbols-outlined text-secondary" style={{ fontSize: 22 }}>folder_open</span>
               </div>
-              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-sky-500/10 text-sky-600 border border-sky-500/25 text-[11px] font-bold">IN PROGRESS</span>
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-secondary/10 text-secondary border border-secondary/25 text-[11px] font-bold">IN PROGRESS</span>
             </div>
             <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Active Cases</p>
             <p className="font-headline-md text-headline-md font-bold text-on-surface">{loading ? '—' : active}</p>
@@ -212,21 +212,21 @@ export default function UserDashboard() {
           </div>
           <div className="bg-white p-6 rounded-2xl border border-border-subtle border-t-2 border-t-cc-teal shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <div className="w-10 h-10 rounded-xl bg-teal-500/15 flex items-center justify-center">
-                <span className="material-symbols-outlined text-teal-600" style={{ fontSize: 22 }}>task_alt</span>
+              <div className="w-10 h-10 rounded-xl bg-tertiary/15 flex items-center justify-center">
+                <span className="material-symbols-outlined text-tertiary" style={{ fontSize: 22 }}>task_alt</span>
               </div>
-              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-teal-500/10 text-teal-600 border border-teal-500/25 text-[11px] font-bold">CLOSED</span>
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-tertiary/10 text-tertiary border border-tertiary/25 text-[11px] font-bold">CLOSED</span>
             </div>
             <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Resolved</p>
             <p className="font-headline-md text-headline-md font-bold text-on-surface">{loading ? '—' : resolved}</p>
             <p className="text-xs text-on-surface-variant mt-1.5">Settled &amp; closed</p>
           </div>
-          <Link to="/user/advisories" className="bg-white p-6 rounded-2xl border border-border-subtle border-t-2 border-t-cc-red shadow-sm hover:border-error-red/40 transition-colors">
+          <Link to="/user/advisories" className="bg-white p-6 rounded-2xl border border-border-subtle border-t-2 border-t-cc-red shadow-sm hover:border-error/40 transition-colors">
             <div className="flex items-center justify-between mb-4">
-              <div className="w-10 h-10 rounded-xl bg-error-red/15 flex items-center justify-center">
-                <span className="material-symbols-outlined text-error-red" style={{ fontSize: 22 }}>notifications_active</span>
+              <div className="w-10 h-10 rounded-xl bg-error/15 flex items-center justify-center">
+                <span className="material-symbols-outlined text-error" style={{ fontSize: 22 }}>notifications_active</span>
               </div>
-              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-error-red/10 text-error-red border border-error-red/25 text-[11px] font-bold">NEW</span>
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-error/10 text-error border border-error/25 text-[11px] font-bold">NEW</span>
             </div>
             <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Community Alerts</p>
             <p className="font-headline-md text-headline-md font-bold text-on-surface">{ADVISORIES.length}</p>
@@ -246,35 +246,35 @@ export default function UserDashboard() {
             </span>
             <span className="material-symbols-outlined text-on-surface-variant group-hover:text-secondary ml-auto transition-colors">arrow_forward</span>
           </Link>
-          <Link to="/user/emergency-sos" className="group bg-white rounded-2xl border border-border-subtle shadow-sm p-5 flex items-center gap-4 hover:border-error-red/50 transition-colors">
-            <span className="w-11 h-11 rounded-xl bg-error-red/15 flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined text-error-red">emergency</span>
+          <Link to="/user/emergency-sos" className="group bg-white rounded-2xl border border-border-subtle shadow-sm p-5 flex items-center gap-4 hover:border-error/50 transition-colors">
+            <span className="w-11 h-11 rounded-xl bg-error/15 flex items-center justify-center shrink-0">
+              <span className="material-symbols-outlined text-error">emergency</span>
             </span>
             <span className="min-w-0">
               <span className="block text-sm font-bold text-on-surface">Emergency SOS</span>
               <span className="block text-xs text-on-surface-variant">1-tap distress call to responders</span>
             </span>
-            <span className="material-symbols-outlined text-on-surface-variant group-hover:text-error-red ml-auto transition-colors">arrow_forward</span>
+            <span className="material-symbols-outlined text-on-surface-variant group-hover:text-error ml-auto transition-colors">arrow_forward</span>
           </Link>
-          <Link to="/user/evidence-vault" className="group bg-white rounded-2xl border border-border-subtle shadow-sm p-5 flex items-center gap-4 hover:border-teal-500/50 transition-colors">
-            <span className="w-11 h-11 rounded-xl bg-teal-500/15 flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined text-teal-600">inventory_2</span>
+          <Link to="/user/evidence-vault" className="group bg-white rounded-2xl border border-border-subtle shadow-sm p-5 flex items-center gap-4 hover:border-tertiary/50 transition-colors">
+            <span className="w-11 h-11 rounded-xl bg-tertiary/15 flex items-center justify-center shrink-0">
+              <span className="material-symbols-outlined text-tertiary">inventory_2</span>
             </span>
             <span className="min-w-0">
               <span className="block text-sm font-bold text-on-surface">Evidence Vault</span>
               <span className="block text-xs text-on-surface-variant">Store &amp; link your media evidence</span>
             </span>
-            <span className="material-symbols-outlined text-on-surface-variant group-hover:text-teal-600 ml-auto transition-colors">arrow_forward</span>
+            <span className="material-symbols-outlined text-on-surface-variant group-hover:text-tertiary ml-auto transition-colors">arrow_forward</span>
           </Link>
-          <Link to="/user/case-chat" className="group bg-white rounded-2xl border border-border-subtle shadow-sm p-5 flex items-center gap-4 hover:border-sky-500/50 transition-colors">
-            <span className="w-11 h-11 rounded-xl bg-sky-500/15 flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined text-sky-600">chat</span>
+          <Link to="/user/case-chat" className="group bg-white rounded-2xl border border-border-subtle shadow-sm p-5 flex items-center gap-4 hover:border-secondary/50 transition-colors">
+            <span className="w-11 h-11 rounded-xl bg-secondary/15 flex items-center justify-center shrink-0">
+              <span className="material-symbols-outlined text-secondary">chat</span>
             </span>
             <span className="min-w-0">
               <span className="block text-sm font-bold text-on-surface">Case Chat</span>
               <span className="block text-xs text-on-surface-variant">Message desk officers securely</span>
             </span>
-            <span className="material-symbols-outlined text-on-surface-variant group-hover:text-sky-600 ml-auto transition-colors">arrow_forward</span>
+            <span className="material-symbols-outlined text-on-surface-variant group-hover:text-secondary ml-auto transition-colors">arrow_forward</span>
           </Link>
         </div>
 
@@ -290,7 +290,7 @@ export default function UserDashboard() {
             {loading ? (
               <div className="p-10 text-center text-sm text-on-surface-variant">Loading your reports…</div>
             ) : error ? (
-              <div className="p-10 text-center text-sm text-error-red">{error}</div>
+              <div className="p-10 text-center text-sm text-error">{error}</div>
             ) : reports.length === 0 ? (
               <div className="p-10 text-center">
                 <span className="material-symbols-outlined text-4xl text-on-surface-variant">inbox</span>
@@ -407,7 +407,7 @@ export default function UserDashboard() {
             <section className="bg-white rounded-2xl border border-border-subtle shadow-sm p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-headline-md text-headline-md font-bold text-on-surface flex items-center gap-2">
-                  <span className="material-symbols-outlined text-sky-600">chat</span> Case Chat
+                  <span className="material-symbols-outlined text-secondary">chat</span> Case Chat
                 </h3>
                 <Link to="/user/case-chat" className="text-xs font-bold text-secondary hover:underline">
                   Open
@@ -415,8 +415,8 @@ export default function UserDashboard() {
               </div>
               <div className="bg-surface-container-low border border-border-subtle rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-sky-500/20 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[16px] text-sky-600">shield_person</span>
+                  <div className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-[16px] text-secondary">shield_person</span>
                   </div>
                   <div>
                     <p className="text-xs font-bold text-on-surface">Desk Officer</p>
@@ -500,6 +500,7 @@ export default function UserDashboard() {
     </div>
   );
 }
+
 
 
 

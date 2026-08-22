@@ -102,7 +102,7 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
         section = item.section;
         nodes.push(
           <div key={`section-${section}`} className="mt-5 mb-1.5 px-3">
-            <p className="text-[10px] text-cc-muted uppercase font-bold tracking-widest">{section}</p>
+            <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">{section}</p>
           </div>,
         );
       }
@@ -114,33 +114,33 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
   return (
     <div className="bg-background text-on-surface font-body-md min-h-screen antialiased portal-dark">
       {/* Side Navigation */}
-      <aside className="h-screen w-72 fixed left-0 top-0 bg-cc-sidebar text-cc-body flex flex-col border-r border-cc-border z-50">
-        <div className="p-6 pb-5 border-b border-cc-border">
+      <aside className="h-screen w-72 fixed left-0 top-0 bg-white text-on-surface-variant flex flex-col border-r border-outline-variant/30 z-50">
+        <div className="p-6 pb-5 border-b border-outline-variant/30">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-cc-card flex items-center justify-center">
+            <div className="w-11 h-11 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
               <img src="/image/culiat-logo.png" alt="Barangay Culiat Logo" className="w-full h-full object-contain" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-cc-heading leading-tight tracking-tight">{nav.brand}</h1>
-              <p className="text-[10px] text-cc-muted uppercase tracking-widest font-bold mt-0.5">{nav.brandSub}</p>
+              <h1 className="text-lg font-bold text-on-surface leading-tight tracking-tight">{nav.brand}</h1>
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold mt-0.5">{nav.brandSub}</p>
             </div>
           </div>
         </div>
         <nav className="flex-1 flex flex-col overflow-y-auto scroll-hide px-3 pt-3 pb-8">
           {renderGroup(nav.items)}
         </nav>
-        <div className="mt-auto p-4 border-t border-cc-border">
-          <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-cc-hover border border-cc-border">
-            <div className="w-9 h-9 rounded-full bg-cc-accent flex items-center justify-center text-cc-on-accent text-xs font-bold shrink-0 overflow-hidden">
+        <div className="mt-auto p-4 border-t border-outline-variant/30">
+          <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-low border border-outline-variant/30">
+            <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs font-bold shrink-0 overflow-hidden">
               {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : initials()}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-cc-heading leading-tight truncate">{displayName()}</p>
-              <p className="text-[10px] text-cc-muted uppercase tracking-wider flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-cc-emerald animate-pulse"></span>System Online
+              <p className="text-sm font-semibold text-on-surface leading-tight truncate">{displayName()}</p>
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span>System Online
               </p>
             </div>
-            <button type="button" onClick={handleSignOut} className="text-cc-muted hover:text-cc-heading transition-colors" aria-label="Sign out">
+            <button type="button" onClick={handleSignOut} className="text-on-surface-variant hover:text-on-surface transition-colors" aria-label="Sign out">
               <span className="material-symbols-outlined" style={{ fontSize: 20 }}>logout</span>
             </button>
           </div>
@@ -149,49 +149,49 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
 
       {/* Main Content */}
       <div className="ml-72 flex-1 w-auto">
-        <header className="h-16 bg-cc-header/90 backdrop-blur border-b border-cc-border sticky top-0 z-40 px-8 flex justify-between items-center w-full">
+        <header className="h-16 bg-white/90 backdrop-blur border-b border-outline-variant/30 sticky top-0 z-40 px-8 flex justify-between items-center w-full">
           <div className="flex items-center gap-3 min-w-0">
             <div>
-              <h2 className="text-xl font-bold text-cc-heading leading-tight truncate">{pageTitle}</h2>
-              <p className="text-[10px] text-cc-muted uppercase tracking-widest font-bold">{nav.brandSub}</p>
+              <h2 className="text-xl font-bold text-on-surface leading-tight truncate">{pageTitle}</h2>
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">{nav.brandSub}</p>
             </div>
           </div>
           <div className="flex items-center gap-5">
             <div className="relative hidden md:block">
               <span
-                className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-cc-muted"
+                className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant"
                 style={{ fontSize: 18 }}
               >
                 search
               </span>
               <input
-                className="pl-9 pr-4 py-2 bg-cc-input border border-cc-border rounded-lg focus:ring-1 focus:ring-cc-accent w-72 text-sm text-cc-heading placeholder:text-cc-muted focus:outline-none"
+                className="pl-9 pr-4 py-2 bg-white border border-outline-variant/30 rounded-lg focus:ring-1 focus:ring-cc-accent w-72 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none"
                 placeholder={nav.searchPlaceholder}
                 type="text"
               />
             </div>
-            <div className="flex items-center gap-3 border-l border-cc-border pl-5">
+            <div className="flex items-center gap-3 border-l border-outline-variant/30 pl-5">
               <button
                 type="button"
                 onClick={toggleTheme}
-                className="p-2 text-cc-muted hover:text-cc-heading hover:bg-cc-hover rounded-full transition-colors"
+                className="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors"
                 title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
                 aria-label="Toggle color theme"
               >
                 <span className="material-symbols-outlined">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
               </button>
-              <span className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cc-emerald/10 text-cc-emerald border border-cc-emerald/20 text-xs font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-cc-emerald animate-pulse"></span> LIVE
+              <span className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-green/10 text-success-green border border-cc-emerald/20 text-xs font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span> LIVE
               </span>
-              <button type="button" className="p-2 text-cc-muted hover:text-cc-heading hover:bg-cc-hover rounded-full relative transition-colors">
+              <button type="button" className="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full relative transition-colors">
                 <span className="material-symbols-outlined">notifications</span>
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-cc-red rounded-full border-2 border-cc-header"></span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full border-2 border-cc-header"></span>
               </button>
-              <button type="button" className="p-2 text-cc-muted hover:text-cc-heading hover:bg-cc-hover rounded-full transition-colors">
+              <button type="button" className="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors">
                 <span className="material-symbols-outlined">help_outline</span>
               </button>
-              <div className="w-9 h-9 rounded-full bg-cc-accent/15 ring-1 ring-cc-border-strong flex items-center justify-center overflow-hidden">
-                {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-cc-accent">{initials()}</span>}
+              <div className="w-9 h-9 rounded-full bg-secondary/15 ring-1 ring-cc-border-strong flex items-center justify-center overflow-hidden">
+                {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-secondary">{initials()}</span>}
               </div>
             </div>
           </div>
@@ -205,7 +205,7 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
       {fab && (
         <button
           type="button"
-          className="fixed bottom-8 right-8 w-14 h-14 bg-cc-accent text-cc-on-accent rounded-full shadow-cc-card-hover flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group border-4 border-cc-header"
+          className="fixed bottom-8 right-8 w-14 h-14 bg-secondary text-on-secondary rounded-full shadow-sm-hover flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group border-4 border-cc-header"
         >
           <span className="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform">bolt</span>
           <span className="absolute right-16 bg-cc-heading text-cc-bg text-[10px] font-bold px-3 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
@@ -239,20 +239,20 @@ function SubmenuItem({ item, pathname, unreadCounts }: { item: NavItem; pathname
           type="button"
           onClick={() => setExpanded((v) => !v)}
           className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg relative transition-colors w-full text-left ${
-            childActive ? 'bg-cc-accent-soft text-cc-heading border border-cc-border-strong' : 'text-cc-body hover:bg-cc-hover hover:text-cc-heading'
+            childActive ? 'bg-secondary/10 text-on-surface border border-outline-variant' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface'
           }`}
         >
-          {childActive && <span className="w-1 h-7 rounded-full bg-cc-accent absolute -left-0.5"></span>}
+          {childActive && <span className="w-1 h-7 rounded-full bg-secondary absolute -left-0.5"></span>}
           <span className="flex items-center gap-3 min-w-0">
-            <span className={`material-symbols-outlined text-[20px] shrink-0 ${childActive ? 'text-cc-accent' : 'text-cc-muted'}`}>
+            <span className={`material-symbols-outlined text-[20px] shrink-0 ${childActive ? 'text-secondary' : 'text-on-surface-variant'}`}>
               {item.icon ?? 'radio_button_unchecked'}
             </span>
             <span className="flex flex-col min-w-0">
               <span className={`text-sm truncate ${childActive ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>
-              {item.subLabel && <span className="text-[10px] text-cc-muted truncate">{item.subLabel}</span>}
+              {item.subLabel && <span className="text-[10px] text-on-surface-variant truncate">{item.subLabel}</span>}
             </span>
           </span>
-          <span className={`material-symbols-outlined text-sm text-cc-muted transition-transform ${expanded ? 'rotate-180' : ''}`}>
+          <span className={`material-symbols-outlined text-sm text-on-surface-variant transition-transform ${expanded ? 'rotate-180' : ''}`}>
             expand_more
           </span>
         </button>
@@ -263,7 +263,7 @@ function SubmenuItem({ item, pathname, unreadCounts }: { item: NavItem; pathname
                 key={child.to}
                 to={child.to}
                 className={`py-1.5 transition-colors w-full text-left text-xs font-medium ${
-                  pathname === child.to ? 'text-cc-heading' : 'text-cc-muted hover:text-cc-heading'
+                  pathname === child.to ? 'text-on-surface' : 'text-on-surface-variant hover:text-on-surface'
                 }`}
               >
                 {child.label}
@@ -280,23 +280,24 @@ function SubmenuItem({ item, pathname, unreadCounts }: { item: NavItem; pathname
       to={item.to!}
       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg relative transition-all ${
         pathname === item.to
-          ? 'bg-cc-accent-soft text-cc-heading border border-cc-border-strong'
-          : 'text-cc-body hover:bg-cc-hover hover:text-cc-heading'
+          ? 'bg-secondary/10 text-on-surface border border-outline-variant'
+          : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface'
       }`}
     >
-      {pathname === item.to && <span className="w-1 h-7 rounded-full bg-cc-accent absolute -left-0.5"></span>}
-      <span className={`material-symbols-outlined text-[20px] shrink-0 ${pathname === item.to ? 'text-cc-accent' : 'text-cc-muted'}`}>
+      {pathname === item.to && <span className="w-1 h-7 rounded-full bg-secondary absolute -left-0.5"></span>}
+      <span className={`material-symbols-outlined text-[20px] shrink-0 ${pathname === item.to ? 'text-secondary' : 'text-on-surface-variant'}`}>
         {item.icon ?? 'radio_button_unchecked'}
       </span>
       <span className="flex flex-col min-w-0">
         <span className={`text-sm truncate ${pathname === item.to ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>
-        {item.subLabel && <span className="text-[10px] text-cc-muted truncate">{item.subLabel}</span>}
+        {item.subLabel && <span className="text-[10px] text-on-surface-variant truncate">{item.subLabel}</span>}
       </span>
       {item.badge ? (
-        <span className="ml-auto bg-cc-red text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">{item.badge}</span>
+        <span className="ml-auto bg-error text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">{item.badge}</span>
       ) : unread > 0 && pathname !== item.to ? (
-        <UnreadBadge count={unread} className="bg-cc-red" />
+        <UnreadBadge count={unread} className="bg-error" />
       ) : null}
     </NavLink>
   );
 }
+

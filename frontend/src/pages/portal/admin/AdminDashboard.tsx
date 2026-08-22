@@ -8,14 +8,14 @@ import { BARANGAY_HALL_CENTER } from '../../../lib/geo';
 
 const incidentPin = divIcon({
   className: '',
-  html: '<div class="relative w-6 h-6"><span class="incident-radar-ring" style="--radar-color:#dc2626"></span><span class="incident-radar-ring incident-radar-ring--delayed" style="--radar-color:#dc2626"></span><span class="absolute inset-0 m-auto w-4 h-4 rounded-full bg-red-600 border-2 border-white"></span></div>',
+  html: '<div class="relative w-6 h-6"><span class="incident-radar-ring" style="--radar-color:#dc2626"></span><span class="incident-radar-ring incident-radar-ring--delayed" style="--radar-color:#dc2626"></span><span class="absolute inset-0 m-auto w-4 h-4 rounded-full bg-error border-2 border-white"></span></div>',
   iconSize: [24, 24],
   iconAnchor: [12, 12],
 });
 
 const unitPin = divIcon({
   className: '',
-  html: '<div class="relative w-5 h-5"><span class="absolute inset-0 m-auto w-4 h-4 rounded-full bg-blue-600 border-2 border-white shadow"></span></div>',
+  html: '<div class="relative w-5 h-5"><span class="absolute inset-0 m-auto w-4 h-4 rounded-full bg-secondary border-2 border-white shadow"></span></div>',
   iconSize: [20, 20],
   iconAnchor: [10, 10],
 });
@@ -133,28 +133,28 @@ export default function AdminDashboard() {
         <>
           {/* KPI ROW */}
           <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 md:col-span-6 xl:col-span-3 bg-surface-container-lowest border border-border-subtle border-t-2 border-t-error-red rounded-xl p-5 shadow-sm">
+            <div className="col-span-12 md:col-span-6 xl:col-span-3 bg-surface-container-lowest border border-border-subtle border-t-2 border-t-error rounded-xl p-5 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <span className="material-symbols-outlined text-error-red text-[22px]">emergency_home</span>
-                <span className="px-2 py-1 rounded-full bg-error-red/10 text-error-red text-[11px] font-bold">{stats.critical} critical</span>
+                <span className="material-symbols-outlined text-error text-[22px]">emergency_home</span>
+                <span className="px-2 py-1 rounded-full bg-error/10 text-error text-[11px] font-bold">{stats.critical} critical</span>
               </div>
               <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Active Incidents</p>
               <p className="font-headline-md text-headline-md font-bold text-on-surface">{stats.active}</p>
               <p className="text-xs text-on-surface-variant mt-1.5">across all statuses</p>
             </div>
-            <div className="col-span-12 md:col-span-6 xl:col-span-3 bg-surface-container-lowest border border-border-subtle border-t-2 border-t-sky-500 rounded-xl p-5 shadow-sm">
+            <div className="col-span-12 md:col-span-6 xl:col-span-3 bg-surface-container-lowest border border-border-subtle border-t-2 border-t-secondary rounded-xl p-5 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <span className="material-symbols-outlined text-sky-600 text-[22px]">local_police</span>
-                <span className="px-2 py-1 rounded-full bg-sky-100 text-sky-700 text-[11px] font-bold">{stats.unitBusy} busy</span>
+                <span className="material-symbols-outlined text-secondary text-[22px]">local_police</span>
+                <span className="px-2 py-1 rounded-full bg-secondary/10 text-sky-700 text-[11px] font-bold">{stats.unitBusy} busy</span>
               </div>
               <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Units On Field</p>
               <p className="font-headline-md text-headline-md font-bold text-on-surface">{stats.unitField}</p>
               <p className="text-xs text-on-surface-variant mt-1.5">responder units on duty</p>
             </div>
-            <div className="col-span-12 md:col-span-6 xl:col-span-3 bg-surface-container-lowest border border-border-subtle border-t-2 border-t-teal-500 rounded-xl p-5 shadow-sm">
+            <div className="col-span-12 md:col-span-6 xl:col-span-3 bg-surface-container-lowest border border-border-subtle border-t-2 border-t-tertiary rounded-xl p-5 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <span className="material-symbols-outlined text-teal-600 text-[22px]">timer</span>
-                <span className="px-2 py-1 rounded-full bg-teal-100 text-teal-700 text-[11px] font-bold">{stats.resolved} done</span>
+                <span className="material-symbols-outlined text-tertiary text-[22px]">timer</span>
+                <span className="px-2 py-1 rounded-full bg-tertiary/10 text-teal-700 text-[11px] font-bold">{stats.resolved} done</span>
               </div>
               <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Avg Resolution Time</p>
               <p className="font-headline-md text-headline-md font-bold text-on-surface">{fmtDurationMs(stats.avgResolve)}</p>
@@ -228,15 +228,15 @@ export default function AdminDashboard() {
                   Live Incident Map
                 </h3>
                 <div className="flex items-center gap-3 text-[11px] font-semibold text-on-surface-variant">
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-red-600"></span>Incident</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>Unit</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-error"></span>Incident</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-secondary"></span>Unit</span>
                   <button type="button" onClick={() => setTile((t) => (t === 'street' ? 'satellite' : 'street'))} className="flex items-center gap-1 px-2 py-1 bg-surface-container-low border border-border-subtle rounded hover:bg-surface-container-high transition-colors">
                     <span className="material-symbols-outlined text-[14px]">layers</span>
                     {tile === 'street' ? 'Satellite' : 'Street'}
                   </button>
                 </div>
               </div>
-              <div className="relative h-[320px] bg-slate-100 overflow-hidden isolate">
+              <div className="relative h-[320px] bg-surface-container-low overflow-hidden isolate">
                 {mapPins.length > 0 ? (
                   <MapContainer center={BARANGAY_HALL_CENTER} zoom={13} className="w-full h-full" scrollWheelZoom>
                     <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
@@ -247,16 +247,16 @@ export default function AdminDashboard() {
                       <Marker key={i.id} position={[i.lat as number, i.lng as number]} icon={incidentPin}>
                         <Popup>
                           <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">{i.report_no}</p>
-                          <p className="text-sm font-semibold text-slate-900">{i.title}</p>
-                          <p className="text-[11px] text-slate-500">{i.category} · {fmtDate(i.created_at, 'short')}</p>
+                          <p className="text-sm font-semibold text-on-surface">{i.title}</p>
+                          <p className="text-[11px] text-on-surface-variant">{i.category} · {fmtDate(i.created_at, 'short')}</p>
                         </Popup>
                       </Marker>
                     ))}
                     {units.filter((u) => u.lat != null && u.lng != null && deriveUnitStatus(u, openAssignments) !== 'Off-Duty').map((u) => (
                       <Marker key={u.id} position={[u.lat as number, u.lng as number]} icon={unitPin}>
                         <Popup>
-                          <p className="text-sm font-semibold text-slate-900">{u.name}</p>
-                          <p className="text-[11px] text-slate-500">{u.type} · {deriveUnitStatus(u, openAssignments)}</p>
+                          <p className="text-sm font-semibold text-on-surface">{u.name}</p>
+                          <p className="text-[11px] text-on-surface-variant">{u.type} · {deriveUnitStatus(u, openAssignments)}</p>
                         </Popup>
                       </Marker>
                     ))}
@@ -308,3 +308,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

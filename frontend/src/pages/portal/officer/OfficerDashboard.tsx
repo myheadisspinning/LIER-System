@@ -30,11 +30,11 @@ type Unit = {
 
 const STATUS_BADGE: Record<string, string> = {
   Pending: 'bg-warning-amber/10 text-warning-amber',
-  Verifying: 'bg-sky-100 text-sky-700',
-  Assigned: 'bg-blue-100 text-blue-700',
+  Verifying: 'bg-secondary/10 text-secondary',
+  Assigned: 'bg-secondary/10 text-secondary',
   Progress: 'bg-warning-amber/10 text-warning-amber',
   Resolved: 'bg-success-green/10 text-success-green',
-  Rejected: 'bg-error-red/10 text-error-red',
+  Rejected: 'bg-error/10 text-error',
 };
 
 const ACTIVE = ['Assigned', 'Progress'];
@@ -204,3 +204,4 @@ export default function OfficerDashboard() {
     </div>
   );
 }
+
