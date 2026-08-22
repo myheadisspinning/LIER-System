@@ -142,6 +142,7 @@ export default function AccountSettings() {
       return;
     }
     setSaving(true);
+    const start = Date.now();
     const { error } = await supabase.rpc('update_own_profile', {
       p_fullname: profile.fullname.trim(),
       p_dob: profile.dob || null,
@@ -152,6 +153,8 @@ export default function AccountSettings() {
       p_ec_rel: profile.emergency_contact_relationship || null,
       p_ec_phone: profile.emergency_contact_phone.trim() || null,
     });
+    const elapsed = Date.now() - start;
+    if (elapsed < 700) await new Promise((r) => setTimeout(r, 700 - elapsed));
     if (error) {
       setSaving(false);
       setToast({ type: 'error', message: `Failed to update profile: ${error.message}` });
@@ -165,11 +168,14 @@ export default function AccountSettings() {
   const saveEmergencyContact = useCallback(async () => {
     if (!userId) return;
     setSaving(true);
+    const start = Date.now();
     const { error } = await supabase.rpc('update_own_profile', {
       p_ec_name: profile.emergency_contact_name.trim() || null,
       p_ec_rel: profile.emergency_contact_relationship || null,
       p_ec_phone: profile.emergency_contact_phone.trim() || null,
     });
+    const elapsed = Date.now() - start;
+    if (elapsed < 700) await new Promise((r) => setTimeout(r, 700 - elapsed));
     setSaving(false);
     if (error) {
       setToast({ type: 'error', message: `Failed to save emergency contact: ${error.message}` });
