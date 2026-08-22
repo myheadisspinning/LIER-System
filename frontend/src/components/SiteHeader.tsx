@@ -67,10 +67,13 @@ export default function SiteHeader({
 
   useEffect(() => {
     if (!drawerOpen) return;
-    const prev = document.body.style.overflow;
+    const htmlPrev = document.documentElement.style.overflow;
+    const bodyPrev = document.body.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = prev;
+      document.documentElement.style.overflow = htmlPrev;
+      document.body.style.overflow = bodyPrev;
     };
   }, [drawerOpen]);
 
@@ -249,7 +252,7 @@ export default function SiteHeader({
               <span className="material-symbols-outlined text-3xl">close</span>
             </button>
           </div>
-          <nav className="flex flex-col gap-lg">
+          <nav className="flex-1 min-h-0 overflow-y-auto scroll-hide flex flex-col gap-lg">
             {navItems.map((item) => (
               <Link
                 key={item.path}
@@ -266,22 +269,13 @@ export default function SiteHeader({
           </nav>
           <div className="mt-auto pt-lg border-t border-outline-variant">
             {user ? (
-              <div className="flex flex-col gap-sm">
-                <Link
-                  to="/profile"
-                  className="w-full px-md py-4 bg-surface-container-low text-on-surface font-bold rounded-xl flex items-center justify-center gap-base shadow-sm transition-transform hover:scale-[1.02]"
-                  onClick={() => setDrawerOpen(false)}
-                >
-                  <span className="material-symbols-outlined text-lg">person</span> Profile
-                </Link>
-                <button
-                  className="w-full px-md py-4 bg-error text-on-error font-bold rounded-xl flex items-center justify-center gap-base shadow-lg transition-transform hover:scale-[1.02]"
-                  type="button"
-                  onClick={handleLogout}
-                >
-                  <span className="material-symbols-outlined text-lg">logout</span> Logout
-                </button>
-              </div>
+              <button
+                className="w-full px-md py-4 bg-error text-on-error font-bold rounded-xl flex items-center justify-center gap-base shadow-lg transition-transform hover:scale-[1.02]"
+                type="button"
+                onClick={handleLogout}
+              >
+                <span className="material-symbols-outlined text-lg">logout</span> Logout
+              </button>
             ) : (
               <Link
                 className="group inline-flex items-center justify-center gap-1.5 w-full px-3 py-2.5 rounded-lg bg-secondary text-white font-semibold text-xs tracking-wide shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-250 cursor-pointer focus:outline-none focus:ring-2 focus:ring-secondary/50"

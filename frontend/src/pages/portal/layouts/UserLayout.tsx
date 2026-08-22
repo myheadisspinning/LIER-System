@@ -45,10 +45,13 @@ export default function UserLayout() {
 
   useEffect(() => {
     if (!drawerOpen) return;
-    const prev = document.body.style.overflow;
+    const htmlPrev = document.documentElement.style.overflow;
+    const bodyPrev = document.body.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = prev;
+      document.documentElement.style.overflow = htmlPrev;
+      document.body.style.overflow = bodyPrev;
     };
   }, [drawerOpen]);
 
@@ -314,7 +317,7 @@ export default function UserLayout() {
               </button>
             </div>
           </div>
-          <nav className="flex-1 flex flex-col overflow-y-auto scroll-hide px-3 pt-3 pb-6">{renderGroups(() => setDrawerOpen(false))}</nav>
+          <nav className="flex-1 min-h-0 flex flex-col overflow-y-auto scroll-hide px-3 pt-3 pb-6">{renderGroups(() => setDrawerOpen(false))}</nav>
           <div className="mt-auto p-4 border-t border-cc-border">
             <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-cc-hover border border-cc-border">
               <div className="w-9 h-9 rounded-full bg-cc-accent flex items-center justify-center text-cc-on-accent text-xs font-bold shrink-0">{initials()}</div>
