@@ -245,7 +245,7 @@ export default function Home() {
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden">
       <SiteHeader active="/" />
 
-      <header className="relative min-h-[70vh] md:min-h-[80vh] lg:min-h-screen pt-16 flex items-center overflow-hidden">
+      <header className="relative min-h-[60vh] py-16 md:py-24 lg:py-32 pt-16 flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img alt="Barangay Culiat Hall" className="w-full h-full object-cover object-center" src="/image/culiat-brgy.jpg" />
           <div className={styles.heroOverlay}></div>
