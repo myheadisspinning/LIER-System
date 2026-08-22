@@ -116,19 +116,19 @@ export default function SiteHeader({
   };
 
   const loginButtonClass =
-    'group hidden md:inline-flex items-center gap-2 px-4 py-1.5 rounded-lg border border-white/30 bg-transparent text-white font-medium text-sm tracking-wider uppercase cursor-pointer transition-all duration-200 ease-in-out hover:bg-white/10 hover:border-slate-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50';
+    'group hidden lg:inline-flex items-center gap-2 px-4 py-1.5 rounded-lg border border-white/30 bg-transparent text-white font-medium text-sm tracking-wider uppercase cursor-pointer transition-all duration-200 ease-in-out hover:bg-white/10 hover:border-slate-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50';
 
   return (
     <>
       <header className="fixed top-0 left-0 w-full z-[100] flex justify-between items-center px-4 md:px-margin-desktop h-20 bg-primary-container/90 backdrop-blur-md shadow-md font-body-md">
-        <div className="flex items-center gap-sm">
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim transition-transform hover:scale-110">
+        <div className="flex items-center gap-sm min-w-0">
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim transition-transform hover:scale-110 shrink-0">
             <img alt={logoAlt} className={logoClass} src={logo} />
           </div>
-          <h1 className="font-headline-md text-base md:text-headline-md font-bold text-surface-bright leading-tight">{title}</h1>
+          <h1 className="font-headline-md text-base md:text-headline-md font-bold text-surface-bright leading-tight truncate">{title}</h1>
         </div>
 
-        <nav className="hidden md:flex items-center gap-lg">
+        <nav className="hidden lg:flex items-center gap-lg">
           {navItems.map((item) => (
             <Link
               key={item.path}
@@ -148,7 +148,7 @@ export default function SiteHeader({
         <div className="flex items-center gap-sm md:gap-md" ref={actionsRef}>
           {user ? (
             <>
-              <div className="relative hidden md:block">
+              <div className="relative hidden lg:block">
                 <button
                   className="p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors relative"
                   type="button"
@@ -201,13 +201,13 @@ export default function SiteHeader({
                     </div>
                     <button
                       type="button"
-                      className="w-full flex items-center gap-3 px-4 py-3 text-on-surface hover:bg-surface-container-low transition-colors font-label-md text-label-md md:hidden"
+                      className="w-full flex items-center gap-3 px-4 py-3 text-on-surface hover:bg-surface-container-low transition-colors font-label-md text-label-md lg:hidden"
                       onClick={() => setNotifOpen((v) => !v)}
                     >
                       <span className="material-symbols-outlined text-lg">notifications</span> Notifications
                     </button>
                     {notifOpen && (
-                      <div className="px-4 py-2.5 flex flex-col items-center gap-sm text-on-surface-variant border-b border-outline-variant/30 md:hidden">
+                      <div className="px-4 py-2.5 flex flex-col items-center gap-sm text-on-surface-variant border-b border-outline-variant/30 lg:hidden">
                         <span className="material-symbols-outlined text-xl">notifications_off</span>
                         <p className="text-caption text-center">No new notifications yet.</p>
                       </div>
@@ -237,7 +237,7 @@ export default function SiteHeader({
             </Link>
           )}
 
-          <button className="md:hidden p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors" onClick={() => setDrawerOpen(true)}>
+          <button className="lg:hidden p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors" onClick={() => setDrawerOpen(true)}>
             <span className="material-symbols-outlined text-2xl">menu</span>
           </button>
         </div>

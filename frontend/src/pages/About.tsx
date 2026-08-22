@@ -38,13 +38,13 @@ export default function About() {
           </div>
           <div className="relative z-10 text-center px-margin-mobile md:px-0">
             <h2 className="font-display-lg text-display-lg text-surface-bright mb-md drop-shadow-lg">Engineering Safety for the Heart of QC</h2>
-            <p className="font-body-lg text-body-lg text-surface-variant max-w-2xl mx-auto leading-relaxed">
+            <p className="font-body-lg text-body-lg text-black md:text-surface-variant max-w-2xl mx-auto leading-relaxed">
               Barangay Culiat is charting a new course in public governance, building a future-ready community through modern smart city technology and inclusive service.
             </p>
           </div>
         </section>
 
-        <section className="px-margin-mobile md:px-margin-desktop py-xl">
+        <section className="px-margin-mobile md:px-margin-desktop py-xl max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
             <div ref={(el) => { sectionRefs.current[0] = el; }} className="md:col-span-7 glass-card p-lg rounded-2xl flex flex-col justify-center border border-outline-variant/20 bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-700">
               <span className="text-secondary font-label-md text-label-md uppercase tracking-widest mb-sm">The Mission</span>
@@ -74,7 +74,7 @@ export default function About() {
           </div>
         </section>
 
-        <section className="bg-surface-container-low py-xl px-margin-mobile md:px-margin-desktop">
+        <section className="bg-surface-container-low py-xl px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-col md:flex-row items-center gap-xl" ref={(el) => { sectionRefs.current[2] = el; }}>
               <div className="flex-1">
@@ -120,7 +120,7 @@ export default function About() {
           </div>
         </section>
 
-        <section className="mb-xl px-margin-mobile md:px-margin-desktop">
+        <section className="mb-xl px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
           <div className="bg-on-background rounded-[2.5rem] p-lg md:p-xl relative overflow-hidden">
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-xl">
               <div className="max-w-ml">

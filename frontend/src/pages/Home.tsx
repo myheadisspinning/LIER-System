@@ -251,7 +251,7 @@ export default function Home() {
           <div className={styles.heroOverlay}></div>
           <div className="absolute inset-0 hero-overlay"></div>
         </div>
-        <div className="container mx-auto px-4 md:px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-xl relative z-10 py-xl">
+        <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-xl relative z-10 py-xl">
           <div ref={(el) => { sectionRefs.current[0] = el; }} className="flex flex-col justify-center items-center lg:items-start text-center lg:text-center space-y-md opacity-0 translate-y-10 transition-all duration-1000" data-section="hero">
             <div className="inline-flex items-center gap-sm bg-secondary-container/30 backdrop-blur-md px-md py-xs rounded-full border border-secondary-fixed/30 mb-sm">
               <span className="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
@@ -293,7 +293,7 @@ export default function Home() {
       </header>
 
       <section ref={(el) => { sectionRefs.current[1] = el; }} className="py-md md:py-xl -mt-8 md:-mt-xl relative z-20 opacity-0 translate-y-10 transition-all duration-1000 delay-100">
-        <div className="container mx-auto px-4 md:px-margin-desktop grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
+        <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
           <div className="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
             <span className="material-symbols-outlined text-secondary text-2xl md:text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>assignment</span>
             <CountUp target={2450} suffix="+" />
@@ -318,7 +318,7 @@ export default function Home() {
       </section>
 
       <section ref={(el) => { sectionRefs.current[2] = el; }} className="py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-1000 delay-200">
-        <div className="container mx-auto px-4 md:px-margin-desktop">
+        <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
           <div className="text-center mb-xl" data-section="services-title">
             <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">LGU Public Safety Services</h2>
             <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Access critical services and report concerns directly to our integrated law enforcement team.</p>
@@ -348,7 +348,7 @@ export default function Home() {
       </section>
 
       <section ref={(el) => { sectionRefs.current[3] = el; }} className="py-xl opacity-0 translate-y-10 transition-all duration-1000 delay-100">
-        <div className="container mx-auto px-4 md:px-margin-desktop">
+        <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
           <div className="text-center mb-xl">
             <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">Barangay Culiat in Action</h2>
             <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">A glimpse into the programs, events, and community efforts that make our barangay safer and more connected.</p>
@@ -358,7 +358,7 @@ export default function Home() {
       </section>
 
       <section ref={(el) => { sectionRefs.current[4] = el; }} className="py-xl bg-surface-container-highest/30 opacity-0 translate-y-10 transition-all duration-1000 delay-200">
-        <div className="container mx-auto px-4 md:px-margin-desktop">
+        <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-xl items-center">
             <div className="order-2 lg:order-1 text-center lg:text-left" data-section="impact">
               <div className="inline-flex items-center gap-sm bg-secondary/10 px-md py-xs rounded-full mb-md mx-auto lg:mx-0">
@@ -386,7 +386,7 @@ export default function Home() {
       </section>
 
       <section ref={(el) => { sectionRefs.current[5] = el; }} className="py-xl bg-surface opacity-0 translate-y-10 transition-all duration-1000 delay-100">
-        <div className="container mx-auto px-4 md:px-margin-desktop">
+        <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
           <div className="text-center mb-xl" data-section="guides">
             <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">Community Safety Guides</h2>
             <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Essential resources and step-by-step instructions for a safer Barangay Culiat.</p>
@@ -413,7 +413,7 @@ export default function Home() {
       </section>
 
       <section ref={(el) => { sectionRefs.current[6] = el; }} className="py-xl bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-1000 delay-200">
-        <div className="container mx-auto px-4 md:px-margin-desktop">
+        <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
           <div className="text-center mb-xl" data-section="hotlines">
             <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">Emergency Hotlines</h2>
             <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Save these numbers for quick access during emergencies. Our responders are ready to assist 24/7.</p>

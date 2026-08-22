@@ -71,7 +71,7 @@ export default function Officials() {
     <div className="bg-surface text-on-surface font-body-md selection:bg-secondary/30">
       <SiteHeader active="/officials" />
 
-      <main className="pb-xl px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto pt-24">
+      <main className="pb-xl px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto pt-24">
         <header ref={(el) => { sectionRefs.current[0] = el; }} className="mb-xl text-center md:text-left opacity-0 translate-y-10 transition-all duration-700">
           <div className="inline-flex items-center gap-sm px-md py-xs bg-secondary/10 text-secondary rounded-full mb-md">
             <span className="material-symbols-outlined text-[18px]">account_balance</span>
@@ -99,7 +99,7 @@ export default function Officials() {
                   <div className="flex-1 text-center md:text-left">
                     <h2 className="font-headline-lg text-headline-lg text-on-background mb-xs">{captain.fullname}</h2>
                     <p className="font-body-lg text-body-lg text-secondary font-semibold mb-md">{captain.title}</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-md mt-lg">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-md mt-lg">
                       {captain.committee && (
                         <div className="flex items-center gap-md p-md bg-white rounded-lg border border-outline-variant/30 transition-all hover:shadow-md hover:-translate-y-0.5">
                           <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
