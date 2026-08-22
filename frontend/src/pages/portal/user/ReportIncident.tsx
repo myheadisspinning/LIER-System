@@ -91,17 +91,29 @@ function clearDraft() {
 }
 
 const CATEGORIES = [
-  { icon: 'local_fire_department', label: 'Fire Hazard', flip: false },
-  { icon: 'medical_services', label: 'Medical', flip: false },
-  { icon: 'gavel', label: 'Crime', flip: true },
-  { icon: 'more_horiz', label: 'Others', flip: false },
+  { icon: 'local_fire_department', label: 'Fire Hazard' },
+  { icon: 'medical_services', label: 'Medical Emergency' },
+  { icon: 'gavel', label: 'Crime & Theft' },
+  { icon: 'traffic', label: 'Traffic Incident' },
+  { icon: 'cyclone', label: 'Natural Disaster' },
+  { icon: 'record_voice_over', label: 'Public Disturbance' },
+  { icon: 'construction', label: 'Infrastructure' },
+  { icon: 'person_search', label: 'Missing Person' },
+  { icon: 'pets', label: 'Animal Incident' },
+  { icon: 'more_horiz', label: 'Other/Uncategorized' },
 ];
 
 const CATEGORY_ICONS: Record<string, string> = {
   'Fire Hazard': 'local_fire_department',
-  Medical: 'medical_services',
-  Crime: 'gavel',
-  Others: 'more_horiz',
+  'Medical Emergency': 'medical_services',
+  'Crime & Theft': 'gavel',
+  'Traffic Incident': 'traffic',
+  'Natural Disaster': 'cyclone',
+  'Public Disturbance': 'record_voice_over',
+  'Infrastructure': 'construction',
+  'Missing Person': 'person_search',
+  'Animal Incident': 'pets',
+  'Other/Uncategorized': 'more_horiz',
 };
 
 const PRIORITY_STYLES: Record<AiAnalysis['priority'], string> = {
@@ -612,21 +624,31 @@ export default function ReportIncident({ className = '' }: { className?: string 
             <div className="flex flex-col gap-6">
               <div className="space-y-6">
                 <div>
-                  <div className="grid grid-cols-2 gap-3">
-                    {CATEGORIES.map((opt) => (
-                      <button
-                        key={opt.label}
-                        type="button"
-                        onClick={() => { setCategory(opt.label); setMissingField((m) => (m === 'category' ? null : m)); }}
-                        className={`flex flex-col items-center justify-center gap-2 p-5 rounded-xl border transition-all shadow-sm ${category === opt.label ? 'border-secondary bg-secondary/10 text-secondary' : 'border-outline-variant/30 bg-surface-container-low hover:border-secondary text-on-surface-variant'}`}
-                      >
-                        <span className="material-symbols-outlined text-3xl" style={opt.flip ? { transform: 'scaleX(-1)' } : undefined}>{opt.icon}</span>
-                        <span className="font-label-md text-label-md font-bold">{opt.label}</span>
-                      </button>
-                    ))}
+                  <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider font-bold">
+                    Incident Category <span className="text-error">*</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={category}
+                      onChange={(e) => {
+                        setCategory(e.target.value);
+                        setMissingField((m) => (m === 'category' ? null : m));
+                        if (e.target.value !== 'Other/Uncategorized') setCustomCategory('');
+                      }}
+                      className={`w-full bg-white border rounded-lg py-[10px] px-3 pr-10 font-label-md text-label-md text-on-surface focus:outline-none focus:border-secondary transition-all appearance-none cursor-pointer ${
+                        missingField === 'category' ? 'border-error' : 'border-outline-variant'
+                      }`}
+                    >
+                      {CATEGORIES.map((opt) => (
+                        <option key={opt.label} value={opt.label}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-xl">expand_more</span>
                   </div>
                 </div>
-                {category === 'Others' && (
+                {category === 'Other/Uncategorized' && (
                   <div>
                     <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider font-bold">Specify Incident Type <span className="text-error">*</span></label>
                     <input ref={customCategoryInputRef} className={`w-full bg-white border rounded-lg py-[10px] px-3 font-label-md text-label-md text-on-surface focus:outline-none focus:border-secondary placeholder:text-xs placeholder:text-on-surface-variant placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all ${missingField === 'category' ? 'border-error' : 'border-outline-variant'}`} type="text" value={customCategory} placeholder="e.g. Flood, Landslide, Electrical outage" onChange={(e) => { setCustomCategory(e.target.value); setMissingField((m) => (m === 'category' ? null : m)); if (e.target.value.trim()) setAiExpanded(true); }} />
