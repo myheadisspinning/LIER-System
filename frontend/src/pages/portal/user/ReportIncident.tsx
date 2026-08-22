@@ -147,8 +147,8 @@ function localFallback(category: string): AiAnalysis {
       criticalFlag: false,
       aiError: null,
     },
-    Medical: {
-      category: 'Medical',
+    'Medical Emergency': {
+      category: 'Medical Emergency',
       confidence: 88,
       priority: 'HIGH',
       threat: 78,
@@ -162,8 +162,8 @@ function localFallback(category: string): AiAnalysis {
       criticalFlag: false,
       aiError: null,
     },
-    Crime: {
-      category: 'Crime',
+    'Crime & Theft': {
+      category: 'Crime & Theft',
       confidence: 86,
       priority: 'CRITICAL',
       threat: 86,
@@ -177,8 +177,98 @@ function localFallback(category: string): AiAnalysis {
       criticalFlag: false,
       aiError: null,
     },
-    Others: {
-      category: 'Others',
+    'Traffic Incident': {
+      category: 'Traffic Incident',
+      confidence: 85,
+      priority: 'MEDIUM',
+      threat: 60,
+      actions: ['Dispatch traffic management unit', 'Clear route if needed'],
+      user_actions: ['Stay in safe area', 'Do not move vehicles if accident', 'Wait for traffic enforcer'],
+      dispatch: 'AI Dispatch routed TM-02 · ETA 8 min',
+      unit: 'Traffic Management Unit 2',
+      eta: '8 min',
+      source: 'fallback',
+      autoDispatch: false,
+      criticalFlag: false,
+      aiError: null,
+    },
+    'Natural Disaster': {
+      category: 'Natural Disaster',
+      confidence: 92,
+      priority: 'CRITICAL',
+      threat: 95,
+      actions: ['Activate disaster response team', 'Open evacuation centers', 'Coordinate with DRRMO'],
+      user_actions: ['Move to higher ground if flooding', 'Prepare emergency kit', 'Listen to official announcements'],
+      dispatch: 'AI Dispatch routed DR-01 · ETA 5 min',
+      unit: 'Disaster Response Team 1',
+      eta: '5 min',
+      source: 'fallback',
+      autoDispatch: false,
+      criticalFlag: true,
+      aiError: null,
+    },
+    'Public Disturbance': {
+      category: 'Public Disturbance',
+      confidence: 80,
+      priority: 'LOW',
+      threat: 40,
+      actions: ['Dispatch barangay tanod for mediation', 'Monitor situation'],
+      user_actions: ['Avoid the area if possible', 'Do not intervene directly', 'Report if situation escalates'],
+      dispatch: 'AI Dispatch routed BT-03 · ETA 10 min',
+      unit: 'Barangay Tanod Unit 3',
+      eta: '10 min',
+      source: 'fallback',
+      autoDispatch: false,
+      criticalFlag: false,
+      aiError: null,
+    },
+    'Infrastructure': {
+      category: 'Infrastructure',
+      confidence: 75,
+      priority: 'LOW',
+      threat: 30,
+      actions: ['Log to public works', 'Schedule repair crew'],
+      user_actions: ['Mark the area if hazardous', 'Avoid damaged infrastructure', 'Report to barangay office during hours'],
+      dispatch: 'AI Dispatch routed PW-01 · ETA 24 hrs',
+      unit: 'Public Works Crew 1',
+      eta: '24 hrs',
+      source: 'fallback',
+      autoDispatch: false,
+      criticalFlag: false,
+      aiError: null,
+    },
+    'Missing Person': {
+      category: 'Missing Person',
+      confidence: 89,
+      priority: 'HIGH',
+      threat: 70,
+      actions: ['Alert all patrol units', 'Check CCTV coverage', 'Coordinate with social workers'],
+      user_actions: ['Provide last known location', 'Share recent photo', 'Contact barangay immediately'],
+      dispatch: 'AI Dispatch routed MP-01 · ETA 2 min',
+      unit: 'Missing Person Response Team',
+      eta: '2 min',
+      source: 'fallback',
+      autoDispatch: false,
+      criticalFlag: false,
+      aiError: null,
+    },
+    'Animal Incident': {
+      category: 'Animal Incident',
+      confidence: 78,
+      priority: 'MEDIUM',
+      threat: 50,
+      actions: ['Dispatch animal control', 'Alert veterinary services'],
+      user_actions: ['Keep safe distance', 'Do not approach aggressive animals', 'Secure pets and children'],
+      dispatch: 'AI Dispatch routed AC-01 · ETA 15 min',
+      unit: 'Animal Control Unit 1',
+      eta: '15 min',
+      source: 'fallback',
+      autoDispatch: false,
+      criticalFlag: false,
+      aiError: null,
+    },
+    'Other/Uncategorized': {
+      category: 'Other/Uncategorized',
       confidence: 70,
       priority: 'MEDIUM',
       threat: 55,
@@ -193,7 +283,7 @@ function localFallback(category: string): AiAnalysis {
       aiError: null,
     },
   };
-  return map[category] ?? map['Others'];
+  return map[category] ?? map['Other/Uncategorized'];
 }
 
 const pinIcon = divIcon({
@@ -325,7 +415,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
 
   const ai = analysis ?? localFallback(category);
   const effectiveCategory =
-    category === 'Others' && customCategory.trim() ? customCategory.trim() : category;
+    category === 'Other/Uncategorized' && customCategory.trim() ? customCategory.trim() : category;
   const threatActive = Math.ceil((ai.threat / 100) * 4);
   const priorityTone = PRIORITY_STYLES[ai.priority];
 
