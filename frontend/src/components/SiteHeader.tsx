@@ -125,7 +125,7 @@ export default function SiteHeader({
           <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim transition-transform hover:scale-110 shrink-0">
             <img alt={logoAlt} className={logoClass} src={logo} />
           </div>
-          <h1 className="font-headline-md text-base md:text-headline-md font-bold text-surface-bright leading-tight truncate">{title}</h1>
+          <h1 className="font-headline-md text-base md:text-headline-md font-bold text-surface-bright leading-tight line-clamp-2 md:line-clamp-none">{title}</h1>
         </div>
 
         <nav className="hidden lg:flex items-center gap-lg">

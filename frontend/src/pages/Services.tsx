@@ -223,17 +223,17 @@ export default function Services() {
       <SiteFooter />
 
             <div className={`fixed inset-0 z-[300] ${modalOpen ? '' : 'hidden'} flex items-center justify-center p-4 md:p-lg`}>
-        <div className="absolute inset-0 bg-primary-container/60" onClick={() => setModalOpen(false)}></div>
-        <div className="cc-light relative bg-cc-card w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-2xl shadow-2xl border border-cc-border flex flex-col">
-          <div className="bg-cc-header px-6 py-4 flex justify-between items-center shrink-0 border-b border-cc-border z-20">
+        <div className="absolute inset-0 bg-primary-container/60 backdrop-blur-sm" onClick={() => setModalOpen(false)}></div>
+        <div className="relative bg-surface w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-2xl shadow-2xl border border-outline-variant/30 flex flex-col">
+          <div className="bg-surface-container-low px-6 py-4 flex justify-between items-center shrink-0 border-b border-outline-variant/30 z-20">
             <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-cc-accent">verified_user</span>
+              <span className="material-symbols-outlined text-secondary">verified_user</span>
               <div>
-                <h2 className="font-headline-md text-cc-heading text-lg md:text-xl">File an Incident Report</h2>
-                <p className="text-cc-muted text-xs opacity-80">Barangay Culiat Enforcement Portal</p>
+                <h2 className="font-headline-md text-on-surface text-lg md:text-xl">File an Incident Report</h2>
+                <p className="text-on-surface-variant text-xs opacity-80">Barangay Culiat Safety Portal</p>
               </div>
             </div>
-            <button className="text-cc-body hover:text-cc-heading p-2 bg-cc-hover rounded-full transition-colors" onClick={() => setModalOpen(false)}>
+            <button className="text-on-surface-variant hover:text-on-surface p-2 bg-surface-container-high hover:bg-surface-container-highest rounded-full transition-colors" onClick={() => setModalOpen(false)}>
               <span className="material-symbols-outlined text-2xl">close</span>
             </button>
           </div>
