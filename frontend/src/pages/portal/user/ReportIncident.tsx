@@ -6,6 +6,8 @@ import 'leaflet/dist/leaflet.css';
 import { checkDuplicateReport, classifyIncident, insertIncidentReport, uploadEvidence, type AiAnalysis, type EvidenceFile } from '../../../lib/ai';
 import Toast from '../../../components/Toast';
 import { BARANGAY_HALL_CENTER, BARANGAY_HALL_ADDRESS } from '../../../lib/geo';
+import { supabase } from '../../../supabaseClient';
+import type { User } from '@supabase/supabase-js';
 
 const EVIDENCE_ACCEPT = {
   video: 'video/*',
@@ -370,6 +372,17 @@ export default function ReportIncident({ className = '' }: { className?: string 
   const [missingField, setMissingField] = useState<'category' | 'title' | 'description' | null>(null);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const categoryDropdownRef = useRef<HTMLDivElement>(null);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user ?? null);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     const d = loadDraft();
@@ -1148,7 +1161,11 @@ export default function ReportIncident({ className = '' }: { className?: string 
                   </div>
                   <div>
                     <div className="font-caps-xs text-caps-xs text-on-surface-variant mb-1">Reporter</div>
-                    <div className="font-body-md text-on-surface font-medium">Signed-in Resident</div>
+                    <div className="font-body-md text-on-surface font-medium">
+                      {anonymous
+                        ? 'Anonymous'
+                        : (user?.user_metadata?.fullname || user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email || 'Signed-in Resident')}
+                    </div>
                   </div>
                 </div>
                 <div className="font-caps-xs text-caps-xs text-on-surface-variant mb-3 pb-1 border-b border-outline-variant">Location Details</div>
@@ -1270,7 +1287,6 @@ export default function ReportIncident({ className = '' }: { className?: string 
             <button type="button" onClick={() => setStep(1)} className="px-6 py-3 rounded-xl border border-outline-variant text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md flex items-center justify-center gap-1 w-full sm:w-auto">
               <span className="material-symbols-outlined text-sm">arrow_back</span> Back
             </button>
-            <button type="button" onClick={handleSaveDraft} className="px-5 py-2.5 rounded-xl border border-outline-variant text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-[13px] font-medium w-full sm:w-auto">Save Draft</button>
             <button type="button" onClick={() => goToStep(3)} className="px-6 py-3 rounded-xl bg-secondary text-on-secondary font-label-md text-label-md hover:shadow-lg transition-all shadow-md flex items-center justify-center gap-1 w-full sm:w-auto">Next: Final Review <span className="material-symbols-outlined text-sm">arrow_forward</span></button>
           </>
         )}
