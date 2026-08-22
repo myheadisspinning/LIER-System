@@ -368,6 +368,8 @@ export default function ReportIncident({ className = '' }: { className?: string 
   const [anonymous, setAnonymous] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [missingField, setMissingField] = useState<'category' | 'title' | 'description' | null>(null);
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const categoryDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const d = loadDraft();
@@ -382,6 +384,18 @@ export default function ReportIncident({ className = '' }: { className?: string 
     const t = setTimeout(() => setNotice(null), 3000);
     return () => clearTimeout(t);
   }, [notice]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (categoryDropdownRef.current && !categoryDropdownRef.current.contains(e.target as Node)) {
+        setIsCategoryOpen(false);
+      }
+    };
+    if (isCategoryOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isCategoryOpen]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
@@ -717,25 +731,38 @@ export default function ReportIncident({ className = '' }: { className?: string 
                   <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider font-bold">
                     Incident Category <span className="text-error">*</span>
                   </label>
-                  <div className="relative">
-                    <select
-                      value={category}
-                      onChange={(e) => {
-                        setCategory(e.target.value);
-                        setMissingField((m) => (m === 'category' ? null : m));
-                        if (e.target.value !== 'Other/Uncategorized') setCustomCategory('');
-                      }}
-                      className={`w-full bg-white border rounded-lg py-[10px] px-3 pr-10 font-label-md text-label-md text-on-surface focus:outline-none focus:border-secondary transition-all appearance-none cursor-pointer ${
+                  <div className="relative" ref={categoryDropdownRef}>
+                    <button
+                      type="button"
+                      onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                      className={`w-full bg-white border rounded-lg py-[10px] px-3 pr-10 font-label-md text-label-md text-on-surface focus:outline-none focus:border-secondary transition-all cursor-pointer text-left ${
                         missingField === 'category' ? 'border-error' : 'border-outline-variant'
                       }`}
                     >
-                      {CATEGORIES.map((opt) => (
-                        <option key={opt.label} value={opt.label}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
-                    <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-xl">expand_more</span>
+                      {category}
+                    </button>
+                    <span className={`material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-xl transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`}>expand_more</span>
+                    {isCategoryOpen && (
+                      <div className="absolute z-50 w-full mt-1 bg-white border border-outline-variant rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        {CATEGORIES.map((opt) => (
+                          <button
+                            key={opt.label}
+                            type="button"
+                            onClick={() => {
+                              setCategory(opt.label);
+                              setMissingField((m) => (m === 'category' ? null : m));
+                              if (opt.label !== 'Other/Uncategorized') setCustomCategory('');
+                              setIsCategoryOpen(false);
+                            }}
+                            className={`w-full text-left px-3 py-2 font-label-md text-label-md hover:bg-surface-container-low transition-colors ${
+                              category === opt.label ? 'bg-surface-container-low text-secondary font-bold' : 'text-on-surface'
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
                 {category === 'Other/Uncategorized' && (
