@@ -31,7 +31,7 @@ export default function About() {
       <div className="w-full h-2 relative z-[90] bg-cover bg-center" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLxqqtZLoB8H8kAKno2uvkDiBWWGz49WTKAVMRQiU3iJn9z_9aXs8td9JMSokNoEd5PaoEiEmknOI7ZgfskWtnaOK4Gvq2Trr6Nf1wh-JD3_Don9GXbwwdvpfzD0i4u4ezPpi5Dz1ZNJIDOCuq1mjUgOH4nyu_h-4IwxL4eax68k9rkebNunNd-r1I9hFzZ9qcxpE-8OsAyXDtJTIVZanLrKx2ZHP4F-VAceCBwuleMpvAsRjSVYLbJnScLK54pJNEkh6U2sBLouM")' }}></div>
 
       <main className="pt-18">
-        <section className="relative min-h-[40vh] py-16 md:py-24 lg:py-32 flex items-center justify-center overflow-hidden">
+        <section className="relative min-h-[20vh] py-16 md:py-24 lg:py-32 flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
             <div className="w-full h-full bg-cover bg-center brightness-50" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBO9a7tgmBd3TIpjJycGCeGSUqYaTms92D67dfZ8VrKupV2w8AEhzx7g26qv_LVKaxyw90_38k6a69jjBG2Yte-RZCX-UPhYw6VgwIOwI46PSsIkIFZtZNaa7kZZTfTGjdh0-EiodRgWk_urSzUtu7xU70XuNIyVWmmmNz9FMTu6lHEIk36r8RX00mwp8ko6WHLR3K_b3LP8xk2st8xGm2JQ7PzV35lOPqY_A2gJwF-D54lBmn_-M-Rd21ImffbPhxGVg")', backgroundSize: 'cover', backgroundPosition: 'center center' }}></div>
             <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-primary-container/40"></div>
