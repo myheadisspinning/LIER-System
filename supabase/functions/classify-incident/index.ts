@@ -37,7 +37,7 @@ type Classification = {
 
 const SYSTEM_PROMPT = `You are the Barangay Culiat Tactical AI dispatcher. Analyze the citizen incident report and respond with STRICT JSON only (no markdown). Schema:
 {
-  "category": one of "Fire Hazard" | "Medical" | "Crime" | "Others",
+  "category": one of "Fire Hazard" | "Medical Emergency" | "Crime & Theft" | "Traffic Incident" | "Natural Disaster" | "Public Disturbance" | "Infrastructure" | "Missing Person" | "Animal Incident" | "Other/Uncategorized",
   "confidence": integer 0-100,
   "priority": one of "CRITICAL" | "HIGH" | "MEDIUM" | "LOW",
   "threat": integer 0-100,
@@ -51,8 +51,15 @@ Base decisions on severity, risk to life/property, and proximity. Threat >= 85 =
 
 const CATEGORY_ALIASES: Record<string, string[]> = {
   'Fire Hazard': ['fire', 'burning', 'flames', 'blaze', 'smoke', 'burnt', 'explosion', 'exploded', 'bomb', 'blast', 'gas leak', 'gas', 'fuel', 'gasoline', 'short circuit', 'electrical fire', 'sunog', 'apoy', 'nasusunog', 'nagliliyab', 'usok', 'nagniningas', 'siga', 'umuusok', 'sunugin', 'nagsusunog', 'panununog', 'sinunog', 'pagsabog', 'sumabog', 'bomba', 'tagas ng gas', 'gasolina', 'nakuryente', 'kuryente'],
-  Medical: ['medical', 'emergency', 'ambulance', 'injury', 'injured', 'bleed', 'bleeding', 'wound', 'unconscious', 'heart attack', 'stroke', 'seizure', 'convulsion', 'accident', 'vehicular accident', 'hit and run', 'fell', 'fell down', 'drown', 'drowning', 'drowned', 'poison', 'poisoning', 'overdose', 'dog bite', 'snake bite', 'bite', 'pregnant', 'labor', 'giving birth', 'asthma', 'sugatan', 'nasugatan', 'dugo', 'dumudugo', 'himatay', 'nasaktan', 'atake', 'hurt', 'malubhang sugat', 'atake sa puso', 'high blood', 'kombulsyon', 'nagko-kombulsiyon', 'aksidente', 'naaksidente', 'nabangga', 'nasagasaan', 'nakabangga', 'nahulog', 'nahulugan', 'nalunod', 'nalulunod', 'nalason', 'pagkalason', 'lason', 'kagat', 'nakagat', 'kagat ng aso', 'kagat ng ahas', 'tinuka', 'buntis', 'manganganak', 'nanganganak', 'nanganak', 'hika', 'atake ng hika'],
-  Crime: ['crime', 'robbery', 'theft', 'stolen', 'stole', 'holdup', 'hold-up', 'armed', 'gun', 'knife', 'weapon', 'threat', 'stab', 'stabbing', 'stabbed', 'shoot', 'shooting', 'shot', 'gunshot', 'assault', 'maul', 'mauling', 'attacked', 'kill', 'killed', 'murder', 'homicide', 'dead body', 'kidnap', 'kidnapping', 'abducted', 'carnap', 'carnapping', 'hijack', 'drugs', 'drug', 'shabu', 'pusher', 'vandalism', 'vandal', 'riot', 'nakaw', 'ninakaw', 'ninanakaw', 'magnanakaw', 'pagnanakaw', 'holdap', 'snatcher', 'mandurukot', 'kutsilyo', 'patalim', 'baril', 'armas', 'pananakot', 'nananakot', 'kawatan', 'nakawan', 'saksak', 'saksakin', 'saksakan', 'sinaksak', 'nasaksak', 'pananaksak', 'nanaksak', 'pinagsasaksak', 'pamamaril', 'namaril', 'barilin', 'binaril', 'gulpi', 'ginulpi', 'binugbog', 'bugbog', 'bugbugan', 'suntukan', 'suntok', 'sinalakay', 'patay', 'pinatay', 'patayan', 'pumatay', 'nasawi', 'natagpuang patay', 'bangkay', 'natagpuang bangkay', 'cadaver', 'deceased', 'patay na tao', 'walang buhay', 'dinukot', 'nangikidnap', 'kinarnap', 'droga', 'ipinagbabawal na gamot', 'basag', 'sinira', 'kaguluhan', 'nagkagulo'],
+  'Medical Emergency': ['medical', 'emergency', 'ambulance', 'injury', 'injured', 'bleed', 'bleeding', 'wound', 'unconscious', 'heart attack', 'stroke', 'seizure', 'convulsion', 'accident', 'vehicular accident', 'hit and run', 'fell', 'fell down', 'drown', 'drowning', 'drowned', 'poison', 'poisoning', 'overdose', 'dog bite', 'snake bite', 'bite', 'pregnant', 'labor', 'giving birth', 'asthma', 'sugatan', 'nasugatan', 'dugo', 'dumudugo', 'himatay', 'nasaktan', 'atake', 'hurt', 'malubhang sugat', 'atake sa puso', 'high blood', 'kombulsyon', 'nagko-kombulsiyon', 'aksidente', 'naaksidente', 'nabangga', 'nasagasaan', 'nakabangga', 'nahulog', 'nahulugan', 'nalunod', 'nalulunod', 'nalason', 'pagkalason', 'lason', 'kagat', 'nakagat', 'kagat ng aso', 'kagat ng ahas', 'tinuka', 'buntis', 'manganganak', 'nanganganak', 'nanganak', 'hika', 'atake ng hika'],
+  'Crime & Theft': ['crime', 'robbery', 'theft', 'stolen', 'stole', 'holdup', 'hold-up', 'armed', 'gun', 'knife', 'weapon', 'threat', 'stab', 'stabbing', 'stabbed', 'shoot', 'shooting', 'shot', 'gunshot', 'assault', 'maul', 'mauling', 'attacked', 'kill', 'killed', 'murder', 'homicide', 'dead body', 'kidnap', 'kidnapping', 'abducted', 'carnap', 'carnapping', 'hijack', 'drugs', 'drug', 'shabu', 'pusher', 'vandalism', 'vandal', 'riot', 'nakaw', 'ninakaw', 'ninanakaw', 'magnanakaw', 'pagnanakaw', 'holdap', 'snatcher', 'mandurukot', 'kutsilyo', 'patalim', 'baril', 'armas', 'pananakot', 'nananakot', 'kawatan', 'nakawan', 'saksak', 'saksakin', 'saksakan', 'sinaksak', 'nasaksak', 'pananaksak', 'nanaksak', 'pinagsasaksak', 'pamamaril', 'namaril', 'barilin', 'binaril', 'gulpi', 'ginulpi', 'binugbog', 'bugbog', 'bugbugan', 'suntukan', 'suntok', 'sinalakay', 'patay', 'pinatay', 'patayan', 'pumatay', 'nasawi', 'natagpuang patay', 'bangkay', 'natagpuang bangkay', 'cadaver', 'deceased', 'patay na tao', 'walang buhay', 'dinukot', 'nangikidnap', 'kinarnap', 'droga', 'ipinagbabawal na gamot', 'basag', 'sinira', 'kaguluhan', 'nagkagulo'],
+  'Traffic Incident': ['traffic', 'accident', 'collision', 'crash', 'car crash', 'vehicular', 'road block', 'roadblock', 'traffic jam', 'gridlock', 'congestion', 'bottleneck', ' overturned', 'hazard', 'road hazard', 'pothole', 'debris', 'flooded road', 'akidente', 'banggaan', 'sasakyan', 'sasakyang pangkalsada', 'trapiko', 'bara', 'barado', 'sira ng sasakyan', 'nasirang sasakyan', 'nabangga', 'nabanggaan', 'nabangga ang sasakyan', 'aksidente sa kalsada'],
+  'Natural Disaster': ['typhoon', 'earthquake', 'flood', 'landslide', 'storm', 'hurricane', 'tornado', 'tsunami', 'volcano', 'eruption', 'bagyo', 'baha', 'pagbaha', 'umuulan', 'ulan', 'strong winds', 'hangin', 'mabagyo', 'nabaha', 'lumubog', 'lumubog sa baha', 'landslide', 'pagguho', 'nagguho', 'naguho', 'pagguho ng lupa', 'earthquake', 'lindol', 'yumanig', 'nagyanig', 'bagyo', 'krisis sa panahon'],
+  'Public Disturbance': ['disturbance', 'noise', 'loud', 'fight', 'brawl', 'riot', 'protest', 'demonstration', 'gathering', 'crowd', 'drunk', 'intoxicated', 'vandalism', 'graffiti', 'gulo', 'ingay', 'maingay', 'palakpakan', 'away', 'sagupaan', 'gyera', 'awayan', 'nag-aaway', 'nagkakagulo', 'sigaw', 'sumisigaw', 'lakas ng tunog', 'mabaho', 'amoy', 'basura', 'kalat', 'nagkakalat', 'kalat sa kalsada'],
+  'Infrastructure': ['infrastructure', 'power outage', 'blackout', 'no electricity', 'no water', 'broken pipe', 'water pipe', 'sewage', 'drainage', 'road damage', 'bridge', 'collapsed', 'fallen tree', 'fallen post', 'street light', 'streetlight', 'traffic light', 'utility', 'kuryente', 'walang kuryente', 'brownout', 'brownout', 'tubig', 'walang tubig', 'sira ng tubo', 'sirang tubo', 'sirang kable', 'sirang poste', 'sirang ilaw', 'sirang traffic light', 'sirang tulay', 'sirang kalsada', 'lubak', 'lubak sa kalsada', 'butas sa kalsada'],
+  'Missing Person': ['missing', 'lost', 'missing person', 'lost child', 'lost person', 'nawawala', 'nawawalang tao', 'nawawalang bata', 'hinahanap', 'hinahanap na tao', 'hindi makita', 'hindi mahanap', 'nawala', 'nawala ang tao', 'nawala ang bata', 'missing child', 'missing elderly', 'senior citizen lost', 'amnesia', 'disoriented', 'confused person'],
+  'Animal Incident': ['animal', 'dog', 'cat', 'snake', 'stray', 'rabid', 'rabies', 'animal bite', 'animal attack', 'hayop', 'aso', 'pusa', 'ahas', 'ligaw na hayop', 'ligaw na aso', 'ligaw na pusa', 'galok', 'nagagalok', 'kagat ng hayop', 'kagat ng aso', 'kagat ng pusa', 'kagat ng ahas', 'hayop na umuungol', 'hayop na nakakagulo', 'daga', 'ipos', 'buwaya', 'monkey', 'unggoy'],
+  'Other/Uncategorized': [],
 };
 
 function normalizeCategory(raw: string): string {
@@ -61,7 +68,7 @@ function normalizeCategory(raw: string): string {
     if (s === cat.toLowerCase()) return cat;
     if (words.some((w) => s.includes(w))) return cat;
   }
-  return 'Others';
+  return 'Other/Uncategorized';
 }
 
 async function callGemini(
@@ -93,7 +100,7 @@ async function callGemini(
         responseSchema: {
           type: 'OBJECT',
           properties: {
-            category: { type: 'STRING', enum: ['Fire Hazard', 'Medical', 'Crime', 'Others'] },
+            category: { type: 'STRING', enum: ['Fire Hazard', 'Medical Emergency', 'Crime & Theft', 'Traffic Incident', 'Natural Disaster', 'Public Disturbance', 'Infrastructure', 'Missing Person', 'Animal Incident', 'Other/Uncategorized'] },
             confidence: { type: 'INTEGER' },
             priority: { type: 'STRING', enum: ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'] },
             threat: { type: 'INTEGER' },
@@ -181,9 +188,15 @@ async function fallbackRules(supabase: ReturnType<typeof createClient>, reportTe
   const confidence = matchedCount === 0 ? 45 : matchedCount === 1 ? 70 : matchedCount === 2 ? 80 : 88;
   const userActions: Record<string, string[]> = {
     'Fire Hazard': ['Evacuate to a safe area immediately', 'Call 911 if the fire is life-threatening', 'Avoid the affected area and keep others away'],
-    Medical: ['Keep the person calm and still', 'Call an ambulance or emergency hotline', 'Do not give food or drink unless told to'],
-    Crime: ['Keep a safe distance from the suspects', 'Do not approach or intervene', 'Note any descriptions without putting yourself at risk'],
-    Others: ['Avoid the affected area', 'Notify barangay officials or authorities', 'Monitor for any change in the situation'],
+    'Medical Emergency': ['Keep the person calm and still', 'Call an ambulance or emergency hotline', 'Do not give food or drink unless told to'],
+    'Crime & Theft': ['Keep a safe distance from the suspects', 'Do not approach or intervene', 'Note any descriptions without putting yourself at risk'],
+    'Traffic Incident': ['Turn on hazard lights', 'Move to a safe location if possible', 'Call traffic authorities if blocking the road'],
+    'Natural Disaster': ['Move to higher ground or shelter immediately', 'Monitor local news and emergency alerts', 'Avoid floodwaters and damaged structures'],
+    'Public Disturbance': ['Keep a safe distance from the disturbance', 'Do not intervene or escalate the situation', 'Contact barangay officials or local authorities'],
+    'Infrastructure': ['Avoid the affected area if hazardous', 'Report to local utility services', 'Do not attempt to repair electrical or water infrastructure yourself'],
+    'Missing Person': ['Contact local authorities immediately', 'Provide a recent photo and description', 'Check with neighbors and local establishments'],
+    'Animal Incident': ['Keep a safe distance from the animal', 'Do not attempt to capture or handle the animal', 'Contact animal control or barangay officials'],
+    'Other/Uncategorized': ['Avoid the affected area', 'Notify barangay officials or authorities', 'Monitor for any change in the situation'],
   };
 
   return {
@@ -192,7 +205,7 @@ async function fallbackRules(supabase: ReturnType<typeof createClient>, reportTe
     priority,
     threat,
     actions,
-    user_actions: userActions[category] ?? userActions['Others'],
+    user_actions: userActions[category] ?? userActions['Other/Uncategorized'],
     dispatch: `AI Dispatch routed via rule engine · ${priority} priority`,
     unit: null,
     eta: null,

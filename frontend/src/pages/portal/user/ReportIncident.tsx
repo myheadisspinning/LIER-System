@@ -502,6 +502,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
         const res = await classifyIncident({
           title: reportTitle,
           description: reportDescription,
+          categoryHint: category,
           lat: location[0],
           lng: location[1],
         });
@@ -754,8 +755,8 @@ export default function ReportIncident({ className = '' }: { className?: string 
                               if (opt.label !== 'Other/Uncategorized') setCustomCategory('');
                               setIsCategoryOpen(false);
                             }}
-                            className={`w-full text-left px-3 py-2 font-label-md text-label-md hover:bg-surface-container-low transition-colors ${
-                              category === opt.label ? 'bg-surface-container-low text-secondary font-bold' : 'text-on-surface'
+                            className={`w-full text-left px-3 py-2 font-label-md text-label-md font-normal hover:bg-surface-container-low transition-colors ${
+                              category === opt.label ? 'bg-surface-container-low text-secondary' : 'text-on-surface'
                             }`}
                           >
                             {opt.label}

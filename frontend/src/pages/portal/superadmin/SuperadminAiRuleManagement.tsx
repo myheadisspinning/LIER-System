@@ -19,7 +19,7 @@ type AuditRow = {
   created_at: string;
 };
 
-const CATEGORIES = ['Fire Hazard', 'Medical', 'Crime', 'Others'];
+const CATEGORIES = ['Fire Hazard', 'Medical Emergency', 'Crime & Theft', 'Traffic Incident', 'Natural Disaster', 'Public Disturbance', 'Infrastructure', 'Missing Person', 'Animal Incident', 'Other/Uncategorized'];
 
 export default function SuperadminAiRuleManagement() {
   const [rules, setRules] = useState<RuleRow[]>([]);
@@ -28,7 +28,7 @@ export default function SuperadminAiRuleManagement() {
   const [maxTokens, setMaxTokens] = useState(1024);
   const [search, setSearch] = useState('');
   const [newKeywords, setNewKeywords] = useState('');
-  const [newCategory, setNewCategory] = useState('Crime');
+  const [newCategory, setNewCategory] = useState('Crime & Theft');
   const [newAction, setNewAction] = useState('Dispatch');
   const [newPriority, setNewPriority] = useState('MEDIUM');
   const [loading, setLoading] = useState(true);
