@@ -148,6 +148,7 @@ export default function AdminIncidentReporting() {
   const [reporterMap, setReporterMap] = useState<Record<string, ReporterProfile>>({});
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [modalReportId, setModalReportId] = useState<string | null>(null);
+  const [modalLoading, setModalLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [loading, setLoading] = useState(true);
@@ -242,6 +243,14 @@ export default function AdminIncidentReporting() {
 
   const selectReport = (id: string) => setSelectedId(id);
 
+  const openModal = (id: string) => {
+    setModalLoading(true);
+    setTimeout(() => {
+      setModalReportId(id);
+      setModalLoading(false);
+    }, 300);
+  };
+
   const resolveReport = async () => {
     if (!selected) return;
     setBusy(true);
@@ -317,7 +326,7 @@ export default function AdminIncidentReporting() {
               <div className="p-4 border-b border-border-subtle flex justify-between items-center shrink-0">
                 <h3 className="font-headline-md text-headline-md font-bold text-on-surface">{selected.report_no ?? 'Report'}</h3>
                 <div className="flex gap-2">
-                  <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="View full details" onClick={() => setModalReportId(selected.id)}><span className="material-symbols-outlined">visibility</span></button>
+                  <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="View full details" onClick={() => openModal(selected.id)}><span className="material-symbols-outlined">visibility</span></button>
                   <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="Print"><span className="material-symbols-outlined">print</span></button>
                   <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
                 </div>
@@ -567,7 +576,7 @@ export default function AdminIncidentReporting() {
                     <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${INCIDENT_STATUS_STYLES[r.incident_status] ?? 'bg-slate-100 text-slate-600'}`}>{r.incident_status}</span></td>
                     <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${STATUS_STYLES[r.status] ?? 'bg-slate-100 text-slate-600'}`}>{r.status}</span></td>
                     <td className="py-3 px-4 text-right whitespace-nowrap">
-                      <button type="button" className="text-on-surface-variant hover:text-secondary mr-2" onClick={(e) => { e.stopPropagation(); setModalReportId(r.id); }} aria-label="View incident"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
+                      <button type="button" className="text-on-surface-variant hover:text-secondary mr-2" onClick={(e) => { e.stopPropagation(); openModal(r.id); }} aria-label="View incident"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
                       <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="More options"><span className="material-symbols-outlined text-[18px]">more_vert</span></button>
                     </td>
                   </tr>
@@ -591,6 +600,14 @@ export default function AdminIncidentReporting() {
         />
       </div>
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
+      {modalLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-xl p-8 flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-on-surface font-medium">Loading incident details...</p>
+          </div>
+        </div>
+      )}
       <IncidentDetailModal reportId={modalReportId} onClose={() => setModalReportId(null)} />
     </div>
   );
