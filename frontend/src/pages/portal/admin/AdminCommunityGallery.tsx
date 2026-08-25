@@ -202,10 +202,6 @@ export default function AdminCommunityGallery() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h2 className="font-headline-md text-headline-md text-on-surface">Community Gallery</h2>
-          <p className="font-body-sm text-on-surface-variant">Manage homepage carousel and section images.</p>
-        </div>
       </div>
 
       <div className="flex gap-1 bg-surface-container-low p-1 rounded-lg w-fit">

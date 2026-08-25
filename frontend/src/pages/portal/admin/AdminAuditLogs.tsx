@@ -18,6 +18,8 @@ export default function AdminAuditLogs() {
   const [search, setSearch] = useState('');
   const [actionFilter, setActionFilter] = useState('All Action Types');
   const [selected, setSelected] = useState<LogRow | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   const fetchLogs = async () => {
     const res = await supabase.from('ai_audit_logs').select('id, actor, action, detail, metadata, created_at').order('created_at', { ascending: false }).limit(300);
@@ -49,6 +51,17 @@ export default function AdminAuditLogs() {
     });
   }, [logs, search, actionFilter]);
 
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, actionFilter]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedLogs = filtered.slice(startIndex, endIndex);
+
   const exportCsv = () => {
     downloadCsv(
       `audit-log-${new Date().toISOString().slice(0, 10)}.csv`,
@@ -66,10 +79,6 @@ export default function AdminAuditLogs() {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-end">
-          <div>
-            <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface">System Audit &amp; Security Logs</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant">Immutable log of every classified report, dispatch action, and account change across the portal.</p>
-          </div>
         </div>
         <div className="flex flex-wrap items-center gap-3 bg-surface-container-lowest p-3 border border-border-subtle rounded-lg">
           <div className="relative flex-1 min-w-[200px]">
@@ -95,14 +104,14 @@ export default function AdminAuditLogs() {
         <div className="flex-1 bg-surface-container-lowest border border-border-subtle rounded-xl flex flex-col overflow-hidden shadow-sm">
           <div className="bg-surface-variant/50 px-4 py-2 border-b border-border-subtle flex items-center justify-between">
             <h3 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Audit Trail</h3>
-            <span className="font-label-sm text-label-sm text-on-surface-variant">Showing {filtered.length} of {logs.length} records</span>
+            <span className="font-label-sm text-label-sm text-on-surface-variant">Showing {startIndex + 1}-{Math.min(endIndex, filtered.length)} of {filtered.length} records</span>
           </div>
           <div className="flex-1 overflow-x-auto">
             {loading ? (
               <div className="p-12 text-center text-sm text-on-surface-variant">Loading audit trail…</div>
             ) : error ? (
               <div className="p-12 text-center text-sm text-error-red">{error}</div>
-            ) : filtered.length === 0 ? (
+            ) : paginatedLogs.length === 0 ? (
               <div className="p-12 text-center text-sm text-on-surface-variant">No audit records found for the current filters.</div>
             ) : (
               <table className="w-full text-left border-collapse">
@@ -116,7 +125,7 @@ export default function AdminAuditLogs() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border-subtle">
-                  {filtered.map((l) => (
+                  {paginatedLogs.map((l) => (
                     <tr key={l.id} className="hover:bg-surface-variant/50 transition-colors cursor-pointer" onClick={() => setSelected(l)}>
                       <td className="py-2.5 px-4 whitespace-nowrap text-on-surface-variant text-body-sm">
                         <span className="block font-medium text-on-surface">{fmtDate(l.created_at, 'short')}</span>
@@ -136,6 +145,109 @@ export default function AdminAuditLogs() {
               </table>
             )}
           </div>
+          
+          {/* Pagination Controls */}
+          {filtered.length > itemsPerPage && (
+            <div className="px-4 py-3 border-t border-border-subtle flex items-center justify-between bg-surface-container-lowest">
+              <div className="flex items-center gap-2">
+                <span className="text-body-sm text-on-surface-variant">Items per page:</span>
+                <select 
+                  className="bg-surface-container-low border border-border-subtle rounded px-2 py-1 text-body-sm text-on-surface focus:ring-1 focus:ring-secondary outline-none cursor-pointer"
+                  value={itemsPerPage}
+                  onChange={(e) => {
+                    setItemsPerPage(Number(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                >
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  <option value={100}>100</option>
+                </select>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <span className="text-body-sm text-on-surface-variant">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button 
+                  type="button"
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 border border-border-subtle rounded text-body-sm text-on-surface hover:bg-surface-variant transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                
+                {/* Page Numbers */}
+                <div className="flex items-center gap-1">
+                  {(() => {
+                    const pages = [];
+                    const maxVisible = 5;
+                    
+                    if (totalPages <= maxVisible) {
+                      // Show all pages
+                      for (let i = 1; i <= totalPages; i++) {
+                        pages.push(i);
+                      }
+                    } else {
+                      // Show first page
+                      pages.push(1);
+                      
+                      if (currentPage > 3) {
+                        pages.push('...');
+                      }
+                      
+                      // Show pages around current
+                      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+                        if (!pages.includes(i)) {
+                          pages.push(i);
+                        }
+                      }
+                      
+                      if (currentPage < totalPages - 2) {
+                        pages.push('...');
+                      }
+                      
+                      // Show last page
+                      if (!pages.includes(totalPages)) {
+                        pages.push(totalPages);
+                      }
+                    }
+                    
+                    return pages.map((page, idx) => {
+                      if (page === '...') {
+                        return <span key={`ellipsis-${idx}`} className="px-2 text-on-surface-variant">...</span>;
+                      }
+                      return (
+                        <button
+                          key={page}
+                          type="button"
+                          onClick={() => setCurrentPage(page as number)}
+                          className={`px-3 py-1 rounded text-body-sm transition-colors ${
+                            currentPage === page
+                              ? 'bg-secondary text-on-secondary'
+                              : 'text-on-surface hover:bg-surface-variant'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    });
+                  })()}
+                </div>
+                
+                <button 
+                  type="button"
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 border border-border-subtle rounded text-body-sm text-on-surface hover:bg-surface-variant transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Detail drawer */}

@@ -130,10 +130,6 @@ export default function AdminEvidenceVault() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-end">
-        <div>
-          <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface">Evidence Vault</h2>
-          <p className="font-body-md text-body-md text-on-surface-variant">Every file attached to incident reports, with full chain-of-custody records.</p>
-        </div>
         <div className="flex gap-3">
           <button type="button" onClick={exportCsv} className="flex items-center gap-2 px-4 py-2 border border-border-subtle rounded-lg text-label-md font-medium text-on-surface hover:bg-surface-variant transition-colors">
             <span className="material-symbols-outlined text-[18px]">download</span>

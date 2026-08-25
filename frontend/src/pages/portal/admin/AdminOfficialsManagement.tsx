@@ -134,10 +134,6 @@ export default function AdminOfficialsManagement() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-end">
-        <div>
-          <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface">Officials Management</h2>
-          <p className="font-body-md text-body-md text-on-surface-variant">Manage the barangay officials displayed on the public website.</p>
-        </div>
         <button type="button" onClick={startCreate} className="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary rounded-lg text-label-md font-medium hover:bg-secondary/90 transition-colors">
           <span className="material-symbols-outlined text-[18px]">add</span>
           Add New Official

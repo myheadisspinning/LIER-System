@@ -211,10 +211,6 @@ export default function AdminTanodRoster() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-end">
-        <div>
-          <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface">Tanod &amp; Responder Roster</h2>
-          <p className="font-body-md text-body-md text-on-surface-variant">Real-time responder availability from duty roster and live dispatch data.</p>
-        </div>
         <div className="flex gap-3">
           <button type="button" onClick={printShift} className="flex items-center gap-2 px-4 py-2 border border-border-subtle rounded-lg text-label-md font-medium text-on-surface hover:bg-surface-variant transition-colors">
             <span className="material-symbols-outlined text-[18px]">print</span>
