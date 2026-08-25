@@ -333,7 +333,7 @@ export default function AdminContactsInbox() {
                     i.status === 'Open' ? 'bg-error-red' : i.status === 'In Progress' ? 'bg-warning-amber' : 'bg-slate-400'
                   }`}>
                     {i.created_by && profiles[i.created_by]?.avatar_url ? (
-                      <img src={profiles[i.created_by].avatar_url} alt="" className="w-full h-full object-cover" />
+                      <img src={profiles[i.created_by].avatar_url ?? undefined} alt="" className="w-full h-full object-cover" />
                     ) : (
                       residentName(i).slice(0, 2).toUpperCase()
                     )}
@@ -376,7 +376,7 @@ export default function AdminContactsInbox() {
                   active.status === 'Open' ? 'bg-error-red' : active.status === 'In Progress' ? 'bg-warning-amber' : 'bg-slate-400'
                 }`}>
                   {active.created_by && profiles[active.created_by]?.avatar_url ? (
-                    <img src={profiles[active.created_by].avatar_url} alt="" className="w-full h-full object-cover" />
+                    <img src={profiles[active.created_by].avatar_url ?? undefined} alt="" className="w-full h-full object-cover" />
                   ) : (
                     residentName(active).slice(0, 2).toUpperCase()
                   )}
