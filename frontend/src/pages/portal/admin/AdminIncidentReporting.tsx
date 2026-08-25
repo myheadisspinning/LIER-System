@@ -5,6 +5,7 @@ import { latLngBounds, type Marker as LeafletMarker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { supabase } from '../../../supabaseClient';
 import Toast from '../../../components/Toast';
+import IncidentDetailModal from '../../../components/IncidentDetailModal';
 import { BARANGAY_HALL_CENTER } from '../../../lib/geo';
 import { PRIORITY_COLORS, pinIconFor } from '../../../lib/mapPins';
 import Pagination from '../../../components/Pagination';
@@ -146,6 +147,7 @@ export default function AdminIncidentReporting() {
   const [reports, setReports] = useState<ReportRow[]>([]);
   const [reporterMap, setReporterMap] = useState<Record<string, ReporterProfile>>({});
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [modalReportId, setModalReportId] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [loading, setLoading] = useState(true);
@@ -564,7 +566,7 @@ export default function AdminIncidentReporting() {
                     <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${INCIDENT_STATUS_STYLES[r.incident_status] ?? 'bg-slate-100 text-slate-600'}`}>{r.incident_status}</span></td>
                     <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${STATUS_STYLES[r.status] ?? 'bg-slate-100 text-slate-600'}`}>{r.status}</span></td>
                     <td className="py-3 px-4 text-right whitespace-nowrap">
-                      <button type="button" className="text-on-surface-variant hover:text-secondary mr-2" onClick={() => selectReport(r.id)} aria-label="View incident"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
+                      <button type="button" className="text-on-surface-variant hover:text-secondary mr-2" onClick={(e) => { e.stopPropagation(); setModalReportId(r.id); }} aria-label="View incident"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
                       <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="More options"><span className="material-symbols-outlined text-[18px]">more_vert</span></button>
                     </td>
                   </tr>
@@ -588,6 +590,7 @@ export default function AdminIncidentReporting() {
         />
       </div>
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
+      <IncidentDetailModal reportId={modalReportId} onClose={() => setModalReportId(null)} />
     </div>
   );
 }
