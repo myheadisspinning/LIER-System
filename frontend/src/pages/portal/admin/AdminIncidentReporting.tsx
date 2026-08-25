@@ -317,6 +317,7 @@ export default function AdminIncidentReporting() {
               <div className="p-4 border-b border-border-subtle flex justify-between items-center shrink-0">
                 <h3 className="font-headline-md text-headline-md font-bold text-on-surface">{selected.report_no ?? 'Report'}</h3>
                 <div className="flex gap-2">
+                  <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="View full details" onClick={() => setModalReportId(selected.id)}><span className="material-symbols-outlined">visibility</span></button>
                   <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="Print"><span className="material-symbols-outlined">print</span></button>
                   <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
                 </div>
