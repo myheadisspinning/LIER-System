@@ -361,7 +361,7 @@ export default function AdminTanodRoster() {
                                     onClick={() => openStatus(u)}
                                     className="w-full flex items-center gap-2 px-3 py-2 text-left text-sm text-on-surface hover:bg-surface-variant transition-colors"
                                   >
-                                    <span className="material-symbols-outlined text-[16px]">status</span>Status
+                                    <span className="material-symbols-outlined text-[16px]">tune</span>Status
                                   </button>
                                   <button
                                     type="button" 

@@ -249,172 +249,70 @@ export default function AdminIncidentReporting() {
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Incident Locations Map */}
-      <section className="bg-white rounded-xl border border-border-subtle shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-border-subtle flex items-center justify-between flex-wrap gap-3">
-          <div className="flex items-center gap-3">
-            <span className="material-symbols-outlined text-secondary">map</span>
-            <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Incident Locations Map</h3>
-            <span className="bg-secondary/10 text-secondary px-2 py-0.5 rounded-full text-[11px] font-bold">{mapPins.length} PIN{mapPins.length === 1 ? '' : 'S'}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            {Object.entries(PRIORITY_COLORS).filter(([k]) => k !== 'LOW').map(([p, c]) => (
-              <span key={p} className="flex items-center gap-1.5 text-[11px] font-semibold text-on-surface-variant">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ background: c }}></span>
-                {p}
-              </span>
-            ))}
-            <button type="button" onClick={() => setTile((t) => (t === 'street' ? 'satellite' : 'street'))} className="flex items-center gap-1 px-2 py-1 bg-surface-container-low border border-border-subtle rounded hover:bg-surface-container-high transition-colors text-[11px]">
-              <span className="material-symbols-outlined text-[14px]">layers</span>
-              {tile === 'street' ? 'Satellite' : 'Street'}
-            </button>
-            <button type="button" onClick={() => setRecenterTrigger((t) => t + 1)} className="flex items-center gap-1 px-2 py-1 bg-surface-container-low border border-border-subtle rounded hover:bg-surface-container-high transition-colors text-[11px]">
-              <span className="material-symbols-outlined text-[14px]">pin_drop</span>
-              Barangay Hall
-            </button>
-          </div>
-        </div>
-        <div className="relative h-[420px] bg-slate-100 overflow-hidden isolate">
-          <MapContainer center={BARANGAY_HALL_CENTER} zoom={13} className="w-full h-full" scrollWheelZoom>
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {tile === 'satellite' && (
-              <TileLayer attribution="Tiles &copy; Esri" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" opacity={0.9} />
-            )}
-            <PinsLayer reports={mapPins} selectedId={selectedId} onSelect={selectReport} />
-            <RecenterControl trigger={recenterTrigger} />
-          </MapContainer>
-          {mapPins.length === 0 && !loading && (
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="bg-white/90 border border-border-subtle rounded-lg px-5 py-3 text-sm text-on-surface-variant shadow-sm">No pinned incident locations for the current filters.</div>
+      {/* Map + Detail Panel */}
+      <div className="flex flex-col xl:flex-row gap-4 h-[500px]">
+        <section className="flex-1 flex flex-col bg-white rounded-xl border border-border-subtle shadow-sm overflow-hidden h-full">
+          <div className="p-4 border-b border-border-subtle flex items-center justify-between flex-wrap gap-3">
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-secondary">map</span>
+              <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Incident Locations Map</h3>
+              <span className="bg-secondary/10 text-secondary px-2 py-0.5 rounded-full text-[11px] font-bold">{mapPins.length} PIN{mapPins.length === 1 ? '' : 'S'}</span>
             </div>
-          )}
-        </div>
-      </section>
-
-      {/* Action Bar — connected to the incidents table below */}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="flex items-center gap-3 flex-1 flex-wrap">
-          <div className="relative w-64">
-            <span className="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-[20px]">search</span>
-            <input
-              className="w-full bg-surface-container-low border border-border-subtle text-on-surface rounded-md pl-10 pr-3 py-2 font-body-sm text-body-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary"
-              placeholder="Search Incident ID..."
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+            <div className="flex items-center gap-3">
+              {Object.entries(PRIORITY_COLORS).filter(([k]) => k !== 'LOW').map(([p, c]) => (
+                <span key={p} className="flex items-center gap-1.5 text-[11px] font-semibold text-on-surface-variant">
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: c }}></span>
+                  {p}
+                </span>
+              ))}
+              <button type="button" onClick={() => setTile((t) => (t === 'street' ? 'satellite' : 'street'))} className="flex items-center gap-1 px-2 py-1 bg-surface-container-low border border-border-subtle rounded hover:bg-surface-container-high transition-colors text-[11px]">
+                <span className="material-symbols-outlined text-[14px]">layers</span>
+                {tile === 'street' ? 'Satellite' : 'Street'}
+              </button>
+              <button type="button" onClick={() => setRecenterTrigger((t) => t + 1)} className="flex items-center gap-1 px-2 py-1 bg-surface-container-low border border-border-subtle rounded hover:bg-surface-container-high transition-colors text-[11px]">
+                <span className="material-symbols-outlined text-[14px]">pin_drop</span>
+                Barangay Hall
+              </button>
+            </div>
           </div>
-          <select
-            className="bg-surface-container-low border border-border-subtle text-on-surface rounded-md px-3 py-2 font-body-sm text-body-sm focus:outline-none focus:border-secondary"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option>All</option>
-            {STATUS_OPTIONS.map((s) => (
-              <option key={s}>{s}</option>
-            ))}
-          </select>
-          <span className="text-xs text-on-surface-variant font-medium">Showing {filtered.length} of {reports.length}</span>
-        </div>
-        <div className="flex items-center gap-3 shrink-0">
-          <button
-            type="button"
-            onClick={() => navigate('/admin/incident-archive')}
-            className="bg-surface-container-low hover:bg-surface-container-high border border-border-subtle text-on-surface font-label-md text-label-md py-2 px-4 rounded-md flex items-center transition-colors"
-          >
-            <span className="material-symbols-outlined mr-2 text-[18px]">archive</span>
-            Open Archive
-          </button>
-          <button type="button" className="bg-secondary hover:bg-secondary/90 text-on-secondary font-label-md text-label-md py-2 px-4 rounded-md flex items-center transition-colors">
-            <span className="material-symbols-outlined mr-2 text-[18px]">add</span>
-            Log New Incident
-          </button>
-        </div>
-      </div>
-
-      {/* Split View Content */}
-      <div className="flex flex-col xl:flex-row overflow-hidden rounded-xl border border-border-subtle bg-white shadow-sm">
-        {/* Left: Data Table (70%) */}
-        <div className="xl:w-[70%] flex flex-col border-b xl:border-b-0 xl:border-r border-border-subtle overflow-hidden">
-          <div className="flex-1 overflow-x-auto max-h-[560px]">
-            {loading ? (
-              <div className="p-12 text-center text-sm text-on-surface-variant">Loading incidents…</div>
-            ) : error ? (
-              <div className="p-12 text-center text-sm text-error-red">{error}</div>
-            ) : filtered.length === 0 ? (
-              <div className="p-12 text-center text-sm text-on-surface-variant">No incidents found for the current filters.</div>
-            ) : (
-              <table className="w-full text-left border-collapse">
-                <thead className="sticky top-0 bg-surface z-10 shadow-sm border-b border-border-subtle">
-                  <tr>
-                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Case ID</th>
-                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Timestamp</th>
-                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Category</th>
-                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Location</th>
-                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Severity</th>
-                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Responder</th>
-                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Incident</th>
-                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Status</th>
-                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border-subtle font-body-sm text-body-sm">
-                  {filtered.map((r) => (
-                    <tr
-                      key={r.id}
-                      id={`report-row-${r.id}`}
-                      onClick={() => selectReport(r.id)}
-                      className={`hover:bg-slate-50 transition-colors cursor-pointer ${selected?.id === r.id ? 'bg-blue-50/40 border-l-4 border-secondary' : ''}`}
-                    >
-                      <td className="py-3 px-4 font-medium text-secondary">{r.report_no ?? '—'}</td>
-                      <td className="py-3 px-4 text-on-surface-variant whitespace-nowrap">{new Date(r.incident_time ?? r.created_at).toLocaleString('en-PH', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</td>
-                      <td className="py-3 px-4 text-on-surface">{r.category}</td>
-                      <td className="py-3 px-4 text-on-surface-variant max-w-[200px] truncate">{r.address ?? 'No address'}</td>
-                      <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${PRIORITY_STYLES[r.priority] ?? 'bg-slate-100 text-slate-600'}`}>{r.priority}</span></td>
-                      <td className="py-3 px-4 text-on-surface">{r.dispatch_unit_name ?? '—'}</td>
-                      <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${INCIDENT_STATUS_STYLES[r.incident_status] ?? 'bg-slate-100 text-slate-600'}`}>{r.incident_status}</span></td>
-                      <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${STATUS_STYLES[r.status] ?? 'bg-slate-100 text-slate-600'}`}>{r.status}</span></td>
-                      <td className="py-3 px-4 text-right whitespace-nowrap">
-                        <button type="button" className="text-on-surface-variant hover:text-secondary mr-2" onClick={() => selectReport(r.id)} aria-label="View incident"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
-                        <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="More options"><span className="material-symbols-outlined text-[18px]">more_vert</span></button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          <div className="relative flex-1 bg-slate-100 overflow-hidden isolate">
+            <MapContainer center={BARANGAY_HALL_CENTER} zoom={13} className="w-full h-full absolute inset-0" scrollWheelZoom>
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {tile === 'satellite' && (
+                <TileLayer attribution="Tiles &copy; Esri" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" opacity={0.9} />
+              )}
+              <PinsLayer reports={mapPins} selectedId={selectedId} onSelect={selectReport} />
+              <RecenterControl trigger={recenterTrigger} />
+            </MapContainer>
+            {mapPins.length === 0 && !loading && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="bg-white/90 border border-border-subtle rounded-lg px-5 py-3 text-sm text-on-surface-variant shadow-sm">No pinned incident locations for the current filters.</div>
+              </div>
             )}
           </div>
-          <div className="p-3 bg-surface border-t border-border-subtle flex justify-between items-center text-xs text-on-surface-variant">
-            <span>Showing {filtered.length} of {reports.length} Incidents</span>
-          </div>
-        </div>
+        </section>
 
-        {/* Right: Detail Side Panel (30%) */}
-        <div className="xl:w-[30%] bg-surface flex flex-col overflow-hidden">
+        <div className="xl:w-[35%] bg-white rounded-xl border border-border-subtle shadow-sm flex flex-col overflow-hidden h-full">
           {selected ? (
             <>
-              <div className="p-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface z-10">
+              <div className="p-4 border-b border-border-subtle flex justify-between items-center shrink-0">
                 <h3 className="font-headline-md text-headline-md font-bold text-on-surface">{selected.report_no ?? 'Report'}</h3>
                 <div className="flex gap-2">
                   <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="Print"><span className="material-symbols-outlined">print</span></button>
                   <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
                 </div>
               </div>
-              <div className="flex-1 p-6 space-y-6 overflow-y-auto max-h-[720px]">
-                <div className="bg-warning-amber/10 border border-warning-amber/30 p-4 rounded-lg flex items-start">
-                  <span className="material-symbols-outlined text-warning-amber mr-3 mt-0.5">local_shipping</span>
-                  <div>
-                    <p className="font-label-sm text-label-sm text-warning-amber uppercase tracking-wider mb-1">Dispatch Status</p>
-                    <p className="font-body-md text-body-md text-on-surface font-medium">{selected.ai_dispatch ?? 'Awaiting manual assignment.'}</p>
-                    {selected.dispatch_unit_name && <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">Assigned Unit: {selected.dispatch_unit_name}</p>}
-                  </div>
+              <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+                <div className="bg-surface-container-low border border-border-subtle p-3 rounded-lg flex items-center gap-2">
+                  <span className="material-symbols-outlined text-secondary text-[18px]">local_shipping</span>
+                  <p className="text-sm text-on-surface">Assigned Unit: <span className="font-medium">{selected.dispatch_unit_name ?? 'None'}</span></p>
                 </div>
                 <div>
-                  <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Incident Details</h4>
-                  <div className="bg-surface-container-low rounded-lg p-4 border border-border-subtle space-y-3">
+                  <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-2">Incident Details</h4>
+                  <div className="bg-surface-container-low rounded-lg p-3 border border-border-subtle space-y-2">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <p className="text-xs text-on-surface-variant">Category</p>
@@ -437,45 +335,49 @@ export default function AdminIncidentReporting() {
                         <p className="text-sm font-semibold"><span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${INCIDENT_STATUS_STYLES[selected.incident_status] ?? 'bg-slate-100 text-slate-600'}`}>{selected.incident_status}</span></p>
                       </div>
                     </div>
-                    {selected.description && (
-                      <div className="pt-2">
-                        <p className="text-xs text-on-surface-variant mb-1">Description</p>
-                        <p className="text-sm text-on-surface leading-relaxed">{selected.description}</p>
-                      </div>
-                    )}
-                    {selected.additional_context && (
-                      <div className="pt-2">
-                        <p className="text-xs text-on-surface-variant mb-1">Additional Context</p>
-                        <p className="text-sm text-on-surface leading-relaxed">{selected.additional_context}</p>
-                      </div>
-                    )}
-                    {(selected.ai_actions ?? []).length > 0 && (
-                      <div className="pt-2">
-                        <p className="text-xs text-on-surface-variant mb-1">Recommended Dispatch Actions</p>
-                        <ul className="space-y-1">
-                          {selected.ai_actions.map((a) => (
-                            <li key={a} className="flex items-start gap-1.5 text-sm text-on-surface">
-                              <span className="material-symbols-outlined text-[14px] text-success-green">check_circle</span>
-                              {a}
-                            </li>
-                          ))}
-                        </ul>
+                    {(selected.description || selected.additional_context || (selected.ai_actions ?? []).length > 0) && (
+                      <div className="pt-1 space-y-2">
+                        {selected.description && (
+                          <div>
+                            <p className="text-xs text-on-surface-variant mb-1">Description</p>
+                            <p className="text-sm text-on-surface leading-relaxed max-h-[80px] overflow-y-auto">{selected.description}</p>
+                          </div>
+                        )}
+                        {selected.additional_context && (
+                          <div>
+                            <p className="text-xs text-on-surface-variant mb-1">Additional Context</p>
+                            <p className="text-sm text-on-surface leading-relaxed max-h-[80px] overflow-y-auto">{selected.additional_context}</p>
+                          </div>
+                        )}
+                        {(selected.ai_actions ?? []).length > 0 && (
+                          <div>
+                            <p className="text-xs text-on-surface-variant mb-1">Recommended Dispatch Actions</p>
+                            <ul className="grid grid-cols-2 gap-2">
+                              {selected.ai_actions.map((a) => (
+                                <li key={a} className="flex items-start gap-1.5 text-sm text-on-surface">
+                                  <span className="material-symbols-outlined text-[14px] text-success-green">check_circle</span>
+                                  {a}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
                 </div>
                 {selected.anonymous ? (
                   <div>
-                    <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Reporter Info</h4>
-                    <div className="bg-surface-container-low rounded-lg border border-border-subtle p-4 flex items-center gap-2 text-sm text-on-surface-variant">
+                    <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-2">Reporter Info</h4>
+                    <div className="bg-surface-container-low rounded-lg border border-border-subtle p-3 flex items-center gap-2 text-sm text-on-surface-variant min-h-[120px]">
                       <span className="material-symbols-outlined text-[18px]">visibility_off</span>
                       Anonymous report — reporter identity withheld.
                     </div>
                   </div>
                 ) : selected.user_id && reporterMap[selected.user_id] && (
                   <div>
-                    <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Reporter Info</h4>
-                    <div className="bg-surface-container-low rounded-lg p-4 border border-border-subtle space-y-3">
+                    <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-2">Reporter Info</h4>
+                    <div className="bg-surface-container-low rounded-lg p-3 border border-border-subtle space-y-2 min-h-[120px]">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <p className="text-xs text-on-surface-variant">Name</p>
@@ -516,9 +418,9 @@ export default function AdminIncidentReporting() {
                   </div>
                 )}
                 <div>
-                  <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Evidence ({selected.evidence?.length ?? 0})</h4>
+                  <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-2">Evidence ({selected.evidence?.length ?? 0})</h4>
                   {(selected.evidence ?? []).length > 0 ? (
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-4 gap-2">
                       {selected.evidence?.map((ev) =>
                         ev.type.startsWith('image/') ? (
                           <a key={ev.url} href={ev.url} target="_blank" rel="noreferrer" className="aspect-square bg-surface-container-highest rounded-md border border-border-subtle overflow-hidden group relative block">
@@ -540,7 +442,7 @@ export default function AdminIncidentReporting() {
                   )}
                 </div>
               </div>
-              <div className="p-4 border-t border-border-subtle bg-surface space-y-2 sticky bottom-0">
+              <div className="p-3 border-t border-border-subtle bg-surface space-y-2 shrink-0">
                 <button
                   type="button"
                   onClick={resolveReport}
@@ -563,6 +465,102 @@ export default function AdminIncidentReporting() {
           ) : (
             <div className="p-12 text-center text-sm text-on-surface-variant">Select an incident to view details.</div>
           )}
+        </div>
+      </div>
+
+      {/* Action Bar */}
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex items-center gap-3 flex-1 flex-wrap">
+          <div className="relative w-64">
+            <span className="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-[20px]">search</span>
+            <input
+              className="w-full bg-surface-container-low border border-border-subtle text-on-surface rounded-md pl-10 pr-3 py-2 font-body-sm text-body-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary"
+              placeholder="Search Incident ID..."
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+          <select
+            className="bg-surface-container-low border border-border-subtle text-on-surface rounded-md px-3 py-2 font-body-sm text-body-sm focus:outline-none focus:border-secondary"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option>All</option>
+            {STATUS_OPTIONS.map((s) => (
+              <option key={s}>{s}</option>
+            ))}
+          </select>
+          <span className="text-xs text-on-surface-variant font-medium">Showing {filtered.length} of {reports.length}</span>
+        </div>
+        <div className="flex items-center gap-3 shrink-0">
+          <button
+            type="button"
+            onClick={() => navigate('/admin/incident-archive')}
+            className="bg-surface-container-low hover:bg-surface-container-high border border-border-subtle text-on-surface font-label-md text-label-md py-2 px-4 rounded-md flex items-center transition-colors"
+          >
+            <span className="material-symbols-outlined mr-2 text-[18px]">archive</span>
+            Open Archive
+          </button>
+          <button type="button" className="bg-secondary hover:bg-secondary/90 text-on-secondary font-label-md text-label-md py-2 px-4 rounded-md flex items-center transition-colors">
+            <span className="material-symbols-outlined mr-2 text-[18px]">add</span>
+            Log New Incident
+          </button>
+        </div>
+      </div>
+
+      {/* Incidents Table */}
+      <div className="overflow-hidden rounded-xl border border-border-subtle bg-white shadow-sm">
+        <div className="overflow-x-auto max-h-[40vh]">
+          {loading ? (
+            <div className="p-12 text-center text-sm text-on-surface-variant">Loading incidents…</div>
+          ) : error ? (
+            <div className="p-12 text-center text-sm text-error-red">{error}</div>
+          ) : filtered.length === 0 ? (
+            <div className="p-12 text-center text-sm text-on-surface-variant">No incidents found for the current filters.</div>
+          ) : (
+            <table className="w-full text-left border-collapse">
+              <thead className="sticky top-0 bg-surface z-10 shadow-sm border-b border-border-subtle">
+                <tr>
+                  <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Case ID</th>
+                  <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Timestamp</th>
+                  <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Category</th>
+                  <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Location</th>
+                  <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Severity</th>
+                  <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Responder</th>
+                  <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Incident</th>
+                  <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Status</th>
+                  <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border-subtle font-body-sm text-body-sm">
+                {filtered.map((r) => (
+                  <tr
+                    key={r.id}
+                    id={`report-row-${r.id}`}
+                    onClick={() => selectReport(r.id)}
+                    className={`hover:bg-slate-50 transition-colors cursor-pointer ${selected?.id === r.id ? 'bg-blue-50/40 border-l-4 border-secondary' : ''}`}
+                  >
+                    <td className="py-3 px-4 font-medium text-secondary">{r.report_no ?? '—'}</td>
+                    <td className="py-3 px-4 text-on-surface-variant whitespace-nowrap">{new Date(r.incident_time ?? r.created_at).toLocaleString('en-PH', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</td>
+                    <td className="py-3 px-4 text-on-surface">{r.category}</td>
+                    <td className="py-3 px-4 text-on-surface-variant max-w-[200px] truncate">{r.address ?? 'No address'}</td>
+                    <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${PRIORITY_STYLES[r.priority] ?? 'bg-slate-100 text-slate-600'}`}>{r.priority}</span></td>
+                    <td className="py-3 px-4 text-on-surface">{r.dispatch_unit_name ?? '—'}</td>
+                    <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${INCIDENT_STATUS_STYLES[r.incident_status] ?? 'bg-slate-100 text-slate-600'}`}>{r.incident_status}</span></td>
+                    <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${STATUS_STYLES[r.status] ?? 'bg-slate-100 text-slate-600'}`}>{r.status}</span></td>
+                    <td className="py-3 px-4 text-right whitespace-nowrap">
+                      <button type="button" className="text-on-surface-variant hover:text-secondary mr-2" onClick={() => selectReport(r.id)} aria-label="View incident"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
+                      <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="More options"><span className="material-symbols-outlined text-[18px]">more_vert</span></button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+        <div className="p-3 bg-surface border-t border-border-subtle flex justify-between items-center text-xs text-on-surface-variant">
+          <span>Showing {filtered.length} of {reports.length} Incidents</span>
         </div>
       </div>
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}

@@ -175,7 +175,7 @@ export default function Services() {
           </div>
         </section>
 
-        <section ref={(el) => { sectionRefs.current[1] = el; }} className="px-4 md:px-margin-desktop py-12 md:py-xl w-full opacity-0 translate-y-10 transition-all duration-700">
+        <section ref={(el) => { sectionRefs.current[0] = el; }} className="px-4 md:px-margin-desktop py-12 md:py-xl w-full opacity-0 translate-y-10 transition-all duration-700">
           <div className="qc-services-banner rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row items-stretch w-full bg-on-background relative">
             <div className="absolute -right-20 -top-20 w-64 h-64 bg-secondary rounded-full blur-[100px] opacity-20"></div>
             <div className="flex-1 p-8 md:p-lg flex flex-col justify-center items-center text-center w-full relative z-10">
@@ -199,7 +199,7 @@ export default function Services() {
           </div>
         </section>
 
-        <section ref={(el) => { sectionRefs.current[2] = el; }} className="py-12 md:py-xl px-4 md:px-margin-desktop bg-surface-container-low/30 w-full flex flex-col opacity-0 translate-y-10 transition-all duration-700">
+        <section ref={(el) => { sectionRefs.current[1] = el; }} className="py-12 md:py-xl px-4 md:px-margin-desktop bg-surface-container-low/30 w-full flex flex-col opacity-0 translate-y-10 transition-all duration-700">
           <div className="max-w-3xl mx-auto text-center mb-lg w-full">
             <h2 className="font-headline-lg text-2xl md:text-headline-lg text-primary mb-sm">Frequently Asked Questions</h2>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full mb-md"></div>

@@ -26,7 +26,7 @@ type Msg = {
   created_at: string;
 };
 
-type ResidentProfile = { id: string; fullname: string | null; phone: string | null };
+type ResidentProfile = { id: string; fullname: string | null; phone: string | null; avatar_url: string | null };
 
 const STATUS_BADGE: Record<string, string> = {
   Open: 'bg-error-red/10 text-error-red',
@@ -117,7 +117,7 @@ export default function AdminContactsInbox() {
       setProfiles({});
       return;
     }
-    const res = await supabase.from('public_users').select('id, fullname, phone').in('id', ids);
+    const res = await supabase.from('public_users').select('id, fullname, phone, avatar_url').in('id', ids);
     const map: Record<string, ResidentProfile> = {};
     for (const p of (res.data ?? []) as ResidentProfile[]) map[p.id] = p;
     setProfiles(map);
@@ -329,10 +329,14 @@ export default function AdminContactsInbox() {
                 }`}
               >
                 <div className="flex gap-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0 ${
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0 overflow-hidden ${
                     i.status === 'Open' ? 'bg-error-red' : i.status === 'In Progress' ? 'bg-warning-amber' : 'bg-slate-400'
                   }`}>
-                    {residentName(i).slice(0, 2).toUpperCase()}
+                    {i.created_by && profiles[i.created_by]?.avatar_url ? (
+                      <img src={profiles[i.created_by].avatar_url} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      residentName(i).slice(0, 2).toUpperCase()
+                    )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex justify-between items-start mb-1">
@@ -368,10 +372,14 @@ export default function AdminContactsInbox() {
                 >
                   <span className="material-symbols-outlined">arrow_back</span>
                 </button>
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm overflow-hidden ${
                   active.status === 'Open' ? 'bg-error-red' : active.status === 'In Progress' ? 'bg-warning-amber' : 'bg-slate-400'
                 }`}>
-                  {residentName(active).slice(0, 2).toUpperCase()}
+                  {active.created_by && profiles[active.created_by]?.avatar_url ? (
+                    <img src={profiles[active.created_by].avatar_url} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    residentName(active).slice(0, 2).toUpperCase()
+                  )}
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
@@ -484,7 +492,7 @@ export default function AdminContactsInbox() {
                 </div>
                 <div className="flex items-end gap-2 bg-surface-container rounded-full border border-border-subtle px-3 py-2 focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary transition-all shadow-sm">
                   <textarea
-                    className="w-full bg-transparent border-none resize-none py-1 font-body-sm text-body-sm focus:ring-0 text-on-surface max-h-32 overflow-y-auto placeholder:text-outline"
+                    className="w-full bg-transparent border-none outline-none resize-none py-1 font-body-sm text-body-sm focus:ring-0 text-on-surface max-h-32 overflow-y-auto placeholder:text-outline"
                     placeholder="Type a response..."
                     rows={1}
                     style={{ minHeight: 28 }}

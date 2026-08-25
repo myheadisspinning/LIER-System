@@ -11,6 +11,7 @@ type Broadcast = {
   type: string;
   audience: string;
   status: string;
+  image_url: string | null;
   scheduled_at: string | null;
   sent_at: string | null;
   created_at: string;
@@ -41,8 +42,9 @@ export default function AdminStatusNotifications() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Broadcast | null>(null);
+  const [viewingBroadcast, setViewingBroadcast] = useState<Broadcast | null>(null);
 
-  useScrollLock(composerOpen || confirmDelete != null);
+  useScrollLock(composerOpen || confirmDelete != null || viewingBroadcast != null);
 
   const fetchAll = async () => {
     const res = await supabase.from('broadcasts').select('*').order('created_at', { ascending: false }).limit(100);
@@ -129,10 +131,6 @@ export default function AdminStatusNotifications() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-end">
-        <div>
-          <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface">Status Notifications</h2>
-          <p className="font-body-md text-body-md text-on-surface-variant">Compose and publish alerts and announcements shown to residents in the Community Alerts feed.</p>
-        </div>
         <button type="button" onClick={() => setComposerOpen(true)} className="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary rounded-lg text-label-md font-medium hover:bg-secondary/90 transition-colors">
           <span className="material-symbols-outlined text-[18px]">add_alert</span>
           Create New Broadcast Alert
@@ -184,7 +182,15 @@ export default function AdminStatusNotifications() {
                     {b.status === 'Sent' ? `Sent ${fmtDate(b.sent_at, 'short')}` : b.status === 'Scheduled' ? `Scheduled ${fmtDate(b.scheduled_at, 'short')}` : `Draft · created ${fmtDate(b.created_at, 'short')}`} · {b.audience}
                   </p>
                 </div>
+                {b.image_url && (
+                  <div className="w-16 h-16 rounded-lg overflow-hidden border border-border-subtle shrink-0">
+                    <img src={b.image_url} alt={b.title} className="w-full h-full object-cover" />
+                  </div>
+                )}
                 <div className="flex items-center gap-2">
+                  <button type="button" onClick={() => setViewingBroadcast(b)} className="px-3 py-1.5 border border-border-subtle rounded-md text-xs font-semibold text-on-surface hover:bg-surface-container-low transition-colors">
+                    View
+                  </button>
                   {b.status !== 'Sent' && (
                     <button type="button" onClick={() => publishNow(b)} className="px-3 py-1.5 bg-success-green text-white rounded-md text-xs font-semibold hover:bg-success-green/90 transition-colors">
                       Send Now
@@ -333,6 +339,64 @@ export default function AdminStatusNotifications() {
               <button type="button" onClick={async () => { await remove(confirmDelete); setConfirmDelete(null); }} className="px-4 py-2 bg-error-red text-white rounded-lg text-sm font-medium hover:bg-error-red/90 transition-colors">
                 Delete
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {viewingBroadcast && (
+        <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10">
+              <div className="flex items-center gap-3">
+                <span className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${TYPE_COLOR[viewingBroadcast.type]}`}>
+                  <span className="material-symbols-outlined text-[20px]">
+                    {viewingBroadcast.type === 'Alert' || viewingBroadcast.type === 'Emergency' ? 'campaign' : viewingBroadcast.type === 'Weather' ? 'cloud' : 'notifications'}
+                  </span>
+                </span>
+                <div>
+                  <h3 className="font-headline-md text-headline-md font-bold text-on-surface">{viewingBroadcast.title}</h3>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${TYPE_COLOR[viewingBroadcast.type]}`}>{viewingBroadcast.type}</span>
+                    <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${STATUS_BADGE[viewingBroadcast.status]}`}>{viewingBroadcast.status}</span>
+                    <span className="text-xs text-on-surface-variant">{viewingBroadcast.audience}</span>
+                  </div>
+                </div>
+              </div>
+              <button type="button" onClick={() => setViewingBroadcast(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              {viewingBroadcast.image_url && (
+                <div className="rounded-lg overflow-hidden border border-border-subtle">
+                  <img src={viewingBroadcast.image_url} alt={viewingBroadcast.title} className="w-full h-auto max-h-96 object-cover" />
+                </div>
+              )}
+              <div>
+                <h4 className="text-xs text-on-surface-variant uppercase tracking-wider font-bold mb-2">Message</h4>
+                <p className="text-body-md text-on-surface whitespace-pre-wrap">{viewingBroadcast.message}</p>
+              </div>
+              <div className="pt-4 border-t border-border-subtle">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-on-surface-variant block text-xs uppercase mb-1">Created</span>
+                    <span className="font-medium text-on-surface">{fmtDate(viewingBroadcast.created_at, 'short')}</span>
+                  </div>
+                  {viewingBroadcast.sent_at && (
+                    <div>
+                      <span className="text-on-surface-variant block text-xs uppercase mb-1">Sent</span>
+                      <span className="font-medium text-on-surface">{fmtDate(viewingBroadcast.sent_at, 'short')}</span>
+                    </div>
+                  )}
+                  {viewingBroadcast.scheduled_at && (
+                    <div>
+                      <span className="text-on-surface-variant block text-xs uppercase mb-1">Scheduled</span>
+                      <span className="font-medium text-on-surface">{fmtDate(viewingBroadcast.scheduled_at, 'short')}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>

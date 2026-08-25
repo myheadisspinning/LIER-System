@@ -13,11 +13,25 @@ type GalleryItem = {
   created_at: string;
 };
 
+type SectionImage = {
+  id: string;
+  section: string;
+  slot_key: string;
+  label: string;
+  image_url: string;
+  updated_at: string;
+};
+
 const EMPTY = { title: '', image_url: '', sort_order: 0, visible: true };
 
+type Tab = 'carousel' | 'sections';
+
 export default function AdminCommunityGallery() {
+  const [tab, setTab] = useState<Tab>('carousel');
   const [items, setItems] = useState<GalleryItem[]>([]);
+  const [sectionImages, setSectionImages] = useState<SectionImage[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingSections, setLoadingSections] = useState(true);
   const [editing, setEditing] = useState<GalleryItem | null>(null);
   const [creating, setCreating] = useState(false);
   const [form, setForm] = useState(EMPTY);
@@ -26,12 +40,21 @@ export default function AdminCommunityGallery() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<GalleryItem | null>(null);
+  const [editingSection, setEditingSection] = useState<SectionImage | null>(null);
+  const [sectionFile, setSectionFile] = useState<File | null>(null);
+  const [sectionForm, setSectionForm] = useState<{ label: string; image_url: string }>({ label: '', image_url: '' });
+  const [savingSection, setSavingSection] = useState(false);
 
-  useScrollLock(creating || editing != null || confirmDelete != null);
+  useScrollLock(creating || editing != null || confirmDelete != null || editingSection != null);
 
   const fetchAll = async () => {
     const res = await supabase.from('community_gallery').select('*').order('sort_order');
     return (res.data ?? []) as GalleryItem[];
+  };
+
+  const fetchSectionImages = async () => {
+    const res = await supabase.from('home_section_images').select('*').order('section', { ascending: true }).order('slot_key');
+    return (res.data ?? []) as SectionImage[];
   };
 
   useEffect(() => {
@@ -40,6 +63,15 @@ export default function AdminCommunityGallery() {
       setLoading(false);
     })();
   }, []);
+
+  useEffect(() => {
+    if (tab === 'sections') {
+      void (async () => {
+        setSectionImages(await fetchSectionImages());
+        setLoadingSections(false);
+      })();
+    }
+  }, [tab]);
 
   const startCreate = () => {
     setForm({ ...EMPTY, sort_order: items.length + 1 });
@@ -59,6 +91,14 @@ export default function AdminCommunityGallery() {
     if (!imageFile) return form.image_url || null;
     const path = `gallery/${crypto.randomUUID()}-${imageFile.name.replace(/[^\w.-]+/g, '_')}`;
     const { error } = await supabase.storage.from('community_gallery').upload(path, imageFile, { cacheControl: '3600', contentType: imageFile.type || 'image/jpeg' });
+    if (error) throw new Error(`Image upload failed: ${error.message}`);
+    const { data } = supabase.storage.from('community_gallery').getPublicUrl(path);
+    return data.publicUrl;
+  };
+
+  const uploadSectionImage = async (file: File): Promise<string> => {
+    const path = `sections/${crypto.randomUUID()}-${file.name.replace(/[^\w.-]+/g, '_')}`;
+    const { error } = await supabase.storage.from('community_gallery').upload(path, file, { cacheControl: '3600', contentType: file.type || 'image/jpeg' });
     if (error) throw new Error(`Image upload failed: ${error.message}`);
     const { data } = supabase.storage.from('community_gallery').getPublicUrl(path);
     return data.publicUrl;
@@ -96,6 +136,29 @@ export default function AdminCommunityGallery() {
     }
   };
 
+  const saveSectionImage = async () => {
+    if (!editingSection) return;
+    setSavingSection(true);
+    try {
+      let image_url = sectionForm.image_url;
+      if (sectionFile) {
+        image_url = await uploadSectionImage(sectionFile);
+      }
+      const { error } = await supabase.from('home_section_images').update({ label: sectionForm.label, image_url, updated_at: new Date().toISOString() }).eq('id', editingSection.id);
+      if (error) throw new Error(error.message);
+      await logAudit('Update section image', `Updated "${sectionForm.label}" image.`);
+      setToast({ type: 'success', message: 'Section updated.' });
+      setEditingSection(null);
+      setSectionFile(null);
+      setSectionForm({ label: '', image_url: '' });
+      setSectionImages(await fetchSectionImages());
+    } catch (e) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : 'Save failed.' });
+    } finally {
+      setSavingSection(false);
+    }
+  };
+
   const toggleVisible = async (item: GalleryItem) => {
     setBusyId(item.id);
     const { error } = await supabase.from('community_gallery').update({ visible: !item.visible }).eq('id', item.id);
@@ -127,72 +190,183 @@ export default function AdminCommunityGallery() {
     setImageFile(null);
   };
 
+  const cancelSectionEdit = () => {
+    setEditingSection(null);
+    setSectionFile(null);
+    setSectionForm({ label: '', image_url: '' });
+  };
+
+  const servicesImages = sectionImages.filter((img) => img.section === 'services');
+  const guidesImages = sectionImages.filter((img) => img.section === 'guides');
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="font-headline-md text-headline-md text-on-surface">Community Gallery</h2>
-          <p className="font-body-sm text-on-surface-variant">Manage images shown in the homepage carousel.</p>
+          <p className="font-body-sm text-on-surface-variant">Manage homepage carousel and section images.</p>
         </div>
+      </div>
+
+      <div className="flex gap-1 bg-surface-container-low p-1 rounded-lg w-fit">
         <button
           type="button"
-          onClick={startCreate}
-          className="bg-secondary hover:bg-secondary/90 text-on-secondary px-5 py-2 rounded-lg font-label-md text-label-md flex items-center gap-2 shadow-sm transition-colors"
+          onClick={() => setTab('carousel')}
+          className={`px-4 py-2 rounded-md font-label-sm text-label-sm transition-colors ${
+            tab === 'carousel' ? 'bg-secondary text-on-secondary shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-bg'
+          }`}
         >
-          <span className="material-symbols-outlined text-[18px]">add_photo_alternate</span>
-          Add Image
+          <span className="material-symbols-outlined text-[16px] mr-1.5 align-middle">photo_library</span>
+          Carousel
+        </button>
+        <button
+          type="button"
+          onClick={() => setTab('sections')}
+          className={`px-4 py-2 rounded-md font-label-sm text-label-sm transition-colors ${
+            tab === 'sections' ? 'bg-secondary text-on-secondary shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-bg'
+          }`}
+        >
+          <span className="material-symbols-outlined text-[16px] mr-1.5 align-middle">dashboard_customize</span>
+          Homepage Sections
         </button>
       </div>
 
-      {loading ? (
-        <div className="p-10 text-center text-sm text-on-surface-variant">Loading gallery…</div>
-      ) : items.length === 0 ? (
-        <div className="bg-surface-container-lowest rounded-xl border border-border-subtle p-10 text-center text-on-surface-variant">
-          No gallery items yet. Click "Add Image" to get started.
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {items.map((item) => (
-            <div key={item.id} className={`bg-surface-container-lowest rounded-xl border border-border-subtle overflow-hidden transition-all ${item.visible ? '' : 'opacity-60'}`}>
-              <div className="h-48 overflow-hidden bg-surface-container-low">
-                <img src={item.image_url} alt={item.title} className="w-full h-full object-cover" />
-              </div>
-              <div className="p-4 space-y-3">
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-label-md text-label-md font-medium text-on-surface truncate">{item.title}</h3>
-                  <span className="text-xs text-on-surface-variant shrink-0">#{item.sort_order}</span>
+      {tab === 'carousel' && (
+        <>
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={startCreate}
+              className="bg-secondary hover:bg-secondary/90 text-on-secondary px-5 py-2 rounded-lg font-label-md text-label-md flex items-center gap-2 shadow-sm transition-colors"
+            >
+              <span className="material-symbols-outlined text-[18px]">add_photo_alternate</span>
+              Add Image
+            </button>
+          </div>
+
+          {loading ? (
+            <div className="p-10 text-center text-sm text-on-surface-variant">Loading gallery…</div>
+          ) : items.length === 0 ? (
+            <div className="bg-surface-container-lowest rounded-xl border border-border-subtle p-10 text-center text-on-surface-variant">
+              No gallery items yet. Click "Add Image" to get started.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {items.map((item) => (
+                <div key={item.id} className={`bg-surface-container-lowest rounded-xl border border-border-subtle overflow-hidden transition-all ${item.visible ? '' : 'opacity-60'}`}>
+                  <div className="h-48 overflow-hidden bg-surface-container-low">
+                    <img src={item.image_url} alt={item.title} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="p-4 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="font-label-md text-label-md font-medium text-on-surface truncate">{item.title}</h3>
+                      <span className="text-xs text-on-surface-variant shrink-0">#{item.sort_order}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        disabled={busyId === item.id}
+                        onClick={() => startEdit(item)}
+                        className="flex-1 py-1.5 px-3 rounded-lg border border-outline-variant text-on-surface font-label-sm text-label-sm hover:bg-surface-bg transition-colors flex items-center justify-center gap-1 disabled:opacity-50"
+                      >
+                        <span className="material-symbols-outlined text-[14px]">edit</span> Edit
+                      </button>
+                      <button
+                        type="button"
+                        disabled={busyId === item.id}
+                        onClick={() => toggleVisible(item)}
+                        className={`py-1.5 px-3 rounded-lg border font-label-sm text-label-sm transition-colors flex items-center justify-center gap-1 disabled:opacity-50 ${item.visible ? 'border-success-green/30 text-success-green hover:bg-success-green/5' : 'border-outline-variant text-on-surface-variant hover:bg-surface-bg'}`}
+                      >
+                        <span className="material-symbols-outlined text-[14px]">{item.visible ? 'visibility' : 'visibility_off'}</span>
+                        {item.visible ? 'Visible' : 'Hidden'}
+                      </button>
+                      <button
+                        type="button"
+                        disabled={busyId === item.id}
+                        onClick={() => setConfirmDelete(item)}
+                        className="py-1.5 px-3 rounded-lg border border-error-red/30 text-error-red font-label-sm text-label-sm hover:bg-error-red/5 transition-colors flex items-center justify-center gap-1 disabled:opacity-50"
+                      >
+                        <span className="material-symbols-outlined text-[14px]">delete</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    disabled={busyId === item.id}
-                    onClick={() => startEdit(item)}
-                    className="flex-1 py-1.5 px-3 rounded-lg border border-outline-variant text-on-surface font-label-sm text-label-sm hover:bg-surface-bg transition-colors flex items-center justify-center gap-1 disabled:opacity-50"
-                  >
-                    <span className="material-symbols-outlined text-[14px]">edit</span> Edit
-                  </button>
-                  <button
-                    type="button"
-                    disabled={busyId === item.id}
-                    onClick={() => toggleVisible(item)}
-                    className={`py-1.5 px-3 rounded-lg border font-label-sm text-label-sm transition-colors flex items-center justify-center gap-1 disabled:opacity-50 ${item.visible ? 'border-success-green/30 text-success-green hover:bg-success-green/5' : 'border-outline-variant text-on-surface-variant hover:bg-surface-bg'}`}
-                  >
-                    <span className="material-symbols-outlined text-[14px]">{item.visible ? 'visibility' : 'visibility_off'}</span>
-                    {item.visible ? 'Visible' : 'Hidden'}
-                  </button>
-                  <button
-                    type="button"
-                    disabled={busyId === item.id}
-                    onClick={() => setConfirmDelete(item)}
-                    className="py-1.5 px-3 rounded-lg border border-error-red/30 text-error-red font-label-sm text-label-sm hover:bg-error-red/5 transition-colors flex items-center justify-center gap-1 disabled:opacity-50"
-                  >
-                    <span className="material-symbols-outlined text-[14px]">delete</span>
-                  </button>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {tab === 'sections' && (
+        <>
+          {loadingSections ? (
+            <div className="p-10 text-center text-sm text-on-surface-variant">Loading section images…</div>
+          ) : (
+            <div className="space-y-8">
+              <div>
+                <h3 className="font-headline-sm text-headline-sm text-on-surface mb-4 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-secondary">home_repair_service</span>
+                  LGU Public Safety Services
+                </h3>
+                <p className="font-body-sm text-on-surface-variant mb-4">Images displayed in the 4 service cards on the homepage.</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                  {servicesImages.map((img) => (
+                    <div key={img.id} className="bg-surface-container-lowest rounded-xl border border-border-subtle overflow-hidden">
+                      <div className="h-36 overflow-hidden bg-surface-container-low">
+                        <img src={img.image_url} alt={img.label} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="p-3 space-y-2">
+                        <h4 className="font-label-sm text-label-sm font-medium text-on-surface truncate">{img.label}</h4>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingSection(img);
+                            setSectionForm({ label: img.label, image_url: img.image_url });
+                            setSectionFile(null);
+                          }}
+                          className="w-full py-1.5 px-3 rounded-lg border border-outline-variant text-on-surface font-label-sm text-label-sm hover:bg-surface-bg transition-colors flex items-center justify-center gap-1"
+                        >
+                          <span className="material-symbols-outlined text-[14px]">edit</span> Edit
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-headline-sm text-headline-sm text-on-surface mb-4 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-secondary">menu_book</span>
+                  Community Safety Guides
+                </h3>
+                <p className="font-body-sm text-on-surface-variant mb-4">Images displayed in the 3 guide cards on the homepage.</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                  {guidesImages.map((img) => (
+                    <div key={img.id} className="bg-surface-container-lowest rounded-xl border border-border-subtle overflow-hidden">
+                      <div className="h-40 overflow-hidden bg-surface-container-low">
+                        <img src={img.image_url} alt={img.label} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="p-3 space-y-2">
+                        <h4 className="font-label-sm text-label-sm font-medium text-on-surface truncate">{img.label}</h4>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingSection(img);
+                            setSectionForm({ label: img.label, image_url: img.image_url });
+                            setSectionFile(null);
+                          }}
+                          className="w-full py-1.5 px-3 rounded-lg border border-outline-variant text-on-surface font-label-sm text-label-sm hover:bg-surface-bg transition-colors flex items-center justify-center gap-1"
+                        >
+                          <span className="material-symbols-outlined text-[14px]">edit</span> Edit
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
 
       {(creating || editing) && (
@@ -216,9 +390,9 @@ export default function AdminCommunityGallery() {
               </div>
               <div className="space-y-2">
                 <label className="block text-xs text-on-surface-variant">Image *</label>
-                {(editing || form.image_url) && (
+                {form.image_url && (
                   <div className="rounded-lg overflow-hidden border border-border-subtle h-36">
-                    <img src={editing?.image_url || form.image_url} alt="Preview" className="w-full h-full object-cover" />
+                    <img src={form.image_url} alt="Preview" className="w-full h-full object-cover" />
                   </div>
                 )}
                 <input
@@ -234,11 +408,13 @@ export default function AdminCommunityGallery() {
                   }}
                   className="hidden"
                 />
-                <label htmlFor="gallery-image" className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 text-secondary rounded-lg text-sm font-medium hover:bg-secondary/20 cursor-pointer transition-colors">
-                  <span className="material-symbols-outlined text-[18px]">upload</span>
-                  Choose File
-                </label>
-                {imageFile && <span className="text-xs text-on-surface-variant ml-2">{imageFile.name}</span>}
+                <div className="flex items-center gap-2">
+                  <label htmlFor="gallery-image" className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 text-secondary rounded-lg text-sm font-medium hover:bg-secondary/20 cursor-pointer transition-colors">
+                    <span className="material-symbols-outlined text-[18px]">upload</span>
+                    Choose File
+                  </label>
+                  {imageFile && <span className="text-xs text-on-surface-variant">{imageFile.name}</span>}
+                </div>
                 {editing && !imageFile && (
                   <p className="text-[11px] text-on-surface-variant">Leave empty to keep the current image.</p>
                 )}
@@ -271,6 +447,71 @@ export default function AdminCommunityGallery() {
                 </button>
                 <button type="button" disabled={saving} onClick={() => void save()} className="flex-1 bg-secondary hover:bg-secondary/90 text-on-secondary rounded-lg py-2 text-label-md font-medium disabled:opacity-50 transition-colors">
                   {saving ? 'Saving…' : editing ? 'Save Changes' : 'Add Item'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editingSection && (
+        <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10">
+              <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Edit Section Item</h3>
+              <button type="button" onClick={cancelSectionEdit} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div>
+                <label className="block text-xs text-on-surface-variant mb-1.5">Section</label>
+                <p className="font-label-md text-on-surface capitalize">{editingSection.section === 'services' ? 'LGU Public Safety Services' : 'Community Safety Guides'}</p>
+              </div>
+              <div>
+                <label className="block text-xs text-on-surface-variant mb-1.5">Label *</label>
+                <input
+                  className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary"
+                  value={sectionForm.label}
+                  onChange={(e) => setSectionForm({ ...sectionForm, label: e.target.value })}
+                  placeholder="e.g. Report an Incident"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-xs text-on-surface-variant">Image</label>
+                <div className="rounded-lg overflow-hidden border border-border-subtle h-36">
+                  <img src={sectionForm.image_url} alt="Preview" className="w-full h-full object-cover" />
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="section-image"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0] ?? null;
+                    setSectionFile(file);
+                    if (file) {
+                      setSectionForm({ ...sectionForm, image_url: URL.createObjectURL(file) });
+                    }
+                  }}
+                  className="hidden"
+                />
+                <div className="flex items-center gap-2">
+                  <label htmlFor="section-image" className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 text-secondary rounded-lg text-sm font-medium hover:bg-secondary/20 cursor-pointer transition-colors">
+                    <span className="material-symbols-outlined text-[18px]">upload</span>
+                    {sectionFile ? 'Change File' : 'Choose File'}
+                  </label>
+                  {sectionFile && <span className="text-xs text-on-surface-variant">{sectionFile.name}</span>}
+                </div>
+                {!sectionFile && (
+                  <p className="text-[11px] text-on-surface-variant">Leave empty to keep the current image.</p>
+                )}
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button type="button" onClick={cancelSectionEdit} className="flex-1 bg-surface-container-low border border-border-subtle text-on-surface rounded-lg py-2 text-label-md font-medium hover:bg-surface-bg transition-colors">
+                  Cancel
+                </button>
+                <button type="button" disabled={savingSection || !sectionForm.label.trim() || (sectionForm.label === editingSection.label && !sectionFile)} onClick={() => void saveSectionImage()} className="flex-1 bg-secondary hover:bg-secondary/90 text-on-secondary rounded-lg py-2 text-label-md font-medium disabled:opacity-50 transition-colors">
+                  {savingSection ? 'Saving…' : 'Save Changes'}
                 </button>
               </div>
             </div>

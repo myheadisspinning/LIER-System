@@ -932,6 +932,39 @@ insert into public.community_gallery (title, image_url, sort_order, visible) val
 on conflict do nothing;
 
 -- ------------------------------------------------------------------
+-- 12b) Home Section Images (editable images for homepage sections)
+-- ------------------------------------------------------------------
+create table if not exists public.home_section_images (
+  id uuid primary key default gen_random_uuid(),
+  section text not null,
+  slot_key text not null,
+  label text not null,
+  image_url text not null,
+  updated_at timestamptz not null default now(),
+  unique (section, slot_key)
+);
+
+alter table public.home_section_images enable row level security;
+
+drop policy if exists "home_section_images public read" on public.home_section_images;
+create policy "home_section_images public read" on public.home_section_images
+  for select using (true);
+
+drop policy if exists "home_section_images staff manage" on public.home_section_images;
+create policy "home_section_images staff manage" on public.home_section_images
+  for all using (public.is_staff()) with check (public.is_staff());
+
+insert into public.home_section_images (section, slot_key, label, image_url) values
+  ('services', 'report_incident', 'Report an Incident', '/image/culiat-brgy.jpg'),
+  ('services', 'emergency_hotline', 'Emergency Hotline', '/image/tandangsora.jfif'),
+  ('services', 'police_assistance', 'Police Assistance', '/image/barangayhalltandangsora.jfif'),
+  ('services', 'contact_barangay', 'Contact Barangay', '/image/tandangsorashrine.jpg'),
+  ('guides', 'elders_guide', 'Elders'' Guide: Navigating the Portal', '/image/culiat-brgy.jpg'),
+  ('guides', 'safety_protocols', 'Public Safety & Protocols', '/image/tandangsora.jfif'),
+  ('guides', 'resilient_community', 'Building a Resilient Community', '/image/tandangsorashrine.jpg')
+on conflict (section, slot_key) do update set image_url = excluded.image_url;
+
+-- ------------------------------------------------------------------
 -- 13) Resident self-service profile update (RPC)
 -- ------------------------------------------------------------------
 -- Secure RPC for residents to update their own profile fields.

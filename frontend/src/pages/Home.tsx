@@ -51,6 +51,12 @@ interface GalleryImage {
   image_url: string;
 }
 
+interface SectionImage {
+  section: string;
+  slot_key: string;
+  image_url: string;
+}
+
 const FALLBACK_GALLERY: GalleryImage[] = [
   { title: 'Local Toda Drivers Patrol Training', image_url: '/image/tandangsora.jfif' },
   { title: 'Zone 4 Tree Planting Event', image_url: '/image/tandangsorashrine.jpg' },
@@ -58,6 +64,19 @@ const FALLBACK_GALLERY: GalleryImage[] = [
   { title: 'Community Clean-Up Drive', image_url: '/image/tandangsora.jpg' },
   { title: 'Barangay Safety Orientation', image_url: '/image/culiat-brgy.jpg' },
 ];
+
+const FALLBACK_SERVICES: Record<string, string> = {
+  report_incident: '/image/culiat-brgy.jpg',
+  emergency_hotline: '/image/tandangsora.jfif',
+  police_assistance: '/image/barangayhalltandangsora.jfif',
+  contact_barangay: '/image/tandangsorashrine.jpg',
+};
+
+const FALLBACK_GUIDES: Record<string, string> = {
+  elders_guide: '/image/culiat-brgy.jpg',
+  safety_protocols: '/image/tandangsora.jfif',
+  resilient_community: '/image/tandangsorashrine.jpg',
+};
 
 function CommunityGallery() {
   const [items, setItems] = useState<GalleryImage[]>(FALLBACK_GALLERY);
@@ -171,6 +190,7 @@ export default function Home() {
   const [user, setUser] = useState<User | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [opening, setOpening] = useState(false);
+  const [sectionImages, setSectionImages] = useState<SectionImage[]>([]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -181,6 +201,23 @@ export default function Home() {
     });
     return () => sub.subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    void (async () => {
+      const { data } = await supabase.from('home_section_images').select('section, slot_key, image_url');
+      if (data) setSectionImages(data as SectionImage[]);
+    })();
+  }, []);
+
+  const getServiceImage = (slotKey: string) => {
+    const dbImage = sectionImages.find((img) => img.section === 'services' && img.slot_key === slotKey);
+    return dbImage?.image_url || FALLBACK_SERVICES[slotKey] || '/image/culiat-brgy.jpg';
+  };
+
+  const getGuideImage = (slotKey: string) => {
+    const dbImage = sectionImages.find((img) => img.section === 'guides' && img.slot_key === slotKey);
+    return dbImage?.image_url || FALLBACK_GUIDES[slotKey] || '/image/culiat-brgy.jpg';
+  };
 
   const handleReportIncident = () => {
     if (!user) {
@@ -325,21 +362,22 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
             {[
-              { icon: 'report_problem', title: 'Report an Incident', desc: 'Submit detailed reports for security concerns in your area.', hoverBorder: 'hover:border-secondary', img: '/image/culiat-brgy.jpg' },
-              { icon: 'call', title: 'Emergency Hotline', desc: 'Quick access to local police, fire department, and medical EMS.', hoverBorder: 'hover:border-error', img: '/image/tandangsora.jfif' },
-              { icon: 'local_police', title: 'Police Assistance', desc: 'Request non-emergency patrol or police presence in your zone.', hoverBorder: 'hover:border-secondary', img: '/image/barangayhalltandangsora.jfif' },
-              { icon: 'forum', title: 'Contact Barangay', desc: 'Direct messaging line to Barangay officials and safety officers.', hoverBorder: 'hover:border-secondary', img: '/image/tandangsorashrine.jpg' },
+              { icon: 'report_problem', title: 'Report an Incident', desc: 'Submit detailed reports for security concerns in your area.', hoverBorder: 'hover:border-secondary', slotKey: 'report_incident' },
+              { icon: 'call', title: 'Emergency Hotline', desc: 'Quick access to local police, fire department, and medical EMS.', hoverBorder: 'hover:border-error', slotKey: 'emergency_hotline' },
+              { icon: 'local_police', title: 'Police Assistance', desc: 'Request emergency patrol or police presence in your zone.', hoverBorder: 'hover:border-secondary', slotKey: 'police_assistance' },
+              { icon: 'forum', title: 'Contact Barangay', desc: 'Direct messaging line to Barangay officials and safety officers.', hoverBorder: 'hover:border-secondary', slotKey: 'contact_barangay' },
             ].map((svc, i) => (
-              <div key={i} className={`group bg-surface rounded-2xl border border-outline-variant overflow-hidden ${svc.hoverBorder} hover:shadow-xl transition-all cursor-pointer touch-manipulation hover:-translate-y-2`} data-section="services">
-                <div className="h-32 overflow-hidden">
-                  <img alt={svc.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={svc.img} />
+              <div key={i} className={`group relative rounded-2xl border border-outline-variant overflow-hidden ${svc.hoverBorder} hover:shadow-xl transition-all cursor-pointer touch-manipulation hover:-translate-y-2 min-h-[280px]`} data-section="services">
+                <div className="absolute inset-0">
+                  <img alt={svc.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={getServiceImage(svc.slotKey)} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                 </div>
-                <div className="p-lg">
-                  <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary mb-sm group-hover:bg-secondary group-hover:text-white transition-colors duration-300">
+                <div className="relative p-lg h-full flex flex-col justify-end">
+                  <div className="w-12 h-12 rounded-xl bg-blue-600/80 flex items-center justify-center text-white mb-sm group-hover:bg-secondary transition-colors duration-300">
                     <span className="material-symbols-outlined text-2xl">{svc.icon}</span>
                   </div>
-                  <h3 className="font-headline-md text-lg md:text-headline-md mb-xs text-on-surface">{svc.title}</h3>
-                  <p className="font-body-md text-on-surface-variant text-sm">{svc.desc}</p>
+                  <h3 className="font-headline-md text-lg md:text-headline-md mb-xs text-white">{svc.title}</h3>
+                  <p className="font-body-md text-white/90 text-sm">{svc.desc}</p>
                 </div>
               </div>
             ))}
@@ -393,13 +431,13 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-gutter">
             {[
-              { title: "Elders' Guide: Navigating the Portal", desc: 'A step-by-step guide for our seniors on how to use digital tools to report incidents and access services safely.', btn: 'View Guide', link: '/elder-guide', img: '/image/culiat-brgy.jpg' },
-              { title: 'Public Safety & Protocols', desc: 'Learn the official procedures for reporting emergencies and how to coordinate with our public safety officers during critical incidents.', btn: 'Learn More', link: '/services', img: '/image/tandangsora.jfif' },
-              { title: 'Building a Resilient Community', desc: 'Discover community initiatives, neighborhood watch programs, and best practices for maintaining a safe environment.', btn: 'Get Involved', link: '/contact', img: '/image/tandangsorashrine.jpg' },
+              { title: "Elders' Guide: Navigating the Portal", desc: 'A step-by-step guide for our seniors on how to use digital tools to report incidents and access services safely.', btn: 'View Guide', link: '/elder-guide', slotKey: 'elders_guide' },
+              { title: 'Public Safety & Protocols', desc: 'Learn the official procedures for reporting emergencies and how to coordinate with our public safety officers during critical incidents.', btn: 'Learn More', link: '/services', slotKey: 'safety_protocols' },
+              { title: 'Building a Resilient Community', desc: 'Discover community initiatives, neighborhood watch programs, and best practices for maintaining a safe environment.', btn: 'Get Involved', link: '/contact', slotKey: 'resilient_community' },
             ].map((guide, i) => (
               <div key={i} className="bg-surface-container-low rounded-2xl border border-outline-variant/30 flex flex-col overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all" data-section="guides">
                 <div className="h-44 overflow-hidden">
-                  <img alt={guide.title} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src={guide.img} />
+                  <img alt={guide.title} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src={getGuideImage(guide.slotKey)} />
                 </div>
                 <div className="p-6 md:p-lg flex flex-col flex-grow">
                   <h3 className="font-headline-md text-lg md:text-headline-md text-on-surface mb-sm">{guide.title}</h3>
