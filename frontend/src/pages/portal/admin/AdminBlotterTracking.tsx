@@ -3,6 +3,7 @@ import { supabase } from '../../../supabaseClient';
 import { fmtDate, logAudit } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
 import { useScrollLock } from '../../../lib/useScrollLock';
+import Pagination from '../../../components/Pagination';
 
 type Blotter = {
   id: string;
@@ -50,6 +51,8 @@ export default function AdminBlotterTracking() {
   const [formOpen, setFormOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [hearingOpen, setHearingOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   useScrollLock(formOpen || (hearingOpen && activeId != null));
   const [hearing, setHearing] = useState({ title: '', date: '', outcome: '' });
@@ -93,6 +96,17 @@ export default function AdminBlotterTracking() {
       b.status === filter;
     return matchesQuery && matchesFilter;
   });
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query, filter]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(visible.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedBlotters = visible.slice(startIndex, endIndex);
 
   const counts = useMemo(
     () => ({
@@ -228,7 +242,7 @@ export default function AdminBlotterTracking() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border-subtle">
-                  {visible.map((b) => (
+                  {paginatedBlotters.map((b) => (
                     <tr
                       key={b.id}
                       onClick={() => setActiveId(b.id)}
@@ -255,6 +269,19 @@ export default function AdminBlotterTracking() {
               </table>
             )}
           </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={(items) => {
+              setItemsPerPage(items);
+              setCurrentPage(1);
+            }}
+            totalItems={visible.length}
+            startIndex={startIndex}
+            endIndex={endIndex}
+          />
         </div>
 
         <div className="xl:flex-[3.5] bg-surface-container-lowest rounded-xl border border-border-subtle shadow-sm flex flex-col overflow-hidden">

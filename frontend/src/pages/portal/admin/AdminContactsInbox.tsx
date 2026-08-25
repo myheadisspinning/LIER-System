@@ -3,6 +3,7 @@ import { supabase } from '../../../supabaseClient';
 import { fmtDate, isOnlineSince, logAudit, markInquiriesRead } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
+import Pagination from '../../../components/Pagination';
 
 type Inquiry = {
   id: string;
@@ -92,6 +93,8 @@ export default function AdminContactsInbox() {
   const [profiles, setProfiles] = useState<Record<string, ResidentProfile>>({});
   const [onlineIds, setOnlineIds] = useState<Set<string>>(new Set());
   const [detailReportId, setDetailReportId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   const lastByInquiry = useMemo(() => {
     const map: Record<string, string> = {};
@@ -216,6 +219,17 @@ export default function AdminContactsInbox() {
     return q === '' || i.sender_name.toLowerCase().includes(q) || i.subject.toLowerCase().includes(q) || i.message.toLowerCase().includes(q);
   });
 
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query, filter]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(visible.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedInquiries = visible.slice(startIndex, endIndex);
+
   const setStatus = async (status: string) => {
     if (!active) return;
     const { error } = await supabase.from('inquiries').update({ status }).eq('id', active.id);
@@ -316,10 +330,10 @@ export default function AdminContactsInbox() {
         <div className="flex-1 overflow-y-auto">
           {loading ? (
             <div className="p-6 text-center text-sm text-on-surface-variant">Loading inquiries…</div>
-          ) : visible.length === 0 ? (
+          ) : paginatedInquiries.length === 0 ? (
             <div className="p-6 text-center text-sm text-on-surface-variant">No inquiries yet.</div>
           ) : (
-            visible.map((i) => (
+            paginatedInquiries.map((i) => (
               <button
                 key={i.id}
                 type="button"
@@ -357,6 +371,19 @@ export default function AdminContactsInbox() {
             ))
           )}
         </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={(items) => {
+            setItemsPerPage(items);
+            setCurrentPage(1);
+          }}
+          totalItems={visible.length}
+          startIndex={startIndex}
+          endIndex={endIndex}
+        />
       </section>
 
       <section className={`flex-1 bg-white border border-border-subtle rounded-xl flex flex-col overflow-hidden shadow-sm ${active ? 'flex' : 'hidden xl:flex'}`}>

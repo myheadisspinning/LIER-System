@@ -3,6 +3,7 @@ import { supabase } from '../../../supabaseClient';
 import { logAudit, DUTY_DAYS, dutyDaysLabel, deriveUnitStatus, fetchOpenUnitAssignments, isOnDutyToday, UNIT_STATUS_BADGE, UNIT_STATUS_DOT, UNIT_STATUS_CHOICES } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
 import { useScrollLock } from '../../../lib/useScrollLock';
+import Pagination from '../../../components/Pagination';
 
 type UnitRow = {
   id: string;
@@ -51,6 +52,8 @@ export default function AdminTanodRoster() {
   const [statusValue, setStatusValue] = useState('Auto');
   const [deleteTarget, setDeleteTarget] = useState<UnitRow | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   useScrollLock(modalOpen || viewing != null || statusTarget != null || deleteTarget != null);
 
@@ -98,6 +101,12 @@ export default function AdminTanodRoster() {
         }),
     [units, openAssignments],
   );
+
+  // Pagination calculations
+  const totalPages = Math.ceil(rows.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedRows = rows.slice(startIndex, endIndex);
 
   const stats = useMemo(() => {
     const total = rows.length;
@@ -297,7 +306,7 @@ export default function AdminTanodRoster() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border-subtle">
-                    {rows.map((u) => (
+                    {paginatedRows.map((u) => (
                       <tr key={u.id} className="hover:bg-slate-50">
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-3">
@@ -377,6 +386,19 @@ export default function AdminTanodRoster() {
                 </table>
               )}
             </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setCurrentPage}
+              onItemsPerPageChange={(items) => {
+                setItemsPerPage(items);
+                setCurrentPage(1);
+              }}
+              totalItems={rows.length}
+              startIndex={startIndex}
+              endIndex={endIndex}
+            />
           </div>
         </>
       )}

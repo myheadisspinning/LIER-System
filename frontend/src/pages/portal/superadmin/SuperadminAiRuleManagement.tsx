@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import Toast from '../../../components/Toast';
+import Pagination from '../../../components/Pagination';
 
 type RuleRow = {
   id: string;
@@ -34,6 +35,8 @@ export default function SuperadminAiRuleManagement() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   const fetchAll = async () => {
     const [ruleRes, cfgRes, auditRes] = await Promise.all([
@@ -158,6 +161,17 @@ export default function SuperadminAiRuleManagement() {
     [rules, search],
   );
 
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedRules = filtered.slice(startIndex, endIndex);
+
   return (
     <div className="space-y-6">
       {/* Top Row Grid */}
@@ -278,7 +292,7 @@ export default function SuperadminAiRuleManagement() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
-                {filtered.map((rule) => (
+                {paginatedRules.map((rule) => (
                   <tr key={rule.id} className={rule.enabled ? '' : 'opacity-50'}>
                     <td className="py-2.5 font-medium text-slate-600">{rule.keywords.slice(0, 3).join(', ')}{rule.keywords.length > 3 ? '…' : ''}</td>
                     <td className="py-2.5"><span className="px-1.5 py-0.5 bg-slate-100 rounded text-slate-700">{rule.category}</span></td>
@@ -299,6 +313,19 @@ export default function SuperadminAiRuleManagement() {
               </tbody>
             </table>
           </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={(items) => {
+              setItemsPerPage(items);
+              setCurrentPage(1);
+            }}
+            totalItems={filtered.length}
+            startIndex={startIndex}
+            endIndex={endIndex}
+          />
           <div className="mt-auto pt-4 border-t border-slate-100 space-y-3">
             <div className="grid grid-cols-2 gap-2">
               <input className="col-span-2 bg-slate-50 border-slate-200 rounded-lg px-3 py-1.5 text-xs" placeholder="Keywords (comma-separated), e.g. fire, smoke" type="text" value={newKeywords} onChange={(e) => setNewKeywords(e.target.value)} />

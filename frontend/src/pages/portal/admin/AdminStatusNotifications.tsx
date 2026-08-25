@@ -3,6 +3,7 @@ import { supabase } from '../../../supabaseClient';
 import { fmtDate, logAudit } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
 import { useScrollLock } from '../../../lib/useScrollLock';
+import Pagination from '../../../components/Pagination';
 
 type Broadcast = {
   id: string;
@@ -43,6 +44,8 @@ export default function AdminStatusNotifications() {
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Broadcast | null>(null);
   const [viewingBroadcast, setViewingBroadcast] = useState<Broadcast | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   useScrollLock(composerOpen || confirmDelete != null || viewingBroadcast != null);
 
@@ -64,6 +67,12 @@ export default function AdminStatusNotifications() {
     const alerts = broadcasts.filter((b) => b.type === 'Alert' || b.type === 'Emergency').length;
     return { total: broadcasts.length, sent, scheduled, alerts };
   }, [broadcasts]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(broadcasts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedBroadcasts = broadcasts.slice(startIndex, endIndex);
 
   const uploadImage = async (): Promise<string | null> => {
     if (!imageFile) return null;
@@ -166,7 +175,7 @@ export default function AdminStatusNotifications() {
           <div className="p-12 text-center text-sm text-on-surface-variant">No broadcasts yet. Create one to reach residents.</div>
         ) : (
           <div className="divide-y divide-border-subtle">
-            {broadcasts.map((b) => (
+            {paginatedBroadcasts.map((b) => (
               <div key={b.id} className="px-5 py-4 flex flex-wrap items-start gap-4">
                 <span className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${TYPE_COLOR[b.type]}`}>
                   <span className="material-symbols-outlined text-[20px]">{b.type === 'Alert' || b.type === 'Emergency' ? 'campaign' : b.type === 'Weather' ? 'cloud' : 'notifications'}</span>
@@ -204,6 +213,19 @@ export default function AdminStatusNotifications() {
             ))}
           </div>
         )}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={(items) => {
+            setItemsPerPage(items);
+            setCurrentPage(1);
+          }}
+          totalItems={broadcasts.length}
+          startIndex={startIndex}
+          endIndex={endIndex}
+        />
       </div>
 
       {composerOpen && (

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
 import { fmtDate, PRIORITY_BADGE, STATUS_BADGE } from '../../../lib/admin';
+import Pagination from '../../../components/Pagination';
 
 type Row = {
   id: string;
@@ -33,6 +34,8 @@ export default function AdminIncidentArchive() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   useEffect(() => {
     void (async () => {
@@ -82,6 +85,17 @@ export default function AdminIncidentArchive() {
       );
     });
   }, [rows, search, statusFilter]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, statusFilter]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedRows = filtered.slice(startIndex, endIndex);
 
   const stats = useMemo(
     () => ({
@@ -164,7 +178,7 @@ export default function AdminIncidentArchive() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-subtle">
-                {filtered.map((r) => (
+                {paginatedRows.map((r) => (
                   <tr key={r.id} onClick={() => setSelectedId(r.id)} className="hover:bg-slate-50 transition-colors cursor-pointer">
                     <td className="py-3 px-4 font-medium text-secondary">{r.report_no ?? '—'}</td>
                     <td className="py-3 px-4">
@@ -184,6 +198,19 @@ export default function AdminIncidentArchive() {
             </table>
           )}
         </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={(items) => {
+            setItemsPerPage(items);
+            setCurrentPage(1);
+          }}
+          totalItems={filtered.length}
+          startIndex={startIndex}
+          endIndex={endIndex}
+        />
       </div>
       <IncidentDetailModal reportId={selectedId} onClose={() => setSelectedId(null)} />
     </div>

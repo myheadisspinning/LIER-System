@@ -7,6 +7,7 @@ import { supabase } from '../../../supabaseClient';
 import Toast from '../../../components/Toast';
 import { BARANGAY_HALL_CENTER } from '../../../lib/geo';
 import { PRIORITY_COLORS, pinIconFor } from '../../../lib/mapPins';
+import Pagination from '../../../components/Pagination';
 
 type EvidenceItem = { name: string; type: string; size: number; url: string };
 
@@ -155,6 +156,8 @@ export default function AdminIncidentReporting() {
   const [recenterTrigger, setRecenterTrigger] = useState(0);
   const [searchParams] = useSearchParams();
   const initialCaseRef = useRef(searchParams.get('case'));
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   const fetchAll = async () => {
     const res = await supabase
@@ -210,6 +213,17 @@ export default function AdminIncidentReporting() {
       );
     });
   }, [reports, search, statusFilter]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, statusFilter]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedReports = filtered.slice(startIndex, endIndex);
 
   const mapPins = useMemo(() => filtered.filter((r) => r.lat != null && r.lng != null), [filtered]);
 
@@ -534,7 +548,7 @@ export default function AdminIncidentReporting() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-subtle font-body-sm text-body-sm">
-                {filtered.map((r) => (
+                {paginatedReports.map((r) => (
                   <tr
                     key={r.id}
                     id={`report-row-${r.id}`}
@@ -559,9 +573,19 @@ export default function AdminIncidentReporting() {
             </table>
           )}
         </div>
-        <div className="p-3 bg-surface border-t border-border-subtle flex justify-between items-center text-xs text-on-surface-variant">
-          <span>Showing {filtered.length} of {reports.length} Incidents</span>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={(items) => {
+            setItemsPerPage(items);
+            setCurrentPage(1);
+          }}
+          totalItems={filtered.length}
+          startIndex={startIndex}
+          endIndex={endIndex}
+        />
       </div>
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
     </div>

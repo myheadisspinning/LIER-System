@@ -3,6 +3,7 @@ import { supabase } from '../../../supabaseClient';
 import { fmtDate, logAudit } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
 import { useScrollLock } from '../../../lib/useScrollLock';
+import Pagination from '../../../components/Pagination';
 
 type Acct = {
   id: string;
@@ -39,6 +40,8 @@ export default function SuperadminUserControl() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [tempPw, setTempPw] = useState<{ name: string; pw: string } | null>(null);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   useScrollLock(tempPw != null);
 
@@ -90,6 +93,17 @@ export default function SuperadminUserControl() {
       return matchesQuery && matchesStatus && matchesVerify;
     });
   }, [users, query, statusFilter, verifyFilter]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query, statusFilter, verifyFilter]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(visible.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedUsers = visible.slice(startIndex, endIndex);
 
   const exportCsv = () => {
     const header = ['Name', 'Email', 'Phone', 'Address', 'Role', 'Verification', 'Status', 'Registered'];
@@ -277,7 +291,7 @@ export default function SuperadminUserControl() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/20 font-body-md text-sm">
-                  {visible.map((u) => (
+                  {paginatedUsers.map((u) => (
                     <tr
                       key={u.id}
                       onClick={() => setActiveId(u.id)}
@@ -341,9 +355,19 @@ export default function SuperadminUserControl() {
               </table>
             )}
           </div>
-          <div className="p-3 border-t border-outline-variant/30 flex justify-between items-center bg-surface text-sm text-on-surface-variant">
-            <div>Showing {visible.length} of {stats.total} entries</div>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={(items) => {
+              setItemsPerPage(items);
+              setCurrentPage(1);
+            }}
+            totalItems={visible.length}
+            startIndex={startIndex}
+            endIndex={endIndex}
+          />
         </div>
         <div className="w-[400px] shrink-0 glass-panel rounded-2xl flex flex-col overflow-hidden relative shadow-lg">
           <div className="h-24 bg-gradient-to-r from-secondary-container to-primary-container absolute top-0 w-full z-0"></div>

@@ -3,6 +3,7 @@ import { supabase } from '../../../supabaseClient';
 import { fmtDate, logAudit } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
 import { useScrollLock } from '../../../lib/useScrollLock';
+import Pagination from '../../../components/Pagination';
 
 type Acct = {
   id: string;
@@ -51,6 +52,8 @@ export default function SuperadminAdminManagement() {
   const [form, setForm] = useState({ email: '', password: '', fullname: '', role: 'officer' });
   const [tempPw, setTempPw] = useState<{ name: string; pw: string } | null>(null);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   useScrollLock(formOpen || tempPw != null);
 
@@ -96,6 +99,17 @@ export default function SuperadminAdminManagement() {
       (filter === 'Officers' && u.role === 'officer');
     return matchesQuery && matchesFilter;
   });
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query, filter]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(visible.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedUsers = visible.slice(startIndex, endIndex);
 
   const createUser = async () => {
     if (!form.email.trim() || !form.password || !form.fullname.trim()) return;
@@ -267,7 +281,7 @@ export default function SuperadminAdminManagement() {
                   </tr>
                 </thead>
                 <tbody className="font-body-md text-body-md text-on-surface divide-y divide-outline-variant/20 bg-white/50">
-                  {visible.map((u) => (
+                  {paginatedUsers.map((u) => (
                     <tr
                       key={u.id}
                       onClick={() => setActiveId(u.id)}
@@ -311,6 +325,19 @@ export default function SuperadminAdminManagement() {
               </table>
             )}
           </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={(items) => {
+              setItemsPerPage(items);
+              setCurrentPage(1);
+            }}
+            totalItems={visible.length}
+            startIndex={startIndex}
+            endIndex={endIndex}
+          />
         </div>
         {active && (
           <div className="w-full lg:w-[400px] bg-surface rounded-2xl border border-outline-variant/30 shadow-xl flex flex-col overflow-hidden transform transition-transform origin-right z-20">

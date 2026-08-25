@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
 import Toast from '../../../components/Toast';
+import Pagination from '../../../components/Pagination';
 
 type EvidenceItem = { name: string; type: string; size: number; url: string };
 
@@ -62,6 +63,8 @@ export default function SuperadminReportRegistry() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   const fetchAll = async () => {
     const [repRes, userRes] = await Promise.all([
@@ -115,6 +118,17 @@ export default function SuperadminReportRegistry() {
       r.category.toLowerCase().includes(q)
     );
   });
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, tab]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedReports = filtered.slice(startIndex, endIndex);
 
   const activeCount = reports.filter((r) => ACTIVE_STATUSES.includes(r.status)).length;
   const archivedCount = reports.length - activeCount;
@@ -233,7 +247,7 @@ export default function SuperadminReportRegistry() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-cc-border">
-                {filtered.map((r) => (
+                {paginatedReports.map((r) => (
                   <tr key={r.id} onClick={() => setSelectedId(r.id)} className="hover:bg-cc-hover transition-colors cursor-pointer">
                     <td className="px-6 py-4">
                       <span className="text-xs font-bold text-cc-accent font-mono">{r.report_no ?? '—'}</span>
@@ -266,11 +280,19 @@ export default function SuperadminReportRegistry() {
             </table>
           )}
         </div>
-        {!loading && !error && filtered.length > 0 && (
-          <div className="px-6 py-3 border-t border-cc-border text-[11px] text-cc-muted">
-            Showing {filtered.length} of {tabFiltered.length} {tab} reports.
-          </div>
-        )}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={(items) => {
+            setItemsPerPage(items);
+            setCurrentPage(1);
+          }}
+          totalItems={filtered.length}
+          startIndex={startIndex}
+          endIndex={endIndex}
+        />
       </div>
 
       <div className="bg-cc-card border border-cc-border rounded-xl p-4 flex items-start gap-3">

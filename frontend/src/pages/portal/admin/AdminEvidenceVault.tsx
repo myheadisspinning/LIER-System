@@ -4,6 +4,7 @@ import { downloadCsv, fmtBytes, logAudit, timeAgo } from '../../../lib/admin';
 import type { EvidenceFile } from '../../../lib/ai';
 import Toast from '../../../components/Toast';
 import { useScrollLock } from '../../../lib/useScrollLock';
+import Pagination from '../../../components/Pagination';
 
 type Report = {
   id: string;
@@ -31,6 +32,8 @@ export default function AdminEvidenceVault() {
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   const fetchAll = async () => {
     const [repRes, audRes] = await Promise.all([
@@ -61,6 +64,12 @@ export default function AdminEvidenceVault() {
     () => reports.flatMap((r) => (r.evidence ?? []).map((e) => ({ ...e, report_no: r.report_no, report_id: r.id, category: r.category }))),
     [reports],
   );
+
+  // Pagination calculations
+  const totalPages = Math.ceil(allEvidence.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedEvidence = allEvidence.slice(startIndex, endIndex);
 
   const stats = useMemo(() => {
     const total = allEvidence.reduce((a, e) => a + (e.size ?? 0), 0);
@@ -192,7 +201,7 @@ export default function AdminEvidenceVault() {
                 {allEvidence.length === 0 ? (
                   <div className="col-span-full p-12 text-center text-sm text-on-surface-variant">No evidence files yet. Uploads from incident reports appear here.</div>
                 ) : (
-                  allEvidence.map((e) => (
+                  paginatedEvidence.map((e) => (
                     <a key={e.url} href={e.url} target="_blank" rel="noreferrer" onClick={() => setSelectedId(e.report_id)}
                       className="group border border-border-subtle rounded-lg overflow-hidden bg-surface-container-low hover:shadow-md transition-shadow">
                       {e.type.startsWith('image/') ? (
@@ -213,6 +222,19 @@ export default function AdminEvidenceVault() {
                   ))
                 )}
               </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                itemsPerPage={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onItemsPerPageChange={(items) => {
+                  setItemsPerPage(items);
+                  setCurrentPage(1);
+                }}
+                totalItems={allEvidence.length}
+                startIndex={startIndex}
+                endIndex={endIndex}
+              />
             </div>
 
             {/* Detail / chain of custody */}

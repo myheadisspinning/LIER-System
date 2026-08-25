@@ -3,6 +3,7 @@ import { supabase } from '../../../supabaseClient';
 import { logAudit } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
 import { useScrollLock } from '../../../lib/useScrollLock';
+import Pagination from '../../../components/Pagination';
 
 type Official = {
   id: string;
@@ -45,6 +46,8 @@ export default function AdminOfficialsManagement() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Official | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   useScrollLock(creating || editing != null || confirmDelete != null);
 
@@ -131,6 +134,12 @@ export default function AdminOfficialsManagement() {
     }
   };
 
+  // Pagination calculations
+  const totalPages = Math.ceil(officials.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedOfficials = officials.slice(startIndex, endIndex);
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-end">
@@ -145,35 +154,50 @@ export default function AdminOfficialsManagement() {
       ) : officials.length === 0 ? (
         <div className="p-12 text-center text-sm text-on-surface-variant bg-surface-container-lowest border border-border-subtle rounded-xl">No officials yet. Add the barangay leadership.</div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {officials.map((o) => (
-            <div key={o.id} className="bg-white rounded-xl border border-border-subtle overflow-hidden shadow-sm">
-              <div className="h-32 bg-slate-100 relative">
-                {o.photo_url ? (
-                  <img src={o.photo_url} alt={o.fullname} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-on-surface-variant">
-                    <span className="material-symbols-outlined text-[40px]">person</span>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {paginatedOfficials.map((o) => (
+              <div key={o.id} className="bg-white rounded-xl border border-border-subtle overflow-hidden shadow-sm">
+                <div className="h-32 bg-slate-100 relative">
+                  {o.photo_url ? (
+                    <img src={o.photo_url} alt={o.fullname} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-on-surface-variant">
+                      <span className="material-symbols-outlined text-[40px]">person</span>
+                    </div>
+                  )}
+                  <div className="absolute top-2 right-2 flex gap-1.5">
+                    <button type="button" onClick={() => toggleVisible(o)} className={`px-2 py-1 rounded-md text-[11px] font-bold ${o.visible ? 'bg-success-green text-white' : 'bg-slate-500 text-white'}`}>
+                      {o.visible ? 'VISIBLE' : 'HIDDEN'}
+                    </button>
                   </div>
-                )}
-                <div className="absolute top-2 right-2 flex gap-1.5">
-                  <button type="button" onClick={() => toggleVisible(o)} className={`px-2 py-1 rounded-md text-[11px] font-bold ${o.visible ? 'bg-success-green text-white' : 'bg-slate-500 text-white'}`}>
-                    {o.visible ? 'VISIBLE' : 'HIDDEN'}
-                  </button>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-headline-md text-headline-md font-bold text-on-surface">{o.fullname}</h3>
+                  <p className="text-sm text-secondary font-semibold">{o.title}</p>
+                  <p className="text-xs text-on-surface-variant mt-1">{o.term ?? '—'}</p>
+                  <div className="flex justify-between items-center mt-3 pt-3 border-t border-border-subtle">
+                    <button type="button" onClick={() => startEdit(o)} className="text-secondary hover:underline text-sm font-medium">Edit</button>
+                    <button type="button" onClick={() => setConfirmDelete(o)} className="text-error-red hover:underline text-sm font-medium">Remove</button>
+                  </div>
                 </div>
               </div>
-              <div className="p-4">
-                <h3 className="font-headline-md text-headline-md font-bold text-on-surface">{o.fullname}</h3>
-                <p className="text-sm text-secondary font-semibold">{o.title}</p>
-                <p className="text-xs text-on-surface-variant mt-1">{o.term ?? '—'}</p>
-                <div className="flex justify-between items-center mt-3 pt-3 border-t border-border-subtle">
-                  <button type="button" onClick={() => startEdit(o)} className="text-secondary hover:underline text-sm font-medium">Edit</button>
-                  <button type="button" onClick={() => setConfirmDelete(o)} className="text-error-red hover:underline text-sm font-medium">Remove</button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={(items) => {
+              setItemsPerPage(items);
+              setCurrentPage(1);
+            }}
+            totalItems={officials.length}
+            startIndex={startIndex}
+            endIndex={endIndex}
+          />
+        </>
       )}
 
       {(creating || editing) && (
