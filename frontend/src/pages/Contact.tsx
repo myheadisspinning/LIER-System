@@ -60,7 +60,7 @@ export default function Contact() {
         </header>
 
         <section className="px-margin-mobile md:px-margin-desktop py-8 md:py-xl bg-background">
-          <div className="flex flex-col gap-8 md:gap-lg max-w-5xl mx-auto">
+          <div className="flex flex-col gap-5 sm:gap-8 md:gap-lg max-w-5xl mx-auto">
             <div className="w-full order-1">
               <div className="glass-card rounded-2xl p-4 md:p-lg shadow-sm border border-outline-variant/50 !bg-white !border-t-2 transition-all hover:-translate-y-1 hover:shadow-lg">
                 <div className="mb-4 md:mb-lg">
@@ -119,15 +119,15 @@ export default function Contact() {
                 )}
               </div>
             </div>
-            <div className="w-full space-y-8 md:space-y-lg order-2">
+            <div className="w-full space-y-5 sm:space-y-8 md:space-y-lg order-2">
               <div className="space-y-4 md:space-y-md">
                 <h3 className="font-label-md text-label-md text-secondary uppercase tracking-widest flex items-center gap-xs">
                   <span className="w-1 h-4 bg-secondary rounded-full"></span>
                   Contact Directory
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-md">
-                  <div className="flex items-center gap-3 md:gap-md p-4 md:p-md bg-white rounded-xl border border-outline-variant/30 shadow-sm border-t-2 border-secondary">
-                    <div className="w-12 h-12 bg-error-container rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="flex items-center gap-3 md:gap-md p-3.5 sm:p-4 md:p-md bg-white rounded-xl border border-outline-variant/30 shadow-sm border-t-2 border-secondary">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-error-container rounded-lg flex items-center justify-center flex-shrink-0">
                       <span className="material-symbols-outlined text-error font-bold">call</span>
                     </div>
                     <div>
@@ -135,8 +135,8 @@ export default function Contact() {
                       <p className="font-headline-md text-headline-md text-on-surface font-bold">911</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 md:gap-md p-4 md:p-md bg-white rounded-xl border border-outline-variant/30 shadow-sm border-t-2 border-secondary">
-                    <div className="w-12 h-12 bg-surface-container-high rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="flex items-center gap-3 md:gap-md p-3.5 sm:p-4 md:p-md bg-white rounded-xl border border-outline-variant/30 shadow-sm border-t-2 border-secondary">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-surface-container-high rounded-lg flex items-center justify-center flex-shrink-0">
                       <span className="material-symbols-outlined text-secondary">mail</span>
                     </div>
                     <div className="overflow-hidden">
@@ -151,7 +151,7 @@ export default function Contact() {
                   <span className="w-1 h-4 bg-secondary rounded-full"></span>
                   Official Headquarters
                 </h3>
-                <div className="p-4 md:p-md bg-white rounded-xl border border-outline-variant/30 shadow-sm space-y-sm">
+                <div className="p-3.5 sm:p-4 md:p-md bg-white rounded-xl border border-outline-variant/30 shadow-sm space-y-sm">
                   <p className="font-body-md text-body-md text-on-surface">Culiat Barangay Hall,<br />467 Tandang Sora Ave,<br />Quezon City, 1128 Metro Manila</p>
                   <div className="inline-flex items-center gap-xs bg-surface-container-low px-md py-xs rounded-full border border-outline-variant/20">
                     <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -159,7 +159,7 @@ export default function Contact() {
                   </div>
                 </div>
               </div>
-              <div className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden shadow-sm border border-outline-variant/30 map-texture group">
+              <div className="relative w-full h-40 sm:h-48 md:h-64 rounded-2xl overflow-hidden shadow-sm border border-outline-variant/30 map-texture group">
                 <div className="absolute inset-0 bg-secondary/5"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
