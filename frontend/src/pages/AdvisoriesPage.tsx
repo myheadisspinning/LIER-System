@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import SiteHeader from '../components/SiteHeader';
 import SiteFooter from '../components/SiteFooter';
+import Pagination from '../components/Pagination';
 import { useScrollLock } from '../lib/useScrollLock';
+
+const PAGE_SIZE = 6;
 
 type Category = 'All' | 'Emergency & Crime' | 'Weather & Floods' | 'Barangay Services' | 'Public Safety';
 
@@ -64,6 +67,8 @@ export default function AdvisoriesPage() {
   const [category, setCategory] = useState<Category>('All');
   const [query, setQuery] = useState('');
   const [selectedAdvisory, setSelectedAdvisory] = useState<Advisory | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const listTopRef = useRef<HTMLDivElement>(null);
 
   useScrollLock(selectedAdvisory != null);
 
@@ -100,12 +105,25 @@ export default function AdvisoriesPage() {
     return matchesCategory && matchesQuery;
   });
 
+  const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const displayed = visible.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category, query, advisories]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    listTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <div className="bg-background text-on-surface font-body-md min-h-screen flex flex-col">
       <SiteHeader active="/advisories" />
 
-      <section className="pt-28 pb-10 bg-primary-container">
-        <div className="container mx-auto px-4 md:px-margin-desktop text-center">
+      <section className="pt-20 pb-8 md:pb-10 bg-primary-container">
+          <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop text-center">
           <div className="inline-flex items-center gap-sm bg-white/15 backdrop-blur-sm px-md py-xs rounded-full mb-base">
             <span className="material-symbols-outlined text-sm text-white">notifications_active</span>
             <span className="text-white font-label-md text-xs tracking-wider uppercase font-bold">Official Advisories</span>
@@ -116,8 +134,8 @@ export default function AdvisoriesPage() {
       </section>
 
       <section className="py-xl flex-1">
-        <div className="container mx-auto px-4 md:px-margin-desktop">
-          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle p-4 flex flex-col md:flex-row justify-between items-center mb-xl gap-4 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
+          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle p-4 flex flex-col md:flex-row justify-between items-center mb-8 md:mb-12 gap-4 shadow-sm">
             <div className="flex flex-wrap gap-2">
               {categories.map((c) => (
                 <button
@@ -147,19 +165,21 @@ export default function AdvisoriesPage() {
           </div>
 
           {loading ? (
-            <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-12 text-center text-sm text-on-surface-variant shadow-sm">Loading advisories...</div>
+            <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 md:p-12 text-center text-sm text-on-surface-variant shadow-sm">Loading advisories...</div>
           ) : advisories.length === 0 ? (
-            <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-12 text-center text-on-surface-variant shadow-sm">
+            <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 md:p-12 text-center text-on-surface-variant shadow-sm">
               <span className="material-symbols-outlined text-4xl text-on-surface-variant/40 mb-3 block">notifications_off</span>
               <p className="font-body-md">No official advisories have been published yet.</p>
             </div>
           ) : visible.length === 0 ? (
-            <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-10 text-center shadow-sm">
+            <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 md:p-10 text-center shadow-sm">
               <p className="text-on-surface-variant">No advisories match your search.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {visible.map((a) => {
+            <>
+            <div ref={listTopRef} className="scroll-mt-24" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              {displayed.map((a) => {
                 const needsTruncate = a.body.length > TRUNCATE_LEN;
                 return (
                   <div
@@ -167,20 +187,20 @@ export default function AdvisoriesPage() {
                     className="bg-surface-container-lowest border border-border-subtle rounded-2xl overflow-hidden hover:border-secondary/50 transition-all duration-200 flex flex-col h-full shadow-sm hover:shadow-md hover:-translate-y-0.5"
                   >
                     {a.image_url && (
-                      <div className="h-36 overflow-hidden">
+                      <div className="h-28 md:h-36 overflow-hidden">
                         <img src={a.image_url} alt={a.title} className="w-full h-full object-cover" />
                       </div>
                     )}
-                    <div className="p-6 flex flex-col flex-1">
-                      <div className="flex justify-between items-start mb-4">
+                    <div className="p-4 md:p-6 flex flex-col flex-1">
+                      <div className="flex justify-between items-start mb-3 md:mb-4">
                         <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-caps-xs text-caps-xs uppercase tracking-wider ${toneClasses[a.tone]}`}>
                           <span className="material-symbols-outlined text-[14px]">{iconFor(a.type)}</span>
                           {a.type}
                         </span>
                         <span className="text-on-surface-variant font-label-sm text-label-sm">{a.time}</span>
                       </div>
-                      <h3 className="font-headline-md text-headline-md text-on-surface font-bold mb-2">{a.title}</h3>
-                      <p className={`font-body-sm text-on-surface-variant flex-1 leading-relaxed ${needsTruncate ? 'line-clamp-3' : ''}`}>{a.body}</p>
+                      <h3 className="font-headline-md text-lg md:text-xl text-on-surface font-bold mb-2">{a.title}</h3>
+                      <p className={`font-body-sm text-on-surface-variant flex-1 leading-relaxed ${needsTruncate ? 'line-clamp-2 md:line-clamp-3' : ''}`}>{a.body}</p>
                       {needsTruncate && (
                         <button
                           type="button"
@@ -190,7 +210,7 @@ export default function AdvisoriesPage() {
                           View More
                         </button>
                       )}
-                      <div className="mt-4 pt-3 border-t border-border-subtle">
+                      <div className="mt-3 md:mt-4 pt-3 border-t border-border-subtle">
                         <span className="text-[11px] text-on-surface-variant/60 font-label-sm">{a.audience}</span>
                       </div>
                     </div>
@@ -198,6 +218,20 @@ export default function AdvisoriesPage() {
                 );
               })}
             </div>
+            <div className="mt-4 md:mt-6 rounded-xl border border-border-subtle overflow-hidden">
+              <Pagination
+                currentPage={safePage}
+                totalPages={totalPages}
+                itemsPerPage={PAGE_SIZE}
+                onPageChange={handlePageChange}
+                onItemsPerPageChange={() => {}}
+                totalItems={visible.length}
+                startIndex={(safePage - 1) * PAGE_SIZE}
+                endIndex={safePage * PAGE_SIZE}
+                hidePerPage
+              />
+            </div>
+            </>
           )}
         </div>
       </section>
@@ -214,7 +248,7 @@ export default function AdvisoriesPage() {
                 </span>
                 <span className="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
                   <span className="material-symbols-outlined text-[16px]">schedule</span>
-                  {selectedAdvisory.time} · {selectedAdvisory.audience}
+                  {selectedAdvisory.time} -+ {selectedAdvisory.audience}
                 </span>
               </div>
               <button

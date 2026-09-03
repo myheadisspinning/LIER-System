@@ -126,7 +126,7 @@ function CommunityGallery() {
         {getVisible().map((item, i) => (
             <div
               key={`${item.title}-${i}`}
-              className={`relative h-72 shrink-0 w-full md:w-[calc((100%-2*1.5rem)/3)] rounded-xl overflow-hidden cursor-pointer transition-all duration-1000 ease-in-out ${
+              className={`relative h-56 md:h-72 shrink-0 w-full md:w-[calc((100%-2*1.5rem)/3)] rounded-xl overflow-hidden cursor-pointer transition-all duration-1000 ease-in-out ${
                 item._center ? 'ring-2 ring-secondary shadow-xl scale-[1.02]' : 'shadow-md scale-100 opacity-80'
               }`}
             >
@@ -136,8 +136,8 @@ function CommunityGallery() {
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4">
-                <p className="text-white font-semibold text-lg leading-snug drop-shadow-lg">{item.title}</p>
+              <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4">
+                <p className="text-white font-semibold text-base md:text-lg leading-snug drop-shadow-lg">{item.title}</p>
               </div>
             </div>
         ))}
@@ -165,7 +165,7 @@ function CommunityGallery() {
       )}
 
       {items.length > 1 && (
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center gap-2 mt-3 md:mt-4">
           {items.map((_, i) => (
             <button
               key={i}
@@ -282,14 +282,14 @@ export default function Home() {
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden">
       <SiteHeader active="/" />
 
-      <header className="relative min-h-[20vh] py-16 md:py-24 lg:py-32 pt-16 flex items-center overflow-hidden">
+      <header className="relative min-h-[20vh] py-8 md:py-16 lg:py-20 pt-20 md:pt-16 flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img alt="Barangay Culiat Hall" className="w-full h-full object-cover object-center" src="/image/culiat-brgy.jpg" />
           <div className={styles.heroOverlay}></div>
           <div className="absolute inset-0 hero-overlay"></div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-xl relative z-10 py-xl">
-          <div ref={(el) => { sectionRefs.current[0] = el; }} className="flex flex-col justify-center items-center lg:items-start text-center lg:text-center space-y-md opacity-0 translate-y-10 transition-all duration-1000" data-section="hero">
+        <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-xl relative z-10 py-6 md:py-10">
+          <div ref={(el) => { sectionRefs.current[0] = el; }} className="flex flex-col justify-center items-center lg:items-start text-center lg:text-center space-y-4 md:space-y-md opacity-0 translate-y-10 transition-all duration-1000" data-section="hero">
             <div className="inline-flex items-center gap-sm bg-secondary-container/30 backdrop-blur-md px-md py-xs rounded-full border border-secondary-fixed/30 mb-sm">
               <span className="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
               <span className="text-white font-label-md text-xs md:text-label-md tracking-wider uppercase font-bold">Tactical Command Center</span>
@@ -297,12 +297,12 @@ export default function Home() {
             <h1 className="font-display-lg text-3xl md:text-5xl lg:text-display-lg text-white text-center md:text-left leading-tight drop-shadow-lg">
               <span className="text-tertiary-fixed-dim">Law Enforcement</span> and Incident Reporting System
             </h1>
-            <p className="font-body-md md:font-body-lg text-body-md md:text-body-lg text-surface-container-low/90 text-center md:text-left max-w-ml">
+            <p className="font-body-md text-body-md text-surface-container-low/90 text-center md:text-left max-w-ml">
               AI-Assisted Dispatch, Case Tracking, and Evidence Management for Barangay Culiat, Quezon City. Ensuring a safer community through transparent and efficient technology.
             </p>
-            <div className="flex flex-col sm:flex-row items-center gap-md pt-base w-full">
+            <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-md pt-base w-full">
               <button
-                className="relative overflow-hidden w-full sm:w-auto px-lg md:px-xl py-4 gold-gradient text-on-tertiary-fixed font-headline-md text-lg rounded-2xl shadow-xl hover:scale-105 hover:shadow-2xl transition-all flex items-center justify-center gap-sm active:scale-95 touch-manipulation group"
+                className="relative overflow-hidden w-full sm:w-auto px-lg md:px-xl py-3 md:py-4 gold-gradient text-on-tertiary-fixed font-headline-md text-lg rounded-2xl shadow-xl hover:scale-105 hover:shadow-2xl transition-all flex items-center justify-center gap-sm active:scale-95 touch-manipulation group"
                 onClick={handleReportIncident}
               >
                 <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -331,22 +331,22 @@ export default function Home() {
 
       <section ref={(el) => { sectionRefs.current[1] = el; }} className="py-md md:py-xl -mt-8 md:-mt-xl relative z-20 opacity-0 translate-y-10 transition-all duration-1000 delay-100">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
-          <div className="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
+          <div className="bg-white/95 backdrop-blur-md p-3 md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
             <span className="material-symbols-outlined text-secondary text-2xl md:text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>assignment</span>
             <CountUp target={2450} suffix="+" />
             <span className="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Total Incidents</span>
           </div>
-          <div className="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border-l-4 border-l-error border-y border-r border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
+          <div className="bg-white/95 backdrop-blur-md p-3 md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border-l-4 border-l-error border-y border-r border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
             <span className="material-symbols-outlined text-error text-2xl md:text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>warning</span>
             <CountUp target={124} />
             <span className="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Active Cases</span>
           </div>
-          <div className="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border-l-4 border-l-secondary border-y border-r border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
+          <div className="bg-white/95 backdrop-blur-md p-3 md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border-l-4 border-l-secondary border-y border-r border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
             <span className="material-symbols-outlined text-secondary text-2xl md:text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>check_circle</span>
             <CountUp target={2210} />
             <span className="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Resolved Cases</span>
           </div>
-          <div className="bg-white/95 backdrop-blur-md p-md md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
+          <div className="bg-white/95 backdrop-blur-md p-3 md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
             <span className="material-symbols-outlined text-secondary text-2xl md:text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>groups</span>
             <CountUp target={15000} suffix="+" />
             <span className="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Registered Users</span>
@@ -354,10 +354,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[2] = el; }} className="py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-1000 delay-200">
+      <section ref={(el) => { sectionRefs.current[2] = el; }} className="py-10 md:py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-1000 delay-200">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
-          <div className="text-center mb-xl" data-section="services-title">
-            <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">LGU Public Safety Services</h2>
+          <div className="text-center mb-8 md:mb-12" data-section="services-title">
+            <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-base">LGU Public Safety Services</h2>
             <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Access critical services and report concerns directly to our integrated law enforcement team.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
@@ -367,16 +367,16 @@ export default function Home() {
               { icon: 'local_police', title: 'Police Assistance', desc: 'Request emergency patrol or police presence in your zone.', hoverBorder: 'hover:border-secondary', slotKey: 'police_assistance' },
               { icon: 'forum', title: 'Contact Barangay', desc: 'Direct messaging line to Barangay officials and safety officers.', hoverBorder: 'hover:border-secondary', slotKey: 'contact_barangay' },
             ].map((svc, i) => (
-              <div key={i} className={`group relative rounded-2xl border border-outline-variant overflow-hidden ${svc.hoverBorder} hover:shadow-xl transition-all cursor-pointer touch-manipulation hover:-translate-y-2 min-h-[280px]`} data-section="services">
+              <div key={i} className={`group relative rounded-2xl border border-outline-variant overflow-hidden ${svc.hoverBorder} hover:shadow-xl transition-all cursor-pointer touch-manipulation hover:-translate-y-2 min-h-[220px] md:min-h-[280px]`} data-section="services">
                 <div className="absolute inset-0">
                   <img alt={svc.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={getServiceImage(svc.slotKey)} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                 </div>
-                <div className="relative p-lg h-full flex flex-col justify-end">
+                <div className="relative p-5 md:p-lg h-full flex flex-col justify-end">
                   <div className="w-12 h-12 rounded-xl bg-blue-600/80 flex items-center justify-center text-white mb-sm group-hover:bg-secondary transition-colors duration-300">
                     <span className="material-symbols-outlined text-2xl">{svc.icon}</span>
                   </div>
-                  <h3 className="font-headline-md text-lg md:text-headline-md mb-xs text-white">{svc.title}</h3>
+                  <h3 className="font-headline-md text-lg md:text-xl mb-xs text-white">{svc.title}</h3>
                   <p className="font-body-md text-white/90 text-sm">{svc.desc}</p>
                 </div>
               </div>
@@ -385,26 +385,26 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[3] = el; }} className="py-xl opacity-0 translate-y-10 transition-all duration-1000 delay-100">
+      <section ref={(el) => { sectionRefs.current[3] = el; }} className="py-10 md:py-xl opacity-0 translate-y-10 transition-all duration-1000 delay-100">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
-          <div className="text-center mb-xl">
-            <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">Barangay Culiat in Action</h2>
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-base">Barangay Culiat in Action</h2>
             <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">A glimpse into the programs, events, and community efforts that make our barangay safer and more connected.</p>
           </div>
           <CommunityGallery />
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[4] = el; }} className="py-xl bg-surface-container-highest/30 opacity-0 translate-y-10 transition-all duration-1000 delay-200">
+      <section ref={(el) => { sectionRefs.current[4] = el; }} className="py-10 md:py-xl bg-surface-container-highest/30 opacity-0 translate-y-10 transition-all duration-1000 delay-200">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-xl items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="order-2 lg:order-1 text-center lg:text-left" data-section="impact">
-              <div className="inline-flex items-center gap-sm bg-secondary/10 px-md py-xs rounded-full mb-md mx-auto lg:mx-0">
+              <div className="inline-flex items-center gap-sm bg-secondary/10 px-md py-xs rounded-full mb-3 md:mb-md mx-auto lg:mx-0">
                 <span className="material-symbols-outlined text-secondary text-sm">auto_awesome</span>
                 <span className="text-secondary font-label-md text-xs tracking-wider uppercase">COMMUNITY IMPACT</span>
               </div>
-              <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-md leading-tight">Digital Dispatch: A 4-Minute Success Story</h2>
-              <p className="font-body-md md:font-body-lg text-on-surface-variant mb-lg">
+              <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-3 md:mb-md leading-tight">Digital Dispatch: A 4-Minute Success Story</h2>
+              <p className="font-body-md md:font-body-lg text-on-surface-variant mb-6 md:mb-lg">
                 Last Tuesday, our AI-assisted dispatch routed an emergency call in record time, resulting in a 4-minute response. This is how smart governance saves lives.
               </p>
               <button className="w-full sm:w-auto px-lg py-sm bg-secondary text-on-secondary font-label-md rounded-lg hover:bg-secondary-container hover:shadow-lg transition-all flex items-center justify-center gap-xs group">
@@ -414,7 +414,7 @@ export default function Home() {
             <div className="order-1 lg:order-2" data-section="impact">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-video group">
                 <img alt="Community Safety" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="frontend/public/image/image-section-culiat.jfif" />
-                <div className={`absolute inset-0 bg-gradient-to-t from-on-background/80 to-transparent flex items-end p-6 ${styles.communityGradient}`}>
+                <div className={`absolute inset-0 bg-gradient-to-t from-on-background/80 to-transparent flex items-end p-4 md:p-6 ${styles.communityGradient}`}>
                   <p className="text-white font-caption text-caption italic">"The response was faster than I ever expected. Technology really made the difference." - Local Resident</p>
                 </div>
               </div>
@@ -423,25 +423,25 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[5] = el; }} className="py-xl bg-surface opacity-0 translate-y-10 transition-all duration-1000 delay-100">
+      <section ref={(el) => { sectionRefs.current[5] = el; }} className="py-10 md:py-xl bg-surface opacity-0 translate-y-10 transition-all duration-1000 delay-100">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
-          <div className="text-center mb-xl" data-section="guides">
-            <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">Community Safety Guides</h2>
+          <div className="text-center mb-8 md:mb-12" data-section="guides">
+            <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-base">Community Safety Guides</h2>
             <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Essential resources and step-by-step instructions for a safer Barangay Culiat.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-gutter">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-gutter">
             {[
               { title: "Elders' Guide: Navigating the Portal", desc: 'A step-by-step guide for our seniors on how to use digital tools to report incidents and access services safely.', btn: 'View Guide', link: '/elder-guide', slotKey: 'elders_guide' },
               { title: 'Public Safety & Protocols', desc: 'Learn the official procedures for reporting emergencies and how to coordinate with our public safety officers during critical incidents.', btn: 'Learn More', link: '/services', slotKey: 'safety_protocols' },
               { title: 'Building a Resilient Community', desc: 'Discover community initiatives, neighborhood watch programs, and best practices for maintaining a safe environment.', btn: 'Get Involved', link: '/contact', slotKey: 'resilient_community' },
             ].map((guide, i) => (
               <div key={i} className="bg-surface-container-low rounded-2xl border border-outline-variant/30 flex flex-col overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all" data-section="guides">
-                <div className="h-44 overflow-hidden">
+                <div className="h-36 md:h-44 overflow-hidden">
                   <img alt={guide.title} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src={getGuideImage(guide.slotKey)} />
                 </div>
-                <div className="p-6 md:p-lg flex flex-col flex-grow">
-                  <h3 className="font-headline-md text-lg md:text-headline-md text-on-surface mb-sm">{guide.title}</h3>
-                  <p className="font-body-md text-on-surface-variant mb-lg flex-grow">{guide.desc}</p>
+                <div className="p-4 md:p-lg flex flex-col flex-grow">
+                  <h3 className="font-headline-md text-lg md:text-xl text-on-surface mb-sm">{guide.title}</h3>
+                  <p className="font-body-md text-on-surface-variant mb-4 md:mb-lg flex-grow">{guide.desc}</p>
                   <Link to={guide.link} className="w-full py-3 border border-secondary text-secondary font-label-md rounded-lg hover:bg-secondary hover:text-white transition-all text-center inline-block">{guide.btn}</Link>
                 </div>
               </div>
@@ -450,16 +450,16 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[6] = el; }} className="py-xl bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-1000 delay-200">
+      <section ref={(el) => { sectionRefs.current[6] = el; }} className="py-10 md:py-xl bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-1000 delay-200">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
-          <div className="text-center mb-xl" data-section="hotlines">
-            <h2 className="font-headline-lg text-2xl md:text-headline-lg text-on-surface mb-base">Emergency Hotlines</h2>
+          <div className="text-center mb-8 md:mb-12" data-section="hotlines">
+            <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-base">Emergency Hotlines</h2>
             <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Save these numbers for quick access during emergencies. Our responders are ready to assist 24/7.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-gutter">
-            <div className="bg-white p-lg rounded-2xl border-l-4 border-l-secondary shadow-md hover:shadow-xl hover:-translate-y-1 transition-all" data-section="hotlines">
-              <div className="flex items-center gap-md mb-md">
-                <div className="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-gutter">
+            <div className="bg-white p-5 md:p-lg rounded-2xl border-l-4 border-l-secondary shadow-md hover:shadow-xl hover:-translate-y-1 transition-all" data-section="hotlines">
+              <div className="flex items-center gap-3 mb-3 md:gap-md md:mb-md">
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-secondary/10 flex items-center justify-center">
                   <span className="material-symbols-outlined text-secondary text-3xl" style={{ fontVariationSettings: '"FILL" 1' }}>local_police</span>
                 </div>
                 <div>
@@ -469,12 +469,12 @@ export default function Home() {
                   </span>
                 </div>
               </div>
-              <p className="font-body-md text-on-surface font-bold text-lg mb-xs">0962-582-1531</p>
+              <p className="font-body-md text-on-surface font-bold text-base md:text-lg mb-xs">0962-582-1531</p>
               <p className="font-body-sm text-on-surface-variant">Landline: 856-722-60</p>
             </div>
-            <div className="bg-white p-lg rounded-2xl border-l-4 border-l-error shadow-md hover:shadow-xl hover:-translate-y-1 transition-all" data-section="hotlines">
-              <div className="flex items-center gap-md mb-md">
-                <div className="w-14 h-14 rounded-xl bg-error/10 flex items-center justify-center">
+            <div className="bg-white p-5 md:p-lg rounded-2xl border-l-4 border-l-error shadow-md hover:shadow-xl hover:-translate-y-1 transition-all" data-section="hotlines">
+              <div className="flex items-center gap-3 mb-3 md:gap-md md:mb-md">
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-error/10 flex items-center justify-center">
                   <span className="material-symbols-outlined text-error text-3xl" style={{ fontVariationSettings: '"FILL" 1' }}>emergency</span>
                 </div>
                 <div>
@@ -482,12 +482,12 @@ export default function Home() {
                   <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-xs font-bold">Nationwide</span>
                 </div>
               </div>
-              <p className="font-body-md text-on-surface font-bold text-lg mb-xs">911</p>
+              <p className="font-body-md text-on-surface font-bold text-base md:text-lg mb-xs">911</p>
               <p className="font-body-sm text-on-surface-variant">Philippine National Police</p>
             </div>
-            <div className="bg-white p-lg rounded-2xl border-l-4 border-l-tertiary shadow-md hover:shadow-xl hover:-translate-y-1 transition-all" data-section="hotlines">
-              <div className="flex items-center gap-md mb-md">
-                <div className="w-14 h-14 rounded-xl bg-tertiary/10 flex items-center justify-center">
+            <div className="bg-white p-5 md:p-lg rounded-2xl border-l-4 border-l-tertiary shadow-md hover:shadow-xl hover:-translate-y-1 transition-all" data-section="hotlines">
+              <div className="flex items-center gap-3 mb-3 md:gap-md md:mb-md">
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-tertiary/10 flex items-center justify-center">
                   <span className="material-symbols-outlined text-tertiary text-3xl" style={{ fontVariationSettings: '"FILL" 1' }}>apartment</span>
                 </div>
                 <div>
@@ -495,7 +495,7 @@ export default function Home() {
                   <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-bold">Quezon City</span>
                 </div>
               </div>
-              <p className="font-body-md text-on-surface font-bold text-lg mb-xs">122</p>
+              <p className="font-body-md text-on-surface font-bold text-base md:text-lg mb-xs">122</p>
               <p className="font-body-sm text-on-surface-variant">Quezon City Emergency Hotline</p>
             </div>
           </div>

@@ -96,7 +96,7 @@ export default function ForgotPassword() {
 
         {/* Right form panel */}
         <section className="w-full lg:w-1/2 bg-surface-container-lowest flex flex-col overflow-hidden">
-          <div className={`flex-1 flex flex-col p-md md:p-lg overflow-y-auto ${styles.hideScrollbar} custom-scrollbar`}>
+          <div className={`flex-1 flex flex-col p-4 md:p-lg overflow-y-auto ${styles.hideScrollbar} custom-scrollbar`}>
             {/* Back arrow */}
             <div className="mb-4">
               <Link to="/signin" className="inline-flex items-center justify-center w-9 h-9 rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant">
@@ -104,12 +104,12 @@ export default function ForgotPassword() {
               </Link>
             </div>
             {/* Logo for mobile */}
-            <div className="lg:hidden flex justify-center mb-6">
-              <img alt="Barangay Culiat Safety Logo" className="h-20 w-20"
+            <div className="lg:hidden flex justify-center mb-4 md:mb-6">
+              <img alt="Barangay Culiat Safety Logo" className="h-16 w-16"
                 src="/image/culiat-logo.png" />
             </div>
             <div className="max-w-2xl w-full mx-auto py-4">
-              <header className="text-center lg:text-left mb-8">
+              <header className="text-center lg:text-left mb-6 md:mb-8">
                 <h2 className="text-2xl font-bold text-on-background mb-1">Forgot your password?</h2>
                 <p className="font-body-md text-on-surface-variant">
                   {sent

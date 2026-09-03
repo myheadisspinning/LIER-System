@@ -524,7 +524,7 @@ export default function SignUp() {
               </>
             ) : (
               <div className="flex flex-col items-center justify-center text-center">
-                <div className="w-full flex items-center gap-2 mb-8">
+                <div className="w-full flex items-center gap-2 mb-6 md:mb-8">
                   <button
                     type="button"
                     onClick={() => setSignupSuccess(false)}
@@ -535,17 +535,17 @@ export default function SignUp() {
                   <h2 className="font-headline-md text-headline-md text-on-background">Verify Your Email</h2>
                 </div>
 
-                <div className="w-20 h-20 rounded-full bg-secondary/10 flex items-center justify-center mb-6">
-                  <span className="material-symbols-outlined text-secondary text-5xl">mark_email_read</span>
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-secondary/10 flex items-center justify-center mb-4 md:mb-6">
+                  <span className="material-symbols-outlined text-secondary text-4xl md:text-5xl">mark_email_read</span>
                 </div>
 
                 <p className="text-body-lg text-on-surface mb-2">
                   We've sent a confirmation link to
                 </p>
-                <p className="text-body-lg font-semibold text-secondary mb-6">
+                <p className="text-body-lg font-semibold text-secondary mb-4 md:mb-6">
                   {email}
                 </p>
-                <p className="text-body-sm text-on-surface-variant mb-8 max-w-2xl">
+                <p className="text-body-sm text-on-surface-variant mb-6 md:mb-8 max-w-2xl">
                   Please check your inbox and click the link to activate your account.
                 </p>
 

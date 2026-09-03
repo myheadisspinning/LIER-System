@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function SiteFooter() {
   return (
-    <footer className="w-full py-xl md:px-margin-desktop grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-lg bg-surface-container-lowest border-t border-outline-variant px-margin-desktop">
+    <footer className="w-full py-10 md:py-xl md:px-margin-desktop grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-lg bg-surface-container-lowest border-t border-outline-variant px-margin-desktop">
       <div className="flex flex-col gap-sm text-center md:text-left">
         <div className="flex items-center justify-center md:justify-start gap-xs">
           <div className="w-10 h-10 rounded-full overflow-hidden border border-outline-variant flex items-center justify-center">

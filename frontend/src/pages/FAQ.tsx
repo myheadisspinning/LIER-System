@@ -116,21 +116,21 @@ export default function FAQ() {
     <div className="bg-background text-on-surface font-body-md flex flex-col min-h-screen">
       <SiteHeader active="/services" />
 
-      <main className="flex-grow w-full pt-24 pb-24 md:pb-12">
-        <section className="relative overflow-hidden px-margin-mobile md:px-margin-desktop py-lg md:py-xl">
+      <main className="flex-grow w-full pt-20 pb-10 md:pb-12">
+        <section className="relative overflow-hidden px-margin-mobile md:px-margin-desktop py-8 md:py-xl">
           <div className="relative z-10 max-w-4xl mx-auto text-center">
-            <span className="text-secondary font-bold tracking-widest uppercase text-sm mb-4 block">Resident Support</span>
-            <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-6 leading-tight">Frequently Asked Questions</h1>
-            <p className="text-body-lg text-on-surface-variant mb-8 max-w-2xl mx-auto">Quick answers to common questions about barangay services, safety protocols, incident reporting, and community guidelines.</p>
+            <span className="text-secondary font-bold tracking-widest uppercase text-sm mb-3 md:mb-4 block">Resident Support</span>
+            <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-4 md:mb-6 leading-tight">Frequently Asked Questions</h1>
+            <p className="text-body-md text-on-surface-variant mb-6 md:mb-8 max-w-2xl mx-auto">Quick answers to common questions about barangay services, safety protocols, incident reporting, and community guidelines.</p>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full"></div>
           </div>
         </section>
 
-        <section className="px-margin-mobile md:px-margin-desktop py-lg md:py-xl">
-          <div className="max-w-4xl mx-auto space-y-16">
+        <section className="px-margin-mobile md:px-margin-desktop py-8 md:py-xl">
+          <div className="max-w-4xl mx-auto space-y-10 md:space-y-12">
             {faqSections.map((section, sIndex) => (
               <div key={section.category}>
-                <div className="flex items-center gap-3 mb-6">
+                <div className="flex items-center gap-3 mb-4 md:mb-6">
                   <div className="w-11 h-11 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center">
                     <span className="material-symbols-outlined">{section.icon}</span>
                   </div>

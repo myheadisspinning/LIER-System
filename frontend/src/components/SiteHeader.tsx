@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
-import { LogIn } from 'lucide-react';
+import { Bell, Home, Info, Landmark, LayoutGrid, LogIn, Mail } from 'lucide-react';
 import { supabase } from '../supabaseClient';
 import { useUnreadCounts } from '../lib/admin';
 import Toast, { type ToastData } from './Toast';
@@ -18,12 +18,12 @@ interface SiteHeaderProps {
 }
 
 const navItems = [
-  { path: '/', label: 'Home' },
-  { path: '/about', label: 'About' },
-  { path: '/officials', label: 'Officials' },
-  { path: '/services', label: 'Services' },
-  { path: '/advisories', label: 'Advisories' },
-  { path: '/contact', label: 'Contact' },
+  { path: '/', label: 'Home', Icon: Home },
+  { path: '/about', label: 'About', Icon: Info },
+  { path: '/officials', label: 'Officials', Icon: Landmark },
+  { path: '/services', label: 'Services', Icon: LayoutGrid },
+  { path: '/advisories', label: 'Advisories', Icon: Bell },
+  { path: '/contact', label: 'Contact', Icon: Mail },
 ];
 
 export default function SiteHeader({
@@ -115,27 +115,39 @@ export default function SiteHeader({
     return user?.user_metadata?.fullname || user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email;
   };
 
+  const titleWords = title.trim().split(/\s+/);
+  const titleTail = titleWords.length > 1 ? titleWords[titleWords.length - 1] : '';
+  const titleHead = titleWords.length > 1 ? titleWords.slice(0, -1).join(' ') : title;
+
   const loginButtonClass =
-    'group hidden lg:inline-flex items-center gap-2 px-4 py-1.5 rounded-lg border border-white/30 bg-transparent text-white font-medium text-sm tracking-wider uppercase cursor-pointer transition-all duration-200 ease-in-out hover:bg-white/10 hover:border-slate-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50';
+    'group hidden lg:inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full border border-white/30 bg-transparent text-white font-medium text-[11px] tracking-widest uppercase cursor-pointer transition-all duration-200 ease-in-out hover:bg-white/10 hover:border-slate-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50';
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-[100] flex justify-between items-center px-4 md:px-margin-desktop h-20 bg-primary-container/90 backdrop-blur-md shadow-md font-body-md">
-        <Link to="/" className="flex flex-1 items-center gap-2 md:gap-sm min-w-0">
-          <div className="w-8 h-8 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim transition-transform hover:scale-110 shrink-0">
+      <header className="fixed top-0 left-0 w-full z-[100] flex justify-between xl:justify-center xl:gap-12 items-center px-4 md:px-margin-desktop h-16 bg-primary-container/90 backdrop-blur-md shadow-md font-body-md">
+        <Link to="/" className="flex flex-1 lg:flex-none items-center gap-2 md:gap-sm min-w-0">
+          <div className="w-8 h-8 md:w-10 md:h-10 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim transition-transform hover:scale-110 shrink-0">
             <img alt={logoAlt} className={logoClass} src={logo} />
           </div>
-          <h1 className="font-headline-md text-[13px] min-[400px]:text-sm sm:text-base md:text-headline-md font-bold text-surface-bright leading-tight whitespace-nowrap overflow-hidden">{title}</h1>
+          <h1 className="font-headline-md text-[13px] min-[400px]:text-sm sm:text-base md:text-[13px] font-bold text-surface-bright leading-tight whitespace-nowrap overflow-hidden">
+            <span className="md:hidden">{title}</span>
+            <span className="hidden md:flex flex-col items-start leading-none gap-[2px]">
+              <span className="uppercase tracking-widest">{titleHead}</span>
+              {titleTail && (
+                <span className="uppercase tracking-widest text-[10px] font-semibold text-tertiary-fixed-dim opacity-90">{titleTail}</span>
+              )}
+            </span>
+          </h1>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-lg">
+        <nav className="hidden lg:flex items-center gap-1 p-1.5 rounded-full bg-white/5 border border-white/10">
           {navItems.map((item) => (
             <Link
               key={item.path}
-              className={`font-label-md text-label-md inline-flex items-center gap-1.5 transition-all duration-200 ${
+              className={`font-label-md text-[13px] inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full transition-all duration-200 ${
                 item.path === active
-                  ? 'text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim pb-1'
-                  : 'text-on-primary-container hover:text-surface-bright'
+                  ? 'bg-tertiary-fixed-dim text-on-tertiary-fixed font-bold shadow'
+                  : 'text-on-primary-container hover:text-surface-bright hover:bg-white/5'
               }`}
               to={item.path}
             >
@@ -145,12 +157,12 @@ export default function SiteHeader({
           ))}
         </nav>
 
-        <div className="flex items-center gap-1 md:gap-md shrink-0" ref={actionsRef}>
+        <div className="flex items-center gap-1 md:gap-md lg:gap-2 shrink-0 lg:shrink lg:flex-1 lg:justify-end xl:flex-none" ref={actionsRef}>
           {user ? (
             <>
               <div className="relative hidden lg:block">
                 <button
-                  className="p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors relative"
+                  className="inline-flex items-center justify-center h-8 w-8 text-surface-bright hover:bg-white/10 rounded-full border border-white/30 transition-colors relative"
                   type="button"
                   aria-label="Notifications"
                   onClick={() => {
@@ -158,8 +170,8 @@ export default function SiteHeader({
                     setProfileOpen(false);
                   }}
                 >
-                  <span className="material-symbols-outlined text-2xl">notifications</span>
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+                  <span className="material-symbols-outlined text-lg leading-none">notifications</span>
+                  <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-error rounded-full"></span>
                 </button>
                 {notifOpen && (
                   <div className="absolute right-0 mt-2 w-72 bg-background rounded-lg shadow-2xl border border-outline-variant/30 overflow-hidden">
@@ -174,7 +186,7 @@ export default function SiteHeader({
 
               <div className="relative">
                 <button
-                  className="flex items-center gap-1 p-1 pr-1 md:gap-2 md:p-1.5 md:pr-2 rounded-full hover:bg-white/10 transition-colors"
+                  className="flex items-center gap-1 p-0.5 pr-1 md:gap-2 md:p-1.5 md:pr-2 rounded-full hover:bg-white/10 transition-colors lg:gap-0.5 lg:h-8 lg:pl-0.5 lg:pr-1 lg:border lg:border-white/30"
                   type="button"
                   aria-label="Profile menu"
                   onClick={() => {
@@ -182,14 +194,14 @@ export default function SiteHeader({
                     setNotifOpen(false);
                   }}
                 >
-                  <span className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary font-bold text-sm overflow-hidden">
+                  <span className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary font-bold text-xs md:text-sm overflow-hidden lg:w-7 lg:h-7 lg:text-xs">
                     {getAvatarUrl() ? (
                       <img src={getAvatarUrl()} alt="Avatar" className="w-full h-full object-cover" />
                     ) : (
                       getInitial()
                     )}
                   </span>
-                  <span className="material-symbols-outlined text-lg md:text-xl text-surface-bright">{profileOpen ? 'expand_less' : 'expand_more'}</span>
+                  <span className="material-symbols-outlined text-base md:text-xl text-surface-bright lg:text-base">{profileOpen ? 'expand_less' : 'expand_more'}</span>
                 </button>
                 {profileOpen && (
                   <div className="absolute right-0 mt-2 w-52 bg-background rounded-lg shadow-2xl border border-outline-variant/30 overflow-hidden">
@@ -237,40 +249,57 @@ export default function SiteHeader({
             </Link>
           )}
 
-          <button className="lg:hidden p-1.5 md:p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors" onClick={() => setDrawerOpen(true)}>
-            <span className="material-symbols-outlined text-2xl">menu</span>
+          <button className="lg:hidden p-1 md:p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors" onClick={() => setDrawerOpen(true)}>
+            <span className="material-symbols-outlined text-xl md:text-2xl">menu</span>
           </button>
         </div>
       </header>
 
       <div className={`fixed inset-0 z-[200] transition-all duration-300 ${drawerOpen ? '' : 'invisible pointer-events-none'}`}>
         <div className={`absolute inset-0 bg-primary-container/60 backdrop-blur-sm transition-opacity duration-300 ${drawerOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setDrawerOpen(false)}></div>
-        <div className={`absolute right-0 top-0 h-full w-[280px] bg-background shadow-2xl flex flex-col p-lg transition-transform duration-300 ease-in-out font-body-md ${drawerOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-          <div className="flex justify-between items-center mb-xl">
-            <span className="font-headline-md text-on-surface">Menu</span>
-            <button className="text-on-surface-variant hover:text-primary p-2 transition-transform hover:rotate-90" onClick={() => setDrawerOpen(false)}>
-              <span className="material-symbols-outlined text-3xl">close</span>
+        <div className={`absolute right-0 top-0 h-full w-[78vw] max-w-[300px] bg-background shadow-2xl flex flex-col p-5 transition-transform duration-300 ease-in-out font-body-md ${drawerOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+          <div className="flex justify-between items-center mb-4">
+            <span className="font-headline-md text-lg font-bold text-on-surface">Menu</span>
+            <button className="text-on-surface-variant hover:text-primary p-1.5 transition-transform hover:rotate-90" onClick={() => setDrawerOpen(false)} aria-label="Close menu">
+              <span className="material-symbols-outlined text-2xl">close</span>
             </button>
           </div>
-          <nav className="flex-1 min-h-0 overflow-y-auto scroll-hide flex flex-col gap-lg">
+          {user && (
+            <div className="flex items-center gap-3 p-3 mb-4 rounded-xl bg-surface-container-low border border-outline-variant/30 min-w-0">
+              <span className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-on-secondary font-bold text-sm overflow-hidden shrink-0">
+                {getAvatarUrl() ? (
+                  <img src={getAvatarUrl()} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  getInitial()
+                )}
+              </span>
+              <div className="min-w-0">
+                <p className="font-label-md text-label-md font-bold text-on-surface truncate">{getDisplayName()}</p>
+                <p className="text-caption text-on-surface-variant truncate">{user.email}</p>
+              </div>
+            </div>
+          )}
+          <p className="px-4 mb-1 text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Navigate</p>
+          <nav className="flex-1 min-h-0 overflow-y-auto scroll-hide flex flex-col gap-1">
             {navItems.map((item) => (
               <Link
                 key={item.path}
-                className={`font-label-md text-lg pl-4 inline-flex items-center gap-2 transition-colors ${
-                  item.path === active ? 'text-secondary border-l-4 border-secondary font-bold' : 'text-on-surface-variant hover:text-secondary'
+                className={`font-label-md text-[15px] px-4 py-3 rounded-xl inline-flex items-center gap-3 transition-colors ${
+                  item.path === active ? 'bg-secondary/10 text-secondary font-bold' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-secondary'
                 }`}
                 to={item.path}
                 onClick={() => setDrawerOpen(false)}
               >
-                {item.label}
+                <item.Icon className="w-[18px] h-[18px] shrink-0" />
+                <span className="flex-1">{item.label}</span>
                 {item.path === '/contact' && item.path !== active && <UnreadBadge count={userUnread} />}
               </Link>
             ))}
           </nav>
-          <div className="mt-auto pt-lg border-t border-outline-variant">
+          <div className="mt-auto pt-4 border-t border-outline-variant">
             {user ? (
               <button
-                className="w-full px-md py-4 bg-error text-on-error font-bold rounded-xl flex items-center justify-center gap-base shadow-lg transition-transform hover:scale-[1.02]"
+                className="w-full px-md py-3 bg-error text-on-error font-bold rounded-xl flex items-center justify-center gap-base shadow-lg transition-transform hover:scale-[1.02]"
                 type="button"
                 onClick={handleLogout}
               >

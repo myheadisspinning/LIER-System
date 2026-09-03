@@ -210,14 +210,14 @@ export default function SignIn() {
 
         {/* Right form panel */}
         <section className="w-full lg:w-1/2 bg-surface-container-lowest flex flex-col overflow-hidden">
-          <div className={`flex-1 flex flex-col p-md md:p-lg overflow-y-auto ${styles.hideScrollbar} custom-scrollbar`}>
+          <div className={`flex-1 flex flex-col p-4 md:p-lg overflow-y-auto ${styles.hideScrollbar} custom-scrollbar`}>
             {/* Logo for mobile */}
-            <div className="lg:hidden flex justify-center mb-6">
-              <img alt="Barangay Culiat Safety Logo" className="h-20 w-20"
+            <div className="lg:hidden flex justify-center mb-4 md:mb-6">
+              <img alt="Barangay Culiat Safety Logo" className="h-16 w-16"
                 src="/image/culiat-logo.png" />
             </div>
             <div className="max-w-2xl w-full mx-auto my-auto py-4">
-              <header className="text-center lg:text-left mb-8">
+              <header className="text-center lg:text-left mb-6 md:mb-8">
                 <h2 className="text-2xl font-bold text-on-background mb-1 whitespace-nowrap">We offer service to you.</h2>
                 <p className="font-body-md text-on-surface-variant">Official Login</p>
               </header>
@@ -298,14 +298,14 @@ export default function SignIn() {
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-outline-variant/30"></div>
                 </div>
-                <div className="relative flex justify-center my-6">
+                <div className="relative flex justify-center my-4 md:my-6">
                   <span className="bg-surface-container-lowest px-4 text-caption text-on-surface-variant font-medium uppercase tracking-wider">
                     Or secure login with
                   </span>
                 </div>
               </div>
               {/* Google Workspace login button */}
-              <div className="grid gap-md mb-8">
+              <div className="grid gap-3 md:gap-md mb-6 md:mb-8">
                 <button
                   type="button"
                   onClick={() => {

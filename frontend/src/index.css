@@ -4,6 +4,11 @@
 @import "./styles/modules.css";
 
 @layer base {
+  html {
+    /* Reserve scrollbar space so locking body scroll (drawer/modals)
+       never changes viewport width or shifts page content. */
+    scrollbar-gutter: stable;
+  }
   body {
     font-family: 'Ranade', 'Inter', 'Outfit', sans-serif;
     -webkit-font-smoothing: antialiased;

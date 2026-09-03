@@ -9,6 +9,7 @@ type PaginationProps = {
   totalItems: number;
   startIndex: number;
   endIndex: number;
+  hidePerPage?: boolean;
 };
 
 export default function Pagination({
@@ -20,6 +21,7 @@ export default function Pagination({
   totalItems,
   startIndex,
   endIndex,
+  hidePerPage = false,
 }: PaginationProps) {
   const pageNumbers = useMemo(() => {
     const pages: (number | string)[] = [];
@@ -59,22 +61,24 @@ export default function Pagination({
   }
 
   return (
-    <div className="px-4 py-3 border-t border-border-subtle flex items-center justify-between bg-surface-container-lowest">
-      <div className="flex items-center gap-2">
-        <span className="text-body-sm text-on-surface-variant">Items per page:</span>
-        <select
-          className="bg-surface-container-low border border-border-subtle rounded px-2 py-1 text-body-sm text-on-surface focus:ring-1 focus:ring-secondary outline-none cursor-pointer"
-          value={itemsPerPage}
-          onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
-        >
-          <option value={10}>10</option>
-          <option value={20}>20</option>
-          <option value={50}>50</option>
-          <option value={100}>100</option>
-        </select>
-      </div>
+    <div className="px-4 py-3 border-t border-border-subtle flex flex-col gap-3 md:flex-row md:items-center md:justify-between bg-surface-container-lowest">
+      {!hidePerPage && (
+        <div className="flex items-center gap-2">
+          <span className="text-body-sm text-on-surface-variant">Items per page:</span>
+          <select
+            className="bg-surface-container-low border border-border-subtle rounded px-2 py-1 text-body-sm text-on-surface focus:ring-1 focus:ring-secondary outline-none cursor-pointer"
+            value={itemsPerPage}
+            onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </select>
+        </div>
+      )}
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-center gap-2 flex-wrap">
         <span className="text-body-sm text-on-surface-variant">
           Showing {startIndex + 1}-{Math.min(endIndex, totalItems)} of {totalItems}
         </span>

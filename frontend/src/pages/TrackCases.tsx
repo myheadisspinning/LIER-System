@@ -94,13 +94,13 @@ export default function TrackCases() {
     <div className="bg-background text-on-surface font-body-md min-h-screen flex flex-col">
       <SiteHeader active="/services" title="Barangay Culiat Safety" />
 
-      <main className="flex-grow w-full max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop py-md pt-24">
-        <section className="mb-lg">
+      <main className="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-md pt-20">
+        <section className="mb-8 md:mb-lg">
           <h2 className="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary mb-2">Track My Cases</h2>
           <p className="text-on-surface-variant text-body-md">Real-time updates on your submitted reports and ongoing community safety investigations.</p>
         </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-gutter">
           <div className="lg:col-span-5 space-y-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Active Reports</h3>
@@ -113,7 +113,7 @@ export default function TrackCases() {
                 <button
                   key={id}
                   onClick={() => selectCase(id)}
-                  className={`w-full text-left ${isSelected ? 'glass-card border-2 border-secondary p-md rounded-2xl shadow-xl' : 'bg-white border border-outline-variant/30 p-md rounded-2xl shadow-sm hover:bg-surface-container/30'} transition-all hover:translate-y-[-2px] focus:outline-none ${c.status === 'Resolved' ? 'opacity-80' : ''}`}
+                  className={`w-full text-left ${isSelected ? 'glass-card border-2 border-secondary p-4 md:p-md rounded-2xl shadow-xl' : 'bg-white border border-outline-variant/30 p-4 md:p-md rounded-2xl shadow-sm hover:bg-surface-container/30'} transition-all hover:translate-y-[-2px] focus:outline-none ${c.status === 'Resolved' ? 'opacity-80' : ''}`}
                 >
                   <div className="flex justify-between items-start mb-2">
                     <span className={`font-label-md ${isSelected ? 'text-secondary' : 'text-on-surface-variant'}`}>#{c.id}</span>
@@ -128,7 +128,7 @@ export default function TrackCases() {
                 </button>
               );
             })}
-            <div className="flex justify-center pt-4">
+            <div className="flex justify-center pt-2 md:pt-4">
               <button className="flex items-center gap-2 px-6 py-2 border-2 border-secondary text-secondary rounded-xl font-bold text-label-md hover:bg-secondary-container/10 transition-colors active:scale-95 focus:outline-none">
                 <span className="material-symbols-outlined">expand_more</span>
                 Load More Reports
@@ -137,8 +137,8 @@ export default function TrackCases() {
           </div>
 
           <div id="case-details-panel" className="lg:col-span-7" style={{ opacity: detailOpacity, transition: 'opacity 0.15s' }}>
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-outline-variant/20 sticky top-[80px]">
-              <div className="p-md bg-primary-container text-on-primary">
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-outline-variant/20 sticky top-[68px]">
+              <div className="p-4 md:p-md bg-primary-container text-on-primary">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
                     <h3 id="detail-id" className="text-secondary-fixed-dim font-label-md">CASE {current.id}</h3>
@@ -150,10 +150,10 @@ export default function TrackCases() {
                   </button>
                 </div>
               </div>
-              <div className="p-md md:p-lg grid md:grid-cols-2 gap-lg">
+              <div className="p-4 md:p-lg grid md:grid-cols-2 gap-6 md:gap-lg">
                 <div>
-                  <h4 className="font-label-md text-secondary uppercase mb-6 tracking-widest">Case Progress</h4>
-                  <div className="relative space-y-8 pl-8">
+                  <h4 className="font-label-md text-secondary uppercase mb-4 md:mb-6 tracking-widest">Case Progress</h4>
+                  <div className="relative space-y-6 md:space-y-8 pl-8">
                     <div className="absolute left-3.5 top-2 bottom-2 w-0.5 bg-secondary/20"></div>
                     {current.timeline.map((step, i) => (
                       <div key={i} className="relative">
@@ -168,7 +168,7 @@ export default function TrackCases() {
                     ))}
                   </div>
                 </div>
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                   <div>
                     <h4 className="font-label-md text-secondary uppercase mb-3 tracking-widest">Case Summary</h4>
                     <p className="text-body-md text-on-surface leading-relaxed">{current.summary}</p>
@@ -196,7 +196,7 @@ export default function TrackCases() {
         </div>
       </main>
 
-      <div className="h-24 md:hidden"></div>
+      <div className="h-10 md:hidden"></div>
 
       <SiteFooter />
     </div>
