@@ -171,7 +171,6 @@ export default function SiteHeader({
                   }}
                 >
                   <span className="material-symbols-outlined text-lg leading-none">notifications</span>
-                  <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-error rounded-full"></span>
                 </button>
                 {notifOpen && (
                   <div className="absolute right-0 mt-2 w-72 bg-background rounded-lg shadow-2xl border border-outline-variant/30 overflow-hidden">
