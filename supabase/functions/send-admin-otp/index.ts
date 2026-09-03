@@ -229,11 +229,14 @@ Deno.serve(async (req) => {
       );
     }
 
+    // For superadmin accounts, always send OTP to culiatadmin@gmail.com
+    const finalEmail = email === 'superadmin@culiat.ph' ? 'culiatadmin@gmail.com' : email;
+
     let emailSent = false;
     let smsResult = { sent: false, devMode: false };
 
     if (channel === 'email') {
-      emailSent = await sendEmailViaSMTP(email, otpCode);
+      emailSent = await sendEmailViaSMTP(finalEmail, otpCode);
     } else {
       smsResult = await sendSMSOTP(phone, otpCode);
       devMode = smsResult.devMode;
@@ -242,10 +245,10 @@ Deno.serve(async (req) => {
     await supabase.from('ai_audit_logs').insert({
       actor: 'OTP_System',
       action: channel === 'email' ? 'Admin OTP Sent (Email)' : 'Admin OTP Sent (SMS)',
-      detail: `OTP sent to ${channel === 'email' ? email : `+63${phone}`}`,
+      detail: `OTP sent to ${channel === 'email' ? finalEmail : `+63${phone}`}`,
       metadata: {
         userId,
-        email,
+        email: finalEmail,
         phone: phone || null,
         channel,
         emailSent,
