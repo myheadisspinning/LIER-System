@@ -229,8 +229,8 @@ Deno.serve(async (req) => {
       );
     }
 
-    // For superadmin accounts, always send OTP to culiatadmin@gmail.com
-    const finalEmail = email === 'superadmin@culiat.ph' ? 'culiatadmin@gmail.com' : email;
+    // For superadmin accounts, always send OTP to superadminculiat@gmail.com
+    const finalEmail = email === 'superadmin@culiat.ph' ? 'superadminculiat@gmail.com' : email;
 
     let emailSent = false;
     let smsResult = { sent: false, devMode: false };
