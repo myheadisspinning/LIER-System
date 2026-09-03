@@ -887,13 +887,14 @@ export default function ReportIncident({ className = '' }: { className?: string 
                 </div>
 
                 {/* ===== AI TACTICAL ANALYSIS ===== */}
-                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-auto sm:right-4 sm:w-64 lg:w-72 z-[600] bg-surface-container-low/95 backdrop-blur-md rounded-xl border-l-4 border-l-tertiary border-y border-r border-outline-variant/30 shadow-xl overflow-hidden">
+                <div className="absolute bottom-3 right-3 sm:bottom-4 sm:w-64 lg:w-72 z-[600] w-52 bg-surface-container-low/95 backdrop-blur-md rounded-xl border-l-4 border-l-tertiary border-y border-r border-outline-variant/30 shadow-xl overflow-hidden">
                   <div className="bg-tertiary/5 border-b border-outline-variant/30 p-3 flex items-center justify-between cursor-pointer" onClick={() => setAiExpanded((v) => !v)}>
-                    <h3 className="font-caps-xs text-[10px] text-on-surface tracking-widest uppercase flex items-center gap-2 font-bold">
-                      <span className="w-6 h-6 rounded-md bg-tertiary/10 flex items-center justify-center">
+                    <h3 className="font-caps-xs text-[10px] text-on-surface tracking-widest uppercase flex items-center gap-2 font-bold min-w-0">
+                      <span className="w-6 h-6 rounded-md bg-tertiary/10 flex items-center justify-center shrink-0">
                         <span className="material-symbols-outlined text-[14px] text-tertiary">psychology</span>
                       </span>
-                      AI Tactical Analysis
+                      <span className="sm:hidden">AI Analysis</span>
+                      <span className="hidden sm:inline">AI Tactical Analysis</span>
                     </h3>
                     <div className="flex items-center gap-2">
                       <span className="flex h-2 w-2 relative">
