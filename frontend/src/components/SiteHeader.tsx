@@ -121,11 +121,11 @@ export default function SiteHeader({
   return (
     <>
       <header className="fixed top-0 left-0 w-full z-[100] flex justify-between items-center px-4 md:px-margin-desktop h-20 bg-primary-container/90 backdrop-blur-md shadow-md font-body-md">
-        <Link to="/" className="flex items-center gap-sm min-w-0">
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim transition-transform hover:scale-110 shrink-0">
+        <Link to="/" className="flex flex-1 items-center gap-2 md:gap-sm min-w-0">
+          <div className="w-8 h-8 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim transition-transform hover:scale-110 shrink-0">
             <img alt={logoAlt} className={logoClass} src={logo} />
           </div>
-          <h1 className="font-headline-md text-base md:text-headline-md font-bold text-surface-bright leading-tight line-clamp-2 md:line-clamp-none">{title}</h1>
+          <h1 className="font-headline-md text-[13px] min-[400px]:text-sm sm:text-base md:text-headline-md font-bold text-surface-bright leading-tight whitespace-nowrap overflow-hidden">{title}</h1>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-lg">
@@ -145,7 +145,7 @@ export default function SiteHeader({
           ))}
         </nav>
 
-        <div className="flex items-center gap-sm md:gap-md" ref={actionsRef}>
+        <div className="flex items-center gap-1 md:gap-md shrink-0" ref={actionsRef}>
           {user ? (
             <>
               <div className="relative hidden lg:block">
@@ -174,7 +174,7 @@ export default function SiteHeader({
 
               <div className="relative">
                 <button
-                  className="flex items-center gap-2 p-1.5 pr-2 rounded-full hover:bg-white/10 transition-colors"
+                  className="flex items-center gap-1 p-1 pr-1 md:gap-2 md:p-1.5 md:pr-2 rounded-full hover:bg-white/10 transition-colors"
                   type="button"
                   aria-label="Profile menu"
                   onClick={() => {
@@ -182,14 +182,14 @@ export default function SiteHeader({
                     setNotifOpen(false);
                   }}
                 >
-                  <span className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary font-bold text-sm overflow-hidden">
+                  <span className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary font-bold text-sm overflow-hidden">
                     {getAvatarUrl() ? (
                       <img src={getAvatarUrl()} alt="Avatar" className="w-full h-full object-cover" />
                     ) : (
                       getInitial()
                     )}
                   </span>
-                  <span className="material-symbols-outlined text-xl text-surface-bright">{profileOpen ? 'expand_less' : 'expand_more'}</span>
+                  <span className="material-symbols-outlined text-lg md:text-xl text-surface-bright">{profileOpen ? 'expand_less' : 'expand_more'}</span>
                 </button>
                 {profileOpen && (
                   <div className="absolute right-0 mt-2 w-52 bg-background rounded-lg shadow-2xl border border-outline-variant/30 overflow-hidden">
@@ -237,7 +237,7 @@ export default function SiteHeader({
             </Link>
           )}
 
-          <button className="lg:hidden p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors" onClick={() => setDrawerOpen(true)}>
+          <button className="lg:hidden p-1.5 md:p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors" onClick={() => setDrawerOpen(true)}>
             <span className="material-symbols-outlined text-2xl">menu</span>
           </button>
         </div>
