@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
-import { downloadCsv, fmtDate, logAudit } from '../../../lib/admin';
+import { downloadCsv } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
-import { useScrollLock } from '../../../lib/useScrollLock';
 
 type Row = {
   id: string;
@@ -16,29 +15,19 @@ type Row = {
   resolved_at: string | null;
 };
 
-type Archive = { id: string; title: string; report_type: string; period_label: string | null; created_at: string };
-
 export default function AdminReportsAnalytics() {
   const [rows, setRows] = useState<Row[]>([]);
-  const [archives, setArchives] = useState<Archive[]>([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-  const [confirmDelete, setConfirmDelete] = useState<Archive | null>(null);
-
-  useScrollLock(confirmDelete != null);
 
   useEffect(() => {
     void (async () => {
-      const [repRes, arcRes] = await Promise.all([
-        supabase
-          .from('incident_reports')
-          .select('id, report_no, category, priority, status, address, created_at, assigned_at, resolved_at')
-          .order('created_at', { ascending: false })
-          .limit(500),
-        supabase.from('report_archives').select('id, title, report_type, period_label, created_at').order('created_at', { ascending: false }).limit(50),
-      ]);
+      const repRes = await supabase
+        .from('incident_reports')
+        .select('id, report_no, category, priority, status, address, created_at, assigned_at, resolved_at')
+        .order('created_at', { ascending: false })
+        .limit(500);
       setRows((repRes.data ?? []) as Row[]);
-      setArchives((arcRes.data ?? []) as Archive[]);
       setLoading(false);
     })();
   }, []);
@@ -115,40 +104,6 @@ export default function AdminReportsAnalytics() {
     );
   };
 
-  const saveArchive = async () => {
-    const now = new Date();
-    const label = `${now.toLocaleString('en-PH', { month: 'long', year: 'numeric' })}`;
-    const { error } = await supabase.from('report_archives').insert({
-      title: `${label} Monthly Safety Summary`,
-      report_type: 'Monthly Summary',
-      period_label: label,
-      data: {
-        month_count: stats.month,
-        clearance: stats.clearance,
-        avg_resolve_ms: stats.avgResolve,
-        by_category: byCategory,
-        by_month: byMonth,
-      },
-    });
-    if (error) {
-      setToast({ type: 'error', message: error.message });
-      return;
-    }
-    await logAudit('Export report', `Saved ${label} Monthly Safety Summary snapshot.`);
-    setToast({ type: 'success', message: `${label} summary archived.` });
-    const res = await supabase.from('report_archives').select('id, title, report_type, period_label, created_at').order('created_at', { ascending: false }).limit(50);
-    setArchives((res.data ?? []) as Archive[]);
-  };
-
-  const deleteArchive = async (id: string) => {
-    const { error } = await supabase.from('report_archives').delete().eq('id', id);
-    if (error) {
-      setToast({ type: 'error', message: error.message });
-      return;
-    }
-    setArchives((prev) => prev.filter((a) => a.id !== id));
-  };
-
   return (
     <div className="space-y-6">
       {loading && <div className="p-12 text-center text-sm text-on-surface-variant">Loading analytics…</div>}
@@ -159,10 +114,6 @@ export default function AdminReportsAnalytics() {
               <button type="button" onClick={exportCsv} className="flex items-center gap-2 px-4 py-2 border border-border-subtle rounded-lg text-label-md font-medium text-on-surface hover:bg-surface-variant transition-colors">
                 <span className="material-symbols-outlined text-[18px]">download</span>
                 Export Raw CSV
-              </button>
-              <button type="button" onClick={saveArchive} className="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary rounded-lg text-label-md font-medium hover:bg-secondary/90 transition-colors">
-                <span className="material-symbols-outlined text-[18px]">archive</span>
-                Save Monthly Summary
               </button>
             </div>
           </div>
@@ -241,69 +192,7 @@ export default function AdminReportsAnalytics() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-border-subtle overflow-hidden shadow-sm">
-            <div className="px-5 py-4 border-b border-border-subtle">
-              <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Archived Reports</h3>
-            </div>
-            <div className="overflow-x-auto">
-              {archives.length === 0 ? (
-                <div className="p-10 text-center text-sm text-on-surface-variant">No archived summaries yet. Use "Save Monthly Summary" to generate one.</div>
-              ) : (
-                <table className="w-full text-left border-collapse">
-                  <thead className="bg-slate-50 border-b border-border-subtle">
-                    <tr>
-                      <th className="font-caps-xs text-caps-xs text-on-surface-variant py-3 px-4">Title</th>
-                      <th className="font-caps-xs text-caps-xs text-on-surface-variant py-3 px-4">Type</th>
-                      <th className="font-caps-xs text-caps-xs text-on-surface-variant py-3 px-4">Period</th>
-                      <th className="font-caps-xs text-caps-xs text-on-surface-variant py-3 px-4">Created</th>
-                      <th className="font-caps-xs text-caps-xs text-on-surface-variant py-3 px-4 text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border-subtle">
-                    {archives.map((a) => (
-                      <tr key={a.id} className="hover:bg-slate-50">
-                        <td className="py-3 px-4 font-medium text-on-surface">{a.title}</td>
-                        <td className="py-3 px-4 text-on-surface-variant">{a.report_type}</td>
-                        <td className="py-3 px-4 text-on-surface-variant">{a.period_label ?? '—'}</td>
-                        <td className="py-3 px-4 text-on-surface-variant">{fmtDate(a.created_at, 'short')}</td>
-                        <td className="py-3 px-4 text-right">
-                          <button type="button" onClick={() => setConfirmDelete(a)} className="text-error-red hover:opacity-70" aria-label="Delete archive">
-                            <span className="material-symbols-outlined text-[18px]">delete</span>
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          </div>
         </>
-      )}
-      {confirmDelete && (
-        <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-md p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="w-10 h-10 rounded-full bg-error-red/10 flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-[20px] text-error-red">warning</span>
-              </span>
-              <div>
-                <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Delete Archive</h3>
-                <p className="text-body-sm text-on-surface-variant">This action cannot be undone.</p>
-              </div>
-            </div>
-            <p className="text-body-sm text-on-surface-variant mb-1">Are you sure you want to delete this archived report?</p>
-            <p className="text-body-sm text-on-surface font-semibold mb-6">{confirmDelete.title}</p>
-            <div className="flex gap-2 justify-end">
-              <button type="button" onClick={() => setConfirmDelete(null)} className="px-4 py-2 border border-border-subtle rounded-lg text-sm font-medium text-on-surface-variant hover:bg-surface-container-low transition-colors">
-                Cancel
-              </button>
-              <button type="button" onClick={async () => { await deleteArchive(confirmDelete.id); setConfirmDelete(null); }} className="px-4 py-2 bg-error-red text-white rounded-lg text-sm font-medium hover:bg-error-red/90 transition-colors">
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
       )}
 
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
