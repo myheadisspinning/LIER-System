@@ -58,7 +58,7 @@ Deno.serve(async (req) => {
 
     if (fetchError || !otpRecord) {
       return Response.json(
-        { ok: false, error: 'No valid OTP found. Please request a new one.' },
+        { ok: false, error: 'This code has expired or is no longer valid. Please request a new one.' },
         { status: 400, headers: corsHeaders }
       );
     }
@@ -117,7 +117,7 @@ Deno.serve(async (req) => {
       });
 
       return Response.json(
-        { ok: false, error: 'Invalid OTP code. Please try again.' },
+        { ok: false, error: 'Wrong code. Please check and try again.' },
         { status: 400, headers: corsHeaders }
       );
     }
