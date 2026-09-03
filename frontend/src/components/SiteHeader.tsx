@@ -247,8 +247,13 @@ export default function SiteHeader({
             </Link>
           )}
 
-          <button className="lg:hidden p-1 md:p-2 text-surface-bright hover:bg-white/10 rounded-full transition-colors" onClick={() => setDrawerOpen(true)}>
-            <span className="material-symbols-outlined text-xl md:text-2xl">menu</span>
+          <button
+            className="lg:hidden inline-flex items-center justify-center h-8 w-8 md:h-9 md:w-9 text-surface-bright hover:bg-white/10 rounded-full transition-colors shrink-0"
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Open menu"
+          >
+            <span className="material-symbols-outlined text-xl md:text-[22px] leading-none">menu</span>
           </button>
         </div>
       </header>
