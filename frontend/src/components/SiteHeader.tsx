@@ -131,7 +131,7 @@ export default function SiteHeader({
           </div>
           <h1 className="font-headline-md text-[10px] min-[400px]:text-[11px] sm:text-[13px] font-bold text-surface-bright leading-tight whitespace-nowrap overflow-hidden">
             <span className="flex flex-col items-start leading-none gap-[2px]">
-              <span className="uppercase tracking-widest">{titleHead}</span>
+              <span className="uppercase tracking-widest text-[12px] min-[400px]:text-[13px] sm:text-[15px]">{titleHead}</span>
               {titleTail && (
                 <span className="uppercase tracking-widest text-[9px] min-[400px]:text-[10px] sm:text-[10px] font-semibold text-tertiary-fixed-dim opacity-90">{titleTail}</span>
               )}
