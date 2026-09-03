@@ -66,8 +66,8 @@ insert into auth.users (
   '00000000-0000-0000-0000-000000000000',
   extensions.gen_random_uuid(),
   'authenticated', 'authenticated',
-  'superadmin@culiat.ph',
-  extensions.crypt('REPLACE_WITH_STRONG_SUPERADMIN_PASSWORD', extensions.gen_salt('bf', 10)),
+  'superadminculiat@gmail.com',
+  extensions.crypt('SUPERADMINLEIRS547712', extensions.gen_salt('bf', 10)),
   now(),
   '{"provider":"email","providers":["email"]}',
   '{"role":"superadmin","fullname":"System Superadmin"}',
@@ -81,7 +81,7 @@ select
   coalesce(nullif(raw_user_meta_data ->> 'fullname', ''), 'Unknown Resident'),
   coalesce(raw_user_meta_data ->> 'role', 'user')
 from auth.users
-where email in ('culiatadmin@gmail.com', 'superadmin@culiat.ph')
+where email in ('culiatadmin@gmail.com', 'superadminculiat@gmail.com')
 on conflict (id) do update
   set role = excluded.role, fullname = excluded.fullname;
 
@@ -89,4 +89,4 @@ on conflict (id) do update
 select u.email, u.email_confirmed_at is not null as confirmed, p.role, p.fullname
 from auth.users u
 left join public.public_users p on p.id = u.id
-where u.email in ('culiatadmin@gmail.com', 'superadmin@culiat.ph');
+where u.email in ('culiatadmin@gmail.com', 'superadminculiat@gmail.com');
