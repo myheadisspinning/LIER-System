@@ -159,15 +159,15 @@ export default function Contact() {
                   </div>
                 </div>
               </div>
-              <div className="relative w-full h-40 sm:h-48 md:h-64 rounded-2xl overflow-hidden shadow-sm border border-outline-variant/30 map-texture group">
+              <div className="relative w-full h-40 sm:h-48 md:h-64 rounded-2xl overflow-hidden shadow-sm border border-outline-variant/30 map-texture group flex flex-col">
                 <div className="absolute inset-0 bg-secondary/5"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div className="relative flex-1 flex items-center justify-center">
                   <div className="text-center">
                     <span className="material-symbols-outlined text-secondary text-4xl mb-xs drop-shadow-md animate-bounce">location_on</span>
                     <p className="font-label-md text-label-md text-on-surface">View on Google Maps</p>
                   </div>
                 </div>
-                <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-sm p-sm rounded-lg flex items-center justify-between border border-outline-variant/50">
+                <div className="relative mx-3 mb-3 bg-white/95 backdrop-blur-sm p-sm rounded-lg flex items-center justify-between border border-outline-variant/50">
                   <span className="font-caption text-caption text-on-surface-variant">&copy; OpenStreetMap</span>
                   <button className="bg-secondary text-white px-md py-xs rounded text-caption font-label-md hover:shadow-md transition-all">Open</button>
                 </div>
