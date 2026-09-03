@@ -77,17 +77,17 @@ export default function EmergencySos() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="bg-[#FEF2F2] border border-error-red/30 rounded-2xl p-8 shadow-sm relative overflow-hidden">
+    <div className="space-y-4 sm:space-y-8">
+      <div className="bg-[#FEF2F2] border border-error-red/30 rounded-2xl p-5 sm:p-8 shadow-sm relative overflow-hidden">
         <div className="absolute inset-0 bg-error-red opacity-5"></div>
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
           <div className="flex-1 text-center md:text-left">
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-error-red/10 text-error-red font-caps-xs text-caps-xs font-bold mb-4">
               <span className="material-symbols-outlined text-[14px] mr-1">cell_tower</span>
               PRIORITY CONNECTION ACTIVE
             </div>
             <h3 className="font-headline-lg text-headline-lg text-on-surface mb-3">Emergency? Don't Wait.</h3>
-            <p className="font-body-md text-body-md text-on-surface-variant mb-6 max-w-2xl">
+            <p className="font-body-md text-body-md text-on-surface-variant mb-4 sm:mb-6 max-w-2xl">
               Transmits your GPS location, contact info, and registered household address directly to Barangay Desk Officers and PNP Station 14.
             </p>
             <div className="flex flex-col gap-3">
@@ -109,7 +109,7 @@ export default function EmergencySos() {
             onTouchStart={startPress}
             onTouchEnd={cancelPress}
           >
-            <div className="relative w-48 h-48 flex items-center justify-center">
+            <div className="relative w-40 h-40 sm:w-48 sm:h-48 flex items-center justify-center">
               <svg className="absolute inset-0 w-full h-full transform -rotate-90 pointer-events-none" viewBox="0 0 100 100">
                 <circle cx="50" cy="50" fill="none" r="45" stroke="#fca5a5" strokeWidth="4"></circle>
                 <circle
@@ -126,11 +126,11 @@ export default function EmergencySos() {
                 ></circle>
               </svg>
               <div
-                className={`w-40 h-40 rounded-full flex flex-col items-center justify-center shadow-2xl shadow-error-red/50 border-4 border-white z-10 ${
+                className={`w-32 h-32 sm:w-40 sm:h-40 rounded-full flex flex-col items-center justify-center shadow-2xl shadow-error-red/50 border-4 border-white z-10 ${
                   pressing ? 'bg-error active:scale-95' : 'bg-error-red hover:bg-error'
                 }`}
               >
-                <span className="material-symbols-outlined text-white text-5xl mb-1" style={{ fontVariationSettings: "'FILL' 1" }}>
+                <span className="material-symbols-outlined text-white text-4xl sm:text-5xl mb-1" style={{ fontVariationSettings: "'FILL' 1" }}>
                   sos
                 </span>
                 <span className="text-white font-caps-xs text-caps-xs text-center px-4 mt-2 font-bold leading-tight uppercase">
@@ -152,15 +152,15 @@ export default function EmergencySos() {
       </div>
 
       <div>
-        <h3 className="font-headline-md text-headline-md text-on-surface mb-6 flex items-center">
+        <h3 className="font-headline-md text-headline-md text-on-surface mb-4 sm:mb-6 flex items-center">
           <span className="material-symbols-outlined mr-2 text-secondary">contact_phone</span>
           Direct Action Hotlines
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {hotlines.map((h) => (
             <div
               key={h.name}
-              className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 shadow-[0_1px_2px_rgba(2,6,23,0.05)] hover:shadow-[0_1px_2px_rgba(2,6,23,0.05),0_16px_40px_-20px_rgba(2,6,23,0.25)] hover:-translate-y-0.5 transition-all duration-200"
+              className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-4 sm:p-6 shadow-[0_1px_2px_rgba(2,6,23,0.05)] hover:shadow-[0_1px_2px_rgba(2,6,23,0.05),0_16px_40px_-20px_rgba(2,6,23,0.25)] hover:-translate-y-0.5 transition-all duration-200"
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
@@ -172,7 +172,7 @@ export default function EmergencySos() {
                   {h.status}
                 </span>
               </div>
-              <div className="flex items-center mb-6 text-on-surface-variant">
+              <div className="flex items-center mb-4 sm:mb-6 text-on-surface-variant">
                 <span className="material-symbols-outlined mr-2 text-outline">{h.icon}</span>
                 <span className="font-body-md text-body-md">{h.number}</span>
               </div>

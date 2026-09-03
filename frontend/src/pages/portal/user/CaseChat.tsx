@@ -287,14 +287,14 @@ export default function CaseChat() {
 
   if (loading) {
     return (
-      <div className="lg:h-[calc(100vh-17rem)] min-h-[520px] bg-surface-container-lowest rounded-2xl border border-border-subtle flex items-center justify-center">
+      <div className="lg:h-[calc(100vh-17rem)] min-h-[440px] sm:min-h-[520px] bg-surface-container-lowest rounded-2xl border border-border-subtle flex items-center justify-center">
         <p className="text-on-surface-variant">Loading…</p>
       </div>
     );
   }
 
   return (
-    <div className="lg:h-[calc(100vh-17rem)] min-h-[520px] bg-surface-container-lowest rounded-2xl border border-border-subtle flex flex-col overflow-hidden shadow-[0_1px_2px_rgba(2,6,23,0.05)]">
+    <div className="lg:h-[calc(100vh-17rem)] min-h-[440px] sm:min-h-[520px] bg-surface-container-lowest rounded-2xl border border-border-subtle flex flex-col overflow-hidden shadow-[0_1px_2px_rgba(2,6,23,0.05)]">
       {startingChat ? (
         <div className="flex-1 flex flex-col items-center justify-center p-6">
           <div className="w-16 h-16 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center mb-4">

@@ -196,7 +196,7 @@ export default function EvidenceVault() {
     <div className="w-full">
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
 
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
+      <div className="flex flex-col md:flex-row gap-4 mb-4 sm:mb-6">
         <div className="relative flex-1">
           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
           <input
@@ -228,7 +228,7 @@ export default function EvidenceVault() {
         </label>
       </div>
 
-      <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-5 shadow-sm mb-8 flex flex-col lg:flex-row lg:items-center gap-5">
+      <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-4 sm:p-5 shadow-sm mb-6 sm:mb-8 flex flex-col lg:flex-row lg:items-center gap-4 sm:gap-5">
         <div className="flex-1">
           <div className="flex justify-between items-end mb-2">
             <span className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-xs">Storage Used</span>
@@ -249,7 +249,7 @@ export default function EvidenceVault() {
       </div>
 
       {unlinkedCount > 0 && (
-        <div className="bg-secondary-fixed text-on-secondary-fixed p-4 rounded-lg border border-secondary-fixed-dim mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="bg-secondary-fixed text-on-secondary-fixed p-4 rounded-lg border border-secondary-fixed-dim mb-6 sm:mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="material-symbols-outlined text-secondary">info</span>
             <span className="font-body-sm text-body-sm">You have {unlinkedCount} unlinked media file{unlinkedCount !== 1 ? 's' : ''}. Want to attach {unlinkedCount !== 1 ? 'them' : 'it'} to an open incident report?</span>
@@ -268,17 +268,17 @@ export default function EvidenceVault() {
           <span className="material-symbols-outlined text-4xl text-secondary animate-spin">progress_activity</span>
         </div>
       ) : visible.length === 0 ? (
-        <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-12 text-center">
+        <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-8 sm:p-12 text-center">
           <span className="material-symbols-outlined text-6xl text-on-surface-variant mb-4">folder_open</span>
           <p className="font-headline-md text-headline-md text-on-surface mb-2">No evidence files found</p>
           <p className="font-body-sm text-body-sm text-on-surface-variant">Upload files to get started</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
           {visible.map((item) => (
             <div
               key={item.name}
-              className="bg-surface-container-lowest border border-border-subtle p-6 rounded-2xl shadow-[0_1px_2px_rgba(2,6,23,0.05)] flex flex-col relative group hover:shadow-[0_1px_2px_rgba(2,6,23,0.05),0_16px_40px_-20px_rgba(2,6,23,0.25)] hover:-translate-y-0.5 transition-all duration-200"
+              className="bg-surface-container-lowest border border-border-subtle p-4 sm:p-6 rounded-2xl shadow-[0_1px_2px_rgba(2,6,23,0.05)] flex flex-col relative group hover:shadow-[0_1px_2px_rgba(2,6,23,0.05),0_16px_40px_-20px_rgba(2,6,23,0.25)] hover:-translate-y-0.5 transition-all duration-200"
             >
               <div className="absolute top-4 right-4 z-10">
                 {item.linked ? (
@@ -292,7 +292,7 @@ export default function EvidenceVault() {
                 )}
               </div>
               <div
-                className="aspect-video bg-surface-container-highest rounded mb-4 relative overflow-hidden group-hover:opacity-90 transition-opacity cursor-pointer border border-outline-variant"
+                className="aspect-video bg-surface-container-highest rounded mb-3 sm:mb-4 relative overflow-hidden group-hover:opacity-90 transition-opacity cursor-pointer border border-outline-variant"
                 onClick={() => setInspect(item)}
               >
                 {item.thumb ? (
@@ -316,7 +316,7 @@ export default function EvidenceVault() {
               <h3 className="font-headline-md text-headline-md mb-2 truncate text-[16px]" title={item.name}>
                 {item.name}
               </h3>
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
                 <span className="bg-surface-container px-2 py-1 rounded font-body-sm text-[12px] text-on-surface-variant border border-outline-variant">{item.size}</span>
                 <span className="bg-surface-container px-2 py-1 rounded font-body-sm text-[12px] text-on-surface-variant border border-outline-variant">{item.uploaded}</span>
               </div>

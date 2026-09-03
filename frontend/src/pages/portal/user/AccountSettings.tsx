@@ -250,15 +250,15 @@ export default function AccountSettings() {
   return (
     <div className="w-full">
       {loading ? (
-        <div className="p-10 text-center text-sm text-on-surface-variant">Loading account settings…</div>
+        <div className="p-6 sm:p-10 text-center text-sm text-on-surface-variant">Loading account settings…</div>
       ) : !profile.fullname && !profile.email ? (
-        <div className="p-10 text-center text-sm text-on-surface-variant">No profile data available.</div>
+        <div className="p-6 sm:p-10 text-center text-sm text-on-surface-variant">No profile data available.</div>
       ) : (
         <>
-          <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 mb-6 relative overflow-hidden text-center sm:text-left">
+          <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 mb-4 sm:mb-6 relative overflow-hidden text-center sm:text-left">
             <div className="absolute right-0 top-0 w-64 h-full bg-gradient-to-l from-surface-container/50 to-transparent pointer-events-none"></div>
             <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 min-w-0 flex-1 relative z-10">
-              <div className="w-20 h-20 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-headline-lg text-headline-lg shadow-md border-4 border-surface-container-lowest overflow-hidden shrink-0">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-headline-lg text-headline-lg shadow-md border-4 border-surface-container-lowest overflow-hidden shrink-0">
                 {profile.avatar_url ? (
                   <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
                 ) : (
@@ -282,14 +282,14 @@ export default function AccountSettings() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
             <div className="lg:col-span-7 bg-surface-container-lowest border border-border-subtle rounded-2xl shadow-sm flex flex-col h-full">
-              <div className="p-6 border-b border-border-subtle bg-surface/50 rounded-t-xl">
+              <div className="p-4 sm:p-6 border-b border-border-subtle bg-surface/50 rounded-t-xl">
                 <h3 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Registration Data</h3>
                 <h2 className="font-headline-md text-headline-md text-on-background">Personal Details</h2>
               </div>
-              <div className="p-6 flex-1">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
+              <div className="p-4 sm:p-6 flex-1">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-4 sm:gap-y-6">
                   <div className="space-y-1">
                     <label className="font-label-sm text-label-sm text-on-surface-variant block">Full Name</label>
                     <div className="relative">
@@ -347,7 +347,7 @@ export default function AccountSettings() {
                   </div>
                 </div>
               </div>
-              <div className="p-6 border-t border-border-subtle bg-surface/30 rounded-b-xl flex justify-end">
+              <div className="p-4 sm:p-6 border-t border-border-subtle bg-surface/30 rounded-b-xl flex justify-end">
                 <button type="button" onClick={saveProfile} disabled={saving} className="px-4 py-2 border border-border-subtle hover:bg-surface-container text-on-surface font-label-md text-label-md rounded-lg transition-colors shadow-sm disabled:opacity-60">
                   {saving ? 'Saving…' : 'Update Personal Info'}
                 </button>
@@ -356,7 +356,7 @@ export default function AccountSettings() {
 
             <div className="lg:col-span-5 bg-surface-container-lowest border border-border-subtle rounded-2xl shadow-sm flex flex-col h-full relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-error-red"></div>
-              <div className="p-6 border-b border-border-subtle bg-error-container/10 rounded-t-xl mt-1">
+              <div className="p-4 sm:p-6 border-b border-border-subtle bg-error-container/10 rounded-t-xl mt-1">
                 <h3 className="font-caps-xs text-caps-xs text-error-red uppercase tracking-wider mb-1 flex items-center gap-1">
                   <span className="material-symbols-outlined text-[14px]">emergency</span>
                   Critical Info
@@ -364,7 +364,7 @@ export default function AccountSettings() {
                 <h2 className="font-headline-md text-headline-md text-on-background">Emergency Contact</h2>
                 <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 leading-tight">Who should desk officers call during an emergency or SOS trigger?</p>
               </div>
-              <div className="p-6 flex-1 space-y-6">
+              <div className="p-4 sm:p-6 flex-1 space-y-4 sm:space-y-6">
                 <div className="space-y-1">
                   <label className="font-label-sm text-label-sm text-on-surface-variant block">Contact Name</label>
                   <div className="relative">
@@ -395,7 +395,7 @@ export default function AccountSettings() {
                   </div>
                 </div>
               </div>
-              <div className="p-6 border-t border-border-subtle bg-surface/30 rounded-b-xl mt-auto">
+              <div className="p-4 sm:p-6 border-t border-border-subtle bg-surface/30 rounded-b-xl mt-auto">
                 <button type="button" onClick={saveEmergencyContact} disabled={saving} className="w-full px-4 py-3 bg-secondary hover:bg-secondary-container text-on-secondary font-label-md text-label-md font-bold rounded-lg transition-colors shadow-md flex justify-center items-center gap-2 disabled:opacity-60">
                   <span className="material-symbols-outlined text-[20px]">save</span>
                   {saving ? 'Saving…' : 'Save Emergency Contact'}
@@ -404,7 +404,7 @@ export default function AccountSettings() {
             </div>
           </div>
 
-          <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle p-6 mt-6 shadow-[0_1px_2px_rgba(2,6,23,0.05)]">
+          <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle p-4 sm:p-6 mt-4 sm:mt-6 shadow-[0_1px_2px_rgba(2,6,23,0.05)]">
             <div className="mb-3">
               <h3 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Channels</h3>
               <h2 className="font-headline-md text-headline-md text-on-surface">Notification Preferences</h2>
@@ -444,12 +444,12 @@ export default function AccountSettings() {
             </div>
           </div>
 
-          <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle p-6 mt-6 shadow-[0_1px_2px_rgba(2,6,23,0.05)]">
-            <div className="mb-6">
+          <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle p-4 sm:p-6 mt-4 sm:mt-6 shadow-[0_1px_2px_rgba(2,6,23,0.05)]">
+            <div className="mb-4 sm:mb-6">
               <h3 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Security</h3>
               <h2 className="font-headline-md text-headline-md text-on-surface">Password & Authentication</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
               <div className="space-y-3">
                 {isEmailProvider ? (
                   <>
@@ -509,7 +509,7 @@ export default function AccountSettings() {
             </div>
           </div>
 
-          <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle p-6 mt-6 shadow-[0_1px_2px_rgba(2,6,23,0.05)]">
+          <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle p-4 sm:p-6 mt-4 sm:mt-6 shadow-[0_1px_2px_rgba(2,6,23,0.05)]">
             <div className="mb-3">
               <h3 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Privacy</h3>
               <h2 className="font-headline-md text-headline-md text-on-surface">Data Privacy & Emergency Consent</h2>
@@ -532,7 +532,7 @@ export default function AccountSettings() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-border-subtle mt-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between pt-4 sm:pt-6 border-t border-border-subtle mt-4 sm:mt-6">
             <button
               type="button"
               onClick={savePreferences}

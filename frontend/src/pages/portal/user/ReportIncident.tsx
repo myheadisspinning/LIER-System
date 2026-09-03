@@ -700,7 +700,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
   return (
     <div className={`bg-surface w-full h-full ${className} rounded-2xl shadow-xl overflow-hidden flex flex-col relative border border-outline-variant/30`}>
       {/* Critical Notice */}
-      <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col gap-4">
         <div className="flex items-center gap-2 text-caption text-on-surface-variant">
           <span className="material-symbols-outlined text-[16px] text-error">warning</span>
           <p>For immediate life-threatening situations, dial 911 immediately.</p>
@@ -738,9 +738,9 @@ export default function ReportIncident({ className = '' }: { className?: string 
         </div>
 
         {step === 1 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="flex flex-col gap-6">
-              <div className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+            <div className="flex flex-col gap-4 sm:gap-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div>
                   <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider font-bold">
                     Incident Category <span className="text-error">*</span>
@@ -835,7 +835,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
                   </div>
                 </div>
               </div>
-              <div className="relative w-full min-h-[380px] sm:min-h-[460px] bg-surface-container-low">
+              <div className="relative w-full min-h-[280px] sm:min-h-[460px] bg-surface-container-low">
                 <MapContainer center={BARANGAY_HALL_CENTER} zoom={15} className="absolute inset-0 z-0" scrollWheelZoom zoomControl={false}>
                   <MapSizeSync />
                   <TileLayer
@@ -998,13 +998,13 @@ export default function ReportIncident({ className = '' }: { className?: string 
         )}
 
         {step === 2 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-6">
-            <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 pb-4 sm:pb-6">
+            <div className="flex flex-col gap-4 sm:gap-6">
               <h2 className="font-headline-md text-headline-md text-on-surface">Step 2: Details &amp; Media</h2>
               <div className="space-y-3">
                 <div>
                   <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1 font-bold uppercase tracking-wider">Primary Description <span className="text-error">*</span></label>
-                  <textarea ref={descriptionTextareaRef} value={reportDescription} onChange={(e) => { setReportDescription(e.target.value); setMissingField((m) => (m === 'description' ? null : m)); }} className={`w-full min-h-[150px] bg-white border rounded-lg p-3 font-label-md text-label-md text-on-surface focus:outline-none focus:border-secondary resize-none placeholder:text-xs placeholder:text-on-surface-variant placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all ${missingField === 'description' ? 'border-error' : 'border-outline-variant'}`} placeholder="Provide a detailed account of the incident, including specific actions observed, individuals involved, and immediate risks..."></textarea>
+                  <textarea ref={descriptionTextareaRef} value={reportDescription} onChange={(e) => { setReportDescription(e.target.value); setMissingField((m) => (m === 'description' ? null : m)); }} className={`w-full min-h-[120px] sm:min-h-[150px] bg-white border rounded-lg p-3 font-label-md text-label-md text-on-surface focus:outline-none focus:border-secondary resize-none placeholder:text-xs placeholder:text-on-surface-variant placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all ${missingField === 'description' ? 'border-error' : 'border-outline-variant'}`} placeholder="Provide a detailed account of the incident, including specific actions observed, individuals involved, and immediate risks..."></textarea>
                 </div>
                 <div>
                   <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1 font-bold uppercase tracking-wider">Additional Context (Optional)</label>
@@ -1012,8 +1012,8 @@ export default function ReportIncident({ className = '' }: { className?: string 
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-6 pb-6">
-              <div className="bg-surface-container-low rounded-xl border border-outline-variant p-6 space-y-6">
+            <div className="flex flex-col gap-4 sm:gap-6 pb-4 sm:pb-6">
+              <div className="bg-surface-container-low rounded-xl border border-outline-variant p-4 sm:p-6 space-y-4 sm:space-y-6">
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-secondary">attachment</span>
                   <h3 className="font-label-md text-label-md font-bold text-on-surface">Evidence Upload</h3>
@@ -1039,7 +1039,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') fileInputRef.current?.click(); }}
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={(e) => { e.preventDefault(); addFiles(e.dataTransfer.files); }}
-                  className="border-2 border-dashed border-outline-variant rounded-xl p-6 flex flex-col items-center justify-center gap-3 bg-surface/50 hover:bg-surface transition-colors cursor-pointer"
+                  className="border-2 border-dashed border-outline-variant rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center gap-3 bg-surface/50 hover:bg-surface transition-colors cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-4xl text-on-surface-variant">cloud_upload</span>
                   <div className="text-center">
@@ -1079,9 +1079,9 @@ export default function ReportIncident({ className = '' }: { className?: string 
         )}
 
         {step === 3 && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="bg-surface border border-outline-variant/30 rounded-lg p-6 shadow-xl relative overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+              <div className="bg-surface border border-outline-variant/30 rounded-lg p-4 sm:p-6 shadow-xl relative overflow-hidden">
                 <div className={`absolute top-0 left-0 w-1 h-full ${ai.priority === 'CRITICAL' ? 'bg-error' : 'bg-secondary'}`}></div>
                 <div className="flex items-start gap-6 flex-wrap">
                   <div className="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center shrink-0">
@@ -1223,11 +1223,11 @@ export default function ReportIncident({ className = '' }: { className?: string 
                 )}
               </div>
             </div>
-            <div className="space-y-6">
-              <div className="bg-surface border border-outline-variant/30 rounded-2xl p-6 shadow-xl lg:sticky lg:top-24">
+            <div className="space-y-4 sm:space-y-6">
+              <div className="bg-surface border border-outline-variant/30 rounded-2xl p-4 sm:p-6 shadow-xl lg:sticky lg:top-24">
                 <h4 className="font-headline-md text-headline-md text-on-surface mb-1">Final Validation</h4>
-                <p className="font-body-sm text-body-sm text-on-surface-variant mb-6">Please review all details carefully before submitting your report.</p>
-                <div className="space-y-3 mb-6">
+                <p className="font-body-sm text-body-sm text-on-surface-variant mb-4 sm:mb-6">Please review all details carefully before submitting your report.</p>
+                <div className="space-y-3 mb-4 sm:mb-6">
                   <label className="flex items-start gap-3 cursor-pointer group">
                     <input checked={confirm1} onChange={(e) => setConfirm1(e.target.checked)} className="mt-1 rounded text-secondary border-outline-variant focus:ring-secondary bg-white" type="checkbox" />
                     <span className="font-label-sm text-label-sm text-on-surface group-hover:text-secondary transition-colors flex items-center gap-2">
@@ -1275,7 +1275,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
         </div>
       )}
       {/* Footer Actions */}
-      <div className="bg-surface-container-low border-t border-outline-variant/30 px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-3 shrink-0">
+      <div className="bg-surface-container-low border-t border-outline-variant/30 px-4 py-3 sm:px-6 sm:py-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-3 shrink-0">
         {step === 1 && (
           <>
             <button type="button" onClick={handleSaveDraft} className="px-5 py-2.5 rounded-xl border border-outline-variant text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-[13px] font-medium w-full sm:w-auto">Save Draft</button>

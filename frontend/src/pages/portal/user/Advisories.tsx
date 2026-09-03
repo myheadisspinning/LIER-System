@@ -98,7 +98,7 @@ export default function Advisories() {
 
   return (
     <div className="w-full">
-      <div className="bg-surface-container-lowest border border-border-subtle rounded p-3 flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+      <div className="bg-surface-container-lowest border border-border-subtle rounded p-3 flex flex-col md:flex-row justify-between items-center mb-4 sm:mb-6 gap-3 sm:gap-4">
         <div className="flex flex-wrap gap-2">
           {categories.map((c) => (
             <button
@@ -128,15 +128,15 @@ export default function Advisories() {
       </div>
 
       {loading ? (
-        <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-10 text-center text-sm text-on-surface-variant shadow-sm">Loading advisories…</div>
+        <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 sm:p-10 text-center text-sm text-on-surface-variant shadow-sm">Loading advisories…</div>
       ) : advisories.length === 0 ? (
-        <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-10 text-center text-sm text-on-surface-variant shadow-sm">No official advisories have been published yet.</div>
+        <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 sm:p-10 text-center text-sm text-on-surface-variant shadow-sm">No official advisories have been published yet.</div>
       ) : visible.length === 0 ? (
-        <div className="bg-surface-container-lowest border border-border-subtle rounded p-8 text-center shadow-sm">
+        <div className="bg-surface-container-lowest border border-border-subtle rounded p-6 sm:p-8 text-center shadow-sm">
           <p className="font-body-md text-body-md text-on-surface-variant">No advisories match your search.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {visible.map((a) => {
             const needsTruncate = a.body.length > TRUNCATE_LEN;
             return (
@@ -145,12 +145,12 @@ export default function Advisories() {
                 className="bg-surface-container-lowest border border-border-subtle rounded-2xl overflow-hidden hover:border-secondary/50 transition-all duration-200 flex flex-col h-full shadow-[0_1px_2px_rgba(2,6,23,0.05)] hover:shadow-[0_1px_2px_rgba(2,6,23,0.05),0_16px_40px_-20px_rgba(2,6,23,0.25)] hover:-translate-y-0.5"
               >
                 {a.image_url && (
-                  <div className="h-36 overflow-hidden">
+                  <div className="h-28 sm:h-36 overflow-hidden">
                     <img src={a.image_url} alt={a.title} className="w-full h-full object-cover" />
                   </div>
                 )}
-                <div className="p-6 flex flex-col flex-1">
-                  <div className="flex justify-between items-start mb-4">
+                <div className="p-4 sm:p-6 flex flex-col flex-1">
+                  <div className="flex justify-between items-start mb-3 sm:mb-4">
                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-caps-xs text-caps-xs uppercase tracking-wider ${toneClasses[a.tone]}`}>
                       <span className="material-symbols-outlined text-[14px]">{iconFor(a.type)}</span>
                       {a.type}
@@ -179,7 +179,7 @@ export default function Advisories() {
         <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-lg">
           <div className="absolute inset-0 bg-black/50" onClick={() => setSelectedAdvisory(null)} />
           <div className="relative bg-surface-container-lowest w-full max-w-3xl max-h-[85vh] overflow-hidden rounded-2xl shadow-2xl border border-border-subtle flex flex-col">
-            <div className="px-6 py-4 flex justify-between items-center shrink-0 border-b border-border-subtle z-10 bg-surface-container-lowest">
+            <div className="px-4 py-3 sm:px-6 sm:py-4 flex justify-between items-center shrink-0 border-b border-border-subtle z-10 bg-surface-container-lowest">
               <div className="flex items-center gap-3">
                 <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-caps-xs text-caps-xs uppercase tracking-wider ${toneClasses[selectedAdvisory.tone]}`}>
                   <span className="material-symbols-outlined text-[14px]">{iconFor(selectedAdvisory.type)}</span>
@@ -204,7 +204,7 @@ export default function Advisories() {
                   <img src={selectedAdvisory.image_url} alt={selectedAdvisory.title} className="w-full h-full object-cover" />
                 </div>
               )}
-              <div className="p-6 md:p-8">
+              <div className="p-4 sm:p-6 md:p-8">
                 <h2 className="font-headline-lg text-headline-lg text-on-surface font-bold mb-4">{selectedAdvisory.title}</h2>
                 <p className="font-body-md text-on-surface-variant leading-relaxed whitespace-pre-wrap">{selectedAdvisory.body}</p>
               </div>

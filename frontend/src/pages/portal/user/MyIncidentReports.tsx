@@ -107,7 +107,7 @@ export default function MyIncidentReports() {
   const current = cases.find((c) => c.id === selectedId) ?? cases[0];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
         <div className="lg:col-span-7 space-y-4">
           <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle overflow-hidden">
@@ -138,21 +138,21 @@ export default function MyIncidentReports() {
               </div>
             </div>
             {loading ? (
-              <div className="p-10 text-center text-sm text-on-surface-variant">Loading your reports…</div>
+              <div className="p-6 sm:p-10 text-center text-sm text-on-surface-variant">Loading your reports…</div>
             ) : error ? (
-              <div className="p-10 text-center text-sm text-error">{error}</div>
+              <div className="p-6 sm:p-10 text-center text-sm text-error">{error}</div>
             ) : filtered.length === 0 ? (
-              <div className="p-10 text-center text-sm text-on-surface-variant">No reports yet. Submit an incident to see it here.</div>
+              <div className="p-6 sm:p-10 text-center text-sm text-on-surface-variant">No reports yet. Submit an incident to see it here.</div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-border-subtle bg-surface-bg">
-                      <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant">CASE REFERENCE</th>
-                      <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant">CATEGORY</th>
-                      <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant">DATE &amp; LOCATION</th>
-                      <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant">STATUS</th>
-                      <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant text-right">ACTION</th>
+                      <th className="py-2 px-3 sm:px-4 sm:py-3 font-caps-xs text-caps-xs text-on-surface-variant">CASE REFERENCE</th>
+                      <th className="py-2 px-3 sm:px-4 sm:py-3 font-caps-xs text-caps-xs text-on-surface-variant">CATEGORY</th>
+                      <th className="py-2 px-3 sm:px-4 sm:py-3 font-caps-xs text-caps-xs text-on-surface-variant">DATE &amp; LOCATION</th>
+                      <th className="py-2 px-3 sm:px-4 sm:py-3 font-caps-xs text-caps-xs text-on-surface-variant">STATUS</th>
+                      <th className="py-2 px-3 sm:px-4 sm:py-3 font-caps-xs text-caps-xs text-on-surface-variant text-right">ACTION</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border-subtle">
@@ -162,16 +162,16 @@ export default function MyIncidentReports() {
                         onClick={() => setSelectedId(c.id)}
                         className={`hover:bg-slate-50 transition-colors cursor-pointer ${selectedId === c.id ? 'bg-secondary/5' : ''}`}
                       >
-                        <td className="py-4 px-4">
+                        <td className="py-3 px-3 sm:px-4 sm:py-4">
                           <div className="font-label-md text-label-md font-bold text-on-surface">{c.id}</div>
                           <div className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">{c.title}</div>
                         </td>
-                        <td className="py-4 px-4 text-body-sm">{c.category}</td>
-                        <td className="py-4 px-4">
+                        <td className="py-3 px-3 sm:px-4 sm:py-4 text-body-sm">{c.category}</td>
+                        <td className="py-3 px-3 sm:px-4 sm:py-4">
                           <div className="font-body-sm text-body-sm">{c.date}</div>
                           <div className="font-body-sm text-body-sm text-on-surface-variant">{c.location}</div>
                         </td>
-                        <td className="py-4 px-4">
+                        <td className="py-3 px-3 sm:px-4 sm:py-4">
                           <span
                             className={`inline-flex items-center px-2 py-1 rounded font-label-sm text-label-sm border ${
                               c.status === 'Under Investigation'
@@ -189,7 +189,7 @@ export default function MyIncidentReports() {
                             {c.status}
                           </span>
                         </td>
-                        <td className="py-4 px-4 text-right">
+                        <td className="py-3 px-3 sm:px-4 sm:py-4 text-right">
                           <button type="button" className="text-secondary font-label-md text-label-md hover:underline" onClick={() => setSelectedId(c.id)}>
                             View Details
                           </button>
@@ -205,18 +205,18 @@ export default function MyIncidentReports() {
 
         <div className="lg:col-span-5 relative">
           <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle shadow-[0_1px_2px_rgba(2,6,23,0.05),0_12px_32px_-16px_rgba(2,6,23,0.18)] overflow-hidden sticky top-24">
-            <div className="p-6 border-b border-border-subtle bg-gradient-to-br from-surface-bg to-white">
+            <div className="p-4 sm:p-6 border-b border-border-subtle bg-gradient-to-br from-surface-bg to-white">
               <div className="font-caps-xs text-caps-xs text-secondary mb-2">CASE DETAILS</div>
               <h3 className="font-headline-md text-headline-md text-on-surface">Case #{current?.id}</h3>
               <p className="font-body-md text-body-md text-on-surface-variant mt-1">{current?.title}</p>
             </div>
             {!current ? (
-              <div className="p-10 text-center text-sm text-on-surface-variant">Select a report to view its progress.</div>
+              <div className="p-6 sm:p-10 text-center text-sm text-on-surface-variant">Select a report to view its progress.</div>
             ) : (
-              <div className="p-6 space-y-8">
+              <div className="p-4 sm:p-6 space-y-6 sm:space-y-8">
                 <div>
                   <h4 className="font-caps-xs text-caps-xs text-on-surface-variant mb-4">PROGRESS TRACKER</h4>
-                  <div className="relative pl-6 space-y-6 before:absolute before:inset-y-0 before:left-[11px] before:w-[2px] before:bg-border-subtle">
+                  <div className="relative pl-6 space-y-4 sm:space-y-6 before:absolute before:inset-y-0 before:left-[11px] before:w-[2px] before:bg-border-subtle">
                     {current.steps.map((step) => (
                       <div key={step.label} className="relative">
                         <div
