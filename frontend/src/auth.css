@@ -1,4 +1,4 @@
-@theme {
+﻿@theme {
   --color-background: #f8f9ff;
   --color-primary: #000000;
   --color-on-primary: #ffffff;
@@ -65,18 +65,18 @@
   --spacing-sm: 12px;
   --spacing-xs: 4px;
 
-  --font-display-lg: 'Ranade', 'Outfit', 'Poppins', sans-serif;
-  --font-display-lg-mobile: 'Ranade', 'Outfit', 'Poppins', sans-serif;
-  --font-headline-lg: 'Ranade', 'Outfit', 'Poppins', sans-serif;
-  --font-headline-lg-mobile: 'Ranade', 'Outfit', 'Poppins', sans-serif;
-  --font-headline-md: 'Ranade', 'Outfit', 'Poppins', sans-serif;
-  --font-body-lg: 'Ranade', 'Inter', 'Outfit', sans-serif;
-  --font-body-md: 'Ranade', 'Inter', 'Outfit', sans-serif;
-  --font-body-sm: 'Ranade', 'Inter', 'Outfit', sans-serif;
-  --font-label-md: 'Ranade', 'Inter', 'Outfit', sans-serif;
-  --font-label-sm: 'Ranade', 'Inter', 'Outfit', sans-serif;
-  --font-caps-xs: 'Ranade', 'Inter', 'Outfit', sans-serif;
-  --font-caption: 'Ranade', 'Inter', 'Outfit', sans-serif;
+  --font-display-lg: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-display-lg-mobile: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-headline-lg: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-headline-lg-mobile: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-headline-md: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-body-lg: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-body-md: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-body-sm: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-label-md: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-label-sm: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-caps-xs: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-caption: 'Cinzel', 'Poppins', 'Inter', sans-serif;
 
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
@@ -185,25 +185,25 @@
   --spacing-sm: 12px;
   --spacing-xs: 4px;
 
-  --font-display-lg: 'Ranade', 'Outfit', 'Poppins', sans-serif;
-  --font-display-lg-mobile: 'Ranade', 'Outfit', 'Poppins', sans-serif;
-  --font-headline-lg: 'Ranade', 'Outfit', 'Poppins', sans-serif;
-  --font-headline-lg-mobile: 'Ranade', 'Outfit', 'Poppins', sans-serif;
-  --font-headline-md: 'Ranade', 'Outfit', 'Poppins', sans-serif;
-  --font-body-lg: 'Ranade', 'Inter', 'Outfit', sans-serif;
-  --font-body-md: 'Ranade', 'Inter', 'Outfit', sans-serif;
-  --font-body-sm: 'Ranade', 'Inter', 'Outfit', sans-serif;
-  --font-label-md: 'Ranade', 'Inter', 'Outfit', sans-serif;
-  --font-label-sm: 'Ranade', 'Inter', 'Outfit', sans-serif;
-  --font-caps-xs: 'Ranade', 'Inter', 'Outfit', sans-serif;
-  --font-caption: 'Ranade', 'Inter', 'Outfit', sans-serif;
+  --font-display-lg: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-display-lg-mobile: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-headline-lg: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-headline-lg-mobile: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-headline-md: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-body-lg: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-body-md: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-body-sm: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-label-md: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-label-sm: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-caps-xs: 'Cinzel', 'Poppins', 'Inter', sans-serif;
+  --font-caption: 'Cinzel', 'Poppins', 'Inter', sans-serif;
 
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
   --radius-2xl: 1rem;
   --radius-full: 9999px;
 
-  /* Command Center (dark navy) dashboard tokens — mirrored from @theme */
+  /* Command Center (dark navy) dashboard tokens â€” mirrored from @theme */
   --color-cc-bg: #0b132b;
   --color-cc-card: #1c2541;
   --color-cc-border: rgba(148, 163, 184, 0.16);

@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 @config "../tailwind.config.js";
 @import "./auth.css";
 @import "./styles/modules.css";
@@ -10,7 +10,7 @@
     scrollbar-gutter: stable;
   }
   body {
-    font-family: 'Ranade', 'Inter', 'Outfit', sans-serif;
+    font-family: 'Cinzel', 'Poppins', 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

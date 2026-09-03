@@ -306,8 +306,8 @@ export default function Home() {
                 onClick={handleReportIncident}
               >
                 <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <span className="material-symbols-outlined relative z-10">campaign</span>
                 <span className="relative z-10">Report an Incident</span>
+                <span className="material-symbols-outlined relative z-10">campaign</span>
               </button>
               <div className="w-full sm:w-auto glass-card rounded-2xl p-sm flex items-center gap-sm border border-white/10 hover:bg-white/10 transition-colors">
                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center overflow-hidden">

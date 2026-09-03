@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+﻿/** @type {import('tailwindcss').Config} */
 export default {
   content: [
     "./index.html",
@@ -64,16 +64,16 @@ export default {
         'ai-cyan': '#06b6d4',
       },
       fontFamily: {
-        'display-lg': ['Ranade', 'Outfit', 'Poppins', 'sans-serif'],
-        'headline-lg': ['Ranade', 'Outfit', 'Poppins', 'sans-serif'],
-        'headline-md': ['Ranade', 'Outfit', 'Poppins', 'sans-serif'],
-        'body-lg': ['Ranade', 'Inter', 'Outfit', 'sans-serif'],
-        'body-md': ['Ranade', 'Inter', 'Outfit', 'sans-serif'],
-        'body-sm': ['Ranade', 'Inter', 'Outfit', 'sans-serif'],
-        'label-md': ['Ranade', 'Inter', 'Outfit', 'sans-serif'],
-        'label-sm': ['Ranade', 'Inter', 'Outfit', 'sans-serif'],
-        'caps-xs': ['Ranade', 'Inter', 'Outfit', 'sans-serif'],
-        'caption': ['Ranade', 'Inter', 'Outfit', 'sans-serif'],
+        'display-lg': ['Cinzel', 'Poppins', 'Inter', 'sans-serif'],
+        'headline-lg': ['Cinzel', 'Poppins', 'Inter', 'sans-serif'],
+        'headline-md': ['Cinzel', 'Poppins', 'Inter', 'sans-serif'],
+        'body-lg': ['Cinzel', 'Poppins', 'Inter', 'sans-serif'],
+        'body-md': ['Cinzel', 'Poppins', 'Inter', 'sans-serif'],
+        'body-sm': ['Cinzel', 'Poppins', 'Inter', 'sans-serif'],
+        'label-md': ['Cinzel', 'Poppins', 'Inter', 'sans-serif'],
+        'label-sm': ['Cinzel', 'Poppins', 'Inter', 'sans-serif'],
+        'caps-xs': ['Cinzel', 'Poppins', 'Inter', 'sans-serif'],
+        'caption': ['Cinzel', 'Poppins', 'Inter', 'sans-serif'],
       },
       borderRadius: {
         'lg': '0.5rem',
