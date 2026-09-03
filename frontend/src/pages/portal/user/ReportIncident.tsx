@@ -981,12 +981,9 @@ export default function ReportIncident({ className = '' }: { className?: string 
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                          <button type="button" onClick={() => { forceAnalyzeRef.current = true; setAnalyzeTick((t) => t + 1); }} disabled={analyzing} className="flex-1 py-1.5 rounded-lg border border-secondary bg-secondary/10 text-secondary text-[11px] font-bold hover:bg-secondary/10 transition-colors flex items-center justify-center gap-1 disabled:opacity-60">
-                            <span className="material-symbols-outlined text-[13px]">refresh</span> {analyzing ? 'Analyzing…' : 'Re-analyze'}
-                          </button>
-                          <span className="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider">Tactical AI {ai.source === 'gemini' ? 'v5 (Gemini)' : 'v4.2 (Rules)'}</span>
-                        </div>
+                        <button type="button" onClick={() => { forceAnalyzeRef.current = true; setAnalyzeTick((t) => t + 1); }} disabled={analyzing} className="w-full py-2 sm:py-1.5 rounded-lg border border-secondary/50 bg-secondary/10 text-secondary text-[11px] font-bold hover:bg-secondary/20 transition-colors flex items-center justify-center gap-1.5 disabled:opacity-60">
+                          <span className="material-symbols-outlined text-[13px]">refresh</span> {analyzing ? 'Analyzing…' : 'Re-analyze'}
+                        </button>
                         </>
                         )}
                       </div>
@@ -1089,7 +1086,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
                     <span className="material-symbols-outlined text-error">smart_toy</span>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="font-caps-xs text-caps-xs text-on-surface-variant mb-1">AI Tactical Analysis Complete</div>
+                    <div className="font-caps-xs text-[10px] text-on-surface-variant mb-1">AI Tactical Analysis Complete</div>
                     <h3 className="font-headline-md text-headline-md text-on-surface mb-3">{ai.priority} {ai.category} Detected</h3>
                     <div className="flex flex-wrap gap-2 sm:gap-3">
                       <span className={`px-2 py-1 rounded font-caps-xs text-caps-xs uppercase border ${priorityTone}`}>Priority: {ai.priority}</span>
