@@ -129,12 +129,11 @@ export default function SiteHeader({
           <div className="w-8 h-8 md:w-10 md:h-10 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim transition-transform hover:scale-110 shrink-0">
             <img alt={logoAlt} className={logoClass} src={logo} />
           </div>
-          <h1 className="font-headline-md text-[13px] min-[400px]:text-sm sm:text-base md:text-[13px] font-bold text-surface-bright leading-tight whitespace-nowrap overflow-hidden">
-            <span className="md:hidden">{title}</span>
-            <span className="hidden md:flex flex-col items-start leading-none gap-[2px]">
+          <h1 className="font-headline-md text-[10px] min-[400px]:text-[11px] sm:text-[13px] font-bold text-surface-bright leading-tight whitespace-nowrap overflow-hidden">
+            <span className="flex flex-col items-start leading-none gap-[2px]">
               <span className="uppercase tracking-widest">{titleHead}</span>
               {titleTail && (
-                <span className="uppercase tracking-widest text-[10px] font-semibold text-tertiary-fixed-dim opacity-90">{titleTail}</span>
+                <span className="uppercase tracking-widest text-[9px] min-[400px]:text-[10px] sm:text-[10px] font-semibold text-tertiary-fixed-dim opacity-90">{titleTail}</span>
               )}
             </span>
           </h1>
