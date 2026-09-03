@@ -887,7 +887,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
                 </div>
 
                 {/* ===== AI TACTICAL ANALYSIS ===== */}
-                <div className="absolute bottom-4 right-4 z-[600] w-64 lg:w-72 bg-surface-container-low/95 backdrop-blur-md rounded-xl border-l-4 border-l-tertiary border-y border-r border-outline-variant/30 shadow-xl overflow-hidden">
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-auto sm:right-4 sm:w-64 lg:w-72 z-[600] bg-surface-container-low/95 backdrop-blur-md rounded-xl border-l-4 border-l-tertiary border-y border-r border-outline-variant/30 shadow-xl overflow-hidden">
                   <div className="bg-tertiary/5 border-b border-outline-variant/30 p-3 flex items-center justify-between cursor-pointer" onClick={() => setAiExpanded((v) => !v)}>
                     <h3 className="font-caps-xs text-[10px] text-on-surface tracking-widest uppercase flex items-center gap-2 font-bold">
                       <span className="w-6 h-6 rounded-md bg-tertiary/10 flex items-center justify-center">
@@ -908,7 +908,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
 
                   <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${aiExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
                     <div className="overflow-hidden min-h-0">
-                      <div className="p-3 space-y-3 max-h-[320px] overflow-y-auto">
+                      <div className="p-3 space-y-3 max-h-[200px] sm:max-h-[320px] overflow-y-auto">
                         {analyzing && (
                           <p className="text-[10px] text-secondary font-bold flex items-center gap-1.5">
                             <span className="material-symbols-outlined text-[13px]">progress_activity</span> Analyzing live…
@@ -1039,9 +1039,9 @@ export default function ReportIncident({ className = '' }: { className?: string 
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') fileInputRef.current?.click(); }}
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={(e) => { e.preventDefault(); addFiles(e.dataTransfer.files); }}
-                  className="border-2 border-dashed border-outline-variant rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center gap-3 bg-surface/50 hover:bg-surface transition-colors cursor-pointer"
+                  className="border-2 border-dashed border-outline-variant rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center gap-2 sm:gap-3 bg-surface/50 hover:bg-surface transition-colors cursor-pointer"
                 >
-                  <span className="material-symbols-outlined text-4xl text-on-surface-variant">cloud_upload</span>
+                  <span className="material-symbols-outlined text-3xl sm:text-4xl text-on-surface-variant">cloud_upload</span>
                   <div className="text-center">
                     <p className="font-label-sm text-label-sm font-bold text-on-surface">Click to upload or drag and drop</p>
                     <p className="text-[10px] text-on-surface-variant uppercase tracking-tighter">PNG, JPG, MP4 or WAV (Max 50MB)</p>
@@ -1083,21 +1083,21 @@ export default function ReportIncident({ className = '' }: { className?: string 
             <div className="lg:col-span-2 space-y-4 sm:space-y-6">
               <div className="bg-surface border border-outline-variant/30 rounded-lg p-4 sm:p-6 shadow-xl relative overflow-hidden">
                 <div className={`absolute top-0 left-0 w-1 h-full ${ai.priority === 'CRITICAL' ? 'bg-error' : 'bg-secondary'}`}></div>
-                <div className="flex items-start gap-6 flex-wrap">
+                <div className="flex items-start gap-3 sm:gap-6 flex-wrap">
                   <div className="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center shrink-0">
                     <span className="material-symbols-outlined text-error">smart_toy</span>
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="font-caps-xs text-caps-xs text-on-surface-variant mb-1">AI Tactical Analysis Complete</div>
                     <h3 className="font-headline-md text-headline-md text-on-surface mb-3">{ai.priority} {ai.category} Detected</h3>
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-wrap gap-2 sm:gap-3">
                       <span className={`px-2 py-1 rounded font-caps-xs text-caps-xs uppercase border ${priorityTone}`}>Priority: {ai.priority}</span>
                       <span className="bg-surface-container-low text-on-surface-variant px-2 py-1 rounded font-caps-xs text-caps-xs uppercase border border-outline-variant">Confidence: {ai.confidence}%</span>
                       <span className="bg-surface-container-low text-on-surface-variant px-2 py-1 rounded font-caps-xs text-caps-xs uppercase border border-outline-variant">Threat: {ai.threat}%</span>
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5 pt-5 border-t border-outline-variant">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 pt-4 sm:mt-5 sm:pt-5 border-t border-outline-variant">
                   <div>
                     <p className="font-label-sm text-[11px] text-on-surface-variant mb-1.5">Auto-detected Category</p>
                     <div className="flex items-center justify-between gap-2">
@@ -1125,7 +1125,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
                     </div>
                   </div>
                 </div>
-                <div className="mt-5 pt-4 border-t border-outline-variant">
+                <div className="mt-4 sm:mt-5 pt-4 border-t border-outline-variant">
                   <p className="font-label-sm text-[11px] text-on-surface-variant mb-1.5">Recommended Actions for You</p>
                   <ul className="space-y-1.5">
                     {(ai.user_actions?.length ? ai.user_actions : localFallback(ai.category).user_actions).map((action) => (
@@ -1169,8 +1169,8 @@ export default function ReportIncident({ className = '' }: { className?: string 
                   </div>
                 </div>
                 <div className="font-caps-xs text-caps-xs text-on-surface-variant mb-3 pb-1 border-b border-outline-variant">Location Details</div>
-                <div className="mb-6">
-                  <div className="h-48 rounded bg-surface-container-low mb-3 relative overflow-hidden border border-outline-variant/30">
+                <div className="mb-4 sm:mb-6">
+                  <div className="h-36 sm:h-48 rounded bg-surface-container-low mb-3 relative overflow-hidden border border-outline-variant/30">
                     <MapContainer center={location} zoom={15} className="w-full h-full" zoomControl={false} attributionControl={false} dragging={false} scrollWheelZoom={false} doubleClickZoom={false}>
                       <MapSizeSync />
                       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
@@ -1184,7 +1184,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
                   </div>
                 </div>
                 <div className="font-caps-xs text-caps-xs text-on-surface-variant mb-3 pb-1 border-b border-outline-variant">Detailed Description</div>
-                <div className="mb-6">
+                <div className="mb-4 sm:mb-6">
                   <p className="font-body-md text-on-surface-variant bg-surface-container-low p-3 rounded border border-outline-variant/30">
                     {reportDescription.trim() || reportTitle.trim() || 'No detailed description provided.'}
                   </p>
@@ -1192,7 +1192,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
                 {additionalContext.trim() && (
                   <>
                     <div className="font-caps-xs text-caps-xs text-on-surface-variant mb-3 pb-1 border-b border-outline-variant">Additional Context</div>
-                    <div className="mb-6">
+                    <div className="mb-4 sm:mb-6">
                       <p className="font-body-md text-on-surface-variant bg-surface-container-low p-3 rounded border border-outline-variant/30">{additionalContext}</p>
                     </div>
                   </>
@@ -1201,7 +1201,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
                 {evidenceFiles.length === 0 ? (
                   <p className="font-body-sm text-on-surface-variant bg-surface-container-low p-3 rounded border border-outline-variant/30">No evidence attached.</p>
                 ) : (
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2 sm:gap-3">
                     {evidenceFiles.map((f) => {
                       const previewUrl = f.type.startsWith('image/') ? URL.createObjectURL(f) : null;
                       return previewUrl ? (
