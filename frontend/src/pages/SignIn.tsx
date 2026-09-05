@@ -166,7 +166,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className="bg-background text-on-background font-body-md min-h-screen flex items-start md:items-center justify-center p-0 md:p-margin-mobile overflow-x-hidden">
+    <div className="bg-background text-on-background font-body-md h-dvh md:h-auto md:min-h-screen flex md:items-center justify-center p-0 md:p-margin-mobile overflow-hidden md:overflow-x-hidden">
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-primary-container/40 z-10 backdrop-brightness-50"></div>
         <div className={`w-full h-full ${styles.bgImage}`}></div>
@@ -209,8 +209,8 @@ export default function SignIn() {
         </section>
 
         {/* Right form panel */}
-        <section className="w-full lg:w-1/2 bg-surface-container-lowest flex flex-col overflow-hidden">
-          <div className={`flex-1 flex flex-col p-4 md:p-lg overflow-y-auto ${styles.hideScrollbar} custom-scrollbar`}>
+        <section className="flex-1 min-h-0 w-full lg:w-1/2 lg:flex-none bg-surface-container-lowest flex flex-col overflow-hidden">
+          <div className={`flex-1 min-h-0 flex flex-col p-4 md:p-lg overflow-y-auto ${styles.hideScrollbar} custom-scrollbar`}>
             {/* Logo for mobile */}
             <div className="lg:hidden flex justify-center mb-3 md:mb-6">
               <img alt="Barangay Culiat Safety Logo" className="h-12 w-12 md:h-16 md:w-16"
