@@ -172,7 +172,7 @@ export default function SignIn() {
         <div className={`w-full h-full ${styles.bgImage}`}></div>
       </div>
 
-      <main className="relative z-20 w-full max-w-6xl mx-auto flex flex-col md:flex-row overflow-hidden md:rounded-xl shadow-2xl bg-surface-container-lowest md:max-h-screen">
+      <main className="relative z-20 mt-4 md:mt-0 w-full max-w-6xl mx-auto flex flex-col md:flex-row overflow-hidden md:rounded-xl shadow-2xl bg-surface-container-lowest md:max-h-screen">
         {/* Left hero panel (hidden on mobile) */}
         <section className="hidden lg:flex w-1/2 flex-col justify-between p-xl relative overflow-hidden">
           <div className="absolute inset-0 z-0">
