@@ -4,6 +4,7 @@ import { supabase } from '../supabaseClient';
 import Toast, { type ToastData } from '../components/Toast';
 import LoadingScreen from '../components/LoadingScreen';
 import OTPVerificationModal from '../components/OTPVerificationModal';
+import { GOOGLE_OAUTH_FLAG } from './AuthCallback';
 import { getRole, dashboardPathFor, checkUserAccess } from '../lib/role';
 import styles from '../styles/modules/SignIn.module.css';
 
@@ -308,8 +309,10 @@ export default function SignIn() {
               <div className="grid gap-3 md:gap-md mb-4 md:mb-8">
                 <button
                   type="button"
-                  onClick={() => {
-                    supabase.auth.signInWithOAuth({
+                  onClick={async () => {
+                    // Tell AuthCallback this redirect is a Google sign-in that needs confirmation.
+                    sessionStorage.setItem(GOOGLE_OAUTH_FLAG, 'pending');
+                    const { error } = await supabase.auth.signInWithOAuth({
                       provider: 'google',
                       options: {
                         redirectTo: window.location.origin + '/auth/callback',
@@ -318,6 +321,10 @@ export default function SignIn() {
                         }
                       }
                     });
+                    if (error) {
+                      sessionStorage.removeItem(GOOGLE_OAUTH_FLAG);
+                      setToast({ type: 'error', message: error.message });
+                    }
                   }}
                   className="flex items-center justify-center gap-base px-md border border-outline-variant/50 rounded-lg bg-white hover:bg-surface-container-low transition-colors py-2.5 shadow-sm"
                 >
