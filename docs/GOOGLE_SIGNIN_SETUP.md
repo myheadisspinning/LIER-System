@@ -78,5 +78,6 @@ Options:
 
 ## Related
 
-- Returning Google users now get an in-app **"Confirm sign-in"** step before the session
-  is completed (implemented in `frontend/src/pages/AuthCallback.tsx`).
+- The app's sign-in request already uses `prompt: 'select_account'`
+  (`frontend/src/pages/SignIn.tsx`), so Google always shows the account chooser and its own
+  consent/confirmation step on Google's screens — no extra confirmation inside the app is needed.
