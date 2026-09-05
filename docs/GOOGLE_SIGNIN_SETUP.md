@@ -69,6 +69,22 @@ Options:
 3. **Never** put `fuphuqkxibmqermtcjoe.supabase.co` in Authorized domains — it belongs only in the
    OAuth client's **Authorized redirect URIs**.
 
+### "Credentials must be updated before deleting" when removing a domain
+
+If a domain is already in Authorized domains and an OAuth client references it (typically the
+Supabase callback redirect URI), Google blocks the deletion until the credential no longer
+mentions the domain. Detach → delete → re-attach:
+
+1. **APIs & Services → Credentials** → open the OAuth client → under *Authorized redirect URIs*,
+   temporarily remove `https://fuphuqkxibmqermtcjoe.supabase.co/auth/v1/callback` → **Save**.
+2. **Google Auth Platform → Branding (OAuth consent screen)** → remove the domain from
+   *Authorized domains* → **Save**. (The deletion now goes through.)
+3. **Credentials** → open the same OAuth client → re-add
+   `https://fuphuqkxibmqermtcjoe.supabase.co/auth/v1/callback` → **Save**.
+
+Redirect URIs do **not** need to be listed under Authorized domains, so Google sign-in keeps
+working after step 3. Avoid doing this while users might be mid sign-in.
+
 ## Result
 
 - Google's account chooser and consent screens now show **"Barangay Culiat Safety"**
