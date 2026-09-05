@@ -97,7 +97,7 @@ export default function Officials() {
             {captain && (
               <section ref={(el) => { sectionRefs.current[1] = el; }} className="mb-8 md:mb-12 opacity-0 translate-y-10 transition-all duration-700">
                 <div className="glass-card rounded-2xl p-4 md:p-lg flex flex-col md:flex-row items-center bg-gradient-to-br from-white to-surface-container-low border-l-8 border-secondary gap-4 md:gap-md transition-all hover:shadow-xl hover:-translate-y-1">
-                  <div className="relative w-40 h-40 md:w-80 md:h-80 shrink-0">
+                  <div className="relative w-40 h-40 md:w-60 md:h-60 shrink-0">
                     <img className="w-full h-full object-cover rounded-xl shadow-xl" src={captain.photo_url || FALLBACK_IMG} alt={captain.fullname} />
                     <div className="absolute -bottom-3 -right-3 md:-bottom-4 md:-right-4 bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 md:px-md md:py-sm rounded-md md:rounded-lg font-bold shadow-lg">
                       <span className="font-label-md text-[11px] md:text-label-md">PUNONG BARANGAY</span>
@@ -166,14 +166,16 @@ export default function Officials() {
                   </div>
                   <div className="hidden md:block h-[2px] bg-outline-variant/30 flex-1 mx-lg mb-4"></div>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-gutter">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-gutter">
                   {visibleMembers.map((o) => (
                     <div key={o.id} className="glass-card bg-white rounded-xl overflow-hidden group hover:-translate-y-1 transition-transform duration-300 border border-outline-variant/20">
-                      <div className="overflow-hidden h-24 md:h-48">
-                        <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={o.photo_url || FALLBACK_IMG} alt={o.fullname} />
+                      <div className="relative overflow-hidden h-24 md:h-48">
+                        <img className="w-full h-full object-cover" src={o.photo_url || FALLBACK_IMG} alt={o.fullname} />
+                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                          <span className="inline-block bg-black/70 text-white text-[10px] md:text-[11px] font-label-md px-2 py-1 rounded-md shadow-lg">{o.title}</span>
+                        </div>
                       </div>
                       <div className="p-3 md:p-md min-w-0">
-                        <p className="font-label-md text-[11px] md:text-label-md text-secondary mb-xs truncate">{o.title}</p>
                         <h4 className="font-headline-md text-[13px] md:text-[20px] leading-snug text-on-surface mb-base line-clamp-2">{o.fullname}</h4>
                         {o.committee && (
                           <div className="flex items-center gap-xs text-on-surface-variant min-w-0">
@@ -200,29 +202,29 @@ export default function Officials() {
           </>
         )}
 
-        <section ref={(el) => { sectionRefs.current[3] = el; }} className="mb-8 md:mb-12 py-8 md:py-xl bg-primary-container rounded-2xl overflow-hidden relative opacity-0 translate-y-10 transition-all duration-700">
+        <section ref={(el) => { sectionRefs.current[3] = el; }} className="mb-8 md:mb-12 py-8 md:py-lg bg-primary-container rounded-2xl overflow-hidden relative opacity-0 translate-y-10 transition-all duration-700">
           <div className="absolute inset-0 opacity-20 pointer-events-none">
             <div className="absolute top-0 right-0 w-96 h-96 bg-secondary rounded-full blur-[120px]"></div>
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-tertiary-fixed rounded-full blur-[120px]"></div>
           </div>
           <div className="relative z-10 px-4 md:px-xl">
-            <div className="text-center mb-8 md:mb-12">
+            <div className="text-center mb-6 md:mb-8">
               <h3 className="font-headline-lg text-2xl md:text-[28px] text-surface-bright mb-base">Organizational Structure</h3>
               <p className="font-body-md text-body-md max-w-ml mx-auto text-surface-bright">The unified framework of our community safety and public health ecosystem.</p>
             </div>
-            <div className="flex flex-col items-center gap-4 md:gap-lg">
-              <div className="p-4 md:p-lg bg-surface-container-lowest rounded-xl border-l-4 border-secondary text-center shadow-lg group hover:bg-surface-bright hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                <span className="material-symbols-outlined text-secondary text-[28px] md:text-[48px] mb-sm group-hover:scale-110 transition-transform duration-300">account_balance</span>
+            <div className="flex flex-col items-center gap-4 md:gap-6">
+              <div className="p-4 md:p-6 bg-surface-container-lowest rounded-xl border-l-4 border-secondary text-center shadow-lg group hover:bg-surface-bright hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <span className="material-symbols-outlined text-secondary text-[28px] md:text-[40px] mb-sm group-hover:scale-110 transition-transform duration-300">account_balance</span>
                 <h4 className="font-headline-md text-lg md:text-xl text-on-background">Sangguniang Barangay</h4>
                 <p className="font-caption text-caption uppercase tracking-widest mt-xs text-secondary">Policy &amp; Legislative Core</p>
               </div>
-              <div className="h-6 md:h-12 w-px relative bg-secondary/50">
+              <div className="h-6 md:h-8 w-px relative bg-secondary/50">
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-secondary"></div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full max-w-4xl">
-                <div className="bg-surface-container-lowest p-4 md:p-lg rounded-xl border-t-4 border-error text-center group hover:bg-surface-bright hover:shadow-xl hover:-translate-y-1 transition-all duration-300 shadow-md">
-                  <span className="material-symbols-outlined text-error text-[28px] md:text-[40px] mb-sm group-hover:scale-110 transition-transform duration-300">shield</span>
-                  <h5 className="font-headline-md text-base md:text-[20px] text-on-background">BPSO (Tanods)</h5>
+                <div className="bg-surface-container-lowest p-4 md:p-6 rounded-xl border-t-4 border-error text-center group hover:bg-surface-bright hover:shadow-xl hover:-translate-y-1 transition-all duration-300 shadow-md">
+                  <span className="material-symbols-outlined text-error text-[28px] md:text-[34px] mb-sm group-hover:scale-110 transition-transform duration-300">shield</span>
+                  <h5 className="font-headline-md text-base md:text-[18px] text-on-background">BPSO (Tanods)</h5>
                   <p className="font-body-md text-body-md mb-3 md:mb-md text-on-surface-variant">Peace, Order &amp; Security</p>
                   <div className="flex flex-wrap justify-center gap-xs">
                     <span className="px-3 py-0.5 md:px-md md:py-xs bg-error/10 text-error rounded-full font-label-md text-[11px] md:text-[12px]">Patrol Teams</span>
@@ -230,9 +232,9 @@ export default function Officials() {
                     <span className="px-3 py-0.5 md:px-md md:py-xs bg-error/10 text-error rounded-full font-label-md text-[11px] md:text-[12px]">Traffic Management</span>
                   </div>
                 </div>
-                <div className="bg-surface-container-lowest p-4 md:p-lg rounded-xl border-t-4 border-secondary text-center group hover:bg-surface-bright hover:shadow-xl hover:-translate-y-1 transition-all duration-300 shadow-md">
-                  <span className="material-symbols-outlined text-secondary text-[28px] md:text-[40px] mb-sm group-hover:scale-110 transition-transform duration-300">local_hospital</span>
-                  <h5 className="font-headline-md text-base md:text-[20px] text-on-background">Health Workers</h5>
+                <div className="bg-surface-container-lowest p-4 md:p-6 rounded-xl border-t-4 border-secondary text-center group hover:bg-surface-bright hover:shadow-xl hover:-translate-y-1 transition-all duration-300 shadow-md">
+                  <span className="material-symbols-outlined text-secondary text-[28px] md:text-[34px] mb-sm group-hover:scale-110 transition-transform duration-300">local_hospital</span>
+                  <h5 className="font-headline-md text-base md:text-[18px] text-on-background">Health Workers</h5>
                   <p className="font-body-md text-body-md mb-3 md:mb-md text-on-surface-variant">Public Health &amp; Sanitation</p>
                   <div className="flex flex-wrap justify-center gap-xs">
                     <span className="px-3 py-0.5 md:px-md md:py-xs bg-secondary/10 text-secondary rounded-full font-label-md text-[11px] md:text-[12px]">BHW Units</span>

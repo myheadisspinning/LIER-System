@@ -125,10 +125,12 @@ export default function SiteHeader({
   return (
     <>
       <header className="fixed top-0 left-0 w-full z-[100] flex justify-between xl:justify-center xl:gap-12 items-center px-4 md:px-margin-desktop h-16 bg-primary-container/90 backdrop-blur-md shadow-md font-body-md">
-        <Link to="/" className="flex flex-1 lg:flex-none items-center gap-2 md:gap-sm min-w-0">
-          <div className="w-8 h-8 md:w-10 md:h-10 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim transition-transform hover:scale-110 shrink-0">
-            <img alt={logoAlt} className={logoClass} src={logo} />
-          </div>
+        <div className="flex flex-1 lg:flex-none items-center gap-2 md:gap-sm min-w-0">
+          <Link to="/" className="shrink-0" aria-label="Home">
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-tertiary-fixed-dim transition-transform hover:scale-110">
+              <img alt={logoAlt} className={logoClass} src={logo} />
+            </div>
+          </Link>
           <h1 className="font-headline-md text-[10px] min-[400px]:text-[11px] sm:text-[13px] font-bold text-surface-bright leading-tight whitespace-nowrap overflow-hidden">
             <span className="flex flex-col items-start leading-none gap-[2px]">
               <span className="uppercase tracking-widest text-[12px] min-[400px]:text-[13px] sm:text-[15px]">{titleHead}</span>
@@ -137,7 +139,7 @@ export default function SiteHeader({
               )}
             </span>
           </h1>
-        </Link>
+        </div>
 
         <nav className="hidden lg:flex items-center gap-1 p-1.5 rounded-full bg-white/5 border border-white/10">
           {navItems.map((item) => (

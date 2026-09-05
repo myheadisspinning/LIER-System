@@ -166,13 +166,13 @@ export default function SignIn() {
   };
 
   return (
-    <div className="bg-background text-on-background font-body-md min-h-screen flex items-center justify-center p-0 md:p-margin-mobile overflow-x-hidden">
+    <div className="bg-background text-on-background font-body-md min-h-screen flex items-start md:items-center justify-center p-0 md:p-margin-mobile overflow-x-hidden">
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-primary-container/40 z-10 backdrop-brightness-50"></div>
         <div className={`w-full h-full ${styles.bgImage}`}></div>
       </div>
 
-      <main className="relative z-20 w-full max-w-6xl mx-auto flex flex-col md:flex-row overflow-hidden md:rounded-xl shadow-2xl bg-surface-container-lowest h-full md:max-h-screen">
+      <main className="relative z-20 w-full max-w-6xl mx-auto flex flex-col md:flex-row overflow-hidden md:rounded-xl shadow-2xl bg-surface-container-lowest md:max-h-screen">
         {/* Left hero panel (hidden on mobile) */}
         <section className="hidden lg:flex w-1/2 flex-col justify-between p-xl relative overflow-hidden">
           <div className="absolute inset-0 z-0">
@@ -212,12 +212,12 @@ export default function SignIn() {
         <section className="w-full lg:w-1/2 bg-surface-container-lowest flex flex-col overflow-hidden">
           <div className={`flex-1 flex flex-col p-4 md:p-lg overflow-y-auto ${styles.hideScrollbar} custom-scrollbar`}>
             {/* Logo for mobile */}
-            <div className="lg:hidden flex justify-center mb-4 md:mb-6">
-              <img alt="Barangay Culiat Safety Logo" className="h-16 w-16"
+            <div className="lg:hidden flex justify-center mb-3 md:mb-6">
+              <img alt="Barangay Culiat Safety Logo" className="h-12 w-12 md:h-16 md:w-16"
                 src="/image/culiat-logo.png" />
             </div>
             <div className="max-w-2xl w-full mx-auto my-auto py-4">
-              <header className="text-center lg:text-left mb-6 md:mb-8">
+              <header className="text-center lg:text-left mb-4 md:mb-8">
                 <h2 className="text-2xl font-bold text-on-background mb-1 whitespace-nowrap">We offer service to you.</h2>
                 <p className="font-body-md text-on-surface-variant">Official Login</p>
               </header>
@@ -298,14 +298,14 @@ export default function SignIn() {
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-outline-variant/30"></div>
                 </div>
-                <div className="relative flex justify-center my-4 md:my-6">
+                <div className="relative flex justify-center my-3 md:my-6">
                   <span className="bg-surface-container-lowest px-4 text-caption text-on-surface-variant font-medium uppercase tracking-wider">
                     Or secure login with
                   </span>
                 </div>
               </div>
               {/* Google Workspace login button */}
-              <div className="grid gap-3 md:gap-md mb-6 md:mb-8">
+              <div className="grid gap-3 md:gap-md mb-4 md:mb-8">
                 <button
                   type="button"
                   onClick={() => {
@@ -339,7 +339,7 @@ export default function SignIn() {
               </div>
             </div>
             {/* Footer */}
-            <div className="mt-auto border-t border-outline-variant/10 flex items-center justify-center gap-base text-on-surface-variant/40 pt-4 pb-2">
+            <div className="mt-auto border-t border-outline-variant/10 flex items-center justify-center gap-base text-on-surface-variant/40 pt-3 pb-2">
               <span className="material-symbols-outlined text-sm">verified_user</span>
               <span className="font-caption text-[10px] uppercase tracking-widest font-bold">
                 OFFICIAL BARANGAY CULIAT GOV PORTAL • ENCRYPTED

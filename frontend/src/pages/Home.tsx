@@ -356,7 +356,7 @@ export default function Home() {
 
       <section ref={(el) => { sectionRefs.current[2] = el; }} className="py-10 md:py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-1000 delay-200">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
-          <div className="text-center mb-8 md:mb-12" data-section="services-title">
+          <div className="text-center mb-6 md:mb-12" data-section="services-title">
             <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-base">LGU Public Safety Services</h2>
             <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Access critical services and report concerns directly to our integrated law enforcement team.</p>
           </div>
@@ -367,16 +367,16 @@ export default function Home() {
               { icon: 'local_police', title: 'Police Assistance', desc: 'Request emergency patrol or police presence in your zone.', hoverBorder: 'hover:border-secondary', slotKey: 'police_assistance' },
               { icon: 'forum', title: 'Contact Barangay', desc: 'Direct messaging line to Barangay officials and safety officers.', hoverBorder: 'hover:border-secondary', slotKey: 'contact_barangay' },
             ].map((svc, i) => (
-              <div key={i} className={`group relative rounded-2xl border border-outline-variant overflow-hidden ${svc.hoverBorder} hover:shadow-xl transition-all cursor-pointer touch-manipulation hover:-translate-y-2 min-h-[220px] md:min-h-[280px]`} data-section="services">
+              <div key={i} className={`group relative rounded-2xl border border-outline-variant overflow-hidden ${svc.hoverBorder} hover:shadow-xl transition-all cursor-pointer touch-manipulation hover:-translate-y-2 min-h-[160px] sm:min-h-[200px] md:min-h-[280px]`} data-section="services">
                 <div className="absolute inset-0">
                   <img alt={svc.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={getServiceImage(svc.slotKey)} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                 </div>
-                <div className="relative p-5 md:p-lg h-full flex flex-col justify-end">
-                  <div className="w-12 h-12 rounded-xl bg-blue-600/80 flex items-center justify-center text-white mb-sm group-hover:bg-secondary transition-colors duration-300">
-                    <span className="material-symbols-outlined text-2xl">{svc.icon}</span>
+                <div className="relative p-4 sm:p-5 md:p-lg h-full flex flex-col justify-end">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-600/80 flex items-center justify-center text-white mb-2 sm:mb-sm group-hover:bg-secondary transition-colors duration-300">
+                    <span className="material-symbols-outlined text-xl sm:text-2xl">{svc.icon}</span>
                   </div>
-                  <h3 className="font-headline-md text-lg md:text-xl mb-xs text-white">{svc.title}</h3>
+                  <h3 className="font-headline-md text-base sm:text-lg md:text-xl mb-xs text-white">{svc.title}</h3>
                   <p className="font-body-md text-white/90 text-sm">{svc.desc}</p>
                 </div>
               </div>
