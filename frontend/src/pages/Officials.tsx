@@ -25,6 +25,7 @@ export default function Officials() {
   const [officials, setOfficials] = useState<Official[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAllMembers, setShowAllMembers] = useState(false);
+  const [activeTitleId, setActiveTitleId] = useState<string | null>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
@@ -75,7 +76,7 @@ export default function Officials() {
   }, [loading]);
 
   return (
-    <div className="bg-surface text-on-surface font-body-md selection:bg-secondary/30">
+    <div className="bg-surface text-on-surface font-body-md selection:bg-secondary/30" onClick={() => setActiveTitleId(null)}>
       <SiteHeader active="/officials" />
 
       <main className="pb-10 md:pb-xl px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto pt-20">
@@ -169,9 +170,15 @@ export default function Officials() {
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-gutter">
                   {visibleMembers.map((o) => (
                     <div key={o.id} className="glass-card bg-white rounded-xl overflow-hidden group hover:-translate-y-1 transition-transform duration-300 border border-outline-variant/20">
-                      <div className="relative overflow-hidden h-24 md:h-48">
+                      <div
+                        className="relative overflow-hidden h-24 md:h-48"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActiveTitleId((prev) => (prev === o.id ? null : o.id));
+                        }}
+                      >
                         <img className="w-full h-full object-cover" src={o.photo_url || FALLBACK_IMG} alt={o.fullname} />
-                        <div className="absolute top-2 right-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                        <div className={`absolute top-2 right-2 opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10 ${activeTitleId === o.id ? 'max-md:opacity-100' : ''}`}>
                           <span className="inline-block bg-black/70 text-white text-[10px] md:text-[11px] font-label-md px-2 py-1 rounded-md shadow-lg">{o.title}</span>
                         </div>
                       </div>
