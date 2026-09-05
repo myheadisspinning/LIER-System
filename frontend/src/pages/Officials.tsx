@@ -178,7 +178,7 @@ export default function Officials() {
                         }}
                       >
                         <img className="w-full h-full object-cover" src={o.photo_url || FALLBACK_IMG} alt={o.fullname} />
-                        <div className={`absolute top-2 right-2 opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10 ${activeTitleId === o.id ? 'max-md:opacity-100' : ''}`}>
+                        <div className={`absolute top-2 right-2 transition-all duration-300 pointer-events-none z-10 ${activeTitleId === o.id ? 'max-md:opacity-100 md:opacity-0 md:group-hover:opacity-100' : 'opacity-0 translate-x-full md:translate-x-0 md:group-hover:opacity-100'}`}>
                           <span className="inline-block bg-black/70 text-white text-[10px] md:text-[11px] font-label-md px-2 py-1 rounded-md shadow-lg">{o.title}</span>
                         </div>
                       </div>
