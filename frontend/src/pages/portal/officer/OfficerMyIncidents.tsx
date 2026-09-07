@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
+import IncidentDetailModal from '../../../components/IncidentDetailModal';
 import { fmtDate, getAdminProfile, logAudit, PRIORITY_BADGE } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
 
@@ -41,6 +42,7 @@ export default function OfficerMyIncidents() {
   const [filter, setFilter] = useState('All');
   const [busyId, setBusyId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [selectedIncidentId, setSelectedIncidentId] = useState<string | null>(null);
 
   const fetchAll = async (uid: string | null) => {
     if (!uid) return [] as Incident[];
@@ -192,6 +194,9 @@ export default function OfficerMyIncidents() {
                     <td className="px-5 py-4 text-xs text-on-surface-variant">{fmtDate(i.created_at, 'short')}</td>
                     <td className="px-5 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
+                        <button type="button" onClick={() => setSelectedIncidentId(i.id)} className="text-secondary font-label-md text-label-md hover:underline">
+                          View Details
+                        </button>
                         {i.status === 'Assigned' && (
                           <button type="button" disabled={busyId === i.id} onClick={() => acknowledge(i)} className="px-3 py-1.5 bg-secondary text-on-secondary rounded-md text-xs font-semibold hover:bg-secondary/90 disabled:opacity-50 transition-colors">
                             Acknowledge
@@ -213,6 +218,7 @@ export default function OfficerMyIncidents() {
       </div>
 
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
+      <IncidentDetailModal reportId={selectedIncidentId} onClose={() => setSelectedIncidentId(null)} isAdmin />
     </div>
   );
 }

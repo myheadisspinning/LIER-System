@@ -212,7 +212,7 @@ export default function AdminIncidentArchive() {
           endIndex={endIndex}
         />
       </div>
-      <IncidentDetailModal reportId={selectedId} onClose={() => setSelectedId(null)} />
+      <IncidentDetailModal reportId={selectedId} onClose={() => setSelectedId(null)} isAdmin />
     </div>
   );
 }

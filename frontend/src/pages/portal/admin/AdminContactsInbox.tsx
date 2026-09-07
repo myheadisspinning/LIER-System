@@ -629,6 +629,7 @@ export default function AdminContactsInbox() {
         <IncidentDetailModal
           reportId={detailReportId}
           onClose={() => setDetailReportId(null)}
+          isAdmin
         />
       )}
     </div>

@@ -302,7 +302,7 @@ export default function SuperadminReportRegistry() {
         </p>
       </div>
 
-      <IncidentDetailModal reportId={selectedId} onClose={() => setSelectedId(null)} unmaskAnonymous />
+      <IncidentDetailModal reportId={selectedId} onClose={() => setSelectedId(null)} unmaskAnonymous isAdmin />
 
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
     </div>

@@ -78,16 +78,17 @@ const caseIds = ['BC-2024-0892', 'BC-2024-0845', 'BC-2024-0711'];
 
 export default function TrackCases() {
   const [selectedCase, setSelectedCase] = useState<string>('BC-2024-0892');
-  const [detailOpacity, setDetailOpacity] = useState(1);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const current = casesData[selectedCase];
 
-  const selectCase = (id: string) => {
-    setDetailOpacity(0.5);
-    setTimeout(() => {
-      setSelectedCase(id);
-      setDetailOpacity(1);
-    }, 150);
+  const openModal = (id: string) => {
+    setSelectedCase(id);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
   };
 
   return (
@@ -112,7 +113,7 @@ export default function TrackCases() {
               return (
                 <button
                   key={id}
-                  onClick={() => selectCase(id)}
+                  onClick={() => openModal(id)}
                   className={`w-full text-left ${isSelected ? 'glass-card border-2 border-secondary p-4 md:p-md rounded-2xl shadow-xl' : 'bg-white border border-outline-variant/30 p-4 md:p-md rounded-2xl shadow-sm hover:bg-surface-container/30'} transition-all hover:translate-y-[-2px] focus:outline-none ${c.status === 'Resolved' ? 'opacity-80' : ''}`}
                 >
                   <div className="flex justify-between items-start mb-2">
@@ -135,66 +136,88 @@ export default function TrackCases() {
               </button>
             </div>
           </div>
+        </div>
+      </main>
 
-          <div id="case-details-panel" className="lg:col-span-7" style={{ opacity: detailOpacity, transition: 'opacity 0.15s' }}>
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-outline-variant/20 sticky top-[68px]">
-              <div className="p-4 md:p-md bg-primary-container text-on-primary">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div>
-                    <h3 id="detail-id" className="text-secondary-fixed-dim font-label-md">CASE {current.id}</h3>
-                    <h2 id="detail-title" className="font-headline-md text-headline-md font-bold">{current.title}</h2>
-                  </div>
-                  <button className="bg-secondary px-6 py-2 rounded-xl text-white font-bold text-label-md flex items-center gap-2 hover:bg-secondary-fixed-dim hover:text-on-secondary-fixed transition-colors">
-                    <span className="material-symbols-outlined">phone_in_talk</span>
-                    Contact Officer
-                  </button>
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={closeModal}>
+          <div
+            className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[88vh] flex flex-col animate-dialog-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-5 border-b border-border-subtle flex justify-between items-start gap-4 shrink-0">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[11px] font-bold text-blue-600 uppercase tracking-wider">{current.id}</span>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${current.statusBg} ${current.statusColor}`}>{current.status}</span>
+                </div>
+                <h3 className="font-headline-md text-headline-md font-bold text-on-surface mt-1">{current.title}</h3>
+              </div>
+              <button type="button" onClick={closeModal} aria-label="Close" className="text-on-surface-variant hover:text-on-surface shrink-0">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-5 space-y-5">
+              <div className="bg-surface-container-low rounded-lg border border-border-subtle p-4">
+                <p className="text-xs text-on-surface-variant mb-1">Date &amp; Zone</p>
+                <p className="text-sm text-on-surface font-medium">{current.date} &bull; {current.zone}</p>
+              </div>
+
+              <div>
+                <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Case Summary</h4>
+                <p className="text-sm text-on-surface leading-relaxed">{current.summary}</p>
+              </div>
+
+              <div>
+                <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Case Progress</h4>
+                <div className="relative space-y-6 pl-8">
+                  <div className="absolute left-3.5 top-2 bottom-2 w-0.5 bg-secondary/20"></div>
+                  {current.timeline.map((step, i) => (
+                    <div key={i} className="relative">
+                      <div className={`absolute -left-8 w-8 h-8 ${step.active ? 'bg-secondary' : 'bg-outline-variant'} rounded-full flex items-center justify-center text-white z-10`}>
+                        <span className="material-symbols-outlined text-[18px]">{step.icon}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className={`font-bold text-body-md ${step.active ? 'text-on-surface' : 'text-on-surface-variant'}`}>{step.label}</span>
+                        <span className="text-caption text-on-surface-variant">{step.time}</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="p-4 md:p-lg grid md:grid-cols-2 gap-6 md:gap-lg">
-                <div>
-                  <h4 className="font-label-md text-secondary uppercase mb-4 md:mb-6 tracking-widest">Case Progress</h4>
-                  <div className="relative space-y-6 md:space-y-8 pl-8">
-                    <div className="absolute left-3.5 top-2 bottom-2 w-0.5 bg-secondary/20"></div>
-                    {current.timeline.map((step, i) => (
-                      <div key={i} className="relative">
-                        <div className={`absolute -left-8 w-8 h-8 ${step.active ? 'bg-secondary' : 'bg-outline-variant'} rounded-full flex items-center justify-center text-white z-10`}>
-                          <span className="material-symbols-outlined text-[18px]">{step.icon}</span>
-                        </div>
-                        <div className="flex flex-col">
-                          <span className={`font-bold text-body-md ${step.active ? 'text-on-surface' : 'text-on-surface-variant'}`}>{step.label}</span>
-                          <span className={`text-caption ${step.active ? 'text-on-surface-variant' : 'text-on-surface-variant'}`}>{step.time}</span>
-                        </div>
-                      </div>
-                    ))}
+
+              <div className="bg-surface-container-low p-4 rounded-xl border border-outline-variant/10">
+                <div className="flex items-start gap-3">
+                  <span className="material-symbols-outlined text-secondary">info</span>
+                  <div>
+                    <p className="text-caption text-on-surface font-bold">Estimated Resolution</p>
+                    <p className="text-caption text-on-surface-variant">Expected within 48 hours based on current priority level.</p>
                   </div>
                 </div>
-                <div className="space-y-4 md:space-y-6">
-                  <div>
-                    <h4 className="font-label-md text-secondary uppercase mb-3 tracking-widest">Case Summary</h4>
-                    <p className="text-body-md text-on-surface leading-relaxed">{current.summary}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-label-md text-secondary uppercase mb-3 tracking-widest">Submitted Evidence</h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="aspect-square rounded-xl bg-cover bg-center border border-outline-variant" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCiuqhhAKgqNUo0pg-fWuq6pcNMu_sxTlkESV7rIJ2cVyEjrwbeuEImDxOwaEtyhHnSE2q2M6o-dpxRX0xXG8E76Iha9Amzc_fZ7csmE6suOEsqc9GYQYH1S-ZimNcwLZu7c8HmMfwzTQaEDkgquOySYQ_RkVpnIaarT0GcNOtqrBi8c7UmsL5CjCTn4MW4e0Ekd9xwx6uWDHjP6IIsBNByWI012VM-yQfV3BAlDzXNI-OMkDP2GFy5")' }}></div>
-                      <div className="aspect-square rounded-xl bg-cover bg-center border border-outline-variant" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDGpUwZBeqkrLFVk9DP0z4Wf7MFGBxFnSMlylz44nYJQADVTFrInRBvfLkI_NElQ8o9zT4r4K2PT4X0ck0FdrSFspekCK9_WQRFkwB3QWFxS9Ej5sEIP8a4Oc191zv_IN8_ymxsNm8K_JgJ2tN_7ZBFpyM7RXyUM6sRdA5bMtv1rbM_ZwR6szOhBfJL3KRWutymaLuYfU4BXUouqa_56Vfex0Rj99C4gY0QCFa88jsA1yeqrLm3uNEl")' }}></div>
-                    </div>
-                  </div>
-                  <div className="bg-surface-container-low p-4 rounded-xl border border-outline-variant/10">
-                    <div className="flex items-start gap-3">
-                      <span className="material-symbols-outlined text-secondary">info</span>
-                      <div>
-                        <p className="text-caption text-on-surface font-bold">Estimated Resolution</p>
-                        <p className="text-caption text-on-surface-variant">Expected within 48 hours based on current priority level.</p>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+
+              <div>
+                <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Submitted Evidence</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="aspect-square rounded-xl bg-cover bg-center border border-outline-variant" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCiuqhhAKgqNUo0pg-fWuq6pcNMu_sxTlkESV7rIJ2cVyEjrwbeuEImDxOwaEtyhHnSE2q2M6o-dpxRX0xXG8E76Iha9Amzc_fZ7csmE6suOEsqc9GYQYH1S-ZimNcwLZu7c8HmMfwzTQaEDkgquOySYQ_RkVpnIaarT0GcNOtqrBi8c7UmsL5CjCTn4MW4e0Ekd9xwx6uWDHjP6IIsBNByWI012VM-yQfV3BAlDzXNI-OMkDP2GFy5")' }}></div>
+                  <div className="aspect-square rounded-xl bg-cover bg-center border border-outline-variant" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDGpUwZBeqkrLFVk9DP0z4Wf7MFGBxFnSMlylz44nYJQADVTFrInRBvfLkI_NElQ8o9zT4r4K2PT4X0ck0FdrSFspekCK9_WQRFkwB3QWFxS9Ej5sEIP8a4Oc191zv_IN8_ymxsNm8K_JgJ2tN_7ZBFpyM7RXyUM6sRdA5bMtv1rbM_ZwR6szOhBfJL3KRWutymaLuYfU4BXUouqa_56Vfex0Rj99C4gY0QCFa88jsA1yeqrLm3uNEl")' }}></div>
                 </div>
               </div>
             </div>
+
+            <div className="p-4 border-t border-border-subtle flex justify-end gap-2 shrink-0">
+              <button type="button" onClick={closeModal} className="bg-surface-container-low hover:bg-surface-container-high border border-border-subtle text-on-surface font-label-md text-label-md py-2 px-4 rounded-md transition-colors">
+                Close
+              </button>
+              <button type="button" className="bg-secondary hover:bg-secondary/90 text-white font-label-md text-label-md py-2 px-4 rounded-md transition-colors flex items-center gap-2">
+                <span className="material-symbols-outlined text-[18px]">phone_in_talk</span>
+                Contact Officer
+              </button>
+            </div>
           </div>
         </div>
-      </main>
+      )}
 
       <div className="h-10 md:hidden"></div>
 

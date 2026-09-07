@@ -350,3 +350,11 @@ drop trigger if exists trg_prevent_duplicate_report on public.incident_reports;
 create trigger trg_prevent_duplicate_report
   before insert on public.incident_reports
   for each row execute function public.prevent_duplicate_report();
+-- ------------------------------------------------------------------
+-- 10) ai_assessment — admin AI credibility / spam-worthiness check
+--     Stores { verdict, spam_confidence, worth_dispatch, worth_reason,
+--              flags, source, aiError, assessed_at } per incident report.
+--     Written by the assess-incident edge function at submit time (via the
+--     reporter's INSERT) and on demand from the admin desk; read by the admin UI.
+-- ------------------------------------------------------------------
+alter table public.incident_reports add column if not exists ai_assessment jsonb default '{}'::jsonb;

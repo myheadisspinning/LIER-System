@@ -1,0 +1,14 @@
+-- ai-incident-assessment / stmt-001
+-- Adds ai_assessment jsonb to incident_reports. Stores the admin-side AI
+-- credibility + spam/troll check performed by the assess-incident edge function:
+--   { verdict, spam_confidence, worth_dispatch, worth_reason, flags, source, aiError, assessed_at }
+-- Populated two ways:
+--   - automatically at submit time (the reporter's submit flow calls
+--     assess-incident and includes the result in the INSERT), and
+--   - on demand from the admin desk ("Check with AI" re-runs the check).
+-- Existing RLS already covers this column:
+--   - "staff read all reports"  -> admins/officers/superadmin can SELECT
+--   - "staff update reports"    -> admins/officers/superadmin can UPDATE
+--   - users insert their own row (which may carry ai_assessment), but cannot
+--     UPDATE rows later
+alter table public.incident_reports add column if not exists ai_assessment jsonb default '{}'::jsonb;

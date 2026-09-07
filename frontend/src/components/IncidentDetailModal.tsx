@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { fmtDate, PRIORITY_BADGE, STATUS_BADGE } from '../lib/admin';
+import type { IncidentAssessment } from '../lib/ai';
+import AiVerdictBanner from './AiVerdictBanner';
 import { useScrollLock } from '../lib/useScrollLock';
 
 type EvidenceItem = { name: string; type: string; size: number; url: string };
@@ -26,12 +28,14 @@ type DetailRow = {
   status_updated_at: string | null;
   ai_dispatch: string | null;
   ai_actions: string[];
+  ai_assessment: IncidentAssessment | null;
   confidence: number | null;
   threat: number | null;
   anonymous: boolean;
   evidence: EvidenceItem[];
   dispatch_unit_name: string | null;
   user_id: string | null;
+  user_actions: string[];
 };
 
 type ReporterProfile = {
@@ -52,6 +56,12 @@ const INCIDENT_STATUS_STYLES: Record<string, string> = {
 
 const meterColor = (v: number) => (v >= 70 ? 'bg-error-red' : v >= 40 ? 'bg-warning-amber' : 'bg-secondary');
 
+const ASSESSMENT_VERDICT_STYLES: Record<string, { badge: string; label: string; icon: string }> = {
+  legitimate: { badge: 'bg-success-green/10 text-success-green border border-success-green/20', label: 'Genuine Report', icon: 'verified' },
+  ambiguous: { badge: 'bg-warning-amber/10 text-warning-amber border border-warning-amber/20', label: 'Unclear · Needs Verification', icon: 'help' },
+  spam_or_troll: { badge: 'bg-error-red/10 text-error-red border border-error-red/20', label: 'Possible Spam / Troll', icon: 'report' },
+};
+
 function Meter({ label, value }: { label: string; value: number }) {
   return (
     <div>
@@ -70,10 +80,12 @@ export default function IncidentDetailModal({
   reportId,
   onClose,
   unmaskAnonymous = false,
+  isAdmin = false,
 }: {
   reportId: string | null;
   onClose: () => void;
   unmaskAnonymous?: boolean;
+  isAdmin?: boolean;
 }) {
   const navigate = useNavigate();
   const [detail, setDetail] = useState<DetailRow | null>(null);
@@ -87,7 +99,7 @@ export default function IncidentDetailModal({
     void (async () => {
       const res = await supabase
         .from('incident_reports')
-        .select('id, report_no, title, description, additional_context, category, priority, status, incident_status, address, lat, lng, incident_time, created_at, assigned_at, resolved_at, status_updated_at, ai_dispatch, ai_actions, confidence, threat, anonymous, evidence, dispatch_unit:dispatch_unit_id(name), user_id')
+        .select('id, report_no, title, description, additional_context, category, priority, status, incident_status, address, lat, lng, incident_time, created_at, assigned_at, resolved_at, status_updated_at, ai_dispatch, ai_actions, ai_assessment, confidence, threat, anonymous, evidence, dispatch_unit:dispatch_unit_id(name), user_id, user_actions')
         .eq('id', reportId)
         .maybeSingle();
       if (cancelled) return;
@@ -95,20 +107,27 @@ export default function IncidentDetailModal({
         setFailure({ id: reportId, message: res.error?.message ?? 'Incident not found.' });
         return;
       }
-      const raw = res.data as unknown as Omit<DetailRow, 'dispatch_unit_name' | 'evidence' | 'ai_actions'> & {
+      const raw = res.data as unknown as Omit<DetailRow, 'dispatch_unit_name' | 'evidence' | 'ai_actions' | 'ai_assessment' | 'user_actions'> & {
         dispatch_unit: { name: string } | { name: string }[] | null;
         evidence: EvidenceItem[] | null;
         ai_actions: string[] | null;
+        ai_assessment: unknown;
+        user_actions: string[] | null;
       };
       const embed = raw.dispatch_unit;
-      setDetail({
-        ...raw,
-        dispatch_unit_name: (Array.isArray(embed) ? embed[0]?.name : embed?.name) ?? null,
-        evidence: raw.evidence ?? [],
-        ai_actions: raw.ai_actions ?? [],
-      });
+       setDetail({
+         ...raw,
+         dispatch_unit_name: (Array.isArray(embed) ? embed[0]?.name : embed?.name) ?? null,
+         evidence: raw.evidence ?? [],
+         ai_actions: raw.ai_actions ?? [],
+         user_actions: raw.user_actions ?? [],
+         ai_assessment:
+           raw.ai_assessment && typeof raw.ai_assessment === 'object' && (raw.ai_assessment as IncidentAssessment)?.verdict
+             ? (raw.ai_assessment as IncidentAssessment)
+             : null,
+       });
       setDetailId(reportId);
-      if (raw.user_id && (!raw.anonymous || unmaskAnonymous)) {
+      if (raw.user_id && isAdmin && (!raw.anonymous || unmaskAnonymous)) {
         const { data: profile } = await supabase
           .from('public_users')
           .select('id, fullname, phone, address, emergency_contact_name, emergency_contact_relationship, emergency_contact_phone')
@@ -122,7 +141,7 @@ export default function IncidentDetailModal({
     return () => {
       cancelled = true;
     };
-  }, [reportId, unmaskAnonymous]);
+  }, [reportId, unmaskAnonymous, isAdmin]);
 
   useEffect(() => {
     if (!reportId) return undefined;
@@ -145,8 +164,10 @@ export default function IncidentDetailModal({
   const timeline = active
     ? [
         { label: 'Reported', ts: active.created_at },
-        { label: 'Assigned to unit', ts: active.assigned_at },
-        { label: 'Last status update', ts: active.status_updated_at },
+        ...(isAdmin ? [
+          { label: 'Assigned to unit', ts: active.assigned_at },
+          { label: 'Last status update', ts: active.status_updated_at },
+        ] : []),
         { label: 'Closed', ts: active.resolved_at },
       ].filter((t): t is { label: string; ts: string } => t.ts != null)
     : [];
@@ -179,8 +200,11 @@ export default function IncidentDetailModal({
           {loading && <div className="py-12 text-center text-sm text-on-surface-variant">Loading full details…</div>}
           {!loading && activeError && <div className="py-12 text-center text-sm text-error-red">{activeError}</div>}
 
-          {!loading && active && (
-            <>
+            {!loading && active && (
+              <>
+                {isAdmin && active.ai_assessment?.verdict && (
+                  <AiVerdictBanner assessment={active.ai_assessment} />
+                )}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4">
                 <div>
                   <p className="text-xs text-on-surface-variant">Category</p>
@@ -190,10 +214,12 @@ export default function IncidentDetailModal({
                   <p className="text-xs text-on-surface-variant">Severity</p>
                   <p className="text-sm font-semibold">{active.priority}</p>
                 </div>
-                <div>
-                  <p className="text-xs text-on-surface-variant">Incident Status</p>
-                  <p><span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${INCIDENT_STATUS_STYLES[active.incident_status] ?? 'bg-slate-100 text-slate-600'}`}>{active.incident_status}</span></p>
-                </div>
+                {isAdmin && (
+                  <div>
+                    <p className="text-xs text-on-surface-variant">Incident Status</p>
+                    <p><span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${INCIDENT_STATUS_STYLES[active.incident_status] ?? 'bg-slate-100 text-slate-600'}`}>{active.incident_status}</span></p>
+                  </div>
+                )}
                 <div className="col-span-2 md:col-span-1">
                   <p className="text-xs text-on-surface-variant">Location</p>
                   <p className="text-sm text-on-surface">{active.address ?? 'No address'}</p>
@@ -205,10 +231,12 @@ export default function IncidentDetailModal({
                   <p className="text-xs text-on-surface-variant">Time Reported</p>
                   <p className="text-sm text-on-surface">{fmtDate(active.created_at, 'medium')}</p>
                 </div>
-                <div>
-                  <p className="text-xs text-on-surface-variant">Responder Unit</p>
-                  <p className="text-sm text-on-surface">{active.dispatch_unit_name ?? '—'}</p>
-                </div>
+                {isAdmin && (
+                  <div>
+                    <p className="text-xs text-on-surface-variant">Responder Unit</p>
+                    <p className="text-sm text-on-surface">{active.dispatch_unit_name ?? '—'}</p>
+                  </div>
+                )}
               </div>
 
               {(active.description || active.additional_context) && (
@@ -228,7 +256,75 @@ export default function IncidentDetailModal({
                 </div>
               )}
 
-              {(active.ai_dispatch || active.ai_actions.length > 0 || active.confidence != null || active.threat != null) && (
+              {!isAdmin && active.ai_assessment?.verdict && (
+                <AiVerdictBanner assessment={active.ai_assessment} />
+              )}
+
+              {!isAdmin && (active.confidence != null || active.threat != null || active.priority || active.ai_actions.length > 0 || active.user_actions.length > 0) && (
+                <div>
+                  <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-base text-secondary">psychology</span>
+                    AI Tactical Analysis
+                  </h4>
+                  <div className="bg-gradient-to-r from-secondary/5 to-surface-container-low border border-secondary/20 rounded-lg p-4 space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider mb-1">Category</p>
+                        <p className="text-sm text-on-surface font-semibold">{active.category}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider mb-1">Priority</p>
+                        <p className="text-sm text-on-surface font-semibold">{active.priority}</p>
+                      </div>
+                    </div>
+                    {active.confidence != null && (
+                      <div>
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="text-on-surface-variant">Confidence</span>
+                          <span className="font-semibold text-on-surface">{active.confidence}%</span>
+                        </div>
+                        <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                          <div className="h-full rounded-full bg-secondary" style={{ width: `${active.confidence}%` }}></div>
+                        </div>
+                      </div>
+                    )}
+                    {active.threat != null && (
+                      <div>
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="text-on-surface-variant">Threat Level</span>
+                          <span className="font-semibold text-on-surface">{active.threat}%</span>
+                        </div>
+                        <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                          <div className={`h-full rounded-full ${active.threat >= 70 ? 'bg-error-red' : active.threat >= 40 ? 'bg-warning-amber' : 'bg-secondary'}`} style={{ width: `${active.threat}%` }}></div>
+                        </div>
+                      </div>
+                    )}
+                    {active.user_actions.length > 0 && (
+                      <div className="pt-2 border-t border-border-subtle">
+                        <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider mb-2">Recommended Actions for You</p>
+                        <ul className="space-y-1.5">
+                          {active.user_actions.map((action, i) => (
+                            <li key={i} className="flex items-start gap-1.5 text-sm text-on-surface">
+                              <span className="material-symbols-outlined text-[14px] text-success-green mt-[1px] shrink-0">check_circle</span>
+                              {action}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {active.ai_dispatch && (
+                      <div className="pt-2 border-t border-border-subtle">
+                        <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-secondary/10 border border-secondary/20">
+                          <span className="material-symbols-outlined text-[14px] text-secondary">route</span>
+                          <span className="text-[11px] font-bold text-on-surface leading-tight">{active.ai_dispatch}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {isAdmin && (active.ai_dispatch || active.ai_actions.length > 0 || active.confidence != null || active.threat != null) && (
                 <div>
                   <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">AI Assessment</h4>
                   <div className="bg-surface-container-low rounded-lg border border-border-subtle p-4 space-y-4">
@@ -247,6 +343,33 @@ export default function IncidentDetailModal({
                           </li>
                         ))}
                       </ul>
+                    )}
+                    {active.ai_assessment?.verdict && (
+                      <div className="border-t border-border-subtle pt-3 space-y-2">
+                        <div className="flex items-center flex-wrap gap-2">
+                          <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wide flex items-center gap-1 ${ASSESSMENT_VERDICT_STYLES[active.ai_assessment.verdict]?.badge ?? 'bg-slate-100 text-slate-600'}`}>
+                            <span className="material-symbols-outlined text-[13px]">{ASSESSMENT_VERDICT_STYLES[active.ai_assessment.verdict]?.icon ?? 'info'}</span>
+                            {ASSESSMENT_VERDICT_STYLES[active.ai_assessment.verdict]?.label ?? active.ai_assessment.verdict}
+                          </span>
+                          <span className="text-[11px] text-on-surface-variant">Spam likelihood {active.ai_assessment.spam_confidence}%</span>
+                        </div>
+                        <p className="text-sm text-on-surface leading-relaxed">
+                          <span className="font-semibold">Recommended action: </span>
+                          <span className={active.ai_assessment.worth_dispatch ? 'text-success-green font-semibold' : 'text-warning-amber font-semibold'}>
+                            {active.ai_assessment.worth_dispatch ? 'Dispatch responders' : 'Verify before dispatching'}
+                          </span>
+                        </p>
+                        {active.ai_assessment.worth_reason && (
+                          <p className="text-sm text-on-surface-variant leading-relaxed">{active.ai_assessment.worth_reason}</p>
+                        )}
+                        {active.ai_assessment.flags.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5">
+                            {active.ai_assessment.flags.map((f) => (
+                              <span key={f} className="text-[11px] bg-surface-container-highest text-on-surface-variant rounded-full px-2 py-0.5">{f}</span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     )}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                       {active.confidence != null && <Meter label="AI Confidence" value={active.confidence} />}
@@ -271,62 +394,64 @@ export default function IncidentDetailModal({
                 </div>
               )}
 
-              <div>
-                <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Reporter Info</h4>
-                {active.anonymous && !unmaskAnonymous ? (
-                  <div className="bg-surface-container-low rounded-lg border border-border-subtle p-4 flex items-center gap-2 text-sm text-on-surface-variant">
-                    <span className="material-symbols-outlined text-[18px]">visibility_off</span>
-                    Anonymous report — reporter identity withheld.
-                  </div>
-                ) : activeReporter ? (
-                  <div className={`bg-surface-container-low rounded-lg border p-4 space-y-3 ${active.anonymous ? 'border-warning-amber/40' : 'border-border-subtle'}`}>
-                    {active.anonymous && (
-                      <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-warning-amber">
-                        <span className="material-symbols-outlined text-[14px]">admin_panel_settings</span>
-                        Identity unmasked · Superadmin privilege
-                      </p>
-                    )}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-xs text-on-surface-variant">Name</p>
-                        <p className="text-sm text-on-surface font-medium">{activeReporter.fullname}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-on-surface-variant">Phone</p>
-                        <p className="text-sm text-on-surface font-medium">{activeReporter.phone ? `+63 ${activeReporter.phone}` : '—'}</p>
-                      </div>
-                      <div className="col-span-2">
-                        <p className="text-xs text-on-surface-variant">Address</p>
-                        <p className="text-sm text-on-surface font-medium">{activeReporter.address || '—'}</p>
-                      </div>
+              {isAdmin && (
+                <div>
+                  <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Reporter Info</h4>
+                  {active.anonymous && !unmaskAnonymous ? (
+                    <div className="bg-surface-container-low rounded-lg border border-border-subtle p-4 flex items-center gap-2 text-sm text-on-surface-variant">
+                      <span className="material-symbols-outlined text-[18px]">visibility_off</span>
+                      Anonymous report — reporter identity withheld.
                     </div>
-                    {activeReporter.emergency_contact_name && (
-                      <div className="pt-3 border-t border-border-subtle">
-                        <p className="text-xs text-error-red font-semibold uppercase mb-2 flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[14px]">emergency</span>
-                          Emergency Contact
+                  ) : activeReporter ? (
+                    <div className={`bg-surface-container-low rounded-lg border p-4 space-y-3 ${active.anonymous ? 'border-warning-amber/40' : 'border-border-subtle'}`}>
+                      {active.anonymous && (
+                        <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-warning-amber">
+                          <span className="material-symbols-outlined text-[14px]">admin_panel_settings</span>
+                          Identity unmasked · Superadmin privilege
                         </p>
-                        <div className="grid grid-cols-3 gap-4">
-                          <div>
-                            <p className="text-xs text-on-surface-variant">Name</p>
-                            <p className="text-sm text-on-surface font-medium">{activeReporter.emergency_contact_name}</p>
-                          </div>
-                          <div>
-                            <p className="text-xs text-on-surface-variant">Relationship</p>
-                            <p className="text-sm text-on-surface font-medium capitalize">{activeReporter.emergency_contact_relationship}</p>
-                          </div>
-                          <div>
-                            <p className="text-xs text-on-surface-variant">Phone</p>
-                            <p className="text-sm text-on-surface font-medium">{activeReporter.emergency_contact_phone ? `+63 ${activeReporter.emergency_contact_phone}` : '—'}</p>
-                          </div>
+                      )}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-xs text-on-surface-variant">Name</p>
+                          <p className="text-sm text-on-surface font-medium">{activeReporter.fullname}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-on-surface-variant">Phone</p>
+                          <p className="text-sm text-on-surface font-medium">{activeReporter.phone ? `+63 ${activeReporter.phone}` : '—'}</p>
+                        </div>
+                        <div className="col-span-2">
+                          <p className="text-xs text-on-surface-variant">Address</p>
+                          <p className="text-sm text-on-surface font-medium">{activeReporter.address || '—'}</p>
                         </div>
                       </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="bg-surface-container-low rounded-lg border border-border-subtle p-4 text-sm text-on-surface-variant">No reporter information available.</div>
-                )}
-              </div>
+                      {activeReporter.emergency_contact_name && (
+                        <div className="pt-3 border-t border-border-subtle">
+                          <p className="text-xs text-error-red font-semibold uppercase mb-2 flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[14px]">emergency</span>
+                            Emergency Contact
+                          </p>
+                          <div className="grid grid-cols-3 gap-4">
+                            <div>
+                              <p className="text-xs text-on-surface-variant">Name</p>
+                              <p className="text-sm text-on-surface font-medium">{activeReporter.emergency_contact_name}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-on-surface-variant">Relationship</p>
+                              <p className="text-sm text-on-surface font-medium capitalize">{activeReporter.emergency_contact_relationship}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-on-surface-variant">Phone</p>
+                              <p className="text-sm text-on-surface font-medium">{activeReporter.emergency_contact_phone ? `+63 ${activeReporter.emergency_contact_phone}` : '—'}</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="bg-surface-container-low rounded-lg border border-border-subtle p-4 text-sm text-on-surface-variant">No reporter information available.</div>
+                  )}
+                </div>
+              )}
 
               <div>
                 <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Evidence ({active.evidence.length})</h4>
@@ -364,15 +489,17 @@ export default function IncidentDetailModal({
           >
             Close
           </button>
-          <button
-            type="button"
-            onClick={() => navigate(`/admin/incident-reporting?case=${reportId}`)}
-            disabled={!active}
-            className="bg-secondary hover:bg-secondary/90 text-white font-label-md text-label-md py-2 px-4 rounded-md transition-colors flex items-center gap-2 disabled:opacity-60"
-          >
-            <span className="material-symbols-outlined text-[18px]">open_in_new</span>
-            Open in Incident Reporting
-          </button>
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={() => navigate(`/admin/incident-reporting?case=${reportId}`)}
+              disabled={!active}
+              className="bg-secondary hover:bg-secondary/90 text-white font-label-md text-label-md py-2 px-4 rounded-md transition-colors flex items-center gap-2 disabled:opacity-60"
+            >
+              <span className="material-symbols-outlined text-[18px]">open_in_new</span>
+              Open in Incident Reporting
+            </button>
+          )}
         </div>
       </div>
     </div>

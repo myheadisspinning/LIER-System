@@ -143,40 +143,40 @@ export default function UserLayout() {
 
         <nav className="flex-1 flex flex-col overflow-y-auto scroll-hide px-3 pt-3 pb-8">{renderGroups()}</nav>
 
-        <div className="mt-auto p-4 border-t border-outline-variant/30">
-          <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-low border border-outline-variant/30">
-            <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs font-bold shrink-0 overflow-hidden">
-              {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : initials()}
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-on-surface leading-tight truncate">{displayName()}</p>
-              <p className="text-[10px] text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span>System Online
-              </p>
-            </div>
-            <button type="button" onClick={handleSignOut} className="text-on-surface-variant hover:text-on-surface transition-colors" aria-label="Sign out">
-              <span className="material-symbols-outlined" style={{ fontSize: 20 }}>logout</span>
-            </button>
-          </div>
-        </div>
+           <div className="mt-auto p-3 border-t border-outline-variant/30">
+             <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-low border border-outline-variant/30">
+               <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs font-bold shrink-0 overflow-hidden">
+                 {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : initials()}
+               </div>
+               <div className="min-w-0 flex-1">
+                 <p className="text-sm font-semibold text-on-surface leading-tight truncate">{displayName()}</p>
+                 <p className="text-[9px] text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
+                   <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span>System Online
+                 </p>
+               </div>
+               <button type="button" onClick={handleSignOut} className="text-on-surface-variant hover:text-on-surface transition-colors" aria-label="Sign out">
+                 <span className="material-symbols-outlined" style={{ fontSize: 18 }}>logout</span>
+               </button>
+             </div>
+           </div>
       </aside>
 
       {/* Main Content */}
       <div className="ml-0 lg:ml-72 flex-1 w-auto min-w-auto">
-        <header className="h-16 bg-white/90 backdrop-blur border-b border-outline-variant/30 sticky top-0 z-40 px-4 lg:px-8 flex justify-between items-center w-full">
+        <header className="h-14 sm:h-16 bg-white/90 backdrop-blur border-b border-outline-variant/30 sticky top-0 z-40 px-4 lg:px-8 flex justify-between items-center w-full">
           <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
               onClick={() => setDrawerOpen(true)}
-              className="lg:hidden p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors"
+              className="lg:hidden p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors"
               aria-label="Open menu"
             >
-              <span className="material-symbols-outlined">menu</span>
+              <span className="material-symbols-outlined text-sm">menu</span>
             </button>
-            <div className="min-w-0">
-              <h2 className="text-xl font-bold text-on-surface leading-tight truncate">{pageTitle}</h2>
-              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">{userNav.brandSub}</p>
-            </div>
+                <div className="min-w-0">
+                <h2 className="text-sm sm:text-lg font-bold text-on-surface leading-tight truncate">{pageTitle}</h2>
+                <p className="text-[8px] sm:text-[9px] text-on-surface-variant uppercase tracking-widest font-bold">{userNav.brandSub}</p>
+              </div>
           </div>
           <div className="flex items-center gap-5">
             <div className="relative hidden md:block">
@@ -193,15 +193,15 @@ export default function UserLayout() {
               />
             </div>
             <div className="flex items-center gap-3 border-l border-outline-variant/30 pl-5">
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors"
-                title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-                aria-label="Toggle color theme"
-              >
-                <span className="material-symbols-outlined">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
-              </button>
+               <button
+                 type="button"
+                 onClick={toggleTheme}
+                 className="flex items-center justify-center p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors"
+                 title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+                 aria-label="Toggle color theme"
+               >
+                 <span className="material-symbols-outlined text-sm">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
+               </button>
               <span className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-green/10 text-success-green border border-cc-emerald/20 text-xs font-bold">
                 <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span> LIVE
               </span>
@@ -216,7 +216,7 @@ export default function UserLayout() {
                 <button
                   type="button"
                   onClick={() => setProfileOpen((v) => !v)}
-                  className="w-9 h-9 rounded-full bg-secondary/15 ring-1 ring-cc-border-strong flex items-center justify-center hover:ring-cc-accent transition-colors overflow-hidden"
+                  className="w-7 h-7 rounded-full bg-secondary/15 ring-1 ring-cc-border-strong flex items-center justify-center hover:ring-cc-accent transition-colors overflow-hidden"
                   aria-label="Profile menu"
                 >
                   {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-secondary">{initials()}</span>}
@@ -281,11 +281,11 @@ export default function UserLayout() {
             </div>
 
             {isReportIncident ? (
-              <div className="mt-6">
+              <div>
                 <Outlet />
               </div>
             ) : (
-              <div className="mt-6 bg-surface-container-lowest/80 backdrop-blur border border-border-subtle rounded-2xl shadow-[0_1px_2px_rgba(2,6,23,0.05),0_12px_32px_-16px_rgba(2,6,23,0.18)] p-5 lg:p-8">
+              <div>
                 <Outlet />
               </div>
             )}
@@ -294,7 +294,7 @@ export default function UserLayout() {
       </div>
 
       {/* Mobile Drawer */}
-      <div className={`fixed inset-0 z-[200] transition-all duration-300 lg:hidden ${drawerOpen ? '' : 'invisible pointer-events-none'}`}>
+      <div className={`fixed inset-0 z-[800] transition-all duration-300 lg:hidden ${drawerOpen ? '' : 'invisible pointer-events-none'}`}>
         <div
           className={`absolute inset-0 bg-white/80 backdrop-blur-sm transition-opacity duration-300 ${drawerOpen ? 'opacity-100' : 'opacity-0'}`}
           onClick={() => setDrawerOpen(false)}
@@ -304,17 +304,17 @@ export default function UserLayout() {
             drawerOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
-          <div className="p-6 pb-4 border-b border-outline-variant/30">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
-                  <img src="/image/culiat-logo.png" alt="Barangay Culiat Logo" className="w-full h-full object-contain" />
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold text-on-surface leading-tight tracking-tight">{userNav.brand}</h1>
-                  <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold mt-0.5">{userNav.brandSub}</p>
-                </div>
-              </div>
+           <div className="p-5 pb-4 border-b border-outline-variant/30">
+             <div className="flex items-center justify-between">
+               <div className="flex items-center gap-3">
+                 <div className="w-10 h-10 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
+                   <img src="/image/culiat-logo.png" alt="Barangay Culiat Logo" className="w-full h-full object-contain" />
+                 </div>
+                 <div>
+                   <h1 className="text-base font-bold text-on-surface leading-tight tracking-tight">{userNav.brand}</h1>
+                   <p className="text-[9px] text-on-surface-variant uppercase tracking-widest font-bold mt-0.5">{userNav.brandSub}</p>
+                 </div>
+               </div>
               <button
                 type="button"
                 onClick={() => setDrawerOpen(false)}
@@ -365,19 +365,19 @@ function SidebarLink({ item, pathname, unreadCounts, onNavigate }: { item: NavIt
     <NavLink
       to={item.to ?? '#!'}
       onClick={onNavigate}
-      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg relative transition-all ${
+      className={`flex items-center gap-3 px-3 py-2 rounded-lg relative transition-all ${
         isActive
           ? 'bg-secondary/10 text-on-surface border border-outline-variant'
           : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface'
       }`}
     >
       {isActive && <span className="w-1 h-7 rounded-full bg-secondary absolute -left-0.5"></span>}
-      <span className={`material-symbols-outlined text-[20px] shrink-0 ${isActive ? 'text-secondary' : 'text-on-surface-variant'}`}>
+      <span className={`material-symbols-outlined shrink-0 flex items-center justify-center ${isActive ? 'text-secondary' : 'text-on-surface-variant'}`} style={{ fontSize: 20 }}>
         {item.icon ?? 'radio_button_unchecked'}
       </span>
       <span className="flex flex-col min-w-0">
         <span className={`text-sm truncate ${isActive ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>
-        {item.subLabel && <span className="text-[10px] text-on-surface-variant truncate">{item.subLabel}</span>}
+        {item.subLabel && <span className="text-[9px] text-on-surface-variant truncate">{item.subLabel}</span>}
       </span>
       {unread > 0 && !isActive && <UnreadBadge count={unread} className="bg-error" />}
     </NavLink>

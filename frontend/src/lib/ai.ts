@@ -33,28 +33,81 @@ export interface ClassifyInput {
   lng?: number | null;
 }
 
-const FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/classify-incident`;
+export type AssessmentVerdict = 'legitimate' | 'ambiguous' | 'spam_or_troll';
 
-export async function classifyIncident(input: ClassifyInput): Promise<AiAnalysis> {
+export interface IncidentAssessment {
+  verdict: AssessmentVerdict;
+  spam_confidence: number;
+  worth_dispatch: boolean;
+  worth_reason: string;
+  flags: string[];
+  source: 'gemini' | 'fallback';
+  aiError: string | null;
+  assessed_at?: string;
+}
+
+export interface AssessInput {
+  title: string;
+  description?: string | null;
+  categoryHint?: string;
+  priority?: string | null;
+  threat?: number | null;
+  lat?: number | null;
+  lng?: number | null;
+}
+
+const FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/classify-incident`;
+const ASSESS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/assess-incident`;
+
+// Posts to a Supabase edge function and returns the parsed JSON body.
+// Turns network-level failures (e.g. the browser's "Failed to fetch" from a
+// blocked preflight or an undeployed/missing function) into an actionable error.
+async function postEdgeFunction<T>(url: string, body: unknown): Promise<T> {
   const {
     data: { session },
   } = await supabase.auth.getSession();
   if (!session) throw new Error('You must be signed in to use AI analysis.');
 
-  const res = await fetch(FUNCTION_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${session.access_token}`,
-    },
-    body: JSON.stringify(input),
-  });
-
-  const json = await res.json();
-  if (!res.ok || !json.ok) {
-    throw new Error(json?.error ?? 'AI service is unavailable.');
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify(body),
+    });
+  } catch {
+    throw new Error(
+      'AI service is unreachable. Check your connection and that the Supabase edge functions (classify-incident / assess-incident) are deployed.',
+    );
   }
-  return json as AiAnalysis;
+
+  const text = await res.text().catch(() => '');
+  let json: Record<string, unknown> | null = null;
+  try {
+    json = text ? (JSON.parse(text) as Record<string, unknown>) : null;
+  } catch {
+    // Non-JSON body (e.g. an HTML error page) — handled below.
+  }
+
+  if (!res.ok || !json?.ok) {
+    const suffix = res.ok ? '' : ` (HTTP ${res.status})`;
+    const detail =
+      (typeof json?.error === 'string' && json.error) ||
+      (text.trim() ? text.trim().slice(0, 160) : 'empty response');
+    throw new Error(`AI service error${suffix}: ${detail}`);
+  }
+  return json as T;
+}
+
+export async function classifyIncident(input: ClassifyInput): Promise<AiAnalysis> {
+  return postEdgeFunction<AiAnalysis>(FUNCTION_URL, input);
+}
+
+export async function assessIncident(input: AssessInput): Promise<IncidentAssessment> {
+  return postEdgeFunction<IncidentAssessment>(ASSESS_URL, input);
 }
 
 export interface IncidentReportRow {
@@ -71,6 +124,10 @@ export interface IncidentReportRow {
   lng?: number | null;
   address?: string | null;
   additional_context?: string | null;
+  user_actions?: string[];
+  // Auto-populated by the AI Credibility check at submit time so the
+  // admin desk sees the verdict without having to click "Check with AI".
+  ai_assessment?: IncidentAssessment | null;
   ai_actions: string[];
   ai_dispatch?: string | null;
   evidence?: EvidenceFile[] | null;

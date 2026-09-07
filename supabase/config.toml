@@ -389,6 +389,11 @@ deno_version = 2
 [edge_runtime.secrets]
 GMAIL_APP_PASSWORD = "env(GMAIL_APP_PASSWORD)"
 
+# Require a valid Supabase auth JWT before assess-incident executes (matches
+# classify-incident). The admin UI sends the user's access token as Bearer.
+[functions.assess-incident]
+verify_jwt = true
+
 [analytics]
 enabled = true
 port = 54327

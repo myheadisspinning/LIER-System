@@ -268,7 +268,7 @@ export const userNav: RoleNav = {
       section: 'Reports',
     },
     {
-      label: 'Emergency SOS & Hotlines',
+      label: 'Emergency Hotlines',
       subLabel: 'SOS & Hotlines',
       description: 'Trigger a priority distress call or instantly reach Barangay Culiat emergency responders.',
       icon: 'emergency',

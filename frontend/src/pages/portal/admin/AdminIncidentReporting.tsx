@@ -6,9 +6,11 @@ import 'leaflet/dist/leaflet.css';
 import { supabase } from '../../../supabaseClient';
 import Toast from '../../../components/Toast';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
+import AiVerdictBanner from '../../../components/AiVerdictBanner';
 import { BARANGAY_HALL_CENTER } from '../../../lib/geo';
 import { PRIORITY_COLORS, pinIconFor } from '../../../lib/mapPins';
 import Pagination from '../../../components/Pagination';
+import { classifyIncident, assessIncident, type IncidentAssessment } from '../../../lib/ai';
 
 type EvidenceItem = { name: string; type: string; size: number; url: string };
 
@@ -29,6 +31,8 @@ type ReportRow = {
   created_at: string;
   ai_dispatch: string | null;
   ai_actions: string[];
+  ai_assessment: IncidentAssessment | null;
+  threat: number | null;
   confidence: number | null;
   evidence: EvidenceItem[] | null;
   dispatch_unit_name: string | null;
@@ -70,6 +74,14 @@ const INCIDENT_STATUS_STYLES: Record<string, string> = {
   Unconfirmed: 'bg-slate-100 text-slate-600',
 };
 
+const VERDICT_STYLES: Record<string, { badge: string; label: string; icon: string }> = {
+  legitimate: { badge: 'bg-success-green/10 text-success-green border border-success-green/20', label: 'Genuine Report', icon: 'verified' },
+  ambiguous: { badge: 'bg-warning-amber/10 text-warning-amber border border-warning-amber/20', label: 'Unclear · Needs Verification', icon: 'help' },
+  spam_or_troll: { badge: 'bg-error-red/10 text-error-red border border-error-red/20', label: 'Possible Spam / Troll', icon: 'report' },
+};
+
+const meterColor = (v: number) => (v >= 70 ? 'bg-error-red' : v >= 40 ? 'bg-warning-amber' : 'bg-secondary');
+
 function RecenterControl({ trigger }: { trigger: number }) {
   const map = useMap();
   useEffect(() => {
@@ -107,7 +119,12 @@ function PinsLayer({
     if (!selectedId) return;
     const marker = refs.get(selectedId);
     if (marker) {
-      map.flyTo(marker.getLatLng(), Math.max(map.getZoom(), 15), { duration: 0.8 });
+      // Offset the fly target so the pin rests below the map center — the
+      // incident popup above the pin is tall and needs that room to stay
+      // fully visible instead of clipping at the top of the map.
+      const zoom = Math.max(map.getZoom(), 15);
+      const targetPoint = map.project(marker.getLatLng(), zoom).subtract([0, 80]);
+      map.flyTo(map.unproject(targetPoint, zoom), zoom, { duration: 0.8 });
       marker.openPopup();
     }
   }, [selectedId, map, refs]);
@@ -127,6 +144,11 @@ function PinsLayer({
         >
           <Popup>
             <div className="min-w-[180px]">
+              {r.ai_assessment?.verdict && (
+                <div className="mb-1">
+                  <AiVerdictBanner assessment={r.ai_assessment} compact />
+                </div>
+              )}
               <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">{r.report_no ?? 'Report'}</p>
               <p className="text-sm font-semibold text-slate-900 leading-snug mt-0.5">{r.title}</p>
               <div className="flex items-center gap-2 mt-1">
@@ -144,35 +166,44 @@ function PinsLayer({
 
 export default function AdminIncidentReporting() {
   const navigate = useNavigate();
-  const [reports, setReports] = useState<ReportRow[]>([]);
-  const [reporterMap, setReporterMap] = useState<Record<string, ReporterProfile>>({});
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [modalReportId, setModalReportId] = useState<string | null>(null);
-  const [modalLoading, setModalLoading] = useState(false);
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-  const [tile, setTile] = useState<'street' | 'satellite'>('street');
-  const [recenterTrigger, setRecenterTrigger] = useState(0);
-  const [searchParams] = useSearchParams();
-  const initialCaseRef = useRef(searchParams.get('case'));
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+   const [reports, setReports] = useState<ReportRow[]>([]);
+   const [reporterMap, setReporterMap] = useState<Record<string, ReporterProfile>>({});
+   const [selectedId, setSelectedId] = useState<string | null>(null);
+   const [modalReportId, setModalReportId] = useState<string | null>(null);
+   const [modalLoading, setModalLoading] = useState(false);
+   const [search, setSearch] = useState('');
+   const [statusFilter, setStatusFilter] = useState('All');
+   const [loading, setLoading] = useState(true);
+   const [error, setError] = useState<string | null>(null);
+   const [busy, setBusy] = useState(false);
+   const [aiAnalyzing, setAiAnalyzing] = useState(false);
+   const [assessing, setAssessing] = useState(false);
+   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+   const [tile, setTile] = useState<'street' | 'satellite'>('street');
+   const [recenterTrigger, setRecenterTrigger] = useState(0);
+   const [searchParams] = useSearchParams();
+   const initialCaseRef = useRef(searchParams.get('case'));
+   const [currentPage, setCurrentPage] = useState(1);
+   const [itemsPerPage, setItemsPerPage] = useState(20);
+   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   const fetchAll = async () => {
     const res = await supabase
       .from('incident_reports')
-      .select('id, report_no, title, description, additional_context, category, priority, status, incident_status, address, lat, lng, incident_time, created_at, ai_dispatch, ai_actions, confidence, evidence, anonymous, dispatch_unit:dispatch_unit_id(name), user_id')
+      .select('id, report_no, title, description, additional_context, category, priority, status, incident_status, address, lat, lng, incident_time, created_at, ai_dispatch, ai_actions, ai_assessment, threat, confidence, evidence, anonymous, dispatch_unit:dispatch_unit_id(name), user_id')
       .order('created_at', { ascending: false })
       .limit(200);
     const mapped = (res.data ?? []).map((r) => {
       const embed = (r as unknown as { dispatch_unit: { name: string } | { name: string }[] | null }).dispatch_unit;
+      const rawAssessment = (r as unknown as { ai_assessment: unknown }).ai_assessment;
+      const assessment =
+        rawAssessment && typeof rawAssessment === 'object' && (rawAssessment as IncidentAssessment)?.verdict
+          ? (rawAssessment as IncidentAssessment)
+          : null;
       return {
         ...r,
         dispatch_unit_name: (Array.isArray(embed) ? embed[0]?.name : embed?.name) ?? null,
+        ai_assessment: assessment,
       };
     }) as ReportRow[];
 
@@ -241,15 +272,30 @@ export default function AdminIncidentReporting() {
     }
   }, [selectedId]);
 
-  const selectReport = (id: string) => setSelectedId(id);
+   const selectReport = (id: string) => { setSelectedId(id); setOpenMenuId(null); };
 
-  const openModal = (id: string) => {
-    setModalLoading(true);
-    setTimeout(() => {
-      setModalReportId(id);
-      setModalLoading(false);
-    }, 300);
-  };
+   const openModal = (id: string) => {
+     setModalLoading(true);
+     setTimeout(() => {
+       setModalReportId(id);
+       setModalLoading(false);
+     }, 300);
+   };
+
+   const handleStatusChange = async (id: string, newStatus: string) => {
+     setOpenMenuId(null);
+     setBusy(true);
+     try {
+       const { error } = await supabase.from('incident_reports').update({ status: newStatus }).eq('id', id);
+       if (error) throw new Error(error.message);
+       setReports((prev) => prev.map((r) => r.id === id ? { ...r, status: newStatus } : r));
+       setToast({ type: 'success', message: `Report status updated to ${newStatus}.` });
+     } catch (e) {
+       setToast({ type: 'error', message: e instanceof Error ? e.message : 'Status update failed.' });
+     } finally {
+       setBusy(false);
+     }
+   };
 
   const resolveReport = async () => {
     if (!selected) return;
@@ -269,6 +315,95 @@ export default function AdminIncidentReporting() {
       setToast({ type: 'error', message: e instanceof Error ? e.message : 'Update failed.' });
     } finally {
       setBusy(false);
+    }
+  };
+
+  // Run a fresh on-demand AI analysis for the selected incident and store the
+  // resulting dispatch recommendation on the report row (visible in the modal too).
+  const generateAiRecommendation = async () => {
+    if (!selected || aiAnalyzing) return;
+    setAiAnalyzing(true);
+    try {
+      const res = await classifyIncident({
+        title: selected.title,
+        description: [selected.description, selected.additional_context].filter(Boolean).join(' '),
+        categoryHint: selected.category,
+        lat: selected.lat,
+        lng: selected.lng,
+      });
+      const { error } = await supabase
+        .from('incident_reports')
+        .update({
+          ai_actions: res.actions,
+          ai_dispatch: res.dispatch,
+          priority: res.priority,
+          threat: res.threat,
+          confidence: res.confidence,
+        })
+        .eq('id', selected.id);
+      if (error) throw new Error(error.message);
+      await supabase.from('ai_audit_logs').insert({
+        actor: 'Admin_Desk',
+        action: 'Generated AI dispatch recommendation',
+        detail: `${selected.report_no ?? 'Report'} re-analyzed -> "${res.category}" (${res.confidence}% confidence, ${res.priority} priority).`,
+        metadata: { source: res.source, aiError: res.aiError },
+      });
+      setReports((prev) =>
+        prev.map((r) =>
+          r.id === selected.id
+            ? {
+                ...r,
+                ai_actions: res.actions,
+                ai_dispatch: res.dispatch,
+                priority: res.priority,
+                threat: res.threat,
+                confidence: res.confidence,
+              }
+            : r,
+        ),
+      );
+      setToast({ type: 'success', message: `AI dispatch recommendation updated for ${selected.report_no ?? 'this incident'}.` });
+    } catch (e) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : 'AI recommendation failed.' });
+    } finally {
+      setAiAnalyzing(false);
+    }
+  };
+
+  // Run an on-demand AI credibility / spam-troll / worth-the-problem check for the
+  // selected incident and store the result on the report row (visible in the modal too).
+  const assessNow = async () => {
+    if (!selected || assessing) return;
+    setAssessing(true);
+    try {
+      const res = await assessIncident({
+        title: selected.title,
+        description: [selected.description, selected.additional_context].filter(Boolean).join(' '),
+        categoryHint: selected.category,
+        priority: selected.priority,
+        threat: selected.threat,
+        lat: selected.lat,
+        lng: selected.lng,
+      });
+      const { error } = await supabase
+        .from('incident_reports')
+        .update({ ai_assessment: res })
+        .eq('id', selected.id);
+      if (error) throw new Error(error.message);
+      await supabase.from('ai_audit_logs').insert({
+        actor: 'Admin_Desk',
+        action: 'Assessed incident credibility',
+        detail: `${selected.report_no ?? 'Report'} judged "${res.verdict}" (spam ${res.spam_confidence}%, worth dispatch: ${res.worth_dispatch}).`,
+        metadata: { source: res.source, aiError: res.aiError },
+      });
+      setReports((prev) =>
+        prev.map((r) => (r.id === selected.id ? { ...r, ai_assessment: res } : r)),
+      );
+      setToast({ type: 'success', message: `AI credibility check complete for ${selected.report_no ?? 'this incident'}.` });
+    } catch (e) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : 'AI assessment failed.' });
+    } finally {
+      setAssessing(false);
     }
   };
 
@@ -332,6 +467,9 @@ export default function AdminIncidentReporting() {
                 </div>
               </div>
               <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+                {selected.ai_assessment?.verdict && (
+                  <AiVerdictBanner assessment={selected.ai_assessment} />
+                )}
                 <div className="bg-surface-container-low border border-border-subtle p-3 rounded-lg flex items-center gap-2">
                   <span className="material-symbols-outlined text-secondary text-[18px]">local_shipping</span>
                   <p className="text-sm text-on-surface">Assigned Unit: <span className="font-medium">{selected.dispatch_unit_name ?? 'None'}</span></p>
@@ -361,35 +499,116 @@ export default function AdminIncidentReporting() {
                         <p className="text-sm font-semibold"><span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${INCIDENT_STATUS_STYLES[selected.incident_status] ?? 'bg-slate-100 text-slate-600'}`}>{selected.incident_status}</span></p>
                       </div>
                     </div>
-                    {(selected.description || selected.additional_context || (selected.ai_actions ?? []).length > 0) && (
-                      <div className="pt-1 space-y-2">
-                        {selected.description && (
-                          <div>
-                            <p className="text-xs text-on-surface-variant mb-1">Description</p>
-                            <p className="text-sm text-on-surface leading-relaxed max-h-[80px] overflow-y-auto">{selected.description}</p>
-                          </div>
-                        )}
-                        {selected.additional_context && (
-                          <div>
-                            <p className="text-xs text-on-surface-variant mb-1">Additional Context</p>
-                            <p className="text-sm text-on-surface leading-relaxed max-h-[80px] overflow-y-auto">{selected.additional_context}</p>
-                          </div>
-                        )}
-                        {(selected.ai_actions ?? []).length > 0 && (
-                          <div>
-                            <p className="text-xs text-on-surface-variant mb-1">Recommended Dispatch Actions</p>
-                            <ul className="grid grid-cols-2 gap-2">
-                              {selected.ai_actions.map((a) => (
-                                <li key={a} className="flex items-start gap-1.5 text-sm text-on-surface">
-                                  <span className="material-symbols-outlined text-[14px] text-success-green">check_circle</span>
-                                  {a}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                    <div className="pt-1 space-y-2">
+                      {selected.description && (
+                        <div>
+                          <p className="text-xs text-on-surface-variant mb-1">Description</p>
+                          <p className="text-sm text-on-surface leading-relaxed max-h-[80px] overflow-y-auto">{selected.description}</p>
+                        </div>
+                      )}
+                      {selected.additional_context && (
+                        <div>
+                          <p className="text-xs text-on-surface-variant mb-1">Additional Context</p>
+                          <p className="text-sm text-on-surface leading-relaxed max-h-[80px] overflow-y-auto">{selected.additional_context}</p>
+                        </div>
+                      )}
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-[14px] text-secondary">smart_toy</span>
+                            AI Recommended Dispatch Actions
+                          </p>
+                          <button
+                            type="button"
+                            onClick={generateAiRecommendation}
+                            disabled={aiAnalyzing}
+                            className="bg-surface-container-low hover:bg-surface-container-high border border-border-subtle text-secondary text-[11px] font-semibold px-2 py-1 rounded-md transition-colors flex items-center gap-1 disabled:opacity-60 shrink-0"
+                          >
+                            <span className={`material-symbols-outlined text-[13px] ${aiAnalyzing ? 'animate-spin' : ''}`}>{aiAnalyzing ? 'progress_activity' : 'refresh'}</span>
+                            {aiAnalyzing ? 'Analyzing…' : (selected.ai_actions ?? []).length > 0 ? 'Regenerate with AI' : 'Generate AI Recommendation'}
+                          </button>
+                        </div>
+                        {aiAnalyzing ? (
+                          <p className="text-xs text-secondary font-medium flex items-center gap-1.5 leading-relaxed">
+                            <span className="material-symbols-outlined text-[14px] animate-spin">progress_activity</span>
+                            AI is analyzing the incident to recommend dispatch actions…
+                          </p>
+                        ) : (selected.ai_actions ?? []).length > 0 ? (
+                          <ul className="grid grid-cols-2 gap-2">
+                            {selected.ai_actions.map((a) => (
+                              <li key={a} className="flex items-start gap-1.5 text-sm text-on-surface">
+                                <span className="material-symbols-outlined text-[14px] text-success-green">check_circle</span>
+                                {a}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p className="text-sm text-on-surface-variant leading-relaxed italic">No AI recommendation stored for this incident yet — generate one above.</p>
                         )}
                       </div>
-                    )}
+                      <div className="pt-2 border-t border-border-subtle">
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+                            AI Credibility
+                          </p>
+                          <button
+                            type="button"
+                            onClick={assessNow}
+                            disabled={assessing}
+                            className="bg-surface-container-low hover:bg-surface-container-high border border-border-subtle text-secondary text-[11px] font-semibold px-2 py-1 rounded-md transition-colors flex items-center gap-1 disabled:opacity-60 shrink-0"
+                          >
+                            <span className={`material-symbols-outlined text-[13px] ${assessing ? 'animate-spin' : ''}`}>{assessing ? 'progress_activity' : 'refresh'}</span>
+                            {assessing ? 'Assessing…' : selected.ai_assessment?.verdict ? 'Re-check with AI' : 'Check with AI'}
+                          </button>
+                        </div>
+                        {assessing ? (
+                          <p className="text-xs text-secondary font-medium flex items-center gap-1.5 leading-relaxed">
+                            <span className="material-symbols-outlined text-[14px] animate-spin">progress_activity</span>
+                            AI is reviewing this report's credibility…
+                          </p>
+                        ) : selected.ai_assessment?.verdict ? (
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between gap-2 flex-wrap">
+                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide flex items-center gap-1 ${VERDICT_STYLES[selected.ai_assessment.verdict]?.badge ?? 'bg-slate-100 text-slate-600'}`}>
+                                <span className="material-symbols-outlined text-[12px]">{VERDICT_STYLES[selected.ai_assessment.verdict]?.icon ?? 'info'}</span>
+                                {VERDICT_STYLES[selected.ai_assessment.verdict]?.label ?? selected.ai_assessment.verdict}
+                              </span>
+                            </div>
+                            <div>
+                              <div className="flex justify-between text-[11px] mb-1">
+                                <span className="text-on-surface-variant">Spam / Troll likelihood</span>
+                                <span className="font-semibold text-on-surface">{selected.ai_assessment.spam_confidence}%</span>
+                              </div>
+                              <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div className={`h-full rounded-full ${meterColor(selected.ai_assessment.spam_confidence)}`} style={{ width: `${selected.ai_assessment.spam_confidence}%` }}></div>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-1.5">
+                              <span className={`material-symbols-outlined text-[14px] mt-[1px] ${selected.ai_assessment.worth_dispatch ? 'text-success-green' : 'text-warning-amber'}`}>{selected.ai_assessment.worth_dispatch ? 'check_circle' : 'help'}</span>
+                              <p className="text-sm text-on-surface leading-tight">
+                                <span className="font-semibold">Recommended action: </span>
+                                <span className={selected.ai_assessment.worth_dispatch ? 'text-success-green font-semibold' : 'text-warning-amber font-semibold'}>
+                                  {selected.ai_assessment.worth_dispatch ? 'Dispatch responders' : 'Verify before dispatching'}
+                                </span>
+                              </p>
+                            </div>
+                            {selected.ai_assessment.worth_reason && (
+                              <p className="text-sm text-on-surface-variant leading-relaxed">{selected.ai_assessment.worth_reason}</p>
+                            )}
+                            {selected.ai_assessment.flags.length > 0 && (
+                              <div className="flex flex-wrap gap-1.5">
+                                {selected.ai_assessment.flags.map((f) => (
+                                  <span key={f} className="text-[10px] bg-surface-container-highest text-on-surface-variant rounded-full px-2 py-0.5">{f}</span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <p className="text-sm text-on-surface-variant leading-relaxed italic">Not assessed yet — run an AI credibility check to screen this report for spam or trolling.</p>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
                 {selected.anonymous ? (
@@ -575,10 +794,21 @@ export default function AdminIncidentReporting() {
                     <td className="py-3 px-4 text-on-surface">{r.dispatch_unit_name ?? '—'}</td>
                     <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${INCIDENT_STATUS_STYLES[r.incident_status] ?? 'bg-slate-100 text-slate-600'}`}>{r.incident_status}</span></td>
                     <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${STATUS_STYLES[r.status] ?? 'bg-slate-100 text-slate-600'}`}>{r.status}</span></td>
-                    <td className="py-3 px-4 text-right whitespace-nowrap">
-                      <button type="button" className="text-on-surface-variant hover:text-secondary mr-2" onClick={(e) => { e.stopPropagation(); openModal(r.id); }} aria-label="View incident"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
-                      <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="More options"><span className="material-symbols-outlined text-[18px]">more_vert</span></button>
-                    </td>
+                     <td className="py-3 px-4 text-right whitespace-nowrap">
+                       <div className="relative inline-flex">
+                         <button type="button" className="text-on-surface-variant hover:text-secondary" onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === r.id ? null : r.id); }} aria-label="More options" aria-expanded={openMenuId === r.id}><span className="material-symbols-outlined text-[18px]">more_vert</span></button>
+                         {openMenuId === r.id && (
+                           <>
+                             <div className="fixed inset-0 z-40" onClick={() => setOpenMenuId(null)} />
+                             <div className="absolute right-0 top-full mt-1 w-44 z-50 bg-surface-container-lowest rounded-lg border border-border-subtle shadow-lg py-1">
+                               <button type="button" onClick={(e) => { e.stopPropagation(); handleStatusChange(r.id, 'Rejected'); }} className="w-full flex items-center gap-2 px-3 py-2 text-left text-sm text-error-red hover:bg-error-red/5 transition-colors">
+                                 <span className="material-symbols-outlined text-[16px]">block</span>Reject
+                               </button>
+                             </div>
+                           </>
+                         )}
+                       </div>
+                     </td>
                   </tr>
                 ))}
               </tbody>
@@ -608,7 +838,7 @@ export default function AdminIncidentReporting() {
           </div>
         </div>
       )}
-      <IncidentDetailModal reportId={modalReportId} onClose={() => setModalReportId(null)} />
+      <IncidentDetailModal reportId={modalReportId} onClose={() => setModalReportId(null)} isAdmin />
     </div>
   );
 }

@@ -47,6 +47,10 @@ const SYSTEM_PROMPT = `You are the Barangay Culiat Tactical AI dispatcher. Analy
   "unit": suggested unit name or null,
   "eta": ETA string like "4 min" or null
 }
+Rules:
+- Read the WHOLE report: the TITLE carries as much weight as the description and often holds the most specific information — use it to judge what happened, how severe it is, and the correct category.
+- The citizen also selected a category (shown with the report). Cross-check the full title and description against that selection: if the content clearly fits a different category, return the better-fitting category and lower "confidence".
+- Set "priority" and "threat" from the actual severity described across the title AND description together, so they match what the report really says — not just its category.
 Base decisions on severity, risk to life/property, and proximity. Threat >= 85 => CRITICAL, >= 70 => HIGH, >= 45 => MEDIUM, else LOW.`;
 
 const CATEGORY_ALIASES: Record<string, string[]> = {
@@ -75,7 +79,9 @@ async function callGemini(
   model: string,
   maxTokens: number,
   temperature: number,
-  reportText: string,
+  title: string,
+  description: string,
+  categoryHint: string,
   lat: number | null,
   lng: number | null,
 ): Promise<Classification> {
@@ -89,7 +95,7 @@ async function callGemini(
           role: 'user',
           parts: [
             { text: SYSTEM_PROMPT },
-            { text: `Citizen report: ${reportText}.${location} Return JSON only.` },
+            { text: `Citizen report:\nTITLE (analyze fully — it often carries the most specific information): ${title || '(none)'}\nDESCRIPTION: ${description || '(none)'}\nCITIZEN-SELECTED CATEGORY (cross-check the text against this): ${categoryHint || 'none'}${location}\nReturn JSON only.` },
           ],
         },
       ],
@@ -251,7 +257,7 @@ Deno.serve(async (req) => {
     let aiError: string | null = null;
     if (GEMINI_API_KEY) {
       try {
-        result = await callGemini(model, maxTokens, temperature, reportText, lat, lng);
+        result = await callGemini(model, maxTokens, temperature, title, description, categoryHint, lat, lng);
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
         aiError = /429|RESOURCE_EXHAUSTED|quota/i.test(msg)

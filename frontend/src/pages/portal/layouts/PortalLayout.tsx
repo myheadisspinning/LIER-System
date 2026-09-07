@@ -152,8 +152,8 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
         <header className="h-16 bg-white/90 backdrop-blur border-b border-outline-variant/30 sticky top-0 z-40 px-8 flex justify-between items-center w-full">
           <div className="flex items-center gap-3 min-w-0">
             <div>
-              <h2 className="text-xl font-bold text-on-surface leading-tight truncate">{pageTitle}</h2>
-              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">{nav.brandSub}</p>
+              <h2 className="text-lg font-bold text-on-surface leading-tight truncate">{pageTitle}</h2>
+              <p className="text-[9px] text-on-surface-variant uppercase tracking-widest font-bold">{nav.brandSub}</p>
             </div>
           </div>
           <div className="flex items-center gap-5">
@@ -190,7 +190,7 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
               <button type="button" className="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors">
                 <span className="material-symbols-outlined">help_outline</span>
               </button>
-              <div className="w-9 h-9 rounded-full bg-secondary/15 ring-1 ring-cc-border-strong flex items-center justify-center overflow-hidden">
+              <div className="w-7 h-7 rounded-full bg-secondary/15 ring-1 ring-cc-border-strong flex items-center justify-center overflow-hidden">
                 {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-secondary">{initials()}</span>}
               </div>
             </div>

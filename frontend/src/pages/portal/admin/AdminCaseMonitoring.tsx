@@ -503,7 +503,7 @@ export default function AdminCaseMonitoring() {
           )}
         </div>
       </div>
-      <IncidentDetailModal reportId={selectedId} onClose={() => setSelectedId(null)} />
+      <IncidentDetailModal reportId={selectedId} onClose={() => setSelectedId(null)} isAdmin />
     </div>
   );
 }
