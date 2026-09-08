@@ -298,7 +298,7 @@ export const userNav: RoleNav = {
       to: '/user/advisories',
     },
     {
-      label: 'Account & Profile Settings',
+      label: 'Account Settings',
       subLabel: 'Profile',
       description: 'Manage residential details, emergency contacts, notification channels, and security credentials.',
       icon: 'manage_accounts',
