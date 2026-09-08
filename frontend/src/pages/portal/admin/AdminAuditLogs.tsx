@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { downloadCsv, fmtDate, timeAgo } from '../../../lib/admin';
+import Pagination from '../../../components/Pagination';
 
 type LogRow = {
   id: string;
@@ -19,7 +20,7 @@ export default function AdminAuditLogs() {
   const [actionFilter, setActionFilter] = useState('All Action Types');
   const [selected, setSelected] = useState<LogRow | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const fetchLogs = async () => {
     const res = await supabase.from('ai_audit_logs').select('id, actor, action, detail, metadata, created_at').order('created_at', { ascending: false }).limit(300);
@@ -147,107 +148,19 @@ export default function AdminAuditLogs() {
           </div>
           
           {/* Pagination Controls */}
-          {filtered.length > itemsPerPage && (
-            <div className="px-4 py-3 border-t border-border-subtle flex items-center justify-between bg-surface-container-lowest">
-              <div className="flex items-center gap-2">
-                <span className="text-body-sm text-on-surface-variant">Items per page:</span>
-                <select 
-                  className="bg-surface-container-low border border-border-subtle rounded px-2 py-1 text-body-sm text-on-surface focus:ring-1 focus:ring-secondary outline-none cursor-pointer"
-                  value={itemsPerPage}
-                  onChange={(e) => {
-                    setItemsPerPage(Number(e.target.value));
-                    setCurrentPage(1);
-                  }}
-                >
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={50}>50</option>
-                  <option value={100}>100</option>
-                </select>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <span className="text-body-sm text-on-surface-variant">
-                  Page {currentPage} of {totalPages}
-                </span>
-                <button 
-                  type="button"
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className="px-3 py-1 border border-border-subtle rounded text-body-sm text-on-surface hover:bg-surface-variant transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Previous
-                </button>
-                
-                {/* Page Numbers */}
-                <div className="flex items-center gap-1">
-                  {(() => {
-                    const pages = [];
-                    const maxVisible = 5;
-                    
-                    if (totalPages <= maxVisible) {
-                      // Show all pages
-                      for (let i = 1; i <= totalPages; i++) {
-                        pages.push(i);
-                      }
-                    } else {
-                      // Show first page
-                      pages.push(1);
-                      
-                      if (currentPage > 3) {
-                        pages.push('...');
-                      }
-                      
-                      // Show pages around current
-                      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
-                        if (!pages.includes(i)) {
-                          pages.push(i);
-                        }
-                      }
-                      
-                      if (currentPage < totalPages - 2) {
-                        pages.push('...');
-                      }
-                      
-                      // Show last page
-                      if (!pages.includes(totalPages)) {
-                        pages.push(totalPages);
-                      }
-                    }
-                    
-                    return pages.map((page, idx) => {
-                      if (page === '...') {
-                        return <span key={`ellipsis-${idx}`} className="px-2 text-on-surface-variant">...</span>;
-                      }
-                      return (
-                        <button
-                          key={page}
-                          type="button"
-                          onClick={() => setCurrentPage(page as number)}
-                          className={`px-3 py-1 rounded text-body-sm transition-colors ${
-                            currentPage === page
-                              ? 'bg-secondary text-on-secondary'
-                              : 'text-on-surface hover:bg-surface-variant'
-                          }`}
-                        >
-                          {page}
-                        </button>
-                      );
-                    });
-                  })()}
-                </div>
-                
-                <button 
-                  type="button"
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                  className="px-3 py-1 border border-border-subtle rounded text-body-sm text-on-surface hover:bg-surface-variant transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          )}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={(items) => {
+              setItemsPerPage(items);
+              setCurrentPage(1);
+            }}
+            totalItems={filtered.length}
+            startIndex={startIndex}
+            endIndex={endIndex}
+          />
         </div>
 
         {/* Detail drawer */}

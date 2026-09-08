@@ -58,8 +58,9 @@ export default function AccountSettings() {
  const navigate = useNavigate();
  const [loading, setLoading] = useState(true);
  const [saving, setSaving] = useState(false);
- const [userId, setUserId] = useState('');
+const [userId, setUserId] = useState('');
  const [authProvider, setAuthProvider] = useState('');
+ const [isCoarsePointer, setIsCoarsePointer] = useState(() => window.matchMedia('(pointer: coarse)').matches);
 
  const [profile, setProfile] = useState<UserProfile>({
  fullname: '', dob: '', gender: '', address: '', phone: '', email: '',
@@ -72,13 +73,22 @@ export default function AccountSettings() {
  gps_access: true, anonymous_reporting: false,
  });
 
- const [pw, setPw] = useState<PasswordForm>({ current: '', newPass: '', confirm: '' });
+const [pw, setPw] = useState<PasswordForm>({ current: '', newPass: '', confirm: '' });
+ const [showFields, setShowFields] = useState<Record<keyof PasswordForm, boolean>>({ current: false, newPass: false, confirm: false });
  const [pwSaving, setPwSaving] = useState(false);
 
  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
  const [deactivateOpen, setDeactivateOpen] = useState(false);
 
- const isEmailProvider = authProvider === 'email';
+const isEmailProvider = authProvider === 'email';
+
+ useEffect(() => {
+ const mq = window.matchMedia('(pointer: coarse)');
+ const handler = (e: MediaQueryListEvent) => setIsCoarsePointer(e.matches);
+ setIsCoarsePointer(mq.matches);
+ mq.addEventListener('change', handler);
+ return () => mq.removeEventListener('change', handler);
+ }, []);
 
  useEffect(() => {
  void (async () => {
@@ -453,18 +463,39 @@ export default function AccountSettings() {
   <div className="space-y-3">
   {isEmailProvider ? (
    <>
-   <div>
-   <label className="block font-label-md text-label-md text-on-surface mb-1">Current Password</label>
-   <input className="w-full bg-surface-bg border border-border-subtle rounded px-3 py-1.5 sm:py-2 text-body-sm font-body-sm focus:ring-1 focus:ring-secondary focus:border-secondary transition-all" placeholder="••••••••" type="password" value={pw.current} onChange={(e) => setPw({ ...pw, current: e.target.value })} />
-   </div>
-   <div>
-   <label className="block font-label-md text-label-md text-on-surface mb-1">New Password</label>
-   <input className="w-full bg-surface-bg border border-border-subtle rounded px-3 py-1.5 sm:py-2 text-body-sm font-body-sm focus:ring-1 focus:ring-secondary focus:border-secondary transition-all" placeholder="••••••••" type="password" value={pw.newPass} onChange={(e) => setPw({ ...pw, newPass: e.target.value })} />
-   </div>
-   <div>
-   <label className="block font-label-md text-label-md text-on-surface mb-1">Confirm New Password</label>
-   <input className="w-full bg-surface-bg border border-border-subtle rounded px-3 py-1.5 sm:py-2 text-body-sm font-body-sm focus:ring-1 focus:ring-secondary focus:border-secondary transition-all" placeholder="••••••••" type="password" value={pw.confirm} onChange={(e) => setPw({ ...pw, confirm: e.target.value })} />
-   </div>
+<div>
+     <label className="block font-label-md text-label-md text-on-surface mb-1">Current Password</label>
+     <div className="relative">
+     <input className="w-full bg-surface-bg border border-border-subtle rounded pl-3 pr-10 py-1.5 sm:py-2 text-body-sm font-body-sm focus:ring-1 focus:ring-secondary focus:border-secondary transition-all" placeholder="••••••••" type={showFields.current ? 'text' : 'password'} value={pw.current} onChange={(e) => setPw({ ...pw, current: e.target.value })} />
+     {pw.current && (
+     <button type="button" onClick={() => setShowFields((s) => ({ ...s, current: !s.current }))} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-outline hover:text-on-surface transition-colors" aria-label={showFields.current ? 'Hide password' : 'Show password'}>
+      <span className="material-symbols-outlined">{showFields.current ? 'visibility_off' : 'visibility'}</span>
+     </button>
+     )}
+     </div>
+     </div>
+     <div>
+     <label className="block font-label-md text-label-md text-on-surface mb-1">New Password</label>
+     <div className="relative">
+     <input className="w-full bg-surface-bg border border-border-subtle rounded pl-3 pr-10 py-1.5 sm:py-2 text-body-sm font-body-sm focus:ring-1 focus:ring-secondary focus:border-secondary transition-all" placeholder="••••••••" type={showFields.newPass ? 'text' : 'password'} value={pw.newPass} onChange={(e) => setPw({ ...pw, newPass: e.target.value })} />
+     {pw.newPass && (
+     <button type="button" onClick={() => setShowFields((s) => ({ ...s, newPass: !s.newPass }))} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-outline hover:text-on-surface transition-colors" aria-label={showFields.newPass ? 'Hide password' : 'Show password'}>
+      <span className="material-symbols-outlined">{showFields.newPass ? 'visibility_off' : 'visibility'}</span>
+     </button>
+     )}
+     </div>
+     </div>
+     <div>
+     <label className="block font-label-md text-label-md text-on-surface mb-1">Confirm New Password</label>
+     <div className="relative">
+     <input className="w-full bg-surface-bg border border-border-subtle rounded pl-3 pr-10 py-1.5 sm:py-2 text-body-sm font-body-sm focus:ring-1 focus:ring-secondary focus:border-secondary transition-all" placeholder="••••••••" type={showFields.confirm ? 'text' : 'password'} value={pw.confirm} onChange={(e) => setPw({ ...pw, confirm: e.target.value })} />
+     {pw.confirm && (
+     <button type="button" onClick={() => setShowFields((s) => ({ ...s, confirm: !s.confirm }))} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-outline hover:text-on-surface transition-colors" aria-label={showFields.confirm ? 'Hide password' : 'Show password'}>
+      <span className="material-symbols-outlined">{showFields.confirm ? 'visibility_off' : 'visibility'}</span>
+     </button>
+     )}
+     </div>
+     </div>
    <button type="button" onClick={updatePassword} disabled={pwSaving} className="mt-3 bg-surface-bg border border-border-subtle text-on-surface font-label-md text-label-md py-2 px-4 rounded hover:bg-surface-container transition-colors disabled:opacity-60">
    {pwSaving ? 'Updating…' : 'Update Password'}
    </button>
@@ -493,18 +524,37 @@ export default function AccountSettings() {
    )}
    </div>
   </div>
-  <div>
+<div>
    <h4 className="font-label-md text-label-md text-on-surface mb-2">Active Sessions</h4>
-   <div className="bg-surface-bg border border-border-subtle rounded p-3 flex items-center justify-between">
-   <div className="flex items-center space-x-3">
-   <span className="material-symbols-outlined text-on-surface-variant">computer</span>
-   <div>
-   <div className="font-label-sm text-label-sm text-on-surface">Current Session</div>
-   <div className="font-caps-xs text-caps-xs text-on-surface-variant mt-0.5">Active now</div>
+   <div className="bg-surface-bg border border-border-subtle rounded-xl overflow-hidden">
+    <div className="px-4 py-3 border-b border-border-subtle flex items-center justify-between gap-2">
+    <span className="font-label-sm text-label-sm text-on-surface flex items-center gap-2">
+     <span className="material-symbols-outlined text-[18px] text-secondary">devices</span>
+     Signed-In Devices
+    </span>
+    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-success-green/10 text-success-green border border-success-green/25 text-[10px] font-bold uppercase tracking-wider">
+     <span className="relative flex h-1.5 w-1.5">
+     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success-green opacity-75"></span>
+     <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-success-green"></span>
+     </span>
+     Online
+    </span>
+    </div>
+    <div className="p-3 sm:p-4 flex items-center gap-3">
+    <div className={`w-11 h-11 shrink-0 rounded-xl flex items-center justify-center ${isCoarsePointer ? 'bg-secondary/10 text-secondary' : 'bg-surface-container-highest text-on-surface-variant'}`}>
+     <span className="material-symbols-outlined text-[22px]">{isCoarsePointer ? 'smartphone' : 'desktop_windows'}</span>
+    </div>
+    <div className="min-w-0 flex-1">
+     <div className="font-label-sm text-label-sm text-on-surface">{isCoarsePointer ? 'Mobile Device' : 'Desktop Device'}</div>
+     <div className="text-xs text-on-surface-variant mt-0.5">This browser · {isCoarsePointer ? 'Touch screen' : 'Pointer & keyboard'}</div>
+    </div>
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-success-green shrink-0">
+     <span className="w-1.5 h-1.5 rounded-full bg-success-green"></span>
+     Active
+    </span>
+    </div>
    </div>
    </div>
-   </div>
-  </div>
   </div>
   </div>
   </div>

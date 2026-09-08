@@ -4,6 +4,7 @@ import { divIcon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { supabase } from '../../../supabaseClient';
 import Toast from '../../../components/Toast';
+import Pagination from '../../../components/Pagination';
 import type { EvidenceFile } from '../../../lib/ai';
 import { logAudit, fetchOpenUnitAssignments, deriveUnitStatus } from '../../../lib/admin';
 import { BARANGAY_HALL_CENTER } from '../../../lib/geo';
@@ -97,6 +98,13 @@ export default function AdminAiDispatchTerminal() {
   const [loading, setLoading] = useState(true);
   const [now, setNow] = useState<number>(() => Date.now());
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const totalPages = Math.max(1, Math.ceil(reports.length / itemsPerPage));
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedReports = reports.slice(startIndex, endIndex);
 
   const fetchAll = async () => {
     const [repRes, unitRes, openMap] = await Promise.all([
@@ -147,6 +155,19 @@ export default function AdminAiDispatchTerminal() {
   };
 
   useEffect(() => {
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
+
+    const refresh = async () => {
+      const { reports, units, openAssignments, reporterMap } = await fetchAll();
+      if (cancelled) return;
+      setReports(reports);
+      setUnits(units);
+      setOpenAssignments(openAssignments);
+      setReporterMap(reporterMap);
+      return;
+    };
+
     void (async () => {
       const { reports, units, openAssignments, reporterMap } = await fetchAll();
       setReports(reports);
@@ -154,7 +175,17 @@ export default function AdminAiDispatchTerminal() {
       setOpenAssignments(openAssignments);
       setReporterMap(reporterMap);
       setLoading(false);
+      channel = supabase
+        .channel('admin-ai-dispatch-terminal')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'incident_reports' }, () => void refresh())
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'dispatch_units' }, () => void refresh())
+        .subscribe();
     })();
+
+    return () => {
+      cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
+    };
   }, []);
 
   useEffect(() => {
@@ -203,9 +234,15 @@ export default function AdminAiDispatchTerminal() {
     if (!selected) return;
     setBusy(true);
     try {
-      await supabase.from('incident_reports').update({ status: 'Pending', dispatch_unit_id: null }).eq('id', selected.id);
-      await logAudit('Manual override', `${selected.report_no ?? 'Report'} unassigned for manual triage.`);
-      setToast({ type: 'success', message: 'Overridden — unassigned for manual triage.' });
+      if (targetUnit) {
+        await supabase.from('incident_reports').update({ status: 'Assigned', dispatch_unit_id: targetUnit.id }).eq('id', selected.id);
+        await logAudit('Manual override', `${selected.report_no ?? 'Report'} assigned to ${targetUnit.name} (override).`);
+        setToast({ type: 'success', message: `${selected.report_no ?? 'Report'} assigned to ${targetUnit.name} — AI recommendation overridden.` });
+      } else {
+        await supabase.from('incident_reports').update({ status: 'Pending', dispatch_unit_id: null }).eq('id', selected.id);
+        await logAudit('Manual override', `${selected.report_no ?? 'Report'} unassigned for manual triage.`);
+        setToast({ type: 'success', message: 'Overridden — unassigned for manual triage.' });
+      }
       setTargetUnitId('');
       await load();
     } catch (e) {
@@ -226,7 +263,7 @@ export default function AdminAiDispatchTerminal() {
         <div className="flex-1 p-4 space-y-3 bg-surface-bg overflow-y-auto">
           {loading && <div className="p-6 text-center text-sm text-slate-500">Loading queue…</div>}
           {!loading && reports.length === 0 && <div className="p-6 text-center text-sm text-slate-400">Queue is clear.</div>}
-          {reports.map((r) => (
+          {paginatedReports.map((r) => (
             <div
               key={r.id}
               onClick={() => setSelectedId(r.id)}
@@ -255,6 +292,19 @@ export default function AdminAiDispatchTerminal() {
             </div>
           ))}
         </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={(n) => {
+            setItemsPerPage(n);
+            setCurrentPage(1);
+          }}
+          totalItems={reports.length}
+          startIndex={startIndex}
+          endIndex={endIndex}
+        />
       </section>
 
       {/* Middle Column: AI Terminal */}
@@ -400,7 +450,7 @@ export default function AdminAiDispatchTerminal() {
                   </button>
                   <button type="button" onClick={manualOverride} disabled={busy} className="border border-error-red text-error-red hover:bg-error-red/5 font-label-md text-label-md px-6 py-3 rounded transition flex items-center gap-2 disabled:opacity-60">
                     <span className="material-symbols-outlined text-sm">block</span>
-                    Manual Override
+                    {targetUnit ? `Assign to ${targetUnit.name}` : 'Manual Override'}
                   </button>
                 </div>
               </div>

@@ -52,7 +52,7 @@ export default function AdminBlotterTracking() {
   const [saving, setSaving] = useState(false);
   const [hearingOpen, setHearingOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useScrollLock(formOpen || (hearingOpen && activeId != null));
   const [hearing, setHearing] = useState({ title: '', date: '', outcome: '' });
@@ -72,12 +72,31 @@ export default function AdminBlotterTracking() {
   };
 
   useEffect(() => {
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
+
+    const refresh = async () => {
+      const rows = await fetchAll();
+      if (cancelled) return;
+      setBlotters(rows);
+      return;
+    };
+
     void (async () => {
       const rows = await fetchAll();
       setBlotters(rows);
       if (rows.length > 0) setActiveId(rows[0].id);
       setLoading(false);
+      channel = supabase
+        .channel('admin-blotter-tracking')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'blotters' }, () => void refresh())
+        .subscribe();
     })();
+
+    return () => {
+      cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
+    };
   }, []);
 
   const active = blotters.find((b) => b.id === activeId) ?? null;

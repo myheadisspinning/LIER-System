@@ -48,12 +48,13 @@ export default function AdminTanodRoster() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [menuPos, setMenuPos] = useState<{ left: number; top: number; bottom: number } | null>(null);
   const [statusTarget, setStatusTarget] = useState<UnitRow | null>(null);
   const [statusValue, setStatusValue] = useState('Auto');
   const [deleteTarget, setDeleteTarget] = useState<UnitRow | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useScrollLock(modalOpen || viewing != null || statusTarget != null || deleteTarget != null);
 
@@ -80,13 +81,33 @@ export default function AdminTanodRoster() {
   };
 
   useEffect(() => {
-    void (async () => {
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
+
+    const refresh = async () => {
       const { units, openAssignments, officers } = await fetchAll();
+      if (cancelled) return;
       setUnits(units);
       setOpenAssignments(openAssignments);
       setOfficers(officers);
+      return;
+    };
+
+    void (async () => {
+      await refresh();
+      if (cancelled) return;
       setLoading(false);
+      channel = supabase
+        .channel('admin-tanod-roster')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'dispatch_units' }, () => void refresh())
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'incident_reports' }, () => void refresh())
+        .subscribe();
     })();
+
+    return () => {
+      cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
+    };
   }, []);
 
   const rows = useMemo(
@@ -154,13 +175,14 @@ export default function AdminTanodRoster() {
   const save = async () => {
     if (!form.name.trim()) return;
     setSaving(true);
+    const lead_officer_id = form.type === 'Tanod' ? (form.lead_officer_id || null) : null;
     const payload = {
       name: form.name.trim(),
       type: form.type,
       area: form.area.trim() || null,
       duty_days: form.duty_days,
       last_location: form.last_location.trim() || null,
-      lead_officer_id: form.lead_officer_id || null,
+      lead_officer_id,
     };
     const { error } = editing
       ? await supabase.from('dispatch_units').update(payload).eq('id', editing.id)
@@ -168,7 +190,10 @@ export default function AdminTanodRoster() {
     if (error) {
       setToast({ type: 'error', message: error.message });
     } else {
-      await logAudit(editing ? 'Update responder' : 'Register responder', `${editing ? 'Updated' : 'Registered'} ${form.type} responder "${form.name.trim()}"${form.area.trim() ? ` (${form.area.trim()})` : ''}.`);
+      const linkedTxt = form.type === 'Tanod' && lead_officer_id
+        ? ` linked to officer "${officerName(lead_officer_id) ?? 'linked account'}".`
+        : '';
+      await logAudit(editing ? 'Update responder' : 'Register responder', `${editing ? 'Updated' : 'Registered'} ${form.type} responder "${form.name.trim()}"${form.area.trim() ? ` (${form.area.trim()})` : ''}.${linkedTxt}`);
       setToast({ type: 'success', message: editing ? `Updated ${form.name.trim()}.` : `Registered ${form.name.trim()}.` });
       setModalOpen(false);
       setEditing(null);
@@ -336,17 +361,33 @@ export default function AdminTanodRoster() {
                           <div className="relative inline-flex">
                             <button
                               type="button"
-                              onClick={() => setOpenMenuId(openMenuId === u.id ? null : u.id)}
+                              onClick={(e) => {
+                                const next = openMenuId === u.id ? null : u.id;
+                                setOpenMenuId(next);
+                                if (next) {
+                                  const rect = e.currentTarget.getBoundingClientRect();
+                                  const MENU_H = 172;
+                                  const GAP = 6;
+                                  if (rect.bottom + GAP + MENU_H <= window.innerHeight) {
+                                    setMenuPos({ left: rect.right - 176, top: rect.bottom + GAP, bottom: 0 });
+                                  } else {
+                                    setMenuPos({ left: rect.right - 176, bottom: window.innerHeight - rect.top + GAP, top: 0 });
+                                  }
+                                }
+                              }}
                               className="p-2 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors"
                               aria-label={`Actions for ${u.name}`}
                               aria-expanded={openMenuId === u.id}
                             >
                               <span className="material-symbols-outlined text-[20px]">more_vert</span>
                             </button>
-                            {openMenuId === u.id && (
+                            {openMenuId === u.id && menuPos && (
                               <>
                                 <div className="fixed inset-0 z-40" onClick={() => setOpenMenuId(null)} />
-                                <div className="absolute right-0 top-full mt-1 w-44 z-50 bg-surface-container-lowest rounded-lg border border-border-subtle shadow-lg py-1">
+                                <div
+                                  className="fixed w-44 z-50 bg-surface-container-lowest rounded-lg border border-border-subtle shadow-lg py-1"
+                                  style={{ left: menuPos.left, ...(menuPos.top ? { top: menuPos.top } : { bottom: menuPos.bottom }) }}
+                                >
                                   <button
                                     type="button"
                                     onClick={() => { setViewing(u); setOpenMenuId(null); }}
@@ -481,21 +522,37 @@ export default function AdminTanodRoster() {
                 </div>
                 {form.duty_days.length === 0 && <p className="text-[11px] text-error-red mt-1">Select at least one duty day — otherwise the responder will always show Off-Duty.</p>}
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs text-on-surface-variant mb-1.5">Lead Officer (optional)</label>
-                  <select className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={form.lead_officer_id} onChange={(e) => setForm({ ...form, lead_officer_id: e.target.value })}>
-                    <option value="">— Not assigned —</option>
-                    {officers.map((o) => (
-                      <option key={o.id} value={o.id}>{o.fullname}</option>
-                    ))}
-                  </select>
+              {form.type === 'Tanod' ? (
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs text-on-surface-variant mb-1.5">Lead Officer (optional)</label>
+                    <select className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={form.lead_officer_id} onChange={(e) => setForm({ ...form, lead_officer_id: e.target.value })}>
+                      <option value="">— Not assigned —</option>
+                      {officers.map((o) => (
+                        <option key={o.id} value={o.id}>{o.fullname}</option>
+                      ))}
+                    </select>
+                    <p className="text-[11px] text-on-surface-variant mt-1">Officer accounts are created in Account Settings.</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-on-surface-variant mb-1.5">Duty Location</label>
+                    <input className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={form.last_location} onChange={(e) => setForm({ ...form, last_location: e.target.value })} placeholder="e.g. Purok 4, Barangay Culiat" />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs text-on-surface-variant mb-1.5">Duty Location</label>
-                  <input className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={form.last_location} onChange={(e) => setForm({ ...form, last_location: e.target.value })} placeholder="e.g. Purok 4, Barangay Culiat" />
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs text-on-surface-variant mb-1.5">Duty Location</label>
+                    <input className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={form.last_location} onChange={(e) => setForm({ ...form, last_location: e.target.value })} placeholder="e.g. Purok 4, Barangay Culiat" />
+                  </div>
+                  <div className="col-span-2">
+                    <div className="flex items-start gap-2 bg-surface-bg border border-border-subtle rounded-md p-3 text-xs text-on-surface-variant">
+                      <span className="material-symbols-outlined text-[16px] mt-0.5">info</span>
+                      <span>Specialized units (BFP / Medical / PNP / Barangay) are not linked to a human officer account. Case progression for these units is handled by the admin.</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
               <button type="button" disabled={saving || !form.name.trim() || form.duty_days.length === 0} onClick={save} className="w-full bg-secondary text-on-secondary rounded-lg py-2 text-label-md font-medium hover:bg-secondary/90 disabled:opacity-50 transition-colors">
                 {saving ? 'Saving…' : editing ? 'Update Responder' : 'Register Responder'}
               </button>

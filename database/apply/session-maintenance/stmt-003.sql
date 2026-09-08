@@ -1,5 +1,10 @@
--- Update admin_list_users to include emergency contact fields
--- (kept in sync with database/admin-modules.sql, incl. 'officers' scope)
+-- session-maintenance.sql
+-- Restores the 'officers' scope in admin_list_users so the Admin Account
+-- Settings page can refresh its list (it calls p_scope 'residents' AND
+-- 'officers'). Split-file versions regressed to reject 'officers', which
+-- broke list refreshes after suspend/re-activate/edit (and the initial
+-- load). Mirrors database/admin-modules.sql. Idempotent.
+
 drop function if exists public.admin_list_users(text);
 
 create or replace function public.admin_list_users(p_scope text default 'all')

@@ -184,8 +184,9 @@ export default function AdminIncidentReporting() {
    const [searchParams] = useSearchParams();
    const initialCaseRef = useRef(searchParams.get('case'));
    const [currentPage, setCurrentPage] = useState(1);
-   const [itemsPerPage, setItemsPerPage] = useState(20);
+   const [itemsPerPage, setItemsPerPage] = useState(10);
    const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+   const [menuPos, setMenuPos] = useState<{ left: number; top: number; bottom: number } | null>(null);
 
   const fetchAll = async () => {
     const res = await supabase
@@ -223,6 +224,18 @@ export default function AdminIncidentReporting() {
   };
 
   useEffect(() => {
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
+
+    const refresh = async () => {
+      const { reports, reporterMap: rMap, error } = await fetchAll();
+      if (cancelled) return;
+      if (error) setError(error);
+      setReports(reports);
+      setReporterMap(rMap);
+      return;
+    };
+
     void (async () => {
       const { reports, reporterMap: rMap, error } = await fetchAll();
       if (error) setError(error);
@@ -230,7 +243,16 @@ export default function AdminIncidentReporting() {
       setReporterMap(rMap);
       setSelectedId((prev) => prev ?? initialCaseRef.current ?? reports[0]?.id ?? null);
       setLoading(false);
+      channel = supabase
+        .channel('admin-incident-reporting')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'incident_reports' }, () => void refresh())
+        .subscribe();
     })();
+
+    return () => {
+      cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
+    };
   }, []);
 
   const filtered = useMemo(() => {
@@ -299,6 +321,10 @@ export default function AdminIncidentReporting() {
 
   const resolveReport = async () => {
     if (!selected) return;
+    if (selected.status !== 'Progress') {
+      setToast({ type: 'error', message: 'Only reports already in progress can be marked as Resolved.' });
+      return;
+    }
     setBusy(true);
     try {
       const { error } = await supabase.from('incident_reports').update({ status: 'Resolved' }).eq('id', selected.id);
@@ -309,6 +335,31 @@ export default function AdminIncidentReporting() {
         detail: `${selected.report_no ?? 'Report'} closed.`,
       });
       setToast({ type: 'success', message: `Report ${selected.report_no} marked as Resolved.` });
+      const { reports } = await fetchAll();
+      setReports(reports);
+    } catch (e) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : 'Update failed.' });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const acknowledgeReport = async () => {
+    if (!selected) return;
+    if (selected.status !== 'Assigned') {
+      setToast({ type: 'error', message: 'Only reports assigned to a unit can be acknowledged to start processing.' });
+      return;
+    }
+    setBusy(true);
+    try {
+      const { error } = await supabase.from('incident_reports').update({ status: 'Progress' }).eq('id', selected.id);
+      if (error) throw new Error(error.message);
+      await supabase.from('ai_audit_logs').insert({
+        actor: 'Admin_Desk',
+        action: 'Acknowledge dispatch',
+        detail: `${selected.report_no ?? 'Report'} advanced to Progress by Admin_Desk.`,
+      });
+      setToast({ type: 'success', message: `Report ${selected.report_no} is now in progress.` });
       const { reports } = await fetchAll();
       setReports(reports);
     } catch (e) {
@@ -688,14 +739,25 @@ export default function AdminIncidentReporting() {
                 </div>
               </div>
               <div className="p-3 border-t border-border-subtle bg-surface space-y-2 shrink-0">
+                {selected.status === 'Assigned' && (
+                  <button
+                    type="button"
+                    onClick={acknowledgeReport}
+                    disabled={busy}
+                    className="w-full bg-secondary hover:bg-secondary/90 text-on-secondary font-label-md text-label-md py-2 px-4 rounded-md transition-colors flex justify-center items-center disabled:opacity-60"
+                  >
+                    <span className="material-symbols-outlined mr-2 text-[18px]">directions_run</span>
+                    {busy ? 'Updating…' : 'Acknowledge & Start Processing'}
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={resolveReport}
-                  disabled={busy || selected.status === 'Resolved'}
+                  disabled={busy || selected.status !== 'Progress'}
                   className="w-full bg-success-green hover:bg-success-green/90 text-white font-label-md text-label-md py-2 px-4 rounded-md transition-colors flex justify-center items-center disabled:opacity-60"
                 >
                   <span className="material-symbols-outlined mr-2 text-[18px]">check_circle</span>
-                  {selected.status === 'Resolved' ? 'Resolved' : busy ? 'Updating…' : 'Mark as Resolved'}
+                  {selected.status === 'Resolved' ? 'Resolved' : selected.status !== 'Progress' ? 'Awaiting Process' : busy ? 'Updating…' : 'Mark as Resolved'}
                 </button>
                 <div className="flex gap-2">
                   <button type="button" className="flex-1 bg-surface-container-low hover:bg-surface-container-highest border border-border-subtle text-on-surface font-label-md text-label-md py-2 px-4 rounded-md transition-colors text-sm">
@@ -796,11 +858,11 @@ export default function AdminIncidentReporting() {
                     <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${STATUS_STYLES[r.status] ?? 'bg-slate-100 text-slate-600'}`}>{r.status}</span></td>
                      <td className="py-3 px-4 text-right whitespace-nowrap">
                        <div className="relative inline-flex">
-                         <button type="button" className="text-on-surface-variant hover:text-secondary" onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === r.id ? null : r.id); }} aria-label="More options" aria-expanded={openMenuId === r.id}><span className="material-symbols-outlined text-[18px]">more_vert</span></button>
-                         {openMenuId === r.id && (
+                         <button type="button" className="text-on-surface-variant hover:text-secondary" onClick={(e) => { e.stopPropagation(); const next = openMenuId === r.id ? null : r.id; setOpenMenuId(next); if (next) { const rect = e.currentTarget.getBoundingClientRect(); const MENU_H = 44; const GAP = 6; if (rect.bottom + GAP + MENU_H <= window.innerHeight) { setMenuPos({ left: rect.right - 176, top: rect.bottom + GAP, bottom: 0 }); } else { setMenuPos({ left: rect.right - 176, bottom: window.innerHeight - rect.top + GAP, top: 0 }); } } }} aria-label="More options" aria-expanded={openMenuId === r.id}><span className="material-symbols-outlined text-[18px]">more_vert</span></button>
+                         {openMenuId === r.id && menuPos && (
                            <>
                              <div className="fixed inset-0 z-40" onClick={() => setOpenMenuId(null)} />
-                             <div className="absolute right-0 top-full mt-1 w-44 z-50 bg-surface-container-lowest rounded-lg border border-border-subtle shadow-lg py-1">
+                             <div className="fixed w-44 z-50 bg-surface-container-lowest rounded-lg border border-border-subtle shadow-lg py-1" style={{ left: menuPos.left, ...(menuPos.top ? { top: menuPos.top } : { bottom: menuPos.bottom }) }}>
                                <button type="button" onClick={(e) => { e.stopPropagation(); handleStatusChange(r.id, 'Rejected'); }} className="w-full flex items-center gap-2 px-3 py-2 text-left text-sm text-error-red hover:bg-error-red/5 transition-colors">
                                  <span className="material-symbols-outlined text-[16px]">block</span>Reject
                                </button>

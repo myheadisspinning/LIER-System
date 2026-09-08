@@ -25,12 +25,69 @@ type Acct = {
 
 type Filter = 'All' | 'Active' | 'Pending' | 'Suspended';
 
+type ConfirmKind = 'reset-pw' | 'suspend' | 'reactivate' | 'logout' | 'delete' | 'save-edit';
+
+type ConfirmMeta = {
+  title: string;
+  message: (name: string) => string;
+  confirmLabel: string;
+  icon: string;
+  danger: boolean;
+};
+
+const CONFIRM_META: Record<ConfirmKind, ConfirmMeta> = {
+  'reset-pw': {
+    title: 'Trigger Password Reset',
+    message: (n) => `Generate a temporary password for ${n}? It must be changed on next sign-in — share it securely.`,
+    confirmLabel: 'Reset Password',
+    icon: 'lock_reset',
+    danger: true,
+  },
+  suspend: {
+    title: 'Suspend Account',
+    message: (n) => `Suspend ${n}'s account? They will be signed out on all devices immediately and blocked from signing in until you re-activate the account.`,
+    confirmLabel: 'Suspend Account',
+    icon: 'block',
+    danger: true,
+  },
+  reactivate: {
+    title: 'Re-activate Account',
+    message: (n) => `Re-activate ${n}'s account? They will regain access to the portal.`,
+    confirmLabel: 'Re-activate',
+    icon: 'check_circle',
+    danger: false,
+  },
+  logout: {
+    title: 'Log Out User',
+    message: (n) => `This will end ${n}'s active session(s) immediately — they will be signed out on all devices.`,
+    confirmLabel: 'Log Out',
+    icon: 'logout',
+    danger: true,
+  },
+  delete: {
+    title: 'Delete Account',
+    message: (n) => `Are you sure you want to delete the account for ${n}?`,
+    confirmLabel: 'Delete Account',
+    icon: 'warning',
+    danger: true,
+  },
+  'save-edit': {
+    title: 'Save Changes',
+    message: (n) => `Save the updated information for ${n}? This will update their user profile.`,
+    confirmLabel: 'Save Changes',
+    icon: 'save',
+    danger: false,
+  },
+};
+
 const ROLE_BADGE: Record<string, string> = {
   user: 'bg-surface-container-high text-on-surface-variant',
+  officer: 'bg-secondary/10 text-secondary',
 };
 
 const ROLE_LABEL: Record<string, string> = {
   user: 'User Account',
+  officer: 'Duty Officer',
 };
 
 const initials = (name: string) =>
@@ -55,17 +112,21 @@ export default function AdminAccountSettings() {
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [editOpen, setEditOpen] = useState(false);
   const [editForm, setEditForm] = useState({ fullname: '', phone: '', address: '', dob: '', gender: '' });
-  const [deleteConfirm, setDeleteConfirm] = useState<Acct | null>(null);
+  const [confirmAction, setConfirmAction] = useState<ConfirmKind | null>(null);
   const [presenceMap, setPresenceMap] = useState<Map<string, string>>(new Map());
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  useScrollLock(formOpen || tempPw != null || (editOpen && activeId != null) || deleteConfirm != null);
+  useScrollLock(formOpen || tempPw != null || (editOpen && activeId != null) || confirmAction != null);
 
   const fetchUsers = async () => {
-    const res = await supabase.rpc('admin_list_users', { p_scope: 'residents' });
-    if (res.error) throw new Error(res.error.message);
-    return (res.data ?? []) as Acct[];
+    const [residents, officers] = await Promise.all([
+      supabase.rpc('admin_list_users', { p_scope: 'residents' }),
+      supabase.rpc('admin_list_users', { p_scope: 'officers' }),
+    ]);
+    if (residents.error) throw new Error(residents.error.message);
+    if (officers.error) throw new Error(officers.error.message);
+    return [...(officers.data ?? []), ...(residents.data ?? [])] as Acct[];
   };
 
   const fetchPresence = async () => {
@@ -119,30 +180,51 @@ export default function AdminAccountSettings() {
     return matchesQuery && matchesFilter;
   });
 
+  // Online accounts float to the top (live, until they go offline).
+  const onlineFirst = useMemo(
+    () =>
+      [...visible].sort(
+        (a, b) => Number(isOnlineSince(presenceMap.get(b.id))) - Number(isOnlineSince(presenceMap.get(a.id)))
+      ),
+    [visible, presenceMap]
+  );
+
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [query, filter]);
 
   // Pagination calculations
-  const totalPages = Math.ceil(visible.length / itemsPerPage);
+  const totalPages = Math.ceil(onlineFirst.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedUsers = visible.slice(startIndex, endIndex);
+  const paginatedUsers = onlineFirst.slice(startIndex, endIndex);
 
   const createUser = async () => {
     if (!form.email.trim() || !form.password || !form.fullname.trim()) return;
+    const email = form.email.trim();
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!EMAIL_RE.test(email)) {
+      setToast({ type: 'error', message: 'Please enter a valid email address.' });
+      return;
+    }
+    if (form.password.length < 8) {
+      setToast({ type: 'error', message: 'Password must be at least 8 characters.' });
+      return;
+    }
     setSaving(true);
     try {
+      const { data: emailExists, error: dupError } = await supabase.rpc('is_email_registered', { p_email: email });
+      if (!dupError && emailExists) throw new Error('This email is already used with an existing account.');
       const res = await supabase.rpc('admin_create_user', {
-        p_email: form.email.trim(),
+        p_email: email,
         p_password: form.password,
         p_fullname: form.fullname.trim(),
         p_role: form.role,
       });
       if (res.error) throw new Error(res.error.message);
-      await logAudit('Create account', `Created ${form.role} account for ${form.email.trim()}.`);
-      setToast({ type: 'success', message: 'Account created successfully.' });
+      await logAudit('Create account', `Created ${form.role} account for ${email}.`);
+      setToast({ type: 'success', message: 'Account created. The user must confirm their email before first sign-in.' });
       setFormOpen(false);
       setForm({ email: '', password: '', fullname: '', role: 'user' });
       const rows = await fetchUsers();
@@ -171,13 +253,21 @@ export default function AdminAccountSettings() {
     setBusyId(null);
     if (res.error) {
       setToast({ type: 'error', message: res.error.message });
-    } else {
-      setToast({ type: 'success', message: u.suspended ? `${u.fullname} re-activated.` : `${u.fullname} suspended.` });
-      try {
-        setUsers(await fetchUsers());
-      } catch (e) {
-        setToast({ type: 'error', message: e instanceof Error ? e.message : 'Failed to refresh accounts.' });
-      }
+      return;
+    }
+    const next = !u.suspended;
+    setToast({ type: 'success', message: next ? `${u.fullname} suspended.` : `${u.fullname} re-activated.` });
+    // Flip the account locally right away so the button/badge update
+    // instantly, then reconcile with a fresh fetch in the background.
+    setUsers((prev) => prev.map((x) => (x.id === u.id ? { ...x, suspended: next } : x)));
+    await fetchPresence();
+    try {
+      // Keep the just-committed value for this user even if the read is
+      // briefly stale (read-replica lag) so the button never flickers back.
+      const fresh = await fetchUsers();
+      setUsers(fresh.map((x) => (x.id === u.id ? { ...x, suspended: next } : x)));
+    } catch (e) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : 'Failed to refresh accounts.' });
     }
   };
 
@@ -221,15 +311,26 @@ export default function AdminAccountSettings() {
     }
   };
 
-  const confirmDelete = async () => {
-    if (!deleteConfirm) return;
-    setBusyId(deleteConfirm.id);
+  const logoutUser = async (u: Acct) => {
+    setBusyId(u.id);
+    const res = await supabase.rpc('admin_logout_user', { p_user_id: u.id });
+    setBusyId(null);
+    if (res.error) {
+      setToast({ type: 'error', message: res.error.message });
+      return;
+    }
+    await logAudit('Logout user', `Signed out ${u.fullname} on all devices.`);
+    setToast({ type: 'success', message: `${u.fullname} signed out.` });
+    await fetchPresence();
+  };
+
+  const deleteUser = async (u: Acct) => {
+    setBusyId(u.id);
     try {
-      const res = await supabase.rpc('admin_delete_user', { p_user_id: deleteConfirm.id });
+      const res = await supabase.rpc('admin_delete_user', { p_user_id: u.id });
       if (res.error) throw new Error(res.error.message);
-      await logAudit('Delete user', `Deleted user ${deleteConfirm.fullname} (${deleteConfirm.email}).`);
-      setToast({ type: 'success', message: `${deleteConfirm.fullname} has been deleted.` });
-      setDeleteConfirm(null);
+      await logAudit('Delete user', `Deleted user ${u.fullname} (${u.email}).`);
+      setToast({ type: 'success', message: `${u.fullname} has been deleted.` });
       setActiveId(null);
       const rows = await fetchUsers();
       setUsers(rows);
@@ -239,6 +340,17 @@ export default function AdminAccountSettings() {
     } finally {
       setBusyId(null);
     }
+  };
+
+  const performConfirm = async () => {
+    if (!confirmAction || !active) return;
+    const kind = confirmAction;
+    setConfirmAction(null);
+    if (kind === 'delete') await deleteUser(active);
+    else if (kind === 'save-edit') await saveEdit();
+    else if (kind === 'reset-pw') await resetPw(active);
+    else if (kind === 'suspend' || kind === 'reactivate') await toggleSuspend(active);
+    else if (kind === 'logout') await logoutUser(active);
   };
 
   return (
@@ -307,7 +419,7 @@ export default function AdminAccountSettings() {
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6 min-h-[600px]">
-        <div className="w-full lg:w-[65%] bg-surface-container-lowest rounded-xl border border-border-subtle flex flex-col overflow-hidden">
+        <div className="w-full lg:w-[60%] bg-surface-container-lowest rounded-xl border border-border-subtle flex flex-col overflow-hidden">
           <div className="px-6 py-3 border-b border-border-subtle bg-surface-bg/50">
             <h3 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-bold">Account Directory</h3>
           </div>
@@ -401,13 +513,13 @@ export default function AdminAccountSettings() {
               setItemsPerPage(items);
               setCurrentPage(1);
             }}
-            totalItems={visible.length}
+            totalItems={onlineFirst.length}
             startIndex={startIndex}
             endIndex={endIndex}
           />
         </div>
 
-        <div className="w-full lg:w-[35%] bg-surface-container-lowest rounded-xl border border-border-subtle flex flex-col shadow-sm relative overflow-hidden">
+        <div className="w-full lg:w-[40%] bg-surface-container-lowest rounded-xl border border-border-subtle flex flex-col shadow-sm relative overflow-hidden">
           <div className="h-1.5 w-full bg-[#1E40AF]"></div>
           {active ? (
             <>
@@ -446,7 +558,7 @@ export default function AdminAccountSettings() {
               <div className="flex-1 overflow-y-auto p-6 bg-surface-bg/30 space-y-5">
                 <div>
                   <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-bold mb-3">Personal Information</h4>
-                  <div className="space-y-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
                     <div>
                       <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Full Name</div>
                       <div className="font-body-sm text-body-sm text-on-surface font-medium">{active.fullname}</div>
@@ -463,7 +575,7 @@ export default function AdminAccountSettings() {
                       <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Phone</div>
                       <div className="font-body-sm text-body-sm text-on-surface font-medium">{active.phone || '—'}</div>
                     </div>
-                    <div>
+                    <div className="sm:col-span-2">
                       <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Address</div>
                       <div className="font-body-sm text-body-sm text-on-surface font-medium">{active.address || '—'}</div>
                     </div>
@@ -475,7 +587,7 @@ export default function AdminAccountSettings() {
                       <span className="material-symbols-outlined text-[14px]">emergency</span>
                       Emergency Contact
                     </h4>
-                    <div className="space-y-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
                       <div>
                         <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Contact Name</div>
                         <div className="font-body-sm text-body-sm text-on-surface font-medium">{active.emergency_contact_name}</div>
@@ -484,7 +596,7 @@ export default function AdminAccountSettings() {
                         <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Relationship</div>
                         <div className="font-body-sm text-body-sm text-on-surface font-medium capitalize">{active.emergency_contact_relationship || '—'}</div>
                       </div>
-                      <div>
+                      <div className="sm:col-span-2">
                         <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Emergency Phone</div>
                         <div className="font-body-sm text-body-sm text-on-surface font-medium">{active.emergency_contact_phone ? `+63 ${active.emergency_contact_phone}` : '—'}</div>
                       </div>
@@ -493,13 +605,13 @@ export default function AdminAccountSettings() {
                 )}
                 <div>
                   <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-bold mb-3">Account Information</h4>
-                  <div className="space-y-3">
-                    <div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                    <div className="sm:col-span-2">
                       <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Role</div>
                       <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${ROLE_BADGE[active.role] ?? 'bg-surface-container-high text-on-surface-variant'}`}>
                         {ROLE_LABEL[active.role] ?? active.role}
                       </span>
-                      <p className="text-[11px] text-on-surface-variant mt-1.5">Staff roles are managed by the Superadmin.</p>
+                      <p className="text-[11px] text-on-surface-variant mt-1.5">Admin and Superadmin roles are managed by the Superadmin.</p>
                     </div>
                     <div>
                       <div className="font-caps-xs text-caps-xs text-outline mb-1 uppercase">Email Verification</div>
@@ -552,7 +664,7 @@ export default function AdminAccountSettings() {
                     <button
                       type="button"
                       disabled={busyId === active.id}
-                      onClick={() => resetPw(active)}
+                      onClick={() => setConfirmAction('reset-pw')}
                       className="w-full py-2 px-4 rounded-lg border border-outline-variant text-on-surface font-label-md text-label-md hover:bg-surface-bg transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
                     >
                       <span className="material-symbols-outlined text-[18px]">lock_reset</span>
@@ -561,7 +673,7 @@ export default function AdminAccountSettings() {
                     <button
                       type="button"
                       disabled={busyId === active.id}
-                      onClick={() => toggleSuspend(active)}
+                      onClick={() => setConfirmAction(active.suspended ? 'reactivate' : 'suspend')}
                       className={`w-full py-2 px-4 rounded-lg border font-label-md text-label-md transition-colors flex justify-center items-center gap-2 disabled:opacity-50 ${active.suspended ? 'border-success-green/30 text-success-green hover:bg-success-green/5' : 'border-error-red/30 text-error-red hover:bg-error-red/5'}`}
                     >
                       <span className="material-symbols-outlined text-[18px]">{active.suspended ? 'check_circle' : 'block'}</span>
@@ -570,7 +682,16 @@ export default function AdminAccountSettings() {
                     <button
                       type="button"
                       disabled={busyId === active.id}
-                      onClick={() => setDeleteConfirm(active)}
+                      onClick={() => setConfirmAction('logout')}
+                      className="w-full py-2 px-4 rounded-lg border border-outline-variant text-on-surface font-label-md text-label-md hover:bg-surface-bg transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">logout</span>
+                      Log Out User
+                    </button>
+                    <button
+                      type="button"
+                      disabled={busyId === active.id}
+                      onClick={() => setConfirmAction('delete')}
                       className="w-full py-2 px-4 rounded-lg border border-error-red/30 text-error-red font-label-md text-label-md hover:bg-error-red/5 transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
                     >
                       <span className="material-symbols-outlined text-[18px]">delete</span>
@@ -608,10 +729,11 @@ export default function AdminAccountSettings() {
               </div>
               <div>
                 <label className="block text-xs text-on-surface-variant mb-1.5">Role</label>
-                <select disabled className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface opacity-60">
+                <select className="w-full bg-surface-container-low border border-border-subtle rounded-md px-3 py-2 text-body-sm text-on-surface focus:outline-none focus:border-secondary" value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
                   <option value="user">User Account</option>
+                  <option value="officer">Duty Officer</option>
                 </select>
-                <p className="text-[11px] text-on-surface-variant mt-1">New accounts are created as resident users.</p>
+                <p className="text-[11px] text-on-surface-variant mt-1">Officer accounts are Duty Officers who can log into the Officer Portal. Link them to a Tanod responder in the Responder Roster.</p>
               </div>
               <button type="button" disabled={saving} onClick={createUser} className="w-full bg-secondary hover:bg-secondary/90 text-on-secondary rounded-lg py-2 text-label-md font-medium disabled:opacity-50 transition-colors">
                 {saving ? 'Creating…' : 'Create Account'}
@@ -675,7 +797,7 @@ export default function AdminAccountSettings() {
                 <button type="button" onClick={() => setEditOpen(false)} className="flex-1 bg-surface-container-low border border-border-subtle text-on-surface rounded-lg py-2 text-label-md font-medium hover:bg-surface-bg transition-colors">
                   Cancel
                 </button>
-                <button type="button" disabled={saving} onClick={saveEdit} className="flex-1 bg-secondary hover:bg-secondary/90 text-on-secondary rounded-lg py-2 text-label-md font-medium disabled:opacity-50 transition-colors">
+                <button type="button" disabled={saving} onClick={() => setConfirmAction('save-edit')} className="flex-1 bg-secondary hover:bg-secondary/90 text-on-secondary rounded-lg py-2 text-label-md font-medium disabled:opacity-50 transition-colors">
                   {saving ? 'Saving…' : 'Save Changes'}
                 </button>
               </div>
@@ -684,31 +806,40 @@ export default function AdminAccountSettings() {
         </div>
       )}
 
-      {deleteConfirm && (
-        <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
+      {confirmAction && active && (
+        <div className="fixed inset-0 z-[140] bg-black/50 flex items-center justify-center p-4">
           <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl">
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
-              <h3 className="font-headline-md text-headline-md font-bold text-error-red">Delete Account</h3>
-              <button type="button" onClick={() => setDeleteConfirm(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
+              <h3 className={`font-headline-md text-headline-md font-bold ${CONFIRM_META[confirmAction].danger ? 'text-error-red' : 'text-on-surface'}`}>{CONFIRM_META[confirmAction].title}</h3>
+              <button type="button" onClick={() => setConfirmAction(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
             </div>
             <div className="p-5">
               <div className="flex items-start gap-3 mb-4">
-                <span className="material-symbols-outlined text-error-red text-3xl">warning</span>
+                <span className={`material-symbols-outlined text-3xl ${CONFIRM_META[confirmAction].danger ? 'text-error-red' : 'text-secondary'}`}>{CONFIRM_META[confirmAction].icon}</span>
                 <div className="flex-1">
-                  <p className="text-sm text-on-surface mb-2">Are you sure you want to delete this account?</p>
-                  <div className="bg-surface-container-low border border-border-subtle rounded-lg p-3">
-                    <p className="font-semibold text-on-surface">{deleteConfirm.fullname}</p>
-                    <p className="text-xs text-on-surface-variant">{deleteConfirm.email}</p>
-                  </div>
-                  <p className="text-xs text-error-red mt-3 font-medium">⚠️ This action cannot be undone. All user data will be permanently deleted.</p>
+                  <p className="text-sm text-on-surface">{CONFIRM_META[confirmAction].message(active.fullname)}</p>
+                  {confirmAction === 'delete' && (
+                    <>
+                      <div className="bg-surface-container-low border border-border-subtle rounded-lg p-3 mt-3">
+                        <p className="font-semibold text-on-surface">{active.fullname}</p>
+                        <p className="text-xs text-on-surface-variant">{active.email}</p>
+                      </div>
+                      <p className="text-xs text-error-red mt-3 font-medium">⚠️ This action cannot be undone. All user data will be permanently deleted.</p>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="flex gap-3">
-                <button type="button" onClick={() => setDeleteConfirm(null)} className="flex-1 bg-surface-container-low border border-border-subtle text-on-surface rounded-lg py-2 text-label-md font-medium hover:bg-surface-bg transition-colors">
+                <button type="button" onClick={() => setConfirmAction(null)} className="flex-1 bg-surface-container-low border border-border-subtle text-on-surface rounded-lg py-2 text-label-md font-medium hover:bg-surface-bg transition-colors">
                   Cancel
                 </button>
-                <button type="button" disabled={busyId === deleteConfirm.id} onClick={confirmDelete} className="flex-1 bg-error-red hover:bg-error-red/90 text-on-error rounded-lg py-2 text-label-md font-medium disabled:opacity-50 transition-colors">
-                  {busyId === deleteConfirm.id ? 'Deleting…' : 'Delete Account'}
+                <button
+                  type="button"
+                  disabled={busyId === active.id}
+                  onClick={() => void performConfirm()}
+                  className={`flex-1 rounded-lg py-2 text-label-md font-medium disabled:opacity-50 transition-colors ${CONFIRM_META[confirmAction].danger ? 'bg-error-red text-on-error hover:bg-error-red/90' : 'bg-secondary text-on-secondary hover:bg-secondary/90'}`}
+                >
+                  {busyId === active.id ? 'Working…' : CONFIRM_META[confirmAction].confirmLabel}
                 </button>
               </div>
             </div>

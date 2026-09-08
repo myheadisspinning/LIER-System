@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
 import { useScrollLock } from '../../../lib/useScrollLock';
+import Pagination from '../../../components/Pagination';
 
 interface ReportCase {
   id: string;
@@ -71,9 +72,29 @@ export default function MyIncidentReports() {
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     let cancelled = false;
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+
+    const refresh = async (userId: string) => {
+      const { data, error: err } = await supabase
+        .from('incident_reports')
+        .select('id, report_no, title, category, status, confidence, priority, address, ai_dispatch, dispatch_unit:dispatch_unit_id(name), created_at')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+      if (cancelled) return;
+      if (err) {
+        setError(err.message);
+      } else {
+        const mapped = (data as DbReport[]).map(toCase);
+        setCases(mapped);
+        setSelectedId((prev) => prev || mapped[0]?.dbId || '');
+      }
+    };
+
     (async () => {
       setLoading(true);
       setError(null);
@@ -84,23 +105,18 @@ export default function MyIncidentReports() {
         setLoading(false);
         return;
       }
-      const { data, error: err } = await supabase
-        .from('incident_reports')
-        .select('id, report_no, title, category, status, confidence, priority, address, ai_dispatch, dispatch_unit:dispatch_unit_id(name), created_at')
-        .eq('user_id', session.user.id)
-        .order('created_at', { ascending: false });
+      const userId = session.user.id;
+      await refresh(userId);
       if (cancelled) return;
-      if (err) {
-        setError(err.message);
-      } else {
-        const mapped = (data as DbReport[]).map(toCase);
-        setCases(mapped);
-        setSelectedId(mapped[0]?.dbId ?? '');
-      }
       setLoading(false);
+      channel = supabase
+        .channel(`my-incidents-${userId}`)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'incident_reports', filter: `user_id=eq.${userId}` }, () => void refresh(userId))
+        .subscribe();
     })();
     return () => {
       cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
     };
   }, []);
 
@@ -120,6 +136,18 @@ export default function MyIncidentReports() {
       c.location.toLowerCase().includes(q)
     );
   });
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [tab, query]);
+
+  // Pagination calculations
+  const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+  const safePage = Math.min(currentPage, totalPages);
+  const startIndex = (safePage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedCases = filtered.slice(startIndex, endIndex);
 
   const handleViewDetails = (id: string) => {
     setSelectedId(id);
@@ -169,30 +197,69 @@ export default function MyIncidentReports() {
           ) : filtered.length === 0 ? (
             <div className="p-6 sm:p-10 text-center text-sm text-on-surface-variant">No reports yet. Submit an incident to see it here.</div>
           ) : (
-            <div className="overflow-x-auto">
+            <>
+            <div className="lg:hidden divide-y divide-border-subtle">
+              {paginatedCases.map((c) => {
+                const statusCard =
+                  c.status === 'Under Investigation'
+                    ? 'bg-warning-amber/10 text-warning-amber border-warning-amber/20'
+                    : c.status === 'Resolved'
+                      ? 'bg-success-green/10 text-success-green border-success-green/20'
+                      : 'bg-surface-container-low text-on-surface-variant border-border-subtle';
+                const statusDot = c.status === 'Under Investigation' ? 'bg-warning-amber' : c.status === 'Resolved' ? 'bg-success-green' : 'bg-outline';
+                return (
+                  <div key={`${c.id}-card`} className="p-4 space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="font-label-md text-label-md font-bold text-on-surface">{c.id}</div>
+                        <div className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">{c.title}</div>
+                      </div>
+                      <span className={`shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${statusCard}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${statusDot}`}></span>
+                        {c.status}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="font-body-sm text-body-sm">{c.category}</div>
+                        <div className="font-body-sm text-body-sm text-on-surface-variant truncate">{c.location}</div>
+                      </div>
+                      <span className="text-xs text-on-surface-variant shrink-0">{c.date}</span>
+                    </div>
+                    <div className="flex gap-2 pt-1">
+                      <button type="button" onClick={() => handleViewDetails(c.dbId)} className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-border-subtle rounded-md text-xs font-semibold text-on-surface-variant hover:border-secondary hover:text-secondary transition-colors whitespace-nowrap">
+                        <span className="material-symbols-outlined text-[16px]">visibility</span>
+                        View Details
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="hidden lg:block overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-border-subtle bg-surface-container-low">
-                    <th className="py-2 px-3 sm:px-4 sm:py-3 font-caps-xs text-caps-xs text-on-surface-variant">CASE REFERENCE</th>
-                    <th className="py-2 px-3 sm:px-4 sm:py-3 font-caps-xs text-caps-xs text-on-surface-variant">CATEGORY</th>
-                    <th className="py-2 px-3 sm:px-4 sm:py-3 font-caps-xs text-caps-xs text-on-surface-variant">DATE &amp; LOCATION</th>
-                    <th className="py-2 px-3 sm:px-4 sm:py-3 font-caps-xs text-caps-xs text-on-surface-variant">STATUS</th>
-                    <th className="py-2 px-3 sm:px-4 sm:py-3 font-caps-xs text-caps-xs text-on-surface-variant text-right">ACTION</th>
+                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant">CASE REFERENCE</th>
+                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant">CATEGORY</th>
+                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant">DATE &amp; LOCATION</th>
+                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant">STATUS</th>
+                    <th className="sticky right-0 z-10 py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant text-right bg-surface-container-low">ACTION</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border-subtle">
-                  {filtered.map((c) => (
+                  {paginatedCases.map((c) => (
                     <tr key={c.id} className="hover:bg-surface-container-low transition-colors">
-                      <td className="py-3 px-3 sm:px-4 sm:py-4">
+                      <td className="py-3 px-4">
                         <div className="font-label-md text-label-md font-bold text-on-surface">{c.id}</div>
                         <div className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">{c.title}</div>
                       </td>
-                      <td className="py-3 px-3 sm:px-4 sm:py-4 text-body-sm">{c.category}</td>
-                      <td className="py-3 px-3 sm:px-4 sm:py-4">
+                      <td className="py-3 px-4 text-body-sm">{c.category}</td>
+                      <td className="py-3 px-4">
                         <div className="font-body-sm text-body-sm">{c.date}</div>
                         <div className="font-body-sm text-body-sm text-on-surface-variant">{c.location}</div>
                       </td>
-                      <td className="py-3 px-3 sm:px-4 sm:py-4">
+                      <td className="py-3 px-4">
                         <span
                           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${
                             c.status === 'Under Investigation'
@@ -210,7 +277,7 @@ export default function MyIncidentReports() {
                           {c.status}
                         </span>
                       </td>
-                      <td className="py-3 px-3 sm:px-4 sm:py-4 text-right">
+                      <td className="sticky right-0 z-10 py-3 px-4 bg-surface-container-lowest shadow-[-8px_0_12px_-8px_rgba(0,0,0,0.35)] text-right">
                         <button type="button" className="text-secondary font-label-md text-label-md hover:underline" onClick={() => handleViewDetails(c.dbId)}>
                           View Details
                         </button>
@@ -220,6 +287,20 @@ export default function MyIncidentReports() {
                 </tbody>
               </table>
             </div>
+            <Pagination
+              currentPage={safePage}
+              totalPages={totalPages}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setCurrentPage}
+              onItemsPerPageChange={(items) => {
+                setItemsPerPage(items);
+                setCurrentPage(1);
+              }}
+              totalItems={filtered.length}
+              startIndex={startIndex}
+              endIndex={endIndex}
+            />
+            </>
           )}
         </div>
       </div>

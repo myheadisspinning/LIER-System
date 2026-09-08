@@ -58,6 +58,7 @@ import OfficerDashboard from './pages/portal/officer/OfficerDashboard';
 import OfficerMyIncidents from './pages/portal/officer/OfficerMyIncidents';
 import OfficerTeam from './pages/portal/officer/OfficerTeam';
 import OfficerAlerts from './pages/portal/officer/OfficerAlerts';
+import OfficerAccountSettings from './pages/portal/officer/OfficerAccountSettings';
 
 const router = createBrowserRouter([
   {
@@ -139,6 +140,7 @@ const router = createBrowserRouter([
           { path: "my-incidents", element: <OfficerMyIncidents /> },
           { path: "team", element: <OfficerTeam /> },
           { path: "alerts", element: <OfficerAlerts /> },
+          { path: "account-settings", element: <OfficerAccountSettings /> },
         ],
       },
       {

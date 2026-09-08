@@ -1,6 +1,376 @@
-import PortalLayout from './PortalLayout';
-import { officerNav } from './nav';
+import { useEffect, useRef, useState } from 'react';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import type { User } from '@supabase/supabase-js';
+import { supabase } from '../../../supabaseClient';
+import { useTheme } from '../../../lib/theme';
+import { usePresenceHeartbeat, useUnreadCounts, type UnreadCounts } from '../../../lib/admin';
+import { officerNav, type NavItem } from './nav';
+import ConfirmDialog from '../../../components/ConfirmDialog';
+import LogoutScreen from '../../../components/LogoutScreen';
+import UnreadBadge from '../../../components/UnreadBadge';
+
+function useActiveItem(pathname: string) {
+  const direct = officerNav.items.find((i) => i.to === pathname);
+  if (direct) return direct;
+  return officerNav.items.find((i) => i.children?.some((c) => c.to === pathname));
+}
 
 export default function OfficerLayout() {
-  return <PortalLayout nav={officerNav} />;
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const active = useActiveItem(pathname);
+  const pageTitle = active?.label ?? officerNav.fallbackTitle;
+  const [theme, toggleTheme] = useTheme();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
+
+  const [user, setUser] = useState<User | null>(null);
+
+  usePresenceHeartbeat();
+  const hasUnread = officerNav.items.some((i) => i.unreadKey === 'admin' || i.unreadKey === 'user');
+  const unreadCounts = useUnreadCounts(hasUnread);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user ?? null);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const htmlPrev = document.documentElement.style.overflow;
+    const bodyPrev = document.body.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.documentElement.style.overflow = htmlPrev;
+      document.body.style.overflow = bodyPrev;
+    };
+  }, [drawerOpen]);
+
+  const getFullName = () => {
+    const meta = user?.user_metadata as Record<string, unknown> | undefined;
+    return (typeof meta?.fullname === 'string' && meta.fullname.trim()) ||
+      (typeof meta?.full_name === 'string' && meta.full_name.trim()) ||
+      (typeof meta?.name === 'string' && meta.name.trim()) || null;
+  };
+
+  const displayName = () => {
+    return getFullName() || user?.email || 'Officer';
+  };
+
+  const initials = () => {
+    const fullname = getFullName() || '';
+    if (fullname) {
+      const parts = fullname.split(/\s+/);
+      const first = parts[0]?.[0] ?? '';
+      const last = parts.length > 1 ? parts[parts.length - 1][0] ?? '' : '';
+      return (first + last).toUpperCase();
+    }
+    return (user?.email?.[0] ?? 'O').toUpperCase();
+  };
+
+  const avatarUrl = () => {
+    const meta = user?.user_metadata as Record<string, unknown> | undefined;
+    return (typeof meta?.avatar_url === 'string' && meta.avatar_url) ||
+      (typeof meta?.picture === 'string' && meta.picture) || null;
+  };
+
+  const handleSignOut = () => {
+    setProfileOpen(false);
+    setConfirmOpen(true);
+  };
+
+  const confirmSignOut = () => {
+    setConfirmOpen(false);
+    setSigningOut(true);
+    void supabase.auth.signOut().catch(() => null);
+    setTimeout(() => {
+      setSigningOut(false);
+      navigate('/');
+    }, 1500);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const renderGroups = (onNavigate?: () => void) => {
+    let section: string | undefined;
+    const nodes: React.ReactNode[] = [];
+    for (const item of officerNav.items) {
+      if (item.section && item.section !== section) {
+        section = item.section;
+        nodes.push(
+          <div key={`section-${section}`} className="mt-5 mb-1.5 px-3">
+            <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">{section}</p>
+          </div>,
+        );
+      }
+      nodes.push(<SidebarLink key={item.label} item={item} pathname={pathname} unreadCounts={unreadCounts} onNavigate={onNavigate} />);
+    }
+    return nodes;
+  };
+
+  return (
+    <div className="min-h-screen bg-background text-on-surface font-body-md portal-dark">
+      {/* Side Navigation */}
+      <aside className="h-screen w-72 fixed left-0 top-0 bg-white text-on-surface-variant flex flex-col border-r border-outline-variant/30 z-50 hidden lg:flex">
+        <div className="p-6 pb-5 border-b border-outline-variant/30">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
+              <img src="/image/culiat-logo.png" alt="Barangay Culiat Logo" className="w-full h-full object-contain" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-on-surface leading-tight tracking-tight">{officerNav.brand}</h1>
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold mt-0.5">{officerNav.brandSub}</p>
+            </div>
+          </div>
+        </div>
+
+        <nav className="flex-1 flex flex-col overflow-y-auto scroll-hide px-3 pt-3 pb-8">{renderGroups()}</nav>
+
+        <div className="mt-auto p-3 border-t border-outline-variant/30">
+          <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-low border border-outline-variant/30">
+            <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs font-bold shrink-0 overflow-hidden">
+              {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : initials()}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-on-surface leading-tight truncate">{displayName()}</p>
+              <p className="text-[9px] text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span>System Online
+              </p>
+            </div>
+            <button type="button" onClick={handleSignOut} className="text-on-surface-variant hover:text-on-surface transition-colors" aria-label="Sign out">
+              <span className="material-symbols-outlined" style={{ fontSize: 18 }}>logout</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <div className="ml-0 lg:ml-72 flex-1 w-auto min-w-auto">
+        <header className="h-14 sm:h-16 bg-white/90 backdrop-blur border-b border-outline-variant/30 sticky top-0 z-40 px-4 lg:px-8 flex justify-between items-center w-full">
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              type="button"
+              onClick={() => setDrawerOpen(true)}
+              className="lg:hidden p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors"
+              aria-label="Open menu"
+            >
+              <span className="material-symbols-outlined text-sm">menu</span>
+            </button>
+            <div className="min-w-0">
+              <h2 className="text-sm sm:text-lg font-bold text-on-surface leading-tight truncate">{pageTitle}</h2>
+              <p className="text-[8px] sm:text-[9px] text-on-surface-variant uppercase tracking-widest font-bold">{officerNav.brandSub}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-5">
+            <div className="relative hidden md:block">
+              <span
+                className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant"
+                style={{ fontSize: 18 }}
+              >
+                search
+              </span>
+              <input
+                className="pl-9 pr-4 py-2 bg-white border border-outline-variant/30 rounded-lg focus:ring-1 focus:ring-cc-accent w-72 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none"
+                placeholder={officerNav.searchPlaceholder}
+                type="text"
+              />
+            </div>
+            <div className="flex items-center gap-3 border-l border-outline-variant/30 pl-5">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="flex items-center justify-center p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors"
+                title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+                aria-label="Toggle color theme"
+              >
+                <span className="material-symbols-outlined text-sm">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
+              </button>
+              <span className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-green/10 text-success-green border border-cc-emerald/20 text-xs font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span> LIVE
+              </span>
+              <button type="button" className="hidden sm:inline-flex p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full relative transition-colors">
+                <span className="material-symbols-outlined">notifications</span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full border-2 border-cc-header"></span>
+              </button>
+              <button type="button" className="hidden sm:inline-flex p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors">
+                <span className="material-symbols-outlined">help_outline</span>
+              </button>
+              <div className="relative" ref={profileRef}>
+                <button
+                  type="button"
+                  onClick={() => setProfileOpen((v) => !v)}
+                  className="w-7 h-7 rounded-full bg-secondary/15 ring-1 ring-cc-border-strong flex items-center justify-center hover:ring-cc-accent transition-colors overflow-hidden"
+                  aria-label="Profile menu"
+                >
+                  {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-secondary">{initials()}</span>}
+                </button>
+                {profileOpen && (
+                  <div className="absolute right-0 mt-2 w-60 bg-white border border-outline-variant/30 rounded-lg shadow-sm overflow-hidden z-50">
+                    <div className="px-4 py-3 border-b border-outline-variant/30">
+                      <p className="text-sm font-bold text-on-surface truncate">{displayName()}</p>
+                      <p className="text-[10px] text-on-surface-variant uppercase tracking-wider truncate">{user?.email}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProfileOpen(false);
+                        navigate('/officer/account-settings');
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors text-left"
+                    >
+                      <span className="material-symbols-outlined text-lg text-secondary">manage_accounts</span> Account &amp; Settings
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProfileOpen(false);
+                        navigate('/');
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors text-left"
+                    >
+                      <span className="material-symbols-outlined text-lg text-secondary">home</span> Home
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSignOut}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-error hover:bg-surface-container-low transition-colors text-left border-t border-outline-variant/30"
+                    >
+                      <span className="material-symbols-outlined text-lg">logout</span> Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main className="relative flex-1 p-4 lg:p-8 min-h-[calc(100vh-4rem)] bg-surface-bg">
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(1100px 480px at 85% -10%, rgba(59,130,246,0.10), transparent 60%), radial-gradient(900px 420px at -10% 0%, rgba(49,107,243,0.07), transparent 55%)',
+            }}
+          ></div>
+          <div className="relative mx-auto w-full max-w-[1440px]">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              {active?.badge && (
+                <span className="w-fit px-3 py-1 rounded-full bg-secondary/10 text-secondary font-label-md text-label-md border border-secondary/20">
+                  {active.badge}
+                </span>
+              )}
+            </div>
+            <div>
+              <Outlet />
+            </div>
+          </div>
+        </main>
+      </div>
+
+      {/* Mobile Drawer */}
+      <div className={`fixed inset-0 z-[800] transition-all duration-300 lg:hidden ${drawerOpen ? '' : 'invisible pointer-events-none'}`}>
+        <div
+          className={`absolute inset-0 bg-white/80 backdrop-blur-sm transition-opacity duration-300 ${drawerOpen ? 'opacity-100' : 'opacity-0'}`}
+          onClick={() => setDrawerOpen(false)}
+        ></div>
+        <div
+          className={`absolute left-0 top-0 h-full w-[280px] bg-white text-on-surface-variant flex flex-col transition-transform duration-300 ease-in-out ${
+            drawerOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
+          <div className="p-5 pb-4 border-b border-outline-variant/30">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
+                  <img src="/image/culiat-logo.png" alt="Barangay Culiat Logo" className="w-full h-full object-contain" />
+                </div>
+                <div>
+                  <h1 className="text-base font-bold text-on-surface leading-tight tracking-tight">{officerNav.brand}</h1>
+                  <p className="text-[9px] text-on-surface-variant uppercase tracking-widest font-bold mt-0.5">{officerNav.brandSub}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setDrawerOpen(false)}
+                className="p-2 text-on-surface-variant hover:text-on-surface rounded-full transition-transform hover:rotate-90"
+                aria-label="Close menu"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+          </div>
+          <nav className="flex-1 min-h-0 flex flex-col overflow-y-auto scroll-hide px-3 pt-3 pb-6">{renderGroups(() => setDrawerOpen(false))}</nav>
+          <div className="mt-auto p-4 border-t border-outline-variant/30">
+            <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-low border border-outline-variant/30">
+              <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs font-bold shrink-0 overflow-hidden">
+                {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : initials()}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-on-surface leading-tight truncate">{displayName()}</p>
+                <p className="text-[10px] text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span>System Online
+                </p>
+              </div>
+              <button type="button" onClick={handleSignOut} className="text-on-surface-variant hover:text-on-surface transition-colors" aria-label="Sign out">
+                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>logout</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Sign out of your account?"
+        message="You will need to sign in again to access the portal and continue where you left off."
+        confirmLabel="Sign out"
+        onConfirm={confirmSignOut}
+        onCancel={() => setConfirmOpen(false)}
+      />
+      {signingOut && <LogoutScreen />}
+    </div>
+  );
+}
+
+function SidebarLink({ item, pathname, unreadCounts, onNavigate }: { item: NavItem; pathname: string; unreadCounts: UnreadCounts; onNavigate?: () => void }) {
+  const isActive = pathname === item.to || item.children?.some((c) => c.to === pathname);
+  const unread = item.unreadKey === 'admin' ? unreadCounts.adminUnread : item.unreadKey === 'user' ? unreadCounts.userUnread : 0;
+  return (
+    <NavLink
+      to={item.to ?? '#!'}
+      onClick={onNavigate}
+      className={`flex items-center gap-3 px-3 py-2 rounded-lg relative transition-all ${
+        isActive
+          ? 'bg-secondary/10 text-on-surface border border-outline-variant'
+          : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface'
+      }`}
+    >
+      {isActive && <span className="w-1 h-7 rounded-full bg-secondary absolute -left-0.5"></span>}
+      <span className={`material-symbols-outlined shrink-0 flex items-center justify-center ${isActive ? 'text-secondary' : 'text-on-surface-variant'}`} style={{ fontSize: 20 }}>
+        {item.icon ?? 'radio_button_unchecked'}
+      </span>
+      <span className="flex flex-col min-w-0">
+        <span className={`text-sm truncate ${isActive ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>
+        {item.subLabel && <span className="text-[9px] text-on-surface-variant truncate">{item.subLabel}</span>}
+      </span>
+      {unread > 0 && !isActive && <UnreadBadge count={unread} className="bg-error" />}
+    </NavLink>
+  );
 }

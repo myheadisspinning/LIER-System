@@ -53,7 +53,7 @@ export default function SuperadminAdminManagement() {
   const [tempPw, setTempPw] = useState<{ name: string; pw: string } | null>(null);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useScrollLock(formOpen || tempPw != null);
 
@@ -113,17 +113,29 @@ export default function SuperadminAdminManagement() {
 
   const createUser = async () => {
     if (!form.email.trim() || !form.password || !form.fullname.trim()) return;
+    const email = form.email.trim();
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!EMAIL_RE.test(email)) {
+      setToast({ type: 'error', message: 'Please enter a valid email address.' });
+      return;
+    }
+    if (form.password.length < 8) {
+      setToast({ type: 'error', message: 'Password must be at least 8 characters.' });
+      return;
+    }
     setSaving(true);
     try {
+      const { data: emailExists, error: dupError } = await supabase.rpc('is_email_registered', { p_email: email });
+      if (!dupError && emailExists) throw new Error('This email is already used with an existing account.');
       const res = await supabase.rpc('admin_create_user', {
-        p_email: form.email.trim(),
+        p_email: email,
         p_password: form.password,
         p_fullname: form.fullname.trim(),
         p_role: form.role,
       });
       if (res.error) throw new Error(res.error.message);
-      await logAudit('Create account', `Created ${form.role} account for ${form.email.trim()}.`);
-      setToast({ type: 'success', message: 'Account created successfully.' });
+      await logAudit('Create account', `Created ${form.role} account for ${email}.`);
+      setToast({ type: 'success', message: 'Account created. The user must confirm their email before first sign-in.' });
       setFormOpen(false);
       setForm({ email: '', password: '', fullname: '', role: 'officer' });
       const rows = await fetchUsers();

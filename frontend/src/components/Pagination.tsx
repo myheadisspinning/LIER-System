@@ -23,50 +23,49 @@ export default function Pagination({
   endIndex,
   hidePerPage = false,
 }: PaginationProps) {
+  const safeTotalPages = Math.max(1, totalPages);
+  const safeCurrentPage = Math.min(Math.max(1, currentPage), safeTotalPages);
+
   const pageNumbers = useMemo(() => {
     const pages: (number | string)[] = [];
     const maxVisible = 5;
 
-    if (totalPages <= maxVisible) {
-      for (let i = 1; i <= totalPages; i++) {
+    if (safeTotalPages <= maxVisible) {
+      for (let i = 1; i <= safeTotalPages; i++) {
         pages.push(i);
       }
     } else {
       pages.push(1);
 
-      if (currentPage > 3) {
+      if (safeCurrentPage > 3) {
         pages.push('...');
       }
 
-      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+      for (let i = Math.max(2, safeCurrentPage - 1); i <= Math.min(safeTotalPages - 1, safeCurrentPage + 1); i++) {
         if (!pages.includes(i)) {
           pages.push(i);
         }
       }
 
-      if (currentPage < totalPages - 2) {
+      if (safeCurrentPage < safeTotalPages - 2) {
         pages.push('...');
       }
 
-      if (!pages.includes(totalPages)) {
-        pages.push(totalPages);
+      if (!pages.includes(safeTotalPages)) {
+        pages.push(safeTotalPages);
       }
     }
 
     return pages;
-  }, [currentPage, totalPages]);
-
-  if (totalItems <= itemsPerPage) {
-    return null;
-  }
+  }, [safeCurrentPage, safeTotalPages]);
 
   return (
-    <div className="px-4 py-3 border-t border-border-subtle flex flex-col gap-3 md:flex-row md:items-center md:justify-between bg-surface-container-lowest">
+    <div className="px-3 py-2 border-t border-border-subtle flex items-center justify-between gap-2 bg-surface-container-lowest">
       {!hidePerPage && (
-        <div className="flex items-center gap-2">
-          <span className="text-body-sm text-on-surface-variant">Items per page:</span>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="text-body-sm text-on-surface-variant whitespace-nowrap">Items</span>
           <select
-            className="bg-surface-container-low border border-border-subtle rounded px-2 py-1 text-body-sm text-on-surface focus:ring-1 focus:ring-secondary outline-none cursor-pointer"
+            className="bg-surface-container-low border border-border-subtle rounded px-1.5 py-0.5 text-body-sm text-on-surface focus:ring-1 focus:ring-secondary outline-none cursor-pointer"
             value={itemsPerPage}
             onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
           >
@@ -78,31 +77,44 @@ export default function Pagination({
         </div>
       )}
 
-      <div className="flex items-center justify-center gap-2 flex-wrap">
-        <span className="text-body-sm text-on-surface-variant">
-          Showing {startIndex + 1}-{Math.min(endIndex, totalItems)} of {totalItems}
+      <div className="flex items-center justify-end gap-1 min-w-0">
+        <span
+          className="text-body-sm text-on-surface-variant whitespace-nowrap shrink-0"
+          title={`Showing ${startIndex + 1}-${Math.min(endIndex, totalItems)} of ${totalItems}`}
+        >
+          Page {safeCurrentPage} of {safeTotalPages}
         </span>
+
         <button
           type="button"
-          onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-          disabled={currentPage === 1}
-          className="px-3 py-1 border border-border-subtle rounded text-body-sm text-on-surface hover:bg-surface-variant transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label="Previous page"
+          onClick={() => onPageChange(Math.max(1, safeCurrentPage - 1))}
+          disabled={safeCurrentPage === 1}
+          className="shrink-0 w-7 h-7 flex items-center justify-center border border-border-subtle rounded text-on-surface hover:bg-surface-variant transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          Previous
+          <span className="material-symbols-outlined text-[16px]">chevron_left</span>
         </button>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5">
           {pageNumbers.map((page, idx) => {
             if (page === '...') {
-              return <span key={`ellipsis-${idx}`} className="px-2 text-on-surface-variant">...</span>;
+              return (
+                <span
+                  key={`ellipsis-${idx}`}
+                  className="w-7 flex items-center justify-center text-body-sm text-on-surface-variant"
+                >
+                  ...
+                </span>
+              );
             }
             return (
               <button
                 key={page}
                 type="button"
+                aria-label={`Go to page ${page}`}
                 onClick={() => onPageChange(page as number)}
-                className={`px-3 py-1 rounded text-body-sm transition-colors ${
-                  currentPage === page
+                className={`w-7 h-7 flex items-center justify-center rounded text-body-sm transition-colors ${
+                  safeCurrentPage === page
                     ? 'bg-secondary text-on-secondary'
                     : 'text-on-surface hover:bg-surface-variant'
                 }`}
@@ -115,11 +127,12 @@ export default function Pagination({
 
         <button
           type="button"
-          onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-          disabled={currentPage === totalPages}
-          className="px-3 py-1 border border-border-subtle rounded text-body-sm text-on-surface hover:bg-surface-variant transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label="Next page"
+          onClick={() => onPageChange(Math.min(safeTotalPages, safeCurrentPage + 1))}
+          disabled={safeCurrentPage === safeTotalPages}
+          className="shrink-0 w-7 h-7 flex items-center justify-center border border-border-subtle rounded text-on-surface hover:bg-surface-variant transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          Next
+          <span className="material-symbols-outlined text-[16px]">chevron_right</span>
         </button>
       </div>
     </div>

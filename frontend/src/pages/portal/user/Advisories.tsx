@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '../../../supabaseClient';
 import { useScrollLock } from '../../../lib/useScrollLock';
+import Pagination from '../../../components/Pagination';
 
 type Category = 'All Advisories' | 'Emergency & Crime' | 'Weather & Floods' | 'Barangay Services' | 'Public Safety';
 
@@ -19,10 +20,18 @@ interface Advisory {
 }
 
 const catFor = (type: string): Category => {
- if (type === 'Emergency' || type === 'Alert') return 'Emergency & Crime';
- if (type === 'Weather') return 'Weather & Floods';
- if (type === 'Advisory') return 'Public Safety';
- return 'Barangay Services';
+  if (type === 'Emergency' || type === 'Alert') return 'Emergency & Crime';
+  if (type === 'Weather') return 'Weather & Floods';
+  if (type === 'Advisory') return 'Public Safety';
+  return 'Barangay Services';
+};
+
+const shortLabel: Record<Category, string> = {
+  'All Advisories': 'All',
+  'Emergency & Crime': 'Emergency',
+  'Weather & Floods': 'Weather',
+  'Barangay Services': 'Services',
+  'Public Safety': 'Safety',
 };
 
 const toneFor = (type: string): Advisory['tone'] => {
@@ -61,30 +70,49 @@ export default function Advisories() {
  const [category, setCategory] = useState<Category>('All Advisories');
  const [query, setQuery] = useState('');
  const [selectedAdvisory, setSelectedAdvisory] = useState<Advisory | null>(null);
+ const [currentPage, setCurrentPage] = useState(1);
+ const [itemsPerPage, setItemsPerPage] = useState(10);
 
  useScrollLock(selectedAdvisory != null);
 
- useEffect(() => {
- void (async () => {
- const res = await supabase
- .from('broadcasts')
- .select('id, title, message, type, audience, sent_at, image_url')
- .eq('status', 'Sent')
- .order('sent_at', { ascending: false })
- .limit(50);
- const rows = (res.data ?? []).map((b) => ({
- id: b.id,
- category: catFor(b.type),
- tone: toneFor(b.type),
- time: timeAgo(b.sent_at ?? b.id),
- title: b.title,
- body: b.message,
- type: b.type,
- image_url: b.image_url ?? null,
- })) as Advisory[];
- setAdvisories(rows);
- setLoading(false);
- })();
+useEffect(() => {
+  let cancelled = false;
+  let channel: ReturnType<typeof supabase.channel> | null = null;
+
+  const refresh = async () => {
+  const res = await supabase
+  .from('broadcasts')
+  .select('id, title, message, type, audience, sent_at, image_url')
+  .eq('status', 'Sent')
+  .order('sent_at', { ascending: false })
+  .limit(50);
+  const rows = (res.data ?? []).map((b) => ({
+  id: b.id,
+  category: catFor(b.type),
+  tone: toneFor(b.type),
+  time: timeAgo(b.sent_at ?? b.id),
+  title: b.title,
+  body: b.message,
+  type: b.type,
+  image_url: b.image_url ?? null,
+  })) as Advisory[];
+  if (!cancelled) setAdvisories(rows);
+  };
+
+  void (async () => {
+  await refresh();
+  if (cancelled) return;
+  setLoading(false);
+  channel = supabase
+  .channel('user-advisories')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'broadcasts' }, () => void refresh())
+  .subscribe();
+  })();
+
+  return () => {
+  cancelled = true;
+  if (channel) void supabase.removeChannel(channel);
+  };
  }, []);
 
  const visible = advisories.filter((a) => {
@@ -96,22 +124,35 @@ export default function Advisories() {
  return matchesCategory && matchesQuery;
  });
 
+ // Reset to page 1 when filters change
+ useEffect(() => {
+  setCurrentPage(1);
+ }, [category, query]);
+
+ // Pagination calculations
+ const totalPages = Math.max(1, Math.ceil(visible.length / itemsPerPage));
+ const safePage = Math.min(currentPage, totalPages);
+ const startIndex = (safePage - 1) * itemsPerPage;
+ const endIndex = startIndex + itemsPerPage;
+ const paginatedVisible = visible.slice(startIndex, endIndex);
+
  return (
  <div className="w-full">
  <div className="bg-surface-container-lowest border border-border-subtle rounded p-3 flex flex-col md:flex-row justify-between items-center mb-4 sm:mb-6 gap-3 sm:gap-4">
- <div className="flex flex-wrap gap-2">
+<div className="flex flex-wrap gap-1.5 bg-surface-container rounded-lg p-1 w-full md:w-auto">
   {categories.map((c) => (
   <button
   key={c}
   type="button"
   onClick={() => setCategory(c)}
-  className={`px-4 py-1.5 rounded font-label-md text-label-md transition-colors ${
-category === c
-   ? 'bg-secondary text-on-secondary hover:bg-secondary/90'
-   : 'bg-surface-container-low text-on-surface-variant border border-border-subtle hover:bg-surface-variant'
+  className={`flex-1 min-w-[104px] whitespace-nowrap px-2 sm:px-3 py-1.5 rounded font-label-md text-label-md transition-colors ${
+   category === c
+    ? 'bg-surface-container-lowest shadow-sm text-secondary'
+    : 'text-on-surface-variant hover:text-on-surface'
   }`}
   >
-  {c}
+  <span className="sm:hidden">{shortLabel[c]}</span>
+  <span className="hidden sm:inline">{c}</span>
   </button>
   ))}
  </div>
@@ -136,8 +177,9 @@ category === c
   <p className="font-body-md text-body-md text-on-surface-variant">No advisories match your search.</p>
  </div>
  ) : (
+ <>
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-  {visible.map((a) => {
+  {paginatedVisible.map((a) => {
   const needsTruncate = a.body.length > TRUNCATE_LEN;
   return (
   <div
@@ -173,6 +215,20 @@ category === c
   );
   })}
  </div>
+ <Pagination
+   currentPage={safePage}
+   totalPages={totalPages}
+   itemsPerPage={itemsPerPage}
+   onPageChange={setCurrentPage}
+   onItemsPerPageChange={(items) => {
+   setItemsPerPage(items);
+   setCurrentPage(1);
+   }}
+   totalItems={visible.length}
+   startIndex={startIndex}
+   endIndex={endIndex}
+ />
+ </>
  )}
 
  {selectedAdvisory && createPortal(

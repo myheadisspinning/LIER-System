@@ -431,7 +431,7 @@ begin
   if p_scope = 'staff' and not public.is_superadmin() then
     raise exception 'Forbidden';
   end if;
-  if p_scope not in ('all', 'staff', 'residents') then
+  if p_scope not in ('all', 'staff', 'residents', 'officers') then
     raise exception 'Invalid scope';
   end if;
   return query
@@ -463,6 +463,7 @@ begin
         p_scope = 'all'
         or (p_scope = 'staff' and coalesce(p.role, 'user') in ('admin', 'officer', 'superadmin'))
         or (p_scope = 'residents' and coalesce(p.role, 'user') = 'user')
+        or (p_scope = 'officers' and coalesce(p.role, 'user') = 'officer')
       )
     order by u.created_at desc;
 end;
@@ -492,6 +493,9 @@ begin
   if p_role = 'superadmin' and not public.is_superadmin() then
     raise exception 'Only a superadmin may create a superadmin account.';
   end if;
+  if p_email !~ '^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$' then
+    raise exception 'Invalid email format';
+  end if;
   if exists (select 1 from auth.users where email = lower(p_email)) then
     raise exception 'An account with that email already exists.';
   end if;
@@ -510,14 +514,14 @@ begin
     'authenticated', 'authenticated',
     lower(p_email),
     extensions.crypt(p_password, extensions.gen_salt('bf', 10)),
-    now(),
+    null,
     '{"provider":"email","providers":["email"]}',
     jsonb_build_object('role', p_role, 'fullname', p_fullname),
     now(), now(), '', '', '', ''
   );
 
-  insert into public.public_users (id, fullname, role)
-  values (v_id, p_fullname, p_role)
+  insert into public.public_users (id, fullname, role, email_confirmed_at)
+  values (v_id, p_fullname, p_role, null)
   on conflict (id) do nothing;
 
   select coalesce((select fullname from public.public_users where id = auth.uid()), 'Admin')
@@ -527,7 +531,7 @@ begin
   values (
     v_actor,
     'Create account',
-    format('Created %s account for %s', p_role, lower(p_email)),
+    format('Created %s account for %s (awaiting email confirmation)', p_role, lower(p_email)),
     jsonb_build_object('user_id', v_id, 'role', p_role)
   );
 

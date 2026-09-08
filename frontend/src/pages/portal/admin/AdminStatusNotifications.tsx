@@ -45,7 +45,7 @@ export default function AdminStatusNotifications() {
   const [confirmDelete, setConfirmDelete] = useState<Broadcast | null>(null);
   const [viewingBroadcast, setViewingBroadcast] = useState<Broadcast | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useScrollLock(composerOpen || confirmDelete != null || viewingBroadcast != null);
 
@@ -55,10 +55,30 @@ export default function AdminStatusNotifications() {
   };
 
   useEffect(() => {
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
+
+    const refresh = async () => {
+      const rows = await fetchAll();
+      if (cancelled) return;
+      setBroadcasts(rows);
+      return;
+    };
+
     void (async () => {
-      setBroadcasts(await fetchAll());
+      await refresh();
+      if (cancelled) return;
       setLoading(false);
+      channel = supabase
+        .channel('admin-status-notifications')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'broadcasts' }, () => void refresh())
+        .subscribe();
     })();
+
+    return () => {
+      cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
+    };
   }, []);
 
   const stats = useMemo(() => {

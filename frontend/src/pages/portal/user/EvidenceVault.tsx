@@ -4,6 +4,7 @@ import { supabase } from '../../../supabaseClient';
 import { uploadEvidence } from '../../../lib/ai';
 import Toast from '../../../components/Toast';
 import { useScrollLock } from '../../../lib/useScrollLock';
+import Pagination from '../../../components/Pagination';
 
 type Filter = 'All Files' | 'CCTV / Video' | 'Photos' | 'Audio / Voice';
 
@@ -68,58 +69,80 @@ export default function EvidenceVault() {
  const [loading, setLoading] = useState(true);
  const [uploading, setUploading] = useState(false);
  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+ const [currentPage, setCurrentPage] = useState(1);
+ const [itemsPerPage, setItemsPerPage] = useState(10);
 
- useEffect(() => {
- let cancelled = false;
- (async () => {
- try {
- const { data: { session } } = await supabase.auth.getSession();
- if (!session) {
-  if (!cancelled) setLoading(false);
-  return;
- }
+useEffect(() => {
+  let cancelled = false;
+  let channel: ReturnType<typeof supabase.channel> | null = null;
 
- const { data: reports, error } = await supabase
-  .from('incident_reports')
-  .select('id, report_no, title, status, evidence, created_at')
-  .eq('user_id', session.user.id)
-  .order('created_at', { ascending: false });
-
- if (error) throw error;
-
- const evidenceItems: VaultItem[] = [];
- (reports || []).forEach((report: ReportEvidence) => {
+  const buildItems = (reports: ReportEvidence[]): VaultItem[] => {
+  const evidenceItems: VaultItem[] = [];
+  reports.forEach((report) => {
   if (report.evidence && report.evidence.length > 0) {
-  report.evidence.forEach((file) => {
-  evidenceItems.push({
-  name: file.name,
-  size: formatSize(file.size),
-  uploaded: `Uploaded: ${formatDate(report.created_at)}`,
-  kind: getKind(file.type),
-  linked: true,
-  linkedCase: report.report_no,
-  linkedReportTitle: report.title,
-  linkedReportStatus: report.status,
-  thumb: file.type.startsWith('image/') ? file.url : '',
-  url: file.url,
-  reportId: report.id,
-  fileSize: file.size,
-  });
-  });
+   report.evidence.forEach((file) => {
+   evidenceItems.push({
+   name: file.name,
+   size: formatSize(file.size),
+   uploaded: `Uploaded: ${formatDate(report.created_at)}`,
+   kind: getKind(file.type),
+   linked: true,
+   linkedCase: report.report_no,
+   linkedReportTitle: report.title,
+   linkedReportStatus: report.status,
+   thumb: file.type.startsWith('image/') ? file.url : '',
+   url: file.url,
+   reportId: report.id,
+   fileSize: file.size,
+   });
+   });
   }
- });
+  });
+  return evidenceItems;
+  };
 
- if (!cancelled) setItems(evidenceItems);
- } catch (error) {
- console.error('Error fetching evidence:', error);
- if (!cancelled) setToast({ type: 'error', message: 'Failed to load evidence files' });
- } finally {
- if (!cancelled) setLoading(false);
- }
- })();
- return () => {
- cancelled = true;
- };
+  const refresh = async (userId: string) => {
+  try {
+  const { data: reports, error } = await supabase
+   .from('incident_reports')
+   .select('id, report_no, title, status, evidence, created_at')
+   .eq('user_id', userId)
+   .order('created_at', { ascending: false });
+  if (error) throw error;
+  if (!cancelled) setItems(buildItems(reports as ReportEvidence[]));
+  } catch (error) {
+  console.error('Error fetching evidence:', error);
+  if (!cancelled) setToast({ type: 'error', message: 'Failed to load evidence files' });
+  }
+  };
+
+  (async () => {
+  let userId: string | null = null;
+  try {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) {
+   if (!cancelled) setLoading(false);
+   return;
+  }
+  userId = session.user.id;
+  await refresh(userId);
+  } catch (error) {
+  console.error('Error fetching evidence:', error);
+  if (!cancelled) setToast({ type: 'error', message: 'Failed to load evidence files' });
+  } finally {
+  if (!cancelled) setLoading(false);
+  }
+  if (userId) {
+  channel = supabase
+   .channel(`evidence-vault-${userId}`)
+   .on('postgres_changes', { event: '*', schema: 'public', table: 'incident_reports', filter: `user_id=eq.${userId}` }, () => void refresh(userId))
+   .subscribe();
+  }
+  })();
+  return () => {
+  cancelled = true;
+  if (channel) void supabase.removeChannel(channel);
+  };
  }, []);
 
  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,6 +214,18 @@ export default function EvidenceVault() {
 
  return matchesFilter && matchesSearch;
  });
+
+ // Reset to page 1 when filters change
+ useEffect(() => {
+  setCurrentPage(1);
+ }, [filter, search]);
+
+ // Pagination calculations
+ const totalPages = Math.max(1, Math.ceil(visible.length / itemsPerPage));
+ const safePage = Math.min(currentPage, totalPages);
+ const startIndex = (safePage - 1) * itemsPerPage;
+ const endIndex = startIndex + itemsPerPage;
+ const paginatedVisible = visible.slice(startIndex, endIndex);
 
  return (
  <div className="w-full">
@@ -274,8 +309,9 @@ export default function EvidenceVault() {
   <p className="font-body-sm text-body-sm text-on-surface-variant">Upload files to get started</p>
  </div>
  ) : (
+ <>
  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-  {visible.map((item) => (
+  {paginatedVisible.map((item) => (
   <div
   key={item.name}
   className="bg-surface-container-lowest border border-border-subtle p-4 sm:p-6 rounded-2xl flex flex-col relative group hover:-translate-y-0.5 transition-all duration-200"
@@ -349,6 +385,20 @@ export default function EvidenceVault() {
   </div>
   ))}
  </div>
+ <Pagination
+   currentPage={safePage}
+   totalPages={totalPages}
+   itemsPerPage={itemsPerPage}
+   onPageChange={setCurrentPage}
+   onItemsPerPageChange={(items) => {
+   setItemsPerPage(items);
+   setCurrentPage(1);
+   }}
+   totalItems={visible.length}
+   startIndex={startIndex}
+   endIndex={endIndex}
+ />
+ </>
  )}
 
  {inspect && createPortal(

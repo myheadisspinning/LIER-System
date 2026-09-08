@@ -94,7 +94,7 @@ export default function AdminContactsInbox() {
   const [onlineIds, setOnlineIds] = useState<Set<string>>(new Set());
   const [detailReportId, setDetailReportId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const lastByInquiry = useMemo(() => {
     const map: Record<string, string> = {};

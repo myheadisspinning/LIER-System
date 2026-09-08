@@ -500,7 +500,7 @@ const statusBadge = (s: string) =>
    <div className="p-4 border-t border-border-subtle bg-surface-container-lowest">
     <div className="flex items-end gap-2 bg-surface-container rounded-full border border-border-subtle px-3 py-2 focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary transition-all ">
     <textarea
-     className="w-full bg-transparent border-none resize-none py-1 font-body-sm text-body-sm focus:ring-0 text-on-surface max-h-32 overflow-y-auto placeholder:text-outline"
+     className="w-full bg-transparent border-none outline-none resize-none py-1 font-body-sm text-body-sm focus:ring-0 focus:outline-none text-on-surface max-h-32 overflow-y-auto placeholder:text-outline"
      placeholder="Type a message..."
      rows={1}
      style={{ minHeight: 28 }}

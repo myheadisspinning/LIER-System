@@ -1,3 +1,12 @@
+-- session-maintenance.sql
+-- Hardens admin_suspend_user so a suspension immediately ends all of
+-- the user's active sessions (auto logout) and marks them offline,
+-- in addition to blocking future sign-ins.
+-- Idempotent: uses create or replace, safe to re-run.
+--
+-- Run statement-by-statement (Supabase SQL Editor / CLI db query cannot
+-- run multi-statement files).
+
 create or replace function public.admin_suspend_user(
   p_user_id uuid,
   p_suspended boolean
@@ -45,4 +54,7 @@ begin
     jsonb_build_object('user_id', p_user_id, 'suspended', p_suspended)
   );
 end;
-$$
+$$;
+
+revoke all on function public.admin_suspend_user(uuid, boolean) from public;
+grant execute on function public.admin_suspend_user(uuid, boolean) to authenticated;

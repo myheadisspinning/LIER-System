@@ -35,16 +35,20 @@ export default function AdminIncidentArchive() {
   const [statusFilter, setStatusFilter] = useState('All');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
-    void (async () => {
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
+
+    const refresh = async () => {
       const res = await supabase
         .from('incident_reports')
         .select('id, report_no, title, category, priority, status, address, created_at, resolved_at, anonymous, dispatch_unit:dispatch_unit_id(name), user_id')
         .in('status', ARCHIVED_STATUSES)
         .order('resolved_at', { ascending: false, nullsFirst: false })
         .limit(2000);
+      if (cancelled) return;
       if (res.error) setError(res.error.message);
       const mapped = (res.data ?? []).map((r) => {
         const embed = (r as unknown as { dispatch_unit: { name: string } | { name: string }[] | null }).dispatch_unit;
@@ -68,8 +72,23 @@ export default function AdminIncidentArchive() {
 
       setRows(mapped);
       setReporterMap(rMap);
+      return;
+    };
+
+    void (async () => {
+      await refresh();
+      if (cancelled) return;
       setLoading(false);
+      channel = supabase
+        .channel('admin-incident-archive')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'incident_reports' }, () => void refresh())
+        .subscribe();
     })();
+
+    return () => {
+      cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
+    };
   }, []);
 
   const filtered = useMemo(() => {

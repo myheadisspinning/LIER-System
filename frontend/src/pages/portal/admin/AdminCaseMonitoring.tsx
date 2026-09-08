@@ -7,6 +7,7 @@ import IncidentDetailModal from '../../../components/IncidentDetailModal';
 import { fmtDate, fmtDurationMs, PRIORITY_BADGE, STATUS_BADGE } from '../../../lib/admin';
 import { BARANGAY_HALL_CENTER } from '../../../lib/geo';
 import { PRIORITY_COLORS, pinIconFor, closedPinIcon } from '../../../lib/mapPins';
+import Pagination from '../../../components/Pagination';
 
 type Row = {
   id: string;
@@ -72,14 +73,20 @@ export default function AdminCaseMonitoring() {
   const [tile, setTile] = useState<'street' | 'satellite'>('street');
   const [loadedAt, setLoadedAt] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
-    void (async () => {
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
+
+    const refresh = async () => {
       const res = await supabase
         .from('incident_reports')
         .select('id, report_no, title, category, priority, status, address, lat, lng, created_at, assigned_at, resolved_at, anonymous, dispatch_unit:dispatch_unit_id(name), user_id')
         .order('created_at', { ascending: false })
         .limit(2000);
+      if (cancelled) return;
       if (res.error) setError(res.error.message);
       const mapped = (res.data ?? []).map((r) => {
         const embed = (r as unknown as { dispatch_unit: { name: string } | { name: string }[] | null }).dispatch_unit;
@@ -104,11 +111,35 @@ export default function AdminCaseMonitoring() {
       setRows(mapped);
       setReporterMap(rMap);
       setLoadedAt(Date.now());
+      return;
+    };
+
+    void (async () => {
+      await refresh();
+      if (cancelled) return;
       setLoading(false);
+      channel = supabase
+        .channel('admin-case-monitoring')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'incident_reports' }, () => void refresh())
+        .subscribe();
     })();
+
+    return () => {
+      cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
+    };
   }, []);
 
   const scoped = useMemo(() => (statusFilter === 'All' ? rows : rows.filter((r) => r.status === statusFilter)), [rows, statusFilter]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [statusFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(scoped.length / itemsPerPage));
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedScoped = scoped.slice(startIndex, endIndex);
 
   const stats = useMemo(() => {
     const active = rows.filter((r) => ACTIVE.includes(r.status));
@@ -482,7 +513,7 @@ export default function AdminCaseMonitoring() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-subtle">
-                {scoped.map((r) => (
+                {paginatedScoped.map((r) => (
                   <tr key={r.id} onClick={() => openCase(r.id)} className="hover:bg-slate-50 transition-colors cursor-pointer">
                     <td className="py-3 px-4 font-medium text-secondary">{r.report_no ?? '—'}</td>
                     <td className="py-3 px-4">
@@ -502,6 +533,19 @@ export default function AdminCaseMonitoring() {
             </table>
           )}
         </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={(n) => {
+            setItemsPerPage(n);
+            setCurrentPage(1);
+          }}
+          totalItems={scoped.length}
+          startIndex={startIndex}
+          endIndex={endIndex}
+        />
       </div>
       <IncidentDetailModal reportId={selectedId} onClose={() => setSelectedId(null)} isAdmin />
     </div>

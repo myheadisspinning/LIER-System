@@ -36,7 +36,7 @@ export default function SuperadminAiRuleManagement() {
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const fetchAll = async () => {
     const [ruleRes, cfgRes, auditRes] = await Promise.all([

@@ -202,7 +202,7 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
         </main>
       </div>
 
-      {fab && (
+{fab && !pathname.startsWith('/admin/tanod-roster') && (
         <button
           type="button"
           className="fixed bottom-8 right-8 w-14 h-14 bg-secondary text-on-secondary rounded-full shadow-sm-hover flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group border-4 border-cc-header"
@@ -232,18 +232,14 @@ function SubmenuItem({ item, pathname, unreadCounts }: { item: NavItem; pathname
   const [expanded, setExpanded] = useState(childActive);
   const unread = item.unreadKey === 'admin' ? unreadCounts.adminUnread : item.unreadKey === 'user' ? unreadCounts.userUnread : 0;
 
-  if (item.children && item.children.length > 0) {
+if (item.children && item.children.length > 0) {
     return (
       <div className="flex flex-col gap-1">
-        <button
-          type="button"
-          onClick={() => setExpanded((v) => !v)}
-          className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg relative transition-colors w-full text-left ${
-            childActive ? 'bg-secondary/10 text-on-surface border border-outline-variant' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface'
-          }`}
-        >
+        <div className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg relative transition-colors ${
+          childActive ? 'bg-secondary/10 text-on-surface border border-outline-variant' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface'
+        }`}>
           {childActive && <span className="w-1 h-7 rounded-full bg-secondary absolute -left-0.5"></span>}
-          <span className="flex items-center gap-3 min-w-0">
+          <NavLink to={item.to!} className="flex items-center gap-3 min-w-0 flex-1">
             <span className={`material-symbols-outlined text-[20px] shrink-0 ${childActive ? 'text-secondary' : 'text-on-surface-variant'}`}>
               {item.icon ?? 'radio_button_unchecked'}
             </span>
@@ -251,19 +247,26 @@ function SubmenuItem({ item, pathname, unreadCounts }: { item: NavItem; pathname
               <span className={`text-sm truncate ${childActive ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>
               {item.subLabel && <span className="text-[10px] text-on-surface-variant truncate">{item.subLabel}</span>}
             </span>
-          </span>
-          <span className={`material-symbols-outlined text-sm text-on-surface-variant transition-transform ${expanded ? 'rotate-180' : ''}`}>
-            expand_more
-          </span>
-        </button>
+          </NavLink>
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="shrink-0 p-1 rounded-md hover:bg-surface-container-low transition-colors"
+            aria-label={expanded ? 'Collapse submenu' : 'Expand submenu'}
+          >
+            <span className={`material-symbols-outlined text-sm text-on-surface-variant transition-transform ${expanded ? 'rotate-180' : ''}`}>
+              expand_more
+            </span>
+          </button>
+        </div>
         {expanded && (
           <div className="flex flex-col gap-1 pl-9">
             {item.children.map((child) => (
               <NavLink
                 key={child.to}
                 to={child.to}
-                className={`py-1.5 transition-colors w-full text-left text-xs font-medium ${
-                  pathname === child.to ? 'text-on-surface' : 'text-on-surface-variant hover:text-on-surface'
+                className={`py-1.5 px-2.5 rounded-md transition-colors w-full text-left text-xs font-medium ${
+                  pathname === child.to ? 'text-on-surface bg-secondary/10' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
                 }`}
               >
                 {child.label}

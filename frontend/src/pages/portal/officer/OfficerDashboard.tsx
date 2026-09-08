@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { getAdminProfile, deriveUnitStatus, fetchOpenUnitAssignments, fmtDate, fmtDurationMs, logAudit, PRIORITY_BADGE } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
+import Pagination from '../../../components/Pagination';
 
 type Incident = {
   id: string;
@@ -46,7 +47,9 @@ export default function OfficerDashboard() {
   const [officerName, setOfficerName] = useState('');
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
-  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const fetchUnit = async () => {
     const profile = await getAdminProfile();
@@ -67,17 +70,44 @@ export default function OfficerDashboard() {
     return (res.data ?? []) as Incident[];
   };
 
-  useEffect(() => {
-    void (async () => {
+useEffect(() => {
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
+
+    const refresh = async () => {
       const u = await fetchUnit();
+      if (cancelled) return;
       const [incidents, openMap] = await Promise.all([fetchIncidents(u?.id ?? null), fetchOpenUnitAssignments()]);
+      if (cancelled) return;
       setIncidents(incidents);
       setOpenAssignments(openMap);
+      return u;
+    };
+
+    void (async () => {
+      const u = await refresh();
+      if (cancelled) return;
       setLoading(false);
+      if (u) {
+        channel = supabase
+          .channel(`officer-dashboard-${u.id}`)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'incident_reports', filter: `dispatch_unit_id=eq.${u.id}` }, () => void refresh())
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'dispatch_units', filter: `id=eq.${u.id}` }, () => void refresh())
+          .subscribe();
+      }
     })();
+
+    return () => {
+      cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
+    };
   }, []);
 
-  const mine = useMemo(() => incidents.filter((i) => i.status !== 'Rejected'), [incidents]);
+const mine = useMemo(() => incidents.filter((i) => i.status !== 'Rejected'), [incidents]);
+  const totalPages = Math.max(1, Math.ceil(mine.length / itemsPerPage));
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedMine = mine.slice(startIndex, endIndex);
   const activeCases = useMemo(() => incidents.filter((i) => ACTIVE.includes(i.status)), [incidents]);
   const resolved = useMemo(() => incidents.filter((i) => i.status === 'Resolved'), [incidents]);
   const pending = useMemo(() => incidents.filter((i) => i.status === 'Assigned'), [incidents]);
@@ -114,12 +144,12 @@ export default function OfficerDashboard() {
     }
   };
 
-  return (
-    <div className="space-y-6">
+return (
+    <div className="w-full space-y-4 sm:space-y-6">
       <div className="flex justify-between items-end flex-wrap gap-4">
         <div>
-          <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface">Good day, {officerName.split(' ')[0] || 'Officer'}.</h2>
-          <p className="font-body-md text-body-md text-on-surface-variant">
+          <h2 className="text-xl sm:text-2xl font-bold text-on-surface tracking-tight">Good day, {officerName.split(' ')[0] || 'Officer'}.</h2>
+          <p className="text-sm text-on-surface-variant mt-1">
             {unit ? `Your unit · ${unit.name} (${unit.type}) — ${deriveUnitStatus(unit, openAssignments)}.` : 'You are not linked to a dispatch unit yet. Contact your admin to assign you.'}
           </p>
         </div>
@@ -130,26 +160,26 @@ export default function OfficerDashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl border border-border-subtle p-5">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-surface-container-lowest border border-border-subtle rounded-xl p-4 sm:p-5">
           <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Active Assignments</div>
           <div className="font-display-lg text-display-lg font-bold text-on-surface">{activeCases.length}</div>
         </div>
-        <div className="bg-white rounded-xl border border-border-subtle p-5">
+        <div className="bg-surface-container-lowest border border-border-subtle rounded-xl p-4 sm:p-5">
           <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Awaiting Acknowledgment</div>
           <div className="font-display-lg text-display-lg font-bold text-warning-amber">{pending.length}</div>
         </div>
-        <div className="bg-white rounded-xl border border-border-subtle p-5">
+        <div className="bg-surface-container-lowest border border-border-subtle rounded-xl p-4 sm:p-5">
           <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Resolved By Unit</div>
           <div className="font-display-lg text-display-lg font-bold text-success-green">{resolved.length}</div>
         </div>
-        <div className="bg-white rounded-xl border border-border-subtle p-5">
+        <div className="bg-surface-container-lowest border border-border-subtle rounded-xl p-4 sm:p-5">
           <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Avg Response-to-Resolve</div>
           <div className="font-display-lg text-display-lg font-bold text-secondary">{avgResponse != null ? fmtDurationMs(avgResponse) : '—'}</div>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-border-subtle overflow-hidden shadow-sm">
+      <div className="bg-surface-container-lowest rounded-xl border border-border-subtle overflow-hidden shadow-sm">
         <div className="px-5 py-4 border-b border-border-subtle flex items-center justify-between">
           <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Assigned Incidents</h3>
           <span className="text-xs text-on-surface-variant">All assignments for {unit?.name ?? 'your unit'}</span>
@@ -160,9 +190,10 @@ export default function OfficerDashboard() {
           <div className="p-12 text-center text-sm text-on-surface-variant">No dispatch unit linked to your account. Ask an admin to assign one.</div>
         ) : mine.length === 0 ? (
           <div className="p-12 text-center text-sm text-on-surface-variant">No incidents assigned to your unit yet.</div>
-        ) : (
+) : (
+          <>
           <div className="divide-y divide-border-subtle">
-            {mine.map((i) => (
+            {paginatedMine.map((i) => (
               <div key={i.id} className="px-5 py-4 flex flex-wrap items-start gap-4">
                 <div className="flex-1 min-w-[240px]">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -188,7 +219,7 @@ export default function OfficerDashboard() {
                       <span className="material-symbols-outlined text-[16px]">task_alt</span> Mark Resolved
                     </button>
                   )}
-                  {i.status === 'Resolved' && (
+{i.status === 'Resolved' && (
                     <span className="inline-flex items-center gap-1 text-xs font-semibold text-success-green">
                       <span className="material-symbols-outlined text-[16px]">verified</span> Completed
                     </span>
@@ -197,6 +228,20 @@ export default function OfficerDashboard() {
               </div>
             ))}
           </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={(items) => {
+              setItemsPerPage(items);
+              setCurrentPage(1);
+            }}
+            totalItems={mine.length}
+            startIndex={startIndex}
+            endIndex={endIndex}
+          />
+          </>
         )}
       </div>
 

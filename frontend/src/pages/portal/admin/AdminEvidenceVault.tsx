@@ -33,7 +33,7 @@ export default function AdminEvidenceVault() {
   const [uploading, setUploading] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const fetchAll = async () => {
     const [repRes, audRes] = await Promise.all([
@@ -52,12 +52,32 @@ export default function AdminEvidenceVault() {
   };
 
   useEffect(() => {
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
+
+    const refresh = async () => {
+      const { reports, audit } = await fetchAll();
+      if (cancelled) return;
+      setReports(reports);
+      setAudit(audit);
+      return;
+    };
+
     void (async () => {
       const { reports, audit } = await fetchAll();
       setReports(reports);
       setAudit(audit);
       setLoading(false);
+      channel = supabase
+        .channel('admin-evidence-vault')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'incident_reports' }, () => void refresh())
+        .subscribe();
     })();
+
+    return () => {
+      cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
+    };
   }, []);
 
   const allEvidence = useMemo(

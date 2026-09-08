@@ -41,13 +41,9 @@ export const adminNav: RoleNav = {
       icon: 'emergency',
       to: '/admin/incident-reporting',
       section: 'Core Operations',
-    },
-    {
-      label: 'Incident Archive',
-      subLabel: 'Browse resolved and rejected reports',
-      icon: 'archive',
-      to: '/admin/incident-archive',
-      section: 'Core Operations',
+      children: [
+        { label: 'Incident Archive', to: '/admin/incident-archive' },
+      ],
     },
     {
       label: 'Dispatch Terminal',
@@ -234,6 +230,14 @@ export const officerNav: RoleNav = {
       description: 'Official alerts and announcements issued by Barangay Leadership.',
       icon: 'notifications_active',
       to: '/officer/alerts',
+    },
+    {
+      label: 'Account & Settings',
+      subLabel: 'Profile & Security',
+      description: 'Manage your profile and change your password.',
+      icon: 'manage_accounts',
+      to: '/officer/account-settings',
+      section: 'Account',
     },
   ],
 };

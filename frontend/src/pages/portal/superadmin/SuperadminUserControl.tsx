@@ -41,9 +41,12 @@ export default function SuperadminUserControl() {
   const [tempPw, setTempPw] = useState<{ name: string; pw: string } | null>(null);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [maintenance, setMaintenance] = useState(false);
+  const [systemBusy, setSystemBusy] = useState(false);
+  const [systemConfirm, setSystemConfirm] = useState<null | 'logout-all' | 'maintenance-on' | 'maintenance-off'>(null);
 
-  useScrollLock(tempPw != null);
+  useScrollLock(tempPw != null || systemConfirm != null);
 
   const fetchUsers = async () => {
     const res = await supabase.rpc('admin_list_users', { p_scope: 'residents' });
@@ -54,8 +57,12 @@ export default function SuperadminUserControl() {
   useEffect(() => {
     void (async () => {
       try {
-        const rows = await fetchUsers();
+        const [rows, m] = await Promise.all([
+          fetchUsers(),
+          supabase.rpc('get_maintenance_mode').then((r) => !!r.data),
+        ]);
         setUsers(rows);
+        setMaintenance(!!m);
         if (rows.length > 0) setActiveId(rows[0].id);
       } catch (e) {
         setToast({ type: 'error', message: e instanceof Error ? e.message : 'Failed to load users.' });
@@ -158,6 +165,45 @@ export default function SuperadminUserControl() {
     }
   };
 
+  const terminateAllSessions = async () => {
+    setSystemBusy(true);
+    const res = await supabase.rpc('admin_logout_others');
+    setSystemBusy(false);
+    if (res.error) {
+      setToast({ type: 'error', message: res.error.message });
+      return;
+    }
+    await logAudit('Logout all users', `Terminated ${res.data ?? 0} active session(s) across all users.`);
+    setToast({ type: 'success', message: `Signed out ${Number(res.data ?? 0)} session(s) across all users.` });
+  };
+
+  const updateMaintenance = async (enabled: boolean) => {
+    setSystemBusy(true);
+    const res = await supabase.rpc('admin_set_maintenance', { p_enabled: enabled });
+    setSystemBusy(false);
+    if (res.error) {
+      setToast({ type: 'error', message: res.error.message });
+      return;
+    }
+    await logAudit(
+      'System maintenance',
+      `${enabled ? 'Enabled' : 'Disabled'} maintenance mode.`
+    );
+    setMaintenance(enabled);
+    setToast({
+      type: 'success',
+      message: enabled ? 'Maintenance mode is now ON. Users will not be able to sign in.' : 'Maintenance mode is now OFF. The system is live again.',
+    });
+  };
+
+  const runSystemAction = () => {
+    if (!systemConfirm) return;
+    const action = systemConfirm;
+    setSystemConfirm(null);
+    if (action === 'logout-all') void terminateAllSessions();
+    else void updateMaintenance(action === 'maintenance-on');
+  };
+
   return (
     <div>
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-lg gap-md">
@@ -165,7 +211,24 @@ export default function SuperadminUserControl() {
           <h2 className="font-headline-lg text-headline-lg text-on-surface mb-xs">User Control</h2>
           <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl">Manage resident accounts, verification status, and account access.</p>
         </div>
-        <div className="flex gap-sm">
+        <div className="flex gap-sm flex-wrap">
+          <button
+            type="button"
+            onClick={() => setSystemConfirm('logout-all')}
+            disabled={systemBusy}
+            className="px-4 py-2 rounded-lg border-1.5 border-error text-error font-label-md text-label-md hover:bg-error/5 transition-colors flex items-center gap-2 disabled:opacity-50"
+          >
+            <span className="material-symbols-outlined text-sm">logout</span> Terminate All Sessions
+          </button>
+          <button
+            type="button"
+            onClick={() => setSystemConfirm(maintenance ? 'maintenance-off' : 'maintenance-on')}
+            disabled={systemBusy}
+            className={`px-4 py-2 rounded-lg border-1.5 font-label-md text-label-md transition-colors flex items-center gap-2 disabled:opacity-50 ${maintenance ? 'bg-warning-amber/10 border-warning-amber text-warning-amber hover:bg-warning-amber/20' : 'border-secondary text-secondary hover:bg-secondary/5'}`}
+          >
+            <span className="material-symbols-outlined text-sm">{maintenance ? 'build' : 'construction'}</span>
+            {maintenance ? 'Maintenance ON — Disable' : 'System Maintenance'}
+          </button>
           <button
             type="button"
             onClick={exportCsv}
@@ -175,6 +238,15 @@ export default function SuperadminUserControl() {
           </button>
         </div>
       </div>
+      {maintenance && (
+        <div className="mb-lg flex items-start gap-3 rounded-xl border border-warning-amber/40 bg-warning-amber/10 px-4 py-3">
+          <span className="material-symbols-outlined text-warning-amber">build</span>
+          <div className="text-sm">
+            <p className="font-medium text-warning-amber">Maintenance mode is ON.</p>
+            <p className="text-on-surface-variant">New sign-ins are blocked across the portals. Your current session stays active — disable maintenance above to bring the system back online.</p>
+          </div>
+        </div>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-lg">
         <div className="bg-surface-container-lowest rounded-xl p-md border border-outline-variant/30 shadow-sm flex flex-col justify-between h-32 relative overflow-hidden group">
           <div className="flex justify-between items-start z-10">
@@ -496,6 +568,56 @@ export default function SuperadminUserControl() {
           )}
         </div>
       </div>
+
+      {systemConfirm && (
+        <div className="fixed inset-0 z-[140] bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl">
+            <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
+              <h3 className={`font-headline-md text-headline-md font-bold ${systemConfirm === 'logout-all' ? 'text-error-red' : 'text-on-surface'}`}>
+                {systemConfirm === 'logout-all'
+                  ? 'Terminate All Sessions'
+                  : systemConfirm === 'maintenance-on'
+                    ? 'Enable Maintenance Mode'
+                    : 'Disable Maintenance Mode'}
+              </h3>
+              <button type="button" onClick={() => setSystemConfirm(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
+            </div>
+            <div className="p-5">
+              <div className="flex items-start gap-3 mb-4">
+                <span className={`material-symbols-outlined text-3xl ${systemConfirm === 'logout-all' ? 'text-error-red' : 'text-warning-amber'}`}>
+                  {systemConfirm === 'logout-all' ? 'logout' : 'build'}
+                </span>
+                <p className="text-sm text-on-surface flex-1">
+                  {systemConfirm === 'logout-all'
+                    ? 'Sign out every user, admin, and officer session across the portals? Your current session will remain active.'
+                    : systemConfirm === 'maintenance-on'
+                      ? 'Enable maintenance mode? Users will be blocked from signing in until you disable it. Your current session stays active, and you can turn it off here at any time.'
+                      : 'Bring the system back online? Users will be able to sign in again.'}
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <button type="button" onClick={() => setSystemConfirm(null)} className="flex-1 bg-surface-container-low border border-border-subtle text-on-surface rounded-lg py-2 text-label-md font-medium hover:bg-surface-bg transition-colors">
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={systemBusy}
+                  onClick={runSystemAction}
+                  className={`flex-1 rounded-lg py-2 text-label-md font-medium disabled:opacity-50 transition-colors ${systemConfirm === 'maintenance-off' ? 'bg-secondary hover:bg-secondary/90 text-on-secondary' : 'bg-error-red text-on-error hover:bg-error-red/90'}`}
+                >
+                  {systemBusy
+                    ? 'Working…'
+                    : systemConfirm === 'logout-all'
+                      ? 'Terminate All'
+                      : systemConfirm === 'maintenance-on'
+                        ? 'Enable Maintenance'
+                        : 'Disable Maintenance'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {tempPw && (
         <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">

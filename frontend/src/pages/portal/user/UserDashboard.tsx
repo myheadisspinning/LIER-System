@@ -38,44 +38,58 @@ export default function UserDashboard() {
  const [error, setError] = useState<string | null>(null);
  const [advisoryCount, setAdvisoryCount] = useState(0);
 
- useEffect(() => {
- let cancelled = false;
- (async () => {
-  setLoading(true);
-  setError(null);
-  const {
-  data: { session },
-  } = await supabase.auth.getSession();
-  if (!session?.user) {
-  setLoading(false);
-  return;
-  }
-  const meta = session.user.user_metadata as Record<string, unknown> | undefined;
-  const fullname = (typeof meta?.fullname === 'string' && meta.fullname.trim()) ||
-  (typeof meta?.full_name === 'string' && meta.full_name.trim()) ||
-  (typeof meta?.name === 'string' && meta.name.trim()) || '';
-  if (!cancelled) setName(fullname || session.user.email || '');
-  const [repRes, advisoryRes] = await Promise.all([
-   supabase
-   .from('incident_reports')
-   .select('id, report_no, title, category, status, priority, address, created_at')
-   .eq('user_id', session.user.id)
-   .order('created_at', { ascending: false })
-   .limit(6),
-   supabase.from('broadcasts').select('id', { count: 'exact', head: true }),
-  ]);
-  if (cancelled) return;
-  if (repRes.error) {
-  setError(repRes.error.message);
-  } else {
-  setReports((repRes.data as DbReport[] | null) ?? []);
-  }
-  setAdvisoryCount(advisoryRes.count ?? 0);
-  setLoading(false);
- })();
- return () => {
-  cancelled = true;
- };
+useEffect(() => {
+  let cancelled = false;
+  let channel: ReturnType<typeof supabase.channel> | null = null;
+
+  const refreshReports = async (userId: string) => {
+   const repRes = await supabase
+    .from('incident_reports')
+    .select('id, report_no, title, category, status, priority, address, created_at')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(6);
+   if (cancelled) return;
+   if (repRes.error) setError(repRes.error.message);
+   else setReports((repRes.data as DbReport[] | null) ?? []);
+  };
+
+  (async () => {
+   setLoading(true);
+   setError(null);
+   const {
+    data: { session },
+   } = await supabase.auth.getSession();
+   if (!session?.user) {
+    setLoading(false);
+    return;
+   }
+   const userId = session.user.id;
+   const meta = session.user.user_metadata as Record<string, unknown> | undefined;
+   const fullname = (typeof meta?.fullname === 'string' && meta.fullname.trim()) ||
+   (typeof meta?.full_name === 'string' && meta.full_name.trim()) ||
+   (typeof meta?.name === 'string' && meta.name.trim()) || '';
+   if (!cancelled) setName(fullname || session.user.email || '');
+   const [advisoryRes] = await Promise.all([
+    supabase.from('broadcasts').select('id', { count: 'exact', head: true }),
+    refreshReports(userId),
+   ]);
+   if (cancelled) return;
+   setAdvisoryCount(advisoryRes.count ?? 0);
+   setLoading(false);
+   channel = supabase
+    .channel(`user-dashboard-${userId}`)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'incident_reports', filter: `user_id=eq.${userId}` }, () => void refreshReports(userId))
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'broadcasts' }, () => {
+     if (cancelled) return;
+     void supabase.from('broadcasts').select('id', { count: 'exact', head: true }).then((r) => { if (!cancelled) setAdvisoryCount(r.count ?? 0); });
+    })
+    .subscribe();
+  })();
+  return () => {
+   cancelled = true;
+   if (channel) void supabase.removeChannel(channel);
+  };
  }, []);
 
  const total = reports.length;

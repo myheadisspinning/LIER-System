@@ -3,6 +3,7 @@ import { supabase } from '../../../supabaseClient';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
 import { fmtDate, getAdminProfile, logAudit, PRIORITY_BADGE } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
+import Pagination from '../../../components/Pagination';
 
 type Incident = {
   id: string;
@@ -32,17 +33,21 @@ const STATUS_BADGE: Record<string, string> = {
   Rejected: 'bg-error-red/10 text-error-red',
 };
 
+const tabs = ['All', 'Assigned', 'Progress', 'Resolved'] as const;
+type Tab = (typeof tabs)[number];
+
 export default function OfficerMyIncidents() {
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [unitId, setUnitId] = useState<string | null>(null);
-  const [unitName, setUnitName] = useState('');
   const [officerName, setOfficerName] = useState('');
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState<Tab>('All');
   const [busyId, setBusyId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [selectedIncidentId, setSelectedIncidentId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const fetchAll = async (uid: string | null) => {
     if (!uid) return [] as Incident[];
@@ -55,16 +60,34 @@ export default function OfficerMyIncidents() {
   };
 
   useEffect(() => {
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
+
     void (async () => {
       const profile = await getAdminProfile();
+      if (cancelled) return;
       setOfficerName(profile.fullname);
       const res = await supabase.from('dispatch_units').select('id, name').eq('lead_officer_id', profile.id).maybeSingle();
       const uid = (res.data?.id as string | undefined) ?? null;
+      if (cancelled) return;
       setUnitId(uid);
-      setUnitName((res.data?.name as string | undefined) ?? '');
       setIncidents(await fetchAll(uid));
       setLoading(false);
+
+      if (uid) {
+        channel = supabase
+          .channel(`officer-incidents-${uid}`)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'incident_reports', filter: `dispatch_unit_id=eq.${uid}` }, async () => {
+            if (!cancelled) setIncidents(await fetchAll(uid));
+          })
+          .subscribe();
+      }
     })();
+
+    return () => {
+      cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
+    };
   }, []);
 
   const visible = useMemo(
@@ -77,6 +100,15 @@ export default function OfficerMyIncidents() {
       }),
     [incidents, query, filter]
   );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query, filter]);
+
+  const totalPages = Math.max(1, Math.ceil(visible.length / itemsPerPage));
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedVisible = visible.slice(startIndex, endIndex);
 
   const counts = useMemo(
     () => ({
@@ -113,109 +145,161 @@ export default function OfficerMyIncidents() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface">Assigned Incidents</h2>
-        <p className="font-body-md text-body-md text-on-surface-variant">Dispatch tasks routed to {unitName || 'your unit'} by the command center.</p>
-      </div>
+    <div className="w-full space-y-4 sm:space-y-6">
 
-      <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl border border-border-subtle p-4">
+      <div className="grid grid-cols-3 gap-3 sm:gap-4">
+        <div className="bg-surface-container-lowest rounded-xl border border-border-subtle p-3 sm:p-4">
           <div className="text-[11px] text-on-surface-variant uppercase tracking-wider">Assigned</div>
-          <div className="text-2xl font-bold text-blue-700">{counts.assigned}</div>
+          <div className="text-xl sm:text-2xl font-bold text-blue-700">{counts.assigned}</div>
         </div>
-        <div className="bg-white rounded-xl border border-border-subtle p-4">
+        <div className="bg-surface-container-lowest rounded-xl border border-border-subtle p-3 sm:p-4">
           <div className="text-[11px] text-on-surface-variant uppercase tracking-wider">In Progress</div>
-          <div className="text-2xl font-bold text-warning-amber">{counts.progress}</div>
+          <div className="text-xl sm:text-2xl font-bold text-warning-amber">{counts.progress}</div>
         </div>
-        <div className="bg-white rounded-xl border border-border-subtle p-4">
+        <div className="bg-surface-container-lowest rounded-xl border border-border-subtle p-3 sm:p-4">
           <div className="text-[11px] text-on-surface-variant uppercase tracking-wider">Resolved</div>
-          <div className="text-2xl font-bold text-success-green">{counts.resolved}</div>
+          <div className="text-xl sm:text-2xl font-bold text-success-green">{counts.resolved}</div>
         </div>
       </div>
 
-      <div className="bg-surface-container-lowest border border-border-subtle rounded p-3 flex flex-col md:flex-row gap-3 items-center">
-        <div className="relative w-full md:max-w-sm">
-          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-white border border-border-subtle rounded pl-10 pr-3 py-2 text-sm focus:ring-2 focus:ring-secondary/50 focus:outline-none"
-            placeholder="Search incident, report no, address..."
-            type="text"
-          />
+      <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle overflow-hidden">
+        <div className="p-4 border-b border-border-subtle flex flex-col sm:flex-row justify-between items-center gap-4 bg-surface-bg/50">
+          <div className="flex space-x-1 bg-surface-container rounded-lg p-1 w-full sm:w-auto">
+            {tabs.map((t) => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => setFilter(t)}
+                className={`flex-1 whitespace-nowrap px-2 sm:px-4 py-1.5 rounded font-label-md text-label-md transition-colors ${
+                  filter === t ? 'bg-surface-container-lowest shadow-sm text-secondary' : 'text-on-surface-variant hover:text-on-surface'
+                }`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <div className="relative flex-1 sm:w-64">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full bg-surface-container-lowest border border-border-subtle rounded-md py-1.5 pl-9 pr-3 text-body-sm focus:border-secondary focus:ring-1 focus:ring-secondary transition-all"
+                placeholder="Search incident, report no, address..."
+                type="text"
+              />
+            </div>
+          </div>
         </div>
-        <div className="flex bg-surface-container-low rounded-lg p-1 flex-wrap">
-          {['All', 'Assigned', 'Progress', 'Resolved'].map((f) => (
-            <button
-              key={f}
-              type="button"
-              onClick={() => setFilter(f)}
-              className={`px-3 py-1 rounded font-label-sm text-label-sm transition-colors ${filter === f ? 'bg-white shadow-sm text-on-surface' : 'text-on-surface-variant hover:bg-white/50'}`}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-      </div>
 
-      <div className="bg-white rounded-xl border border-border-subtle overflow-hidden shadow-sm">
-        <div className="px-5 py-4 border-b border-border-subtle">
-          <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Incident Log</h3>
-        </div>
         {loading ? (
-          <div className="p-12 text-center text-sm text-on-surface-variant">Loading incidents…</div>
+          <div className="p-6 sm:p-10 text-center text-sm text-on-surface-variant">Loading incidents…</div>
         ) : !unitId ? (
-          <div className="p-12 text-center text-sm text-on-surface-variant">No dispatch unit linked to your account. Ask an admin to assign one.</div>
+          <div className="p-6 sm:p-10 text-center text-sm text-on-surface-variant">No dispatch unit linked to your account. Ask an admin to assign one.</div>
         ) : visible.length === 0 ? (
-          <div className="p-12 text-center text-sm text-on-surface-variant">No incidents match your filters.</div>
+          <div className="p-6 sm:p-10 text-center text-sm text-on-surface-variant">No incidents match your filters.</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className="bg-surface-bg border-b border-border-subtle">
-                <tr>
-                  <th className="px-5 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-semibold">Incident</th>
-                  <th className="px-5 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-semibold">Priority</th>
-                  <th className="px-5 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-semibold">Status</th>
-                  <th className="px-5 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-semibold">Reported</th>
-                  <th className="px-5 py-3 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider font-semibold text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border-subtle">
-                {visible.map((i) => (
-                  <tr key={i.id} className="hover:bg-surface-bg/50 transition-colors">
-                    <td className="px-5 py-4">
+          <>
+            <div className="lg:hidden divide-y divide-border-subtle">
+              {paginatedVisible.map((i) => (
+                <div key={i.id} className="p-4 space-y-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
                       <div className="font-label-md text-label-md text-on-surface font-medium">{i.title}</div>
                       <div className="text-xs text-on-surface-variant mt-0.5">{i.category} · {i.address || 'No address'}</div>
                       <div className="text-[10px] text-on-surface-variant/70 mt-0.5">AI threat {i.threat}% · confidence {i.confidence}%</div>
-                    </td>
-                    <td className="px-5 py-4"><span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${PRIORITY_BADGE[i.priority] ?? 'bg-slate-100 text-slate-600'}`}>{i.priority}</span></td>
-                    <td className="px-5 py-4"><span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${STATUS_BADGE[i.status] ?? 'bg-slate-100 text-slate-600'}`}>{i.status}</span></td>
-                    <td className="px-5 py-4 text-xs text-on-surface-variant">{fmtDate(i.created_at, 'short')}</td>
-                    <td className="px-5 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button type="button" onClick={() => setSelectedIncidentId(i.id)} className="text-secondary font-label-md text-label-md hover:underline">
-                          View Details
-                        </button>
-                        {i.status === 'Assigned' && (
-                          <button type="button" disabled={busyId === i.id} onClick={() => acknowledge(i)} className="px-3 py-1.5 bg-secondary text-on-secondary rounded-md text-xs font-semibold hover:bg-secondary/90 disabled:opacity-50 transition-colors">
-                            Acknowledge
-                          </button>
-                        )}
-                        {(i.status === 'Progress' || i.status === 'Assigned') && (
-                          <button type="button" disabled={busyId === i.id} onClick={() => resolve(i)} className="px-3 py-1.5 bg-success-green text-white rounded-md text-xs font-semibold hover:bg-success-green/90 disabled:opacity-50 transition-colors">
-                            Resolve
-                          </button>
-                        )}
-                      </div>
-                    </td>
+                    </div>
+                    <span className={`shrink-0 px-2 py-0.5 rounded-full text-[11px] font-bold ${PRIORITY_BADGE[i.priority] ?? 'bg-slate-100 text-slate-600'}`}>{i.priority}</span>
+                  </div>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${STATUS_BADGE[i.status] ?? 'bg-slate-100 text-slate-600'}`}>{i.status}</span>
+                    <span className="text-xs text-on-surface-variant">{fmtDate(i.created_at, 'short')}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {i.status === 'Assigned' && (
+                      <button type="button" disabled={busyId === i.id} onClick={() => acknowledge(i)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-secondary text-on-secondary rounded-md text-xs font-semibold hover:bg-secondary/90 disabled:opacity-50 transition-colors whitespace-nowrap">
+                        <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                        Acknowledge
+                      </button>
+                    )}
+                    {(i.status === 'Progress' || i.status === 'Assigned') && (
+                      <button type="button" disabled={busyId === i.id} onClick={() => resolve(i)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-success-green text-white rounded-md text-xs font-semibold hover:bg-success-green/90 disabled:opacity-50 transition-colors whitespace-nowrap">
+                        <span className="material-symbols-outlined text-[16px]">task_alt</span>
+                        Resolve
+                      </button>
+                    )}
+                    <button type="button" onClick={() => setSelectedIncidentId(i.id)} className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-border-subtle rounded-md text-xs font-semibold text-on-surface-variant hover:border-secondary hover:text-secondary transition-colors whitespace-nowrap">
+                      <span className="material-symbols-outlined text-[16px]">visibility</span>
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="hidden lg:block overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-border-subtle bg-surface-container-low">
+                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Incident</th>
+                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Priority</th>
+                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Status</th>
+                    <th className="py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Reported</th>
+                    <th className="sticky right-0 z-10 py-3 px-4 font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider text-right bg-surface-container-low">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-border-subtle">
+                  {paginatedVisible.map((i) => (
+                    <tr key={i.id} className="hover:bg-surface-container-low transition-colors">
+                      <td className="py-3 px-4">
+                        <div className="font-label-md text-label-md text-on-surface font-medium">{i.title}</div>
+                        <div className="text-xs text-on-surface-variant mt-0.5">{i.category} · {i.address || 'No address'}</div>
+                        <div className="text-[10px] text-on-surface-variant/70 mt-0.5">AI threat {i.threat}% · confidence {i.confidence}%</div>
+                      </td>
+                      <td className="py-3 px-4"><span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${PRIORITY_BADGE[i.priority] ?? 'bg-slate-100 text-slate-600'}`}>{i.priority}</span></td>
+                      <td className="py-3 px-4"><span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${STATUS_BADGE[i.status] ?? 'bg-slate-100 text-slate-600'}`}>{i.status}</span></td>
+                      <td className="py-3 px-4 text-xs text-on-surface-variant whitespace-nowrap">{fmtDate(i.created_at, 'short')}</td>
+                      <td className="sticky right-0 z-10 py-3 px-4 bg-surface-container-lowest shadow-[-8px_0_12px_-8px_rgba(0,0,0,0.35)]">
+                        <div className="flex flex-wrap items-center justify-end gap-2">
+                          {i.status === 'Assigned' && (
+                            <button type="button" disabled={busyId === i.id} onClick={() => acknowledge(i)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-secondary text-on-secondary rounded-md text-xs font-semibold hover:bg-secondary/90 disabled:opacity-50 transition-colors whitespace-nowrap">
+                              <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                              Acknowledge
+                            </button>
+                          )}
+                          {(i.status === 'Progress' || i.status === 'Assigned') && (
+                            <button type="button" disabled={busyId === i.id} onClick={() => resolve(i)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-success-green text-white rounded-md text-xs font-semibold hover:bg-success-green/90 disabled:opacity-50 transition-colors whitespace-nowrap">
+                              <span className="material-symbols-outlined text-[16px]">task_alt</span>
+                              Resolve
+                            </button>
+                          )}
+                          <button type="button" onClick={() => setSelectedIncidentId(i.id)} className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-border-subtle rounded-md text-xs font-semibold text-on-surface-variant hover:border-secondary hover:text-secondary transition-colors whitespace-nowrap">
+                            <span className="material-symbols-outlined text-[16px]">visibility</span>
+                            View Details
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+        onItemsPerPageChange={(items) => {
+          setItemsPerPage(items);
+          setCurrentPage(1);
+        }}
+        totalItems={visible.length}
+        startIndex={startIndex}
+        endIndex={endIndex}
+      />
 
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
       <IncidentDetailModal reportId={selectedIncidentId} onClose={() => setSelectedIncidentId(null)} isAdmin />

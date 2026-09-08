@@ -28,7 +28,10 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    void (async () => {
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
+
+    const refresh = async () => {
       const [repRes, unitRes, openMap] = await Promise.all([
         supabase
           .from('incident_reports')
@@ -38,11 +41,28 @@ export default function AdminDashboard() {
         supabase.from('dispatch_units').select('id, name, type, status, manual_status, lat, lng, last_location, duty_days').order('name'),
         fetchOpenUnitAssignments(),
       ]);
+      if (cancelled) return;
       setIncidents((repRes.data ?? []) as Incident[]);
       setUnits((unitRes.data ?? []) as Unit[]);
       setOpenAssignments(openMap);
+      return;
+    };
+
+    void (async () => {
+      await refresh();
+      if (cancelled) return;
       setLoading(false);
+      channel = supabase
+        .channel('admin-dashboard')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'incident_reports' }, () => void refresh())
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'dispatch_units' }, () => void refresh())
+        .subscribe();
     })();
+
+    return () => {
+      cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
+    };
   }, []);
 
   const stats = useMemo(() => {

@@ -1,34 +1,61 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { supabase } from '../../../supabaseClient';
 import { useScrollLock } from '../../../lib/useScrollLock';
+import Pagination from '../../../components/Pagination';
 
-type Broadcast = {
+type Category = 'All Advisories' | 'Emergency & Crime' | 'Weather & Floods' | 'Barangay Services' | 'Public Safety';
+
+const categories: Category[] = ['All Advisories', 'Emergency & Crime', 'Weather & Floods', 'Barangay Services', 'Public Safety'];
+
+interface Advisory {
   id: string;
+  category: Category;
+  tone: 'red' | 'blue' | 'green' | 'safety';
+  time: string;
   title: string;
-  message: string;
+  body: string;
   type: string;
-  sent_at: string | null;
   image_url: string | null;
+}
+
+const catFor = (type: string): Category => {
+  if (type === 'Emergency' || type === 'Alert') return 'Emergency & Crime';
+  if (type === 'Weather') return 'Weather & Floods';
+  if (type === 'Advisory') return 'Public Safety';
+  return 'Barangay Services';
 };
 
-const TYPE_BADGE: Record<string, string> = {
-  Advisory: 'bg-sky-100 text-sky-700',
-  Alert: 'bg-error-red/10 text-error-red',
-  Announcement: 'bg-secondary/10 text-secondary',
-  Weather: 'bg-teal-100 text-teal-700',
-  Emergency: 'bg-error-red/10 text-error-red',
+const shortLabel: Record<Category, string> = {
+  'All Advisories': 'All',
+  'Emergency & Crime': 'Emergency',
+  'Weather & Floods': 'Weather',
+  'Barangay Services': 'Services',
+  'Public Safety': 'Safety',
 };
 
-const TYPE_ICON: Record<string, string> = {
-  Alert: 'campaign',
-  Emergency: 'campaign',
-  Weather: 'cloud',
-  Advisory: 'info',
-  Announcement: 'notifications',
+const toneFor = (type: string): Advisory['tone'] => {
+  if (type === 'Emergency' || type === 'Alert') return 'red';
+  if (type === 'Weather') return 'blue';
+  if (type === 'Advisory') return 'safety';
+  return 'green';
 };
 
-const timeAgo = (iso: string | null) => {
-  if (!iso) return '—';
+const toneClasses: Record<Advisory['tone'], string> = {
+  red: 'bg-error-red/10 text-error-red border border-error-red/30',
+  blue: 'bg-blue-100 text-[#1E40AF] border border-blue-200',
+  green: 'bg-green-100 text-green-800 border border-green-200',
+  safety: 'bg-[#1E40AF]/10 text-[#1E40AF] border border-[#1E40AF]/20',
+};
+
+const iconFor = (type: string) => {
+  if (type === 'Emergency' || type === 'Alert') return 'campaign';
+  if (type === 'Weather') return 'cloud';
+  if (type === 'Advisory') return 'info';
+  return 'notifications';
+};
+
+const timeAgo = (iso: string) => {
   const secs = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
   if (secs < 3600) return `${Math.max(1, Math.floor(secs / 60))}m ago`;
   if (secs < 86400) return `${Math.floor(secs / 3600)}h ago`;
@@ -38,107 +65,213 @@ const timeAgo = (iso: string | null) => {
 const TRUNCATE_LEN = 150;
 
 export default function OfficerAlerts() {
-  const [broadcasts, setBroadcasts] = useState<Broadcast[]>([]);
+  const [advisories, setAdvisories] = useState<Advisory[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedBroadcast, setSelectedBroadcast] = useState<Broadcast | null>(null);
+  const [category, setCategory] = useState<Category>('All Advisories');
+  const [query, setQuery] = useState('');
+  const [selectedAdvisory, setSelectedAdvisory] = useState<Advisory | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  useScrollLock(selectedBroadcast != null);
+  useScrollLock(selectedAdvisory != null);
 
   useEffect(() => {
+    let cancelled = false;
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+
+    const refresh = async () => {
+      const res = await supabase
+        .from('broadcasts')
+        .select('id, title, message, type, audience, sent_at, image_url')
+        .eq('status', 'Sent')
+        .order('sent_at', { ascending: false })
+        .limit(50);
+      const rows = (res.data ?? []).map((b) => ({
+        id: b.id,
+        category: catFor(b.type),
+        tone: toneFor(b.type),
+        time: timeAgo(b.sent_at ?? b.id),
+        title: b.title,
+        body: b.message,
+        type: b.type,
+        image_url: b.image_url ?? null,
+      })) as Advisory[];
+      if (!cancelled) setAdvisories(rows);
+    };
+
     void (async () => {
-      const res = await supabase.from('broadcasts').select('id, title, message, type, sent_at, image_url').eq('status', 'Sent').order('sent_at', { ascending: false }).limit(50);
-      setBroadcasts((res.data ?? []) as Broadcast[]);
+      await refresh();
+      if (cancelled) return;
       setLoading(false);
+      channel = supabase
+        .channel('officer-alerts')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'broadcasts' }, () => void refresh())
+        .subscribe();
     })();
+
+    return () => {
+      cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
+    };
   }, []);
 
+  const visible = useMemo(
+    () =>
+      advisories.filter((a) => {
+        const matchesCategory = category === 'All Advisories' || a.category === category;
+        const matchesQuery =
+          query.trim() === '' ||
+          a.title.toLowerCase().includes(query.toLowerCase()) ||
+          a.body.toLowerCase().includes(query.toLowerCase());
+        return matchesCategory && matchesQuery;
+      }),
+    [advisories, category, query]
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category, query]);
+
+  const totalPages = Math.max(1, Math.ceil(visible.length / itemsPerPage));
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedVisible = visible.slice(startIndex, endIndex);
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface">Community Alerts</h2>
-        <p className="font-body-md text-body-md text-on-surface-variant">Official alerts and announcements issued by Barangay Culiat Leadership.</p>
+    <div className="w-full">
+
+      <div className="bg-surface-container-lowest border border-border-subtle rounded p-3 flex flex-col md:flex-row justify-between items-center mb-4 sm:mb-6 gap-3 sm:gap-4">
+        <div className="flex flex-wrap gap-1.5 bg-surface-container rounded-lg p-1 w-full md:w-auto">
+          {categories.map((c) => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => setCategory(c)}
+              className={`flex-1 min-w-[104px] whitespace-nowrap px-2 sm:px-3 py-1.5 rounded font-label-md text-label-md transition-colors ${
+                category === c
+                  ? 'bg-surface-container-lowest shadow-sm text-secondary'
+                  : 'text-on-surface-variant hover:text-on-surface'
+              }`}
+            >
+              <span className="sm:hidden">{shortLabel[c]}</span>
+              <span className="hidden sm:inline">{c}</span>
+            </button>
+          ))}
+        </div>
+        <div className="relative w-full md:w-auto">
+          <span className="material-symbols-outlined text-on-surface-variant absolute left-3 top-1/2 -translate-y-1/2">search</span>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-full md:w-64 bg-surface-container-low border border-border-subtle rounded pl-10 pr-3 py-1.5 text-sm focus:ring-secondary focus:border-secondary"
+            placeholder="Search advisories..."
+            type="text"
+          />
+        </div>
       </div>
 
       {loading ? (
-        <div className="bg-white rounded-xl border border-border-subtle p-12 text-center text-sm text-on-surface-variant">Loading alerts…</div>
-      ) : broadcasts.length === 0 ? (
-        <div className="bg-white rounded-xl border border-border-subtle p-12 text-center text-sm text-on-surface-variant">No published alerts yet.</div>
+        <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 sm:p-10 text-center text-sm text-on-surface-variant">Loading alerts…</div>
+      ) : advisories.length === 0 ? (
+        <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 sm:p-10 text-center text-sm text-on-surface-variant">No official advisories have been published yet.</div>
+      ) : visible.length === 0 ? (
+        <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 sm:p-8 text-center">
+          <p className="font-body-md text-body-md text-on-surface-variant">No advisories match your search.</p>
+        </div>
       ) : (
-        <div className="space-y-4">
-          {broadcasts.map((b) => {
-            const needsTruncate = b.message.length > TRUNCATE_LEN;
+        <>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {paginatedVisible.map((a) => {
+            const needsTruncate = a.body.length > TRUNCATE_LEN;
             return (
-              <div key={b.id} className="bg-white rounded-xl border border-border-subtle shadow-sm overflow-hidden">
-                {b.image_url && (
-                  <div className="h-40 overflow-hidden">
-                    <img src={b.image_url} alt={b.title} className="w-full h-full object-cover" />
+              <div
+                key={a.id}
+                className="bg-surface-container-lowest border border-border-subtle rounded-2xl overflow-hidden hover:border-secondary/50 transition-all duration-200 flex flex-col h-full hover:-translate-y-0.5"
+              >
+                {a.image_url && (
+                  <div className="h-28 sm:h-36 overflow-hidden">
+                    <img src={a.image_url} alt={a.title} className="w-full h-full object-cover" />
                   </div>
                 )}
-                <div className="p-5 flex items-start gap-4">
-                  <span className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${TYPE_BADGE[b.type]}`}>
-                    <span className="material-symbols-outlined text-[20px]">{TYPE_ICON[b.type] ?? 'notifications'}</span>
-                  </span>
-                  <div className="flex-1 min-w-[200px]">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-headline-md text-headline-md font-bold text-on-surface">{b.title}</h3>
-                      <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${TYPE_BADGE[b.type]}`}>{b.type}</span>
-                    </div>
-                    <p className={`text-sm text-on-surface-variant mt-1 ${needsTruncate ? 'line-clamp-3' : ''}`}>{b.message}</p>
-                    {needsTruncate && (
-                      <button
-                        type="button"
-                        onClick={() => setSelectedBroadcast(b)}
-                        className="mt-2 text-secondary font-label-sm text-label-sm font-semibold hover:underline text-left"
-                      >
-                        View More
-                      </button>
-                    )}
-                    <p className="text-[11px] text-on-surface-variant/70 mt-1.5">Published {timeAgo(b.sent_at)}</p>
+                <div className="p-4 sm:p-6 flex flex-col flex-1">
+                  <div className="flex justify-between items-start mb-3 sm:mb-4">
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-caps-xs text-caps-xs uppercase tracking-wider ${toneClasses[a.tone]}`}>
+                      <span className="material-symbols-outlined text-[14px]">{iconFor(a.type)}</span>
+                      {a.type}
+                    </span>
+                    <span className="text-on-surface-variant font-label-sm text-label-sm">{a.time}</span>
                   </div>
+                  <h3 className="font-headline-md text-headline-md text-on-background mb-2">{a.title}</h3>
+                  <p className={`font-body-sm text-body-sm text-on-surface-variant flex-1 leading-relaxed ${needsTruncate ? 'line-clamp-3' : ''}`}>{a.body}</p>
+                  {needsTruncate && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedAdvisory(a)}
+                      className="mt-2 text-secondary font-label-sm text-label-sm font-semibold hover:underline text-left"
+                    >
+                      View More
+                    </button>
+                  )}
                 </div>
               </div>
             );
           })}
         </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={(items) => {
+            setItemsPerPage(items);
+            setCurrentPage(1);
+          }}
+          totalItems={visible.length}
+          startIndex={startIndex}
+          endIndex={endIndex}
+        />
+        </>
       )}
 
-      {selectedBroadcast && (
-        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-lg">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setSelectedBroadcast(null)} />
-          <div className="relative bg-surface-container-lowest w-full max-w-3xl max-h-[85vh] overflow-hidden rounded-2xl shadow-2xl border border-border-subtle flex flex-col">
-            <div className="px-6 py-4 flex justify-between items-center shrink-0 border-b border-border-subtle z-10 bg-surface-container-lowest">
-              <div className="flex items-center gap-3">
-                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-caps-xs text-caps-xs uppercase tracking-wider ${TYPE_BADGE[selectedBroadcast.type]}`}>
-                  <span className="material-symbols-outlined text-[14px]">{TYPE_ICON[selectedBroadcast.type] ?? 'notifications'}</span>
-                  {selectedBroadcast.type}
-                </span>
-                <span className="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
-                  <span className="material-symbols-outlined text-[16px]">schedule</span>
-                  Published {timeAgo(selectedBroadcast.sent_at)}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedBroadcast(null)}
-                className="text-on-surface-variant hover:text-on-surface p-2 rounded-full hover:bg-surface-container transition-colors"
-              >
-                <span className="material-symbols-outlined text-2xl">close</span>
-              </button>
-            </div>
-            <div className="flex-1 overflow-y-auto">
-              {selectedBroadcast.image_url && (
-                <div className="w-full max-h-80 overflow-hidden">
-                  <img src={selectedBroadcast.image_url} alt={selectedBroadcast.title} className="w-full h-full object-cover" />
+      {selectedAdvisory &&
+        createPortal(
+          <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-lg">
+            <div className="absolute inset-0 bg-black/50" onClick={() => setSelectedAdvisory(null)} />
+            <div className="relative bg-surface-container-lowest w-full max-w-3xl max-h-[85vh] overflow-hidden rounded-2xl border border-border-subtle flex flex-col">
+              <div className="px-4 py-3 sm:px-6 sm:py-4 flex justify-between items-center shrink-0 border-b border-border-subtle z-10 bg-surface-container-lowest">
+                <div className="flex items-center gap-3">
+                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-caps-xs text-caps-xs uppercase tracking-wider ${toneClasses[selectedAdvisory.tone]}`}>
+                    <span className="material-symbols-outlined text-[14px]">{iconFor(selectedAdvisory.type)}</span>
+                    {selectedAdvisory.type}
+                  </span>
+                  <span className="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[16px]">schedule</span>
+                    {selectedAdvisory.time}
+                  </span>
                 </div>
-              )}
-              <div className="p-6 md:p-8">
-                <h2 className="font-headline-lg text-headline-lg text-on-surface font-bold mb-4">{selectedBroadcast.title}</h2>
-                <p className="font-body-md text-on-surface-variant leading-relaxed whitespace-pre-wrap">{selectedBroadcast.message}</p>
+                <button
+                  type="button"
+                  onClick={() => setSelectedAdvisory(null)}
+                  className="text-on-surface-variant hover:text-on-surface p-2 rounded-full hover:bg-surface-container transition-colors"
+                >
+                  <span className="material-symbols-outlined text-2xl">close</span>
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto">
+                {selectedAdvisory.image_url && (
+                  <div className="w-full max-h-80 overflow-hidden">
+                    <img src={selectedAdvisory.image_url} alt={selectedAdvisory.title} className="w-full h-full object-cover" />
+                  </div>
+                )}
+                <div className="p-4 sm:p-6 md:p-8">
+                  <h2 className="font-headline-lg text-headline-lg text-on-surface font-bold mb-4">{selectedAdvisory.title}</h2>
+                  <p className="font-body-md text-on-surface-variant leading-relaxed whitespace-pre-wrap">{selectedAdvisory.body}</p>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

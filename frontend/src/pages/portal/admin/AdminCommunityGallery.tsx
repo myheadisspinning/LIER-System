@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { logAudit } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
+import Pagination from '../../../components/Pagination';
 import { useScrollLock } from '../../../lib/useScrollLock';
 
 type GalleryItem = {
@@ -44,6 +45,8 @@ export default function AdminCommunityGallery() {
   const [sectionFile, setSectionFile] = useState<File | null>(null);
   const [sectionForm, setSectionForm] = useState<{ label: string; image_url: string }>({ label: '', image_url: '' });
   const [savingSection, setSavingSection] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useScrollLock(creating || editing != null || confirmDelete != null || editingSection != null);
 
@@ -199,6 +202,11 @@ export default function AdminCommunityGallery() {
   const servicesImages = sectionImages.filter((img) => img.section === 'services');
   const guidesImages = sectionImages.filter((img) => img.section === 'guides');
 
+  const totalPages = useMemo(() => Math.max(1, Math.ceil(items.length / itemsPerPage)), [items, itemsPerPage]);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedItems = items.slice(startIndex, endIndex);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -248,7 +256,7 @@ export default function AdminCommunityGallery() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {items.map((item) => (
+              {paginatedItems.map((item) => (
                 <div key={item.id} className={`bg-surface-container-lowest rounded-xl border border-border-subtle overflow-hidden transition-all ${item.visible ? '' : 'opacity-60'}`}>
                   <div className="h-48 overflow-hidden bg-surface-container-low">
                     <img src={item.image_url} alt={item.title} className="w-full h-full object-cover" />
@@ -290,6 +298,19 @@ export default function AdminCommunityGallery() {
               ))}
             </div>
           )}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={(n) => {
+            setItemsPerPage(n);
+            setCurrentPage(1);
+          }}
+          totalItems={items.length}
+          startIndex={startIndex}
+          endIndex={endIndex}
+        />
         </>
       )}
 
