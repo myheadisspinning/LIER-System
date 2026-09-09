@@ -414,7 +414,8 @@ const isEmailProvider = authProvider === 'email';
   </div>
   </div>
 
-  <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle p-4 sm:p-6 mt-4 sm:mt-6 ">
+  <div className="mt-4 sm:mt-6 space-y-4 sm:space-y-6">
+  <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle p-4 sm:p-6">
   <div className="mb-3">
   <h3 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Channels</h3>
   <h2 className="text-lg font-headline-md sm:text-headline-md text-on-surface">Notification Preferences</h2>
@@ -454,7 +455,7 @@ const isEmailProvider = authProvider === 'email';
   </div>
   </div>
 
-  <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle p-4 sm:p-6 mt-4 sm:mt-6 ">
+  <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle p-4 sm:p-6 ">
   <div className="mb-4 sm:mb-6">
   <h3 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Security</h3>
   <h2 className="text-lg font-headline-md sm:text-headline-md text-on-surface">Password & Authentication</h2>
@@ -559,7 +560,7 @@ const isEmailProvider = authProvider === 'email';
   </div>
   </div>
 
-  <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle p-4 sm:p-6 mt-4 sm:mt-6 ">
+  <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle p-4 sm:p-6 ">
   <div className="mb-3">
   <h3 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Privacy</h3>
   <h2 className="text-lg font-headline-md sm:text-headline-md text-on-surface">Data Privacy & Emergency Consent</h2>
@@ -582,7 +583,7 @@ const isEmailProvider = authProvider === 'email';
   </div>
   </div>
 
-  <div className="flex flex-col sm:flex-row items-center justify-between pt-4 sm:pt-6 border-t border-border-subtle mt-4 sm:mt-6">
+  <div className="bg-surface-container-lowest rounded-2xl border border-border-subtle p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
   <button
   type="button"
   onClick={savePreferences}
@@ -594,6 +595,7 @@ const isEmailProvider = authProvider === 'email';
   <button type="button" onClick={() => setDeactivateOpen(true)} className="mt-4 sm:mt-0 text-error-red font-label-md text-label-md hover:underline transition-all">
   Request Account Deactivation
   </button>
+  </div>
   </div>
  </>
  )}

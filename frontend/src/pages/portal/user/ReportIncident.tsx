@@ -1307,12 +1307,12 @@ export default function ReportIncident({ className = '' }: { className?: string 
    </div>
    {/* Overlay Success Notification */}
    {notice === 'draft-saved' && (
-    <div className="fixed top-5 right-5 z-[150] w-[min(280px,calc(100vw-2rem))] sm:w-[min(360px,calc(100vw-2rem))] bg-secondary text-white rounded-lg p-4 animate-toast-in">
-     <div className="flex items-start gap-3">
-      <span className="material-symbols-outlined text-xl shrink-0">check_circle</span>
+    <div className="fixed top-3 right-3 z-[150] w-[min(260px,calc(100vw-1.5rem))] sm:w-[min(360px,calc(100vw-2rem))] bg-secondary text-white rounded-lg p-3 sm:p-4 animate-toast-in">
+     <div className="flex items-start gap-2 sm:gap-3">
+      <span className="material-symbols-outlined text-lg sm:text-xl shrink-0">check_circle</span>
       <div className="min-w-0 flex-1">
-       <p className="font-label-md text-label-md font-bold mb-0.5">Success</p>
-       <p className="text-caption text-white/90 break-words">Draft saved on this device.</p>
+       <p className="font-label-sm sm:font-label-md text-label-sm sm:text-label-md font-bold mb-0.5">Success</p>
+       <p className="text-[11px] sm:text-caption text-white/90 break-words leading-snug">Draft saved on this device.</p>
       </div>
       <button type="button" onClick={() => setNotice(null)} className="ml-auto shrink-0 text-white/70 hover:text-white transition-colors" aria-label="Close notification">
        <span className="material-symbols-outlined text-lg">close</span>

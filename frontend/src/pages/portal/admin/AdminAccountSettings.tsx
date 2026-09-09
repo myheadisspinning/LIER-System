@@ -151,8 +151,18 @@ export default function AdminAccountSettings() {
         setLoading(false);
       }
     })();
-    const interval = window.setInterval(fetchPresence, 15_000);
-    return () => window.clearInterval(interval);
+
+    // Update presence live so the Online column reflects heartbeats as they
+    // land; a slow fallback poll covers setups where realtime is not published.
+    const channel = supabase
+      .channel('admin-account-presence')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'presence' }, () => void fetchPresence())
+      .subscribe();
+    const interval = window.setInterval(fetchPresence, 60_000);
+    return () => {
+      void supabase.removeChannel(channel);
+      window.clearInterval(interval);
+    };
   }, []);
 
   const active = users.find((u) => u.id === activeId) ?? null;

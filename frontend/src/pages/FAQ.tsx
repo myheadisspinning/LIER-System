@@ -79,7 +79,7 @@ const faqSections: FaqSection[] = [
       },
       {
         q: 'Can I communicate with the officer handling my case?',
-        a: 'Yes. Once your report is assigned, you can use Case Chat & Messages inside your portal to communicate directly with the assigned responder.',
+        a: 'Yes. Once your report is assigned, you can use Messages inside your portal to communicate directly with the assigned responder.',
       },
       {
         q: 'How long until my case is resolved?',

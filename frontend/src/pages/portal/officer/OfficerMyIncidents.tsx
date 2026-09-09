@@ -170,7 +170,7 @@ export default function OfficerMyIncidents() {
                 key={t}
                 type="button"
                 onClick={() => setFilter(t)}
-                className={`flex-1 whitespace-nowrap px-2 sm:px-4 py-1.5 rounded font-label-md text-label-md transition-colors ${
+                className={`flex-1 whitespace-nowrap px-1.5 sm:px-3 py-1.5 rounded text-[11px] sm:text-xs font-semibold transition-colors leading-none ${
                   filter === t ? 'bg-surface-container-lowest shadow-sm text-secondary' : 'text-on-surface-variant hover:text-on-surface'
                 }`}
               >

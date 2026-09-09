@@ -76,7 +76,7 @@ export default function Contact() {
                       <h3 className="font-headline-md text-headline-md text-on-surface">Inquiry Sent</h3>
                       <p className="font-body-md text-body-md text-on-surface-variant max-w-md">
                         Thank you, {form.name.trim()}! Your inquiry has been delivered to the Barangay desk.
-                        You can track the conversation in your portal under <span className="font-semibold text-on-surface">Case Chat &amp; Messages</span>.
+                        You can track the conversation in your portal under <span className="font-semibold text-on-surface">Messages</span>.
                       </p>
                       <button
                         type="button"

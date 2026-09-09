@@ -183,7 +183,11 @@ export interface PresenceRow {
   last_seen_at: string;
 }
 
-export const ONLINE_THRESHOLD_MS = 60_000;
+// Online = last_seen_at within 5 minutes. The heartbeat fires every 30s, but
+// mobile browsers throttle background-tab timers (often to once per minute or
+// worse), so a strict window falsely marks active users as offline. 5 minutes
+// keeps phone users "online" while the tab remains open.
+export const ONLINE_THRESHOLD_MS = 300_000;
 
 export function isOnlineSince(lastSeen: string | null | undefined): boolean {
   if (!lastSeen) return false;
@@ -206,21 +210,47 @@ export function usePresenceHeartbeat(intervalMs = 30_000) {
   useEffect(() => {
     let stopped = false;
     let timer: number | undefined;
+    let beating = false;
     const beat = async () => {
-      const profile = await getAdminProfile();
-      if (!profile.id || stopped) return;
-      await upsertPresence(profile);
-      timer = window.setTimeout(beat, intervalMs);
+      if (beating || stopped) return;
+      beating = true;
+      try {
+        const profile = await getAdminProfile();
+        if (!profile.id || stopped) return;
+        await upsertPresence(profile);
+      } catch { /* keep trying on next tick */ } finally {
+        beating = false;
+      }
+      if (!stopped) timer = window.setTimeout(beat, intervalMs);
     };
     void beat();
+
+    // Browsers throttle background-tab timers heavily on mobile, which can
+    // stall the chain above. Fire immediately whenever the user returns to the
+    // tab so last_seen_at is refreshed as soon as the app is visible/active.
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') void beat();
+    };
+    const onFocus = () => void beat();
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('focus', onFocus);
+
     return () => {
       stopped = true;
       if (timer) window.clearTimeout(timer);
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('focus', onFocus);
+      // Only mark offline when the session has actually ended (real sign-out).
+      // A layout remount (e.g. role change, route regrouping) keeps the user
+      // logged in; marking them offline there is what made the Online column
+      // wrongly show "Offline" for users who were still signed in.
       void (async () => {
-        const profile = await getAdminProfile();
-        if (!profile.id) return;
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        if (!session?.user) return;
         await supabase.from('presence').upsert(
-          { user_id: profile.id, last_seen_at: '1970-01-01T00:00:00Z' },
+          { user_id: session.user.id, last_seen_at: '1970-01-01T00:00:00Z' },
           { onConflict: 'user_id' },
         );
       })();
@@ -260,6 +290,14 @@ export async function markInquiriesRead() {
   if (error) console.error('mark_inquiries_read failed:', error);
 }
 
+// Messenger-style: clears the unread badge for ONE conversation only (the one
+// the staff just opened), leaving the rest untouched.
+export async function markInquiryRead(inquiryId: string) {
+  if (!inquiryId) return;
+  const { error } = await supabase.rpc('mark_inquiry_read', { p_inquiry_id: inquiryId });
+  if (error) console.error('mark_inquiry_read failed:', error);
+}
+
 export function useUnreadCounts(enabled = true, intervalMs = 5_000): UnreadCounts {
   const [counts, setCounts] = useState<UnreadCounts>({ userUnread: 0, adminUnread: 0 });
   useEffect(() => {
@@ -270,10 +308,19 @@ export function useUnreadCounts(enabled = true, intervalMs = 5_000): UnreadCount
       setCounts(await fetchUnreadCounts());
     };
     void refresh();
+    // Refresh instantly when an inquiry or its messages change so unread
+    // badges are live (realtime), not just polled. Falls back to the poll when
+    // realtime isn't published for these tables yet.
+    const channel = supabase
+      .channel(`unread-counts-${Math.random().toString(36).slice(2)}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'inquiries' }, () => void refresh())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'inquiry_messages' }, () => void refresh())
+      .subscribe();
     const timer = window.setInterval(refresh, intervalMs);
     return () => {
       stopped = true;
       window.clearInterval(timer);
+      void supabase.removeChannel(channel);
     };
   }, [enabled, intervalMs]);
   return counts;

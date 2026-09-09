@@ -39,15 +39,15 @@ export default function ConfirmDialog({
   if (!open) return null;
 
   return (
-    <div className="fixed top-5 right-5 z-[1000] w-[340px] max-w-[calc(100vw-2rem)]">
+    <div className="fixed top-3 right-3 z-[1000] w-[260px] sm:w-[340px] max-w-[calc(100vw-1.5rem)] sm:max-w-[calc(100vw-2rem)]">
       <div className="bg-surface-container-lowest rounded-2xl shadow-2xl border border-outline-variant/40 overflow-hidden animate-toast-in">
-        <div className="flex items-start gap-3 px-5 pt-5">
-          <div className="w-10 h-10 shrink-0 rounded-full bg-error-container flex items-center justify-center">
-            <span className="material-symbols-outlined text-error text-xl">{icon}</span>
+        <div className="flex items-start gap-2.5 sm:gap-3 px-3.5 pt-3.5 sm:px-5 sm:pt-5">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 shrink-0 rounded-full bg-error-container flex items-center justify-center">
+            <span className="material-symbols-outlined text-error text-lg sm:text-xl">{icon}</span>
           </div>
           <div className="min-w-0 flex-1">
-            <h2 className="font-label-md text-label-md font-bold text-on-surface leading-tight">{title}</h2>
-            <p className="font-caption text-caption text-on-surface-variant mt-1">{message}</p>
+            <h2 className="font-label-sm sm:font-label-md text-label-sm sm:text-label-md font-bold text-on-surface leading-tight">{title}</h2>
+            <p className="font-caption text-[11px] sm:text-caption text-on-surface-variant mt-1 leading-snug">{message}</p>
           </div>
           <button
             type="button"
@@ -58,18 +58,18 @@ export default function ConfirmDialog({
             <span className="material-symbols-outlined text-lg">close</span>
           </button>
         </div>
-        <div className="flex gap-2.5 px-5 pb-5 mt-4">
+        <div className="flex gap-2 sm:gap-2.5 px-3.5 pb-3.5 sm:px-5 sm:pb-5 mt-3 sm:mt-4">
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 py-2.5 rounded-lg bg-surface-container-high text-on-surface font-bold transition-all hover:bg-surface-container-highest active:scale-[0.98]"
+            className="flex-1 py-2 sm:py-2.5 rounded-lg bg-surface-container-high text-on-surface font-bold text-[13px] sm:text-sm transition-all hover:bg-surface-container-highest active:scale-[0.98]"
           >
             {cancelLabel}
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className="flex-1 py-2.5 rounded-lg bg-error text-on-error font-bold shadow-lg transition-all hover:bg-error/90 active:scale-[0.98]"
+            className="flex-1 py-2 sm:py-2.5 rounded-lg bg-error text-on-error font-bold text-[13px] sm:text-sm shadow-lg transition-all hover:bg-error/90 active:scale-[0.98]"
           >
             {confirmLabel}
           </button>

@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
-import { fmtDate, isOnlineSince, logAudit, markInquiriesRead } from '../../../lib/admin';
+import { fmtDate, isOnlineSince, logAudit, markInquiryRead, useUnreadCounts } from '../../../lib/admin';
 import Toast from '../../../components/Toast';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
 import Pagination from '../../../components/Pagination';
@@ -16,6 +16,7 @@ type Inquiry = {
   created_by: string | null;
   incident_id: string | null;
   created_at: string;
+  staff_last_read_at: string | null;
 };
 
 type Msg = {
@@ -68,11 +69,11 @@ const dayLabel = (iso: string) => {
   return d.toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' });
 };
 
-const CANNED_RESPONSES = [
-  'Good day! We have received your concern and our team is looking into it now.',
-  'Could you share more details (time, place, people involved) so we can assist faster?',
-  'Thank you for your patience. We will update you as soon as possible.',
-  'This matter has been resolved. Reply here anytime if you need further help.',
+const CANNED_RESPONSES: { label: string; message: string }[] = [
+  { label: 'Acknowledge receipt', message: 'Good day! We have received your concern and our team is looking into it now.' },
+  { label: 'Request more details', message: 'Could you share more details (time, place, people involved) so we can assist faster?' },
+  { label: 'Ask for patience', message: 'Thank you for your patience. We will update you as soon as possible.' },
+  { label: 'Mark as resolved', message: 'This matter has been resolved. Reply here anytime if you need further help.' },
 ];
 
 type TimelineItem =
@@ -95,6 +96,55 @@ export default function AdminContactsInbox() {
   const [detailReportId, setDetailReportId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [quickOpen, setQuickOpen] = useState(false);
+  const threadRef = useRef<HTMLDivElement | null>(null);
+  // Always-current active thread id so the realtime refresh() can tell which
+  // conversation is "open" without re-creating the subscription effect.
+  const activeIdRef = useRef<string | null>(null);
+  useEffect(() => {
+    activeIdRef.current = activeId;
+  }, [activeId]);
+
+  // Live unread count (updates instantly when residents send/start chats).
+  const { adminUnread } = useUnreadCounts(true);
+
+  // Keep the latest messages in view so a new chat entry is always visible
+  // without the admin having to scroll down manually.
+  useEffect(() => {
+    const el = threadRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [messages, activeId]);
+
+  // Opening a thread counts as "seen" — clears THAT thread's red unread number
+  // only (not the whole inbox), Messenger-style.
+  useEffect(() => {
+    if (!activeId) return;
+    void markInquiryRead(activeId);
+  }, [activeId]);
+
+  // Latest message time per conversation — used to sort threads by activity so
+  // a conversation with a fresh message floats to the top (Messenger-style).
+  const lastActiveAt = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const m of messages) map[m.inquiry_id] = m.created_at;
+    return map;
+  }, [messages]);
+
+  // How many unseen resident messages a conversation has (bold + badge). The
+  // thread's initial inquiry message counts too, so a brand-new chat — which
+  // has no inquiry_messages rows — still shows a red 1.
+  const unreadReplyCount = (i: Inquiry) => {
+    if (i.status === 'Resolved' || i.status === 'Closed') return 0;
+    const cutoff = new Date(i.staff_last_read_at ?? 0).getTime();
+    const initial = new Date(i.created_at).getTime() > cutoff ? 1 : 0;
+    return (
+      initial +
+      messages.reduce(
+        (n, m) => (m.inquiry_id === i.id && m.sender_role === 'resident' && new Date(m.created_at).getTime() > cutoff ? n + 1 : n),
+        0,
+      )
+    );
+  };
 
   const lastByInquiry = useMemo(() => {
     const map: Record<string, string> = {};
@@ -144,26 +194,79 @@ export default function AdminContactsInbox() {
   };
 
   useEffect(() => {
-    void (async () => {
+    let disposed = false;
+    const refresh = async (initial = false) => {
+      if (disposed) return;
       const inqs = await fetchInquiries();
+      if (disposed) return;
       setInquiries(inqs);
       const msgs = await fetchMessages();
+      if (disposed) return;
       setMessages(msgs);
       await Promise.all([fetchProfiles(inqs), fetchPresence(inqs)]);
-      setActiveId((prev) => prev ?? inqs[0]?.id ?? null);
-      setLoading(false);
-      void markInquiriesRead();
-    })();
-    const timer = window.setInterval(() => {
-      void (async () => {
-        const inqs = await fetchInquiries();
-        setInquiries(inqs);
-        const msgs = await fetchMessages();
-        setMessages(msgs);
-        await Promise.all([fetchProfiles(inqs), fetchPresence(inqs)]);
-      })();
-    }, 5_000);
-    return () => window.clearInterval(timer);
+      // The currently open thread counts as seen: if a resident reply just
+      // landed in it, clear only its red number. This converges — once marked,
+      // no unseen messages remain in that thread, so the follow-up realtime
+      // refresh won't re-mark (avoids an update -> event -> update loop).
+      const opened = activeIdRef.current;
+      if (opened) {
+        const inquiry = inqs.find((i) => i.id === opened);
+        const cutoff = new Date(inquiry?.staff_last_read_at ?? 0).getTime();
+        const initialUnseen = inquiry ? new Date(inquiry.created_at).getTime() > cutoff : false;
+        const hasUnseen =
+          initialUnseen ||
+          msgs.some(
+            (m) =>
+              m.inquiry_id === opened &&
+              m.sender_role === 'resident' &&
+              new Date(m.created_at).getTime() > cutoff,
+          );
+        if (hasUnseen) void markInquiryRead(opened);
+      }
+      if (initial) {
+        // Latest message per conversation — auto-select the newest ACTIVE
+        // thread (by last activity, matching the list's Messenger-style sort),
+        // never an archived one.
+        const lastActivity = new Map<string, string>();
+        for (const m of msgs) {
+          if (!m.inquiry_id || !m.created_at) continue;
+          const cur = lastActivity.get(m.inquiry_id);
+          if (!cur || m.created_at > cur) lastActivity.set(m.inquiry_id, m.created_at);
+        }
+        setActiveId((prev) => {
+          if (prev) return prev;
+          let best: Inquiry | null = null;
+          for (const i of inqs) {
+            if (isArchivedStatus(i.status)) continue;
+            const t = lastActivity.get(i.id) ?? i.created_at;
+            const bt = best ? lastActivity.get(best.id) ?? best.created_at : null;
+            if (!best || new Date(t).getTime() > new Date(bt!).getTime()) best = i;
+          }
+          return best?.id ?? inqs[0]?.id ?? null;
+        });
+        setLoading(false);
+      }
+    };
+
+    void refresh(true);
+
+    // Live updates: new/changed inquiries and thread messages stream in via
+    // realtime (SQL: realtime-publication/stmt-001.sql).
+    const channel = supabase
+      .channel('admin-contacts-inbox')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'inquiries' }, () => void refresh())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'inquiry_messages' }, () => void refresh())
+      .subscribe();
+
+    // Presence last_seen_at refreshes only with heartbeats, so a light poll
+    // keeps the online dot honest without needing realtime on presence.
+    const timer = window.setInterval(() => void refresh(), 10_000);
+
+    return () => {
+      disposed = true;
+      window.clearInterval(timer);
+      void supabase.removeChannel(channel);
+    };
   }, []);
 
   const active = inquiries.find((i) => i.id === activeId) ?? null;
@@ -219,16 +322,27 @@ export default function AdminContactsInbox() {
     return q === '' || i.sender_name.toLowerCase().includes(q) || i.subject.toLowerCase().includes(q) || i.message.toLowerCase().includes(q);
   });
 
+  // Conversations sort by latest activity (last message wins) so a thread with
+  // a fresh message jumps to the top instead of being buried by created_at.
+  const sortedVisible = useMemo(
+    () =>
+      [...visible].sort(
+        (a, b) =>
+          new Date(lastActiveAt[b.id] ?? b.created_at).getTime() - new Date(lastActiveAt[a.id] ?? a.created_at).getTime(),
+      ),
+    [visible, lastActiveAt],
+  );
+
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [query, filter]);
 
   // Pagination calculations
-  const totalPages = Math.ceil(visible.length / itemsPerPage);
+  const totalPages = Math.ceil(sortedVisible.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedInquiries = visible.slice(startIndex, endIndex);
+  const paginatedInquiries = sortedVisible.slice(startIndex, endIndex);
 
   const setStatus = async (status: string) => {
     if (!active) return;
@@ -286,7 +400,7 @@ export default function AdminContactsInbox() {
       const msgs = await fetchMessages();
       setMessages(msgs);
       await Promise.all([fetchProfiles(inqs), fetchPresence(inqs)]);
-      void markInquiriesRead();
+      void markInquiryRead(active.id);
     } catch (e) {
       setToast({ type: 'error', message: e instanceof Error ? e.message : 'Failed to send reply.' });
     } finally {
@@ -298,7 +412,15 @@ export default function AdminContactsInbox() {
     <div className="flex flex-col xl:flex-row gap-6 h-[72vh] min-h-[520px]">
       <section className={`xl:w-[320px] w-full bg-white border border-border-subtle rounded-xl flex flex-col overflow-hidden shrink-0 ${active ? 'hidden xl:flex' : 'flex'}`}>
         <div className="p-4 border-b border-border-subtle bg-surface/50">
-          <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase mb-3">Message Threads</div>
+          <div className="flex items-center justify-between mb-3">
+            <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase">Message Threads</div>
+            {adminUnread > 0 && (
+              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-error text-white text-[10px] font-bold animate-pulse">
+                <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
+                {adminUnread} new
+              </span>
+            )}
+          </div>
           <div className="flex space-x-1 bg-surface-container rounded-lg p-1 mb-3">
             {FILTERS.map((f) => (
               <button
@@ -353,15 +475,26 @@ export default function AdminContactsInbox() {
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="flex justify-between items-start mb-1">
-                      <span className="font-label-md text-label-md font-bold text-on-surface flex items-center gap-1 truncate">
+                    <div className="flex justify-between items-start mb-1 gap-2">
+                      <span className={`font-label-md text-label-md flex items-center gap-1 truncate ${
+                        unreadReplyCount(i) > 0 ? 'font-extrabold text-on-surface' : 'font-bold text-on-surface-variant'
+                      }`}>
                         {residentName(i)}
-                        {i.status === 'Open' && <span className="w-2 h-2 rounded-full bg-error-red"></span>}
+                        {unreadReplyCount(i) > 0 && (
+                          <span className="w-2 h-2 rounded-full bg-secondary shrink-0" title="Unread resident replies"></span>
+                        )}
                         {isResidentOnline(i) && (
-                          <span className="w-2 h-2 rounded-full bg-success-green animate-pulse" title="Resident online now"></span>
+                          <span className="w-2 h-2 rounded-full bg-success-green animate-pulse shrink-0" title="Resident online now"></span>
                         )}
                       </span>
-                      <span className="font-label-sm text-label-sm text-outline shrink-0 ml-2">{timeAgo(i.created_at)}</span>
+                      <span className="flex flex-col items-end gap-0.5 shrink-0">
+                        <span className="font-label-sm text-label-sm text-outline">{timeAgo(lastActiveAt[i.id] ?? i.created_at)}</span>
+                        {unreadReplyCount(i) > 0 && (
+                          <span className="inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-error px-1 text-[9px] font-bold text-white">
+                            {unreadReplyCount(i) > 9 ? '9+' : unreadReplyCount(i)}
+                          </span>
+                        )}
+                      </span>
                     </div>
                     <p className="font-body-sm text-body-sm text-on-surface font-medium truncate mb-1">{i.subject}</p>
                     <p className="font-body-sm text-body-sm text-on-surface-variant truncate">{lastByInquiry[i.id] ?? i.message}</p>
@@ -380,7 +513,7 @@ export default function AdminContactsInbox() {
             setItemsPerPage(items);
             setCurrentPage(1);
           }}
-          totalItems={visible.length}
+          totalItems={sortedVisible.length}
           startIndex={startIndex}
           endIndex={endIndex}
         />
@@ -432,7 +565,7 @@ export default function AdminContactsInbox() {
                 </button>
               )}
             </div>
-            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-surface-bg/50">
+            <div ref={threadRef} className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-surface-bg/50">
               {timeline.map((item) => {
                 if (item.kind === 'day') {
                   return (
@@ -505,17 +638,53 @@ export default function AdminContactsInbox() {
               </div>
             ) : (
               <div className="p-4 border-t border-border-subtle bg-white">
-                <div className="flex gap-2 mb-3 overflow-x-auto pb-1">
-                  {CANNED_RESPONSES.map((c, idx) => (
+                <div className="relative mb-3">
+                  {quickOpen && (
                     <button
-                      key={idx}
                       type="button"
-                      onClick={() => setReply(c)}
-                      className="shrink-0 px-3 py-1.5 bg-surface-container border border-border-subtle rounded-full font-body-sm text-body-sm text-on-surface hover:border-secondary hover:text-secondary transition-colors"
-                    >
-                      {c.length > 40 ? `${c.slice(0, 40)}…` : c}
-                    </button>
-                  ))}
+                      className="fixed inset-0 z-30 cursor-default"
+                      onClick={() => setQuickOpen(false)}
+                      aria-label="Close quick replies"
+                    />
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setQuickOpen((v) => !v)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-label-sm font-medium transition-colors ${
+                      quickOpen ? 'border-secondary bg-secondary/10 text-secondary' : 'border-border-subtle text-on-surface hover:border-secondary hover:text-secondary'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-[16px]">bolt</span>
+                    Quick replies
+                    <span className={`material-symbols-outlined text-[16px] transition-transform ${quickOpen ? 'rotate-180' : ''}`}>expand_more</span>
+                  </button>
+                  {quickOpen && (
+                    <div className="absolute bottom-full left-0 mb-2 z-40 w-[22rem] max-w-[calc(100vw-2rem)] bg-white border border-border-subtle rounded-xl shadow-sm-hover overflow-hidden">
+                      <div className="px-3 py-2 border-b border-border-subtle bg-surface/50 flex items-center justify-between">
+                        <span className="font-caps-xs text-caps-xs text-on-surface-variant uppercase">Quick replies</span>
+                        <span className="text-[10px] text-outline">Tap to use</span>
+                      </div>
+                      <div className="max-h-56 overflow-y-auto">
+                        {CANNED_RESPONSES.map((c, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => {
+                              setReply(c.message);
+                              setQuickOpen(false);
+                            }}
+                            className="w-full text-left px-3 py-2.5 border-b border-border-subtle last:border-0 hover:bg-surface-bg transition-colors flex items-start gap-2.5"
+                          >
+                            <span className="material-symbols-outlined text-[18px] text-secondary mt-0.5 shrink-0">chat_bubble</span>
+                            <span className="min-w-0">
+                              <span className="block font-label-md text-label-md font-semibold text-on-surface">{c.label}</span>
+                              <span className="block font-body-sm text-body-sm text-on-surface-variant leading-snug line-clamp-2">{c.message}</span>
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="flex items-end gap-2 bg-surface-container rounded-full border border-border-subtle px-3 py-2 focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary transition-all shadow-sm">
                   <textarea

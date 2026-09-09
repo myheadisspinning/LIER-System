@@ -297,8 +297,8 @@ if (item.children && item.children.length > 0) {
       </span>
       {item.badge ? (
         <span className="ml-auto bg-error text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">{item.badge}</span>
-      ) : unread > 0 && pathname !== item.to ? (
-        <UnreadBadge count={unread} className="bg-error" />
+      ) : unread > 0 ? (
+        <UnreadBadge count={unread} className="ml-auto bg-error" />
       ) : null}
     </NavLink>
   );

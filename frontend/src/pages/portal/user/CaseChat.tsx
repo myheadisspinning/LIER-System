@@ -130,41 +130,46 @@ export default function CaseChat() {
  })();
  }, [currentId]);
 
- useEffect(() => {
- void (async () => {
-  const rows = await fetchStaffPresence();
-  setAdminPresence(rows);
- })();
- const presenceTimer = window.setInterval(() => {
+useEffect(() => {
   void (async () => {
-  const rows = await fetchStaffPresence();
-  setAdminPresence(rows);
+   const rows = await fetchStaffPresence();
+   setAdminPresence(rows);
   })();
- }, 10_000);
- const pollTimer = window.setInterval(() => {
-  void (async () => {
-  const res = await supabase
-   .from('inquiries')
-   .select('id, sender_name, subject, message, status, incident_id, created_at')
-   .eq('created_by', profile?.id ?? '')
-   .order('created_at', { ascending: false })
-   .limit(100);
-  setInquiries((res.data ?? []) as Inquiry[]);
-  if (currentId) {
-   const msgRes = await supabase
-   .from('inquiry_messages')
-   .select('id, inquiry_id, sender_role, sender_name, message, created_at')
-   .eq('inquiry_id', currentId)
-   .order('created_at', { ascending: true });
-   setMessages((msgRes.data ?? []) as Msg[]);
-  }
-  })();
- }, 5_000);
- return () => {
-  window.clearInterval(presenceTimer);
-  window.clearInterval(pollTimer);
- };
- }, [profile?.id, currentId]);
+  const refreshThread = async () => {
+   const res = await supabase
+    .from('inquiries')
+    .select('id, sender_name, subject, message, status, incident_id, created_at')
+    .eq('created_by', profile?.id ?? '')
+    .order('created_at', { ascending: false })
+    .limit(100);
+   setInquiries((res.data ?? []) as Inquiry[]);
+   if (currentId) {
+    const msgRes = await supabase
+     .from('inquiry_messages')
+     .select('id, inquiry_id, sender_role, sender_name, message, created_at')
+     .eq('inquiry_id', currentId)
+     .order('created_at', { ascending: true });
+    setMessages((msgRes.data ?? []) as Msg[]);
+   }
+  };
+  const presenceTimer = window.setInterval(() => {
+   void (async () => {
+    const rows = await fetchStaffPresence();
+    setAdminPresence(rows);
+   })();
+  }, 10_000);
+  const pollTimer = window.setInterval(() => void refreshThread(), 5_000);
+  const channel = supabase
+   .channel(`case-chat-${Math.random().toString(36).slice(2)}`)
+   .on('postgres_changes', { event: '*', schema: 'public', table: 'inquiries' }, () => void refreshThread())
+   .on('postgres_changes', { event: '*', schema: 'public', table: 'inquiry_messages' }, () => void refreshThread())
+   .subscribe();
+  return () => {
+   window.clearInterval(presenceTimer);
+   window.clearInterval(pollTimer);
+   void supabase.removeChannel(channel);
+  };
+  }, [profile?.id, currentId]);
 
  const buildTimeline = (): TimelineItem[] => {
  if (!active) return [];
@@ -323,8 +328,11 @@ const statusBadge = (s: string) =>
    </div>
 
    <div>
-    <h3 className="font-label-md text-label-md font-bold text-on-surface mb-3 text-center">Choose a topic to start a chat</h3>
-    <div className="grid gap-3 md:grid-cols-2">
+    <div className="text-center mb-3">
+     <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Start a new chat</div>
+     <h3 className="font-label-md text-label-md font-bold text-on-surface">Choose a topic</h3>
+    </div>
+    <div className="grid gap-3 sm:grid-cols-2">
     <button
      type="button"
      onClick={() => startTopic('general')}

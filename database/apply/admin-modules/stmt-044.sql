@@ -1,2 +1,4 @@
 -- 6a) presence (online / last-seen for portal heartbeat)
---     Heartbeat upserts own row every 30s
+--     Heartbeat upserts own row every 30s; online = last_seen_at within ~5 min
+--     (mobile browsers throttle background-tab timers, so a tight window
+--     falsely marks active users offline).

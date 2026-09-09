@@ -241,7 +241,10 @@ export default function AdminIncidentReporting() {
       if (error) setError(error);
       setReports(reports);
       setReporterMap(rMap);
-      setSelectedId((prev) => prev ?? initialCaseRef.current ?? reports[0]?.id ?? null);
+      setSelectedId((prev) => {
+        const firstActive = reports.find((r) => r.status !== 'Resolved' && r.status !== 'Rejected');
+        return prev ?? initialCaseRef.current ?? firstActive?.id ?? reports[0]?.id ?? null;
+      });
       setLoading(false);
       channel = supabase
         .channel('admin-incident-reporting')

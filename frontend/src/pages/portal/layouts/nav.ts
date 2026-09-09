@@ -52,8 +52,8 @@ export const adminNav: RoleNav = {
       to: '/admin/ai-dispatch-terminal',
     },
     {
-      label: 'Contacts & Inbox',
-      subLabel: 'Official communication and inquiries',
+      label: 'Inbox',
+      subLabel: 'Inquiries & messages',
       icon: 'chat',
       to: '/admin/contacts-inbox',
       unreadKey: 'admin',
@@ -279,8 +279,8 @@ export const userNav: RoleNav = {
       to: '/user/emergency-sos',
     },
     {
-      label: 'Case Chat & Messages',
-      subLabel: 'Messages',
+      label: 'Messages',
+      subLabel: 'Chat with the desk',
       description: 'Securely message desk officers and review official case conversations.',
       icon: 'chat',
       to: '/user/case-chat',
