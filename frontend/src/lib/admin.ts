@@ -195,7 +195,7 @@ export function isOnlineSince(lastSeen: string | null | undefined): boolean {
 }
 
 async function upsertPresence(profile: { id: string; fullname: string; role: string | null }) {
-  await supabase.from('presence').upsert(
+  const { error } = await supabase.from('presence').upsert(
     {
       user_id: profile.id,
       user_name: profile.fullname,
@@ -204,6 +204,7 @@ async function upsertPresence(profile: { id: string; fullname: string; role: str
     },
     { onConflict: 'user_id' },
   );
+  if (error) console.error('presence heartbeat upsert failed:', error.message);
 }
 
 export function usePresenceHeartbeat(intervalMs = 30_000) {

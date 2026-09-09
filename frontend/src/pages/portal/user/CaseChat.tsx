@@ -290,16 +290,16 @@ useEffect(() => {
 const statusBadge = (s: string) =>
   s === 'Open' ? 'bg-error-red/10 text-error-red' : s === 'In Progress' ? 'bg-warning-amber/10 text-warning-amber' : s === 'Resolved' ? 'bg-success-green/10 text-success-green' : 'bg-surface-container-low text-on-surface-variant';
 
- if (loading) {
- return (
-  <div className="h-[calc(100vh-12rem)] sm:h-[calc(100vh-17rem)] min-h-[300px] sm:min-h-[520px] bg-surface-container-lowest rounded-2xl border border-border-subtle flex items-center justify-center">
-  <p className="text-on-surface-variant">Loading…</p>
-  </div>
- );
- }
+if (loading) {
+  return (
+   <div className="h-[70vh] min-h-[360px] max-h-[560px] sm:h-[65vh] sm:max-h-[600px] bg-surface-container-lowest rounded-2xl border border-border-subtle flex items-center justify-center">
+   <p className="text-on-surface-variant">Loading…</p>
+   </div>
+  );
+  }
 
- return (
- <div className="h-[calc(100vh-12rem)] sm:h-[calc(100vh-17rem)] min-h-[300px] sm:min-h-[520px] bg-surface-container-lowest rounded-2xl border border-border-subtle flex flex-col overflow-hidden">
+  return (
+  <div className="h-[70vh] min-h-[360px] max-h-[560px] sm:h-[65vh] sm:max-h-[600px] bg-surface-container-lowest rounded-2xl border border-border-subtle flex flex-col overflow-hidden">
   {startingChat ? (
   <div className="flex-1 flex flex-col items-center justify-center p-6">
    <div className="w-16 h-16 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center mb-4">
