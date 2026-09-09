@@ -200,9 +200,10 @@ useEffect(() => {
       <span className="material-symbols-outlined text-[18px]">add</span> Report an Incident
      </Link>
      </div>
-    ) : (
-     <div className="overflow-x-auto">
-     <table className="w-full text-left">
+) : (
+     <>
+     <div className="hidden lg:block overflow-x-auto">
+      <table className="w-full text-left">
       <thead className="border-b border-border-subtle bg-surface-container-low text-on-surface-variant">
       <tr>
        <th className="px-5 py-2.5 text-[11px] font-bold uppercase tracking-widest">Report</th>
@@ -245,10 +246,43 @@ useEffect(() => {
         </td>
        </tr>
        );
+})}
+       </tbody>
+      </table>
+      </div>
+      <div className="lg:hidden divide-y divide-border-subtle">
+      {reports.map((r) => {
+       const sm = statusMeta(r.status);
+       return (
+       <div key={r.id} className="p-4">
+        <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+         <div className="text-sm font-semibold text-on-surface">{r.report_no ?? r.id.slice(0, 8).toUpperCase()}</div>
+         <div className="text-xs text-on-surface-variant mt-0.5 line-clamp-2">{r.title}</div>
+        </div>
+        <span className={`inline-flex items-center shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${sm.chip}`}>
+         <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${sm.dot}`}></span>
+         {sm.label}
+        </span>
+        </div>
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-on-surface-variant">
+        <span>{r.category}</span>
+        <span>{formatDate(r.created_at)}</span>
+        <span className="max-w-[180px] truncate">{r.address ?? 'Location on file'}</span>
+        </div>
+        <div className="mt-3 flex items-center justify-between">
+        <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold border ${priorityChip(r.priority)}`}>
+         {r.priority}
+        </span>
+        <Link to="/user/my-incident-reports" className="inline-flex items-center gap-1 text-xs font-bold text-secondary hover:underline">
+         Track <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+        </Link>
+        </div>
+       </div>
+       );
       })}
-      </tbody>
-     </table>
-     </div>
+      </div>
+     </>
     )}
     </section>
 
