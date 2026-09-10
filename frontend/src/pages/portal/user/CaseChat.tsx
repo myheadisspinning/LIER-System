@@ -76,27 +76,47 @@ export default function CaseChat() {
  const [loading, setLoading] = useState(true);
  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
- const endRef = useRef<HTMLDivElement | null>(null);
+ const scrollRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
+  const stickToBottom = useRef(true);
+  const prevThreadRef = useRef<string | null>(null);
 
- const openThread = inquiries.find((i) => i.status === 'Open' || i.status === 'In Progress') ?? null;
+  const scrollToBottom = () => {
+    const el = scrollRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  };
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    stickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  };
+
+  const openThread = inquiries.find((i) => i.status === 'Open' || i.status === 'In Progress') ?? null;
  const archivedThreads = inquiries.filter((i) => i.status === 'Resolved' || i.status === 'Closed');
  const currentId = viewingPastId ?? openThread?.id ?? null;
  const active = inquiries.find((i) => i.id === currentId) ?? null;
  const isClosed = !!active && (active.status === 'Resolved' || active.status === 'Closed');
  const isViewingPast = !!viewingPastId;
 
- const onlineStaff = adminPresence.filter((p) => isOnlineSince(p.last_seen_at));
+  useEffect(() => {
+    if (prevThreadRef.current !== currentId) {
+      prevThreadRef.current = currentId;
+      stickToBottom.current = true;
+    }
+    if (stickToBottom.current) {
+      requestAnimationFrame(scrollToBottom);
+    }
+  }, [messages, currentId]);
+
+  const onlineStaff = adminPresence.filter((p) => isOnlineSince(p.last_seen_at));
  const onlineStaffCount = onlineStaff.length;
 
  const caseLabel = (i: Incident) => `Case ${i.report_no ?? i.id.slice(0, 8).toUpperCase()}`;
- const firstName = profile?.fullname.split(' ')[0] ?? 'there';
+const firstName = profile?.fullname.split(' ')[0] ?? 'there';
 
- useEffect(() => {
- endRef.current?.scrollIntoView({ block: 'end', behavior: 'smooth' });
- }, [messages, currentId]);
-
- useEffect(() => {
- void (async () => {
+  useEffect(() => {
+  void (async () => {
   const p = await getAdminProfile();
   setProfile(p);
   const incRes = await supabase
@@ -130,7 +150,18 @@ export default function CaseChat() {
  })();
  }, [currentId]);
 
-useEffect(() => {
+const autosize = () => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 128) + 'px';
+  };
+
+  useEffect(() => {
+    autosize();
+  }, [draft]);
+
+  useEffect(() => {
   void (async () => {
    const rows = await fetchStaffPresence();
    setAdminPresence(rows);
@@ -437,7 +468,7 @@ if (loading) {
     )}
    </div>
    </div>
-   <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4 bg-surface-bg/50">
+   <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4 bg-surface-bg/50" ref={scrollRef} onScroll={handleScroll}>
    {timeline.map((item) => {
     if (item.kind === 'day') {
     return (
@@ -488,9 +519,8 @@ if (loading) {
      <div className="bg-secondary text-white p-3 rounded-2xl rounded-br-sm font-body-sm text-body-sm ">{m.message}</div>
     </div>
     );
-   })}
-   <div ref={endRef} />
-   </div>
+})}
+    </div>
    {isClosed ? (
    <div className="p-4 border-t border-border-subtle bg-surface/30">
     <div className="flex items-center gap-3 bg-surface-container-lowest border border-border-subtle rounded-xl p-3">
@@ -507,13 +537,14 @@ if (loading) {
    ) : (
    <div className="p-4 border-t border-border-subtle bg-surface-container-lowest">
     <div className="flex items-end gap-2 bg-surface-container rounded-full border border-border-subtle px-3 py-2 focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary transition-all ">
-    <textarea
-     className="w-full bg-transparent border-none outline-none resize-none py-1 font-body-sm text-body-sm focus:ring-0 focus:outline-none text-on-surface max-h-32 overflow-y-auto placeholder:text-outline"
-     placeholder="Type a message..."
-     rows={1}
-     style={{ minHeight: 28 }}
-     value={draft}
-     onChange={(e) => setDraft(e.target.value)}
+<textarea
+      ref={inputRef}
+      className="w-full bg-transparent border-none outline-none resize-none py-1 font-body-sm text-body-sm focus:ring-0 focus:outline-none text-on-surface max-h-32 overflow-y-auto placeholder:text-outline"
+      placeholder="Type a message..."
+      rows={1}
+      style={{ minHeight: 28 }}
+      value={draft}
+      onChange={(e) => setDraft(e.target.value)}
      onKeyDown={(e) => {
      if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();

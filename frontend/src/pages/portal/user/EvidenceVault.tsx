@@ -242,20 +242,20 @@ useEffect(() => {
   onChange={(e) => setSearch(e.target.value)}
   />
  </div>
- <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
-  {filters.map((f) => (
-  <button
-  key={f}
-  type="button"
-  onClick={() => setFilter(f)}
-  className={`px-4 py-2 bg-surface-container-lowest border font-body-sm text-body-sm rounded-lg whitespace-nowrap transition-colors ${
-  filter === f ? 'border-primary text-primary' : 'border-outline-variant text-on-surface-variant hover:bg-surface-container-low'
-  }`}
-  >
-  {f}
-  </button>
-  ))}
- </div>
+<div className="flex space-x-1 bg-surface-container rounded-lg p-1 w-fit">
+   {filters.map((f) => (
+   <button
+   key={f}
+   type="button"
+   onClick={() => setFilter(f)}
+   className={`px-3 py-1.5 rounded font-label-sm text-label-sm transition-colors ${
+   filter === f ? 'bg-surface-container-lowest shadow-sm text-secondary' : 'text-on-surface-variant hover:text-on-surface'
+   }`}
+   >
+   {f}
+   </button>
+   ))}
+   </div>
  <label className="bg-gradient-to-r from-primary to-[#2b2b2b] text-on-primary px-6 py-2 rounded-lg flex items-center justify-center gap-2 font-body-sm font-semibold shrink-0 transition-all duration-200 active:scale-[0.98] cursor-pointer">
   <span className="material-symbols-outlined text-[18px]">{uploading ? 'hourglass_empty' : 'upload'}</span>
   {uploading ? 'Uploading...' : 'Upload New File'}

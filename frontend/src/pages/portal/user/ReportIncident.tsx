@@ -342,6 +342,16 @@ function MapSizeSync() {
  return null;
 }
 
+// Re-measure the map when it goes in/out of fullscreen so tiles re-render to
+// the new viewport size.
+function FullscreenSizeSync({ isFullscreen }: { isFullscreen: boolean }) {
+ const map = useMap();
+ useEffect(() => {
+  requestAnimationFrame(() => map.invalidateSize());
+ }, [map, isFullscreen]);
+ return null;
+}
+
 function FlyTo({ target, onDone }: { target: [number, number] | null; onDone: () => void }) {
  const map = useMap();
  useEffect(() => {
@@ -381,6 +391,24 @@ export default function ReportIncident({ className = '' }: { className?: string 
  const [usingCurrent, setUsingCurrent] = useState(false);
  const [flyTarget, setFlyTarget] = useState<[number, number] | null>(null);
  const [tile, setTile] = useState<'street' | 'satellite'>('street');
+ const [isFullscreen, setIsFullscreen] = useState(false);
+ const mapBoxRef = useRef<HTMLDivElement>(null);
+
+ useEffect(() => {
+  const onFsChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
+  document.addEventListener('fullscreenchange', onFsChange);
+  return () => document.removeEventListener('fullscreenchange', onFsChange);
+ }, []);
+
+ const toggleFullscreen = () => {
+  const el = mapBoxRef.current;
+  if (!el) return;
+  if (document.fullscreenElement) {
+   void document.exitFullscreen();
+  } else {
+   void el.requestFullscreen();
+  }
+ };
  const [analysis, setAnalysis] = useState<AiAnalysis | null>(null);
  const [analyzing, setAnalyzing] = useState(false);
  const [analyzeTick, setAnalyzeTick] = useState(0);
@@ -555,7 +583,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
    }
   }, forced ? 0 : 1500);
   return () => clearTimeout(timer);
- }, [reportTitle, reportDescription, analyzeTick]); // eslint-disable-line react-hooks/exhaustive-deps
+ }, [reportTitle, reportDescription, category, analyzeTick]); // eslint-disable-line react-hooks/exhaustive-deps
 
  const addFiles = (list: FileList | null) => {
   if (!list) return;
@@ -883,9 +911,10 @@ export default function ReportIncident({ className = '' }: { className?: string 
          </div>
         </div>
        </div>
-       <div className="relative w-full min-h-[280px] sm:min-h-[460px] bg-surface-container-low">
+       <div ref={mapBoxRef} className="relative w-full min-h-[280px] sm:min-h-[460px] bg-surface-container-low">
         <MapContainer center={BARANGAY_HALL_CENTER} zoom={15} className="absolute inset-0 z-0" scrollWheelZoom zoomControl={false}>
          <MapSizeSync />
+         <FullscreenSizeSync isFullscreen={isFullscreen} />
          <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -912,6 +941,17 @@ export default function ReportIncident({ className = '' }: { className?: string 
          />
         </MapContainer>
 
+        {/* fullscreen toggle */}
+        <button
+         type="button"
+         onClick={toggleFullscreen}
+         className="absolute top-4 right-4 sm:top-[5.5rem] sm:right-4 z-[600] w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-surface/95 border border-outline-variant text-on-surface flex items-center justify-center shadow-sm hover:border-secondary hover:text-secondary transition-colors active:scale-95"
+         title={isFullscreen ? 'Exit fullscreen' : 'View fullscreen'}
+         aria-label={isFullscreen ? 'Exit fullscreen' : 'View fullscreen'}
+        >
+         <span className="material-symbols-outlined text-[20px]">{isFullscreen ? 'fullscreen_exit' : 'fullscreen'}</span>
+        </button>
+
         {/* crosshair reticle */}
         <div className="absolute inset-0 pointer-events-none">
          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-outline-variant/30"></div>
@@ -926,7 +966,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
         </div>
 
         {/* address + coordinates chip */}
-        <div className="absolute top-4 left-4 z-[600] bg-surface/95 border border-outline-variant rounded-lg px-2 py-1 sm:px-3 sm:py-2 flex items-center gap-2 max-w-[calc(100%-2rem)] sm:max-w-[260px]" title={address}>
+        <div className="absolute top-4 left-4 z-[600] bg-surface/95 border border-outline-variant rounded-lg px-2 py-1 sm:px-3 sm:py-2 flex items-center gap-2 max-w-[calc(100%-5rem)] sm:max-w-[260px]" title={address}>
          <span className="material-symbols-outlined text-secondary text-[12px] sm:text-[16px] shrink-0">near_me</span>
          <div className="min-w-0">
           <p className="text-[9px] leading-tight sm:text-[11px] text-on-surface font-semibold truncate">{address}</p>

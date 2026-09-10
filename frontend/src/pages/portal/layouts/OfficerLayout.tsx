@@ -115,8 +115,8 @@ export default function OfficerLayout() {
       if (item.section && item.section !== section) {
         section = item.section;
         nodes.push(
-          <div key={`section-${section}`} className="mt-5 mb-1.5 px-3">
-            <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">{section}</p>
+          <div key={`section-${section}`} className="mt-3 mb-1 px-2.5">
+            <p className="text-[9px] text-on-surface-variant uppercase font-bold tracking-widest">{section}</p>
           </div>,
         );
       }
@@ -222,10 +222,10 @@ export default function OfficerLayout() {
                   {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-secondary">{initials()}</span>}
                 </button>
                 {profileOpen && (
-                  <div className="absolute right-0 mt-2 w-60 bg-white border border-outline-variant/30 rounded-lg shadow-sm overflow-hidden z-50">
-                    <div className="px-4 py-3 border-b border-outline-variant/30">
-                      <p className="text-sm font-bold text-on-surface truncate">{displayName()}</p>
-                      <p className="text-[10px] text-on-surface-variant uppercase tracking-wider truncate">{user?.email}</p>
+                  <div className="absolute right-0 mt-2 w-48 md:w-60 bg-white border border-outline-variant/30 rounded-lg shadow-sm overflow-hidden z-50">
+                    <div className="px-3 py-2 md:px-4 md:py-3 border-b border-outline-variant/30">
+                      <p className="text-xs md:text-sm font-bold text-on-surface truncate">{displayName()}</p>
+                      <p className="text-[9px] md:text-[10px] text-on-surface-variant uppercase tracking-wider truncate">{user?.email}</p>
                     </div>
                     <button
                       type="button"
@@ -233,26 +233,16 @@ export default function OfficerLayout() {
                         setProfileOpen(false);
                         navigate('/officer/account-settings');
                       }}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors text-left"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors text-left"
                     >
-                      <span className="material-symbols-outlined text-lg text-secondary">manage_accounts</span> Account &amp; Settings
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setProfileOpen(false);
-                        navigate('/');
-                      }}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors text-left"
-                    >
-                      <span className="material-symbols-outlined text-lg text-secondary">home</span> Home
+                      <span className="material-symbols-outlined text-base md:text-lg text-secondary">manage_accounts</span> Account &amp; Settings
                     </button>
                     <button
                       type="button"
                       onClick={handleSignOut}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-error hover:bg-surface-container-low transition-colors text-left border-t border-outline-variant/30"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm text-error hover:bg-surface-container-low transition-colors text-left border-t border-outline-variant/30"
                     >
-                      <span className="material-symbols-outlined text-lg">logout</span> Sign Out
+                      <span className="material-symbols-outlined text-base md:text-lg">logout</span> Sign Out
                     </button>
                   </div>
                 )}
@@ -295,15 +285,15 @@ export default function OfficerLayout() {
             drawerOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
-          <div className="p-5 pb-4 border-b border-outline-variant/30">
+          <div className="p-4 pb-3 border-b border-outline-variant/30">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-full bg-white border-2 border-tertiary-fixed-dim overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
                   <img src="/image/culiat-logo.png" alt="Barangay Culiat Logo" className="w-full h-full object-contain" />
                 </div>
                 <div>
-                  <h1 className="text-base font-bold text-on-surface leading-tight tracking-tight">{officerNav.brand}</h1>
-                  <p className="text-[9px] text-on-surface-variant uppercase tracking-widest font-bold mt-0.5">{officerNav.brandSub}</p>
+                  <h1 className="text-sm font-bold text-on-surface leading-tight tracking-tight">{officerNav.brand}</h1>
+                  <p className="text-[8px] text-on-surface-variant uppercase tracking-widest font-bold mt-0.5">{officerNav.brandSub}</p>
                 </div>
               </div>
               <button
@@ -316,20 +306,20 @@ export default function OfficerLayout() {
               </button>
             </div>
           </div>
-          <nav className="flex-1 min-h-0 flex flex-col overflow-y-auto scroll-hide px-3 pt-3 pb-6">{renderGroups(() => setDrawerOpen(false))}</nav>
-          <div className="mt-auto p-4 border-t border-outline-variant/30">
-            <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-low border border-outline-variant/30">
-              <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs font-bold shrink-0 overflow-hidden">
+          <nav className="flex-1 min-h-0 flex flex-col overflow-y-auto scroll-hide px-2.5 pt-2.5 pb-5">{renderGroups(() => setDrawerOpen(false))}</nav>
+          <div className="mt-auto p-3 border-t border-outline-variant/30">
+            <div className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant/30">
+              <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-[11px] font-bold shrink-0 overflow-hidden">
                 {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : initials()}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-on-surface leading-tight truncate">{displayName()}</p>
-                <p className="text-[10px] text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
+                <p className="text-xs font-semibold text-on-surface leading-tight truncate">{displayName()}</p>
+                <p className="text-[9px] text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span>System Online
                 </p>
               </div>
               <button type="button" onClick={handleSignOut} className="text-on-surface-variant hover:text-on-surface transition-colors" aria-label="Sign out">
-                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>logout</span>
+                <span className="material-symbols-outlined" style={{ fontSize: 18 }}>logout</span>
               </button>
             </div>
           </div>
@@ -356,19 +346,19 @@ function SidebarLink({ item, pathname, unreadCounts, onNavigate }: { item: NavIt
     <NavLink
       to={item.to ?? '#!'}
       onClick={onNavigate}
-      className={`flex items-center gap-3 px-3 py-2 rounded-lg relative transition-all ${
+      className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg relative transition-all ${
         isActive
           ? 'bg-secondary/10 text-on-surface border border-outline-variant'
           : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface'
       }`}
     >
       {isActive && <span className="w-1 h-7 rounded-full bg-secondary absolute -left-0.5"></span>}
-      <span className={`material-symbols-outlined shrink-0 flex items-center justify-center ${isActive ? 'text-secondary' : 'text-on-surface-variant'}`} style={{ fontSize: 20 }}>
+      <span className={`material-symbols-outlined shrink-0 flex items-center justify-center ${isActive ? 'text-secondary' : 'text-on-surface-variant'}`} style={{ fontSize: 18 }}>
         {item.icon ?? 'radio_button_unchecked'}
       </span>
       <span className="flex flex-col min-w-0">
-        <span className={`text-sm truncate ${isActive ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>
-        {item.subLabel && <span className="text-[9px] text-on-surface-variant truncate">{item.subLabel}</span>}
+        <span className={`text-xs truncate ${isActive ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>
+        {item.subLabel && <span className="text-[8px] text-on-surface-variant truncate">{item.subLabel}</span>}
       </span>
       {unread > 0 && !isActive && <UnreadBadge count={unread} className="bg-error" />}
     </NavLink>

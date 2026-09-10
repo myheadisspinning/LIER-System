@@ -76,6 +76,8 @@ const CANNED_RESPONSES: { label: string; message: string }[] = [
   { label: 'Mark as resolved', message: 'This matter has been resolved. Reply here anytime if you need further help.' },
 ];
 
+const CLOSING_MESSAGE = 'We are now closing this conversation so everything stays organized. If you have other questions or concerns, feel free to start a new chat anytime. Thank you for reaching out to us!';
+
 type TimelineItem =
   | { kind: 'day'; label: string; key: string }
   | { kind: 'inquiry'; key: string }
@@ -97,7 +99,11 @@ export default function AdminContactsInbox() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [quickOpen, setQuickOpen] = useState(false);
-  const threadRef = useRef<HTMLDivElement | null>(null);
+  const [closeOpen, setCloseOpen] = useState(false);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
+  const stickToBottom = useRef(true);
+  const prevThreadRef = useRef<string | null>(null);
   // Always-current active thread id so the realtime refresh() can tell which
   // conversation is "open" without re-creating the subscription effect.
   const activeIdRef = useRef<string | null>(null);
@@ -108,12 +114,37 @@ export default function AdminContactsInbox() {
   // Live unread count (updates instantly when residents send/start chats).
   const { adminUnread } = useUnreadCounts(true);
 
-  // Keep the latest messages in view so a new chat entry is always visible
-  // without the admin having to scroll down manually.
-  useEffect(() => {
-    const el = threadRef.current;
+  // Auto-scroll to the newest message without yanking the admin down while
+  // they're reading older history: stick only when already near the bottom or
+  // when switching to a different thread.
+  const scrollToBottom = () => {
+    const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
+  };
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    stickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  };
+  useEffect(() => {
+    if (prevThreadRef.current !== activeId) {
+      prevThreadRef.current = activeId;
+      stickToBottom.current = true;
+    }
+    if (stickToBottom.current) {
+      requestAnimationFrame(scrollToBottom);
+    }
   }, [messages, activeId]);
+
+  const autosize = () => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 128) + 'px';
+  };
+  useEffect(() => {
+    autosize();
+  }, [reply]);
 
   // Opening a thread counts as "seen" — clears THAT thread's red unread number
   // only (not the whole inbox), Messenger-style.
@@ -565,7 +596,7 @@ export default function AdminContactsInbox() {
                 </button>
               )}
             </div>
-            <div ref={threadRef} className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-surface-bg/50">
+            <div ref={scrollRef} onScroll={handleScroll} className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-surface-bg/50">
               {timeline.map((item) => {
                 if (item.kind === 'day') {
                   return (
@@ -638,18 +669,65 @@ export default function AdminContactsInbox() {
               </div>
             ) : (
               <div className="p-4 border-t border-border-subtle bg-white">
-                <div className="relative mb-3">
-                  {quickOpen && (
+                <div className="relative mb-3 flex items-center gap-2">
+                  {(quickOpen || closeOpen) && (
                     <button
                       type="button"
                       className="fixed inset-0 z-30 cursor-default"
-                      onClick={() => setQuickOpen(false)}
-                      aria-label="Close quick replies"
+                      onClick={() => {
+                        setQuickOpen(false);
+                        setCloseOpen(false);
+                      }}
+                      aria-label="Close popovers"
                     />
                   )}
                   <button
                     type="button"
-                    onClick={() => setQuickOpen((v) => !v)}
+                    disabled={sending || !active}
+                    onClick={() => {
+                      setCloseOpen((v) => !v);
+                      setQuickOpen(false);
+                    }}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-label-sm font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none ${
+                      closeOpen ? 'border-error bg-error/10 text-error' : 'border-border-subtle text-error hover:border-error hover:bg-error/10'
+                    }`}
+                    title="Insert the closing-reminder message into the composer"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">lock</span>
+                    Close chat
+                    <span className={`material-symbols-outlined text-[16px] transition-transform ${closeOpen ? 'rotate-180' : ''}`}>expand_more</span>
+                  </button>
+                  {closeOpen && (
+                    <div className="absolute bottom-full left-0 mb-2 z-40 w-[22rem] max-w-[calc(100vw-2rem)] bg-white border border-border-subtle rounded-xl shadow-sm-hover overflow-hidden">
+                      <div className="px-3 py-2 border-b border-border-subtle bg-surface/50 flex items-center justify-between">
+                        <span className="font-caps-xs text-caps-xs text-on-surface-variant uppercase">Close conversation</span>
+                        <span className="text-[10px] text-outline">Tap to fill message</span>
+                      </div>
+                      <div className="max-h-56 overflow-y-auto p-1">
+                        <button
+                          type="button"
+                          disabled={sending || !active}
+                          onClick={() => {
+                            setReply(CLOSING_MESSAGE);
+                            setCloseOpen(false);
+                          }}
+                          className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-surface-bg transition-colors flex items-start gap-2.5 disabled:opacity-50"
+                        >
+                          <span className="material-symbols-outlined text-[18px] text-error mt-0.5 shrink-0">lock</span>
+                          <span className="min-w-0">
+                            <span className="block font-label-md text-label-md font-semibold text-on-surface">Insert closing reminder</span>
+                            <span className="block font-body-sm text-body-sm text-on-surface-variant leading-snug line-clamp-3">{CLOSING_MESSAGE}</span>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setQuickOpen((v) => !v);
+                      setCloseOpen(false);
+                    }}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-label-sm font-medium transition-colors ${
                       quickOpen ? 'border-secondary bg-secondary/10 text-secondary' : 'border-border-subtle text-on-surface hover:border-secondary hover:text-secondary'
                     }`}
@@ -688,6 +766,7 @@ export default function AdminContactsInbox() {
                 </div>
                 <div className="flex items-end gap-2 bg-surface-container rounded-full border border-border-subtle px-3 py-2 focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary transition-all shadow-sm">
                   <textarea
+                    ref={inputRef}
                     className="w-full bg-transparent border-none outline-none resize-none py-1 font-body-sm text-body-sm focus:ring-0 text-on-surface max-h-32 overflow-y-auto placeholder:text-outline"
                     placeholder="Type a response..."
                     rows={1}
