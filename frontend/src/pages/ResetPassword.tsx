@@ -1,3 +1,4 @@
+import Ph from '../components/PhIcon';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
@@ -93,7 +94,7 @@ export default function ResetPassword() {
     return (
       <div className="bg-background text-on-background font-body-md min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <span className="material-symbols-outlined text-4xl text-secondary animate-spin">progress_activity</span>
+          <Ph className="text-4xl text-secondary animate-spin" name="progress_activity" />
           <p className="text-on-surface-variant">Verifying your reset link...</p>
         </div>
       </div>
@@ -111,10 +112,10 @@ export default function ResetPassword() {
         <main className="relative z-20 w-full max-w-2xl mx-auto bg-surface-container-lowest rounded-xl shadow-2xl p-6 md:p-lg text-center">
           <div className="mb-4 text-left">
             <Link to="/signin" className="inline-flex items-center justify-center w-9 h-9 rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant">
-              <span className="material-symbols-outlined">arrow_back</span>
+              <Ph name="arrow_back" />
             </Link>
           </div>
-          <span className="material-symbols-outlined text-5xl text-error-red mb-4">error</span>
+          <Ph className="text-5xl text-error-red mb-4" name="error" />
           <h2 className="text-xl font-bold text-on-background mb-2">Invalid or Expired Link</h2>
           <p className="text-on-surface-variant mb-6">
             The password reset link is invalid or has expired. Please request a new one.
@@ -123,7 +124,7 @@ export default function ResetPassword() {
             to="/forgot-password"
             className="inline-flex items-center gap-2 bg-secondary rounded-lg text-white font-semibold text-body-sm px-6 py-2.5 shadow-lg hover:bg-secondary/90 transition-all active:scale-[0.98]"
           >
-            <span className="material-symbols-outlined">mail</span>
+            <Ph name="mail" />
             Request New Link
           </Link>
         </main>
@@ -161,13 +162,13 @@ export default function ResetPassword() {
           <div className="relative z-20 flex gap-md items-center mt-xl">
             <div className="flex -space-x-2">
               <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-lg">security</span>
+                <Ph className="text-white text-lg" name="security" />
               </div>
               <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-lg">verified_user</span>
+                <Ph className="text-white text-lg" name="verified_user" />
               </div>
               <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-lg">local_police</span>
+                <Ph className="text-white text-lg" name="local_police" />
               </div>
             </div>
             <p className="text-white/80 font-caption text-caption">Join over 15,000 verified residents and administrators.</p>
@@ -180,7 +181,7 @@ export default function ResetPassword() {
             {/* Back arrow */}
             <div className="mb-4">
               <Link to="/signin" className="inline-flex items-center justify-center w-9 h-9 rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant">
-                <span className="material-symbols-outlined">arrow_back</span>
+                <Ph name="arrow_back" />
               </Link>
             </div>
             {/* Logo */}
@@ -199,7 +200,7 @@ export default function ResetPassword() {
                 <div className="space-y-1">
                   <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="password">New Password</label>
                   <div className="relative">
-                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
+                    <Ph className="absolute left-4 top-1/2 -translate-y-1/2 text-outline" name="lock" />
                     <input className="w-full pl-12 pr-12 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-2.5"
                       id="password" placeholder="••••••••" required
                       type={showPassword ? 'text' : 'password'}
@@ -207,7 +208,7 @@ export default function ResetPassword() {
                     <button className="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface"
                       type="button"
                       onClick={() => setShowPassword((prev) => !prev)}>
-                      <span className="material-symbols-outlined">{showPassword ? 'visibility_off' : 'visibility'}</span>
+                      <Ph name={showPassword ? 'visibility_off' : 'visibility'} />
                     </button>
                   </div>
                 </div>
@@ -216,7 +217,7 @@ export default function ResetPassword() {
                 <div className="space-y-1">
                   <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="confirm-password">Confirm Password</label>
                   <div className="relative">
-                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
+                    <Ph className="absolute left-4 top-1/2 -translate-y-1/2 text-outline" name="lock" />
                     <input className="w-full pl-12 pr-12 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-2.5"
                       id="confirm-password" placeholder="••••••••" required
                       type={showConfirmPassword ? 'text' : 'password'}
@@ -224,7 +225,7 @@ export default function ResetPassword() {
                     <button className="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface"
                       type="button"
                       onClick={() => setShowConfirmPassword((prev) => !prev)}>
-                      <span className="material-symbols-outlined">{showConfirmPassword ? 'visibility_off' : 'visibility'}</span>
+                      <Ph name={showConfirmPassword ? 'visibility_off' : 'visibility'} />
                     </button>
                   </div>
                   {confirmPassword && password !== confirmPassword && (
@@ -236,13 +237,13 @@ export default function ResetPassword() {
                 <button className="w-full bg-secondary rounded-lg text-white font-semibold text-body-lg shadow-lg hover:bg-secondary/90 transition-all active:scale-[0.98] flex items-center justify-center gap-base py-2.5"
                   type="submit" disabled={loading}>
                   {loading ? 'Updating...' : 'Update Password'}
-                  <span className="material-symbols-outlined">save</span>
+                  <Ph name="save" />
                 </button>
               </form>
 
               {/* Footer */}
               <div className="mt-auto border-t border-outline-variant/10 flex items-center justify-center gap-base text-on-surface-variant/40 pt-4 pb-2">
-                <span className="material-symbols-outlined text-sm">verified_user</span>
+                <Ph className="text-sm" name="verified_user" />
                 <span className="font-caption text-[10px] uppercase tracking-widest font-bold">
                   OFFICIAL BARANGAY CULIAT GOV PORTAL • ENCRYPTED
                 </span>

@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import { divIcon } from 'leaflet';
@@ -273,19 +274,19 @@ export default function AdminAiDispatchTerminal() {
               <div className="flex justify-between items-start mb-2 pl-2">
                 <span className={`px-2 py-0.5 rounded font-caps-xs text-caps-xs ${PRIORITY_BADGE[r.priority] ?? PRIORITY_BADGE['LOW']}`}>{PRIORITY_LABEL[r.priority] ?? r.priority}</span>
                 <span className="font-caps-xs text-caps-xs text-slate-500 flex items-center">
-                  <span className="material-symbols-outlined text-[12px] mr-1">schedule</span>{formatElapsed(r.created_at, now)}
+                  <Ph className="text-[12px] mr-1" name="schedule" />{formatElapsed(r.created_at, now)}
                 </span>
               </div>
               <h4 className="font-label-md text-label-md font-bold pl-2 mb-1">{r.title}</h4>
               <p className="font-body-sm text-body-sm text-on-surface-variant pl-2 flex items-center mb-2">
-                <span className="material-symbols-outlined text-[14px] mr-1 opacity-70">location_on</span>{r.address ?? 'Location on file'}
+                <Ph className="text-[14px] mr-1 opacity-70" name="location_on" />{r.address ?? 'Location on file'}
               </p>
               <div className="flex justify-between items-center pl-2 pt-2 border-t border-slate-50">
                 <span className="text-xs text-slate-500">AI Score: <span className="text-secondary font-bold">{r.confidence}/100</span></span>
                 <div className="flex items-center gap-2">
                   <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${INCIDENT_STATUS_BADGE[r.incident_status] ?? INCIDENT_STATUS_BADGE['Unconfirmed']}`}>{r.incident_status}</span>
                   <span className="text-xs font-medium text-secondary flex items-center">
-                    <span className="material-symbols-outlined text-[14px] mr-1">smart_toy</span>{r.status}
+                    <Ph className="text-[14px] mr-1" name="smart_toy" />{r.status}
                   </span>
                 </div>
               </div>
@@ -311,7 +312,7 @@ export default function AdminAiDispatchTerminal() {
       <section className="col-span-12 xl:col-span-5 flex flex-col bg-surface-container-lowest border border-border-subtle rounded-xl shadow-sm overflow-hidden">
         <div className="p-4 border-b border-border-subtle bg-surface-bg flex justify-between items-center shrink-0">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary">memory</span>
+            <Ph className="text-secondary" name="memory" />
             <h3 className="font-label-md text-label-md font-bold text-on-surface uppercase tracking-wider">AI Recommendation Terminal</h3>
           </div>
           <span className="font-caps-xs text-caps-xs text-slate-400">INCIDENT ID: {selected?.report_no ?? '—'}</span>
@@ -323,7 +324,7 @@ export default function AdminAiDispatchTerminal() {
             <>
               {selected.priority === 'CRITICAL' && (
                 <div className="mb-6 bg-error-red/5 border border-error-red/20 rounded-lg p-3 flex items-start gap-3">
-                  <span className="material-symbols-outlined text-error-red mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>local_police</span>
+                  <Ph className="text-error-red mt-0.5" name="local_police" weight="fill" />
                   <div>
                     <h4 className="font-label-md text-label-md font-bold text-error-red uppercase">Critical Flag</h4>
                     <p className="text-sm text-slate-700 mt-1">
@@ -364,12 +365,12 @@ export default function AdminAiDispatchTerminal() {
                             <a key={ev.url} href={ev.url} target="_blank" rel="noreferrer" className="w-16 h-16 rounded border border-border-subtle overflow-hidden group relative">
                               <img className="w-full h-full object-cover" src={ev.url} alt={ev.name} />
                               <span className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                                <span className="material-symbols-outlined text-white text-sm">open_in_new</span>
+                                <Ph className="text-white text-sm" name="open_in_new" />
                               </span>
                             </a>
                           ) : (
                             <a key={ev.url} href={ev.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 px-2.5 py-1.5 rounded border border-border-subtle bg-white hover:bg-surface-bg transition-colors shadow-sm">
-                              <span className="material-symbols-outlined text-slate-500 text-sm">{ev.type.startsWith('video') ? 'videocam' : 'mic'}</span>
+                              <Ph className="text-slate-500 text-sm" name={ev.type.startsWith('video') ? 'videocam' : 'mic'} />
                               <span className="text-[10px] font-bold text-slate-600 max-w-[110px] truncate">{ev.name}</span>
                             </a>
                           ),
@@ -400,7 +401,7 @@ export default function AdminAiDispatchTerminal() {
                     {reporterMap[selected.user_id].emergency_contact_name && (
                       <div className="mt-3 pt-3 border-t border-border-subtle">
                         <span className="text-error-red font-caps-xs text-caps-xs uppercase tracking-wider flex items-center gap-1 mb-2">
-                          <span className="material-symbols-outlined text-[14px]">emergency</span>
+                          <Ph className="text-[14px]" name="emergency" />
                           Emergency Contact
                         </span>
                         <div className="grid grid-cols-3 gap-4 text-sm">
@@ -440,16 +441,16 @@ export default function AdminAiDispatchTerminal() {
                 </div>
               </div>
               <div className="mt-8 border-2 border-secondary/20 rounded-lg bg-surface-container-low p-5 text-center relative overflow-hidden">
-                <div className="absolute -right-4 -top-4 opacity-5"><span className="material-symbols-outlined text-[100px]">smart_toy</span></div>
+                <div className="absolute -right-4 -top-4 opacity-5"><Ph className="text-[100px]" name="smart_toy" /></div>
                 <h4 className="font-caps-xs text-caps-xs text-secondary mb-2 tracking-widest">PRIMARY RECOMMENDATION</h4>
                 <p className="font-headline-md text-headline-md font-bold text-on-secondary-fixed mb-4">Dispatch {targetUnit?.name ?? 'nearest available unit'}</p>
                 <div className="flex gap-4 justify-center">
                   <button type="button" onClick={acceptDispatch} disabled={busy} className="bg-success-green hover:bg-green-600 text-white font-label-md text-label-md px-6 py-3 rounded shadow-md transition flex items-center gap-2 disabled:opacity-60">
-                    <span className="material-symbols-outlined text-sm">check_circle</span>
+                    <Ph className="text-sm" name="check_circle" />
                     {busy ? 'Dispatching…' : 'Accept & Dispatch'}
                   </button>
                   <button type="button" onClick={manualOverride} disabled={busy} className="border border-error-red text-error-red hover:bg-error-red/5 font-label-md text-label-md px-6 py-3 rounded transition flex items-center gap-2 disabled:opacity-60">
-                    <span className="material-symbols-outlined text-sm">block</span>
+                    <Ph className="text-sm" name="block" />
                     {targetUnit ? `Assign to ${targetUnit.name}` : 'Manual Override'}
                   </button>
                 </div>
@@ -480,7 +481,7 @@ export default function AdminAiDispatchTerminal() {
             {/* Radar sweep animation */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-full h-full relative">
-                <div className="absolute inset-0 animate-spin" style={{ animationDuration: '4s' }}>
+                <div className="absolute inset-0 animate-spin">
                   <div className="absolute top-1/2 left-1/2 w-1/2 h-0.5 bg-gradient-to-r from-blue-400/60 to-transparent origin-left -translate-y-1/2"></div>
                 </div>
               </div>
@@ -509,17 +510,17 @@ export default function AdminAiDispatchTerminal() {
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${isAvail ? 'bg-success-green/10 text-success-green border-success-green/20' : 'bg-slate-100 text-slate-600 border-slate-200'}`}>{deriveUnitStatus(u, openAssignments).toUpperCase()}</span>
                 </div>
                 <div className="text-xs text-slate-500 flex justify-between items-center">
-                  <span className="flex items-center"><span className="material-symbols-outlined text-[12px] mr-1">directions_run</span>{u.type}</span>
+                  <span className="flex items-center"><Ph className="text-[12px] mr-1" name="directions_run" />{u.type}</span>
                   {isAvail ? (
                     <span className="flex items-center gap-0.5 text-[10px] font-bold">
                       {targetUnit?.id === u.id ? (
                         <>
-                          <span className="material-symbols-outlined text-[12px] text-success-green">check_circle</span>
+                          <Ph className="text-[12px] text-success-green" name="check_circle" />
                           <span className="text-success-green">Target</span>
                         </>
                       ) : (
                         <>
-                          <span className="material-symbols-outlined text-[12px]">my_location</span>
+                          <Ph className="text-[12px]" name="my_location" />
                           <span className="text-slate-400">Tap to target</span>
                         </>
                       )}

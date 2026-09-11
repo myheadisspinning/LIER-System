@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { fmtDate, logAudit } from '../../../lib/admin';
@@ -218,7 +219,7 @@ export default function SuperadminUserControl() {
             disabled={systemBusy}
             className="px-4 py-2 rounded-lg border-1.5 border-error text-error font-label-md text-label-md hover:bg-error/5 transition-colors flex items-center gap-2 disabled:opacity-50"
           >
-            <span className="material-symbols-outlined text-sm">logout</span> Terminate All Sessions
+            <Ph className="text-sm" name="logout" /> Terminate All Sessions
           </button>
           <button
             type="button"
@@ -226,7 +227,7 @@ export default function SuperadminUserControl() {
             disabled={systemBusy}
             className={`px-4 py-2 rounded-lg border-1.5 font-label-md text-label-md transition-colors flex items-center gap-2 disabled:opacity-50 ${maintenance ? 'bg-warning-amber/10 border-warning-amber text-warning-amber hover:bg-warning-amber/20' : 'border-secondary text-secondary hover:bg-secondary/5'}`}
           >
-            <span className="material-symbols-outlined text-sm">{maintenance ? 'build' : 'construction'}</span>
+            <Ph className="text-sm" name={maintenance ? 'build' : 'construction'} />
             {maintenance ? 'Maintenance ON — Disable' : 'System Maintenance'}
           </button>
           <button
@@ -234,13 +235,13 @@ export default function SuperadminUserControl() {
             onClick={exportCsv}
             className="px-4 py-2 rounded-lg border-1.5 border-secondary text-secondary font-label-md text-label-md hover:bg-secondary/5 transition-colors flex items-center gap-2"
           >
-            <span className="material-symbols-outlined text-sm">download</span> Export Users
+            <Ph className="text-sm" name="download" /> Export Users
           </button>
         </div>
       </div>
       {maintenance && (
         <div className="mb-lg flex items-start gap-3 rounded-xl border border-warning-amber/40 bg-warning-amber/10 px-4 py-3">
-          <span className="material-symbols-outlined text-warning-amber">build</span>
+          <Ph className="text-warning-amber" name="build" />
           <div className="text-sm">
             <p className="font-medium text-warning-amber">Maintenance mode is ON.</p>
             <p className="text-on-surface-variant">New sign-ins are blocked across the portals. Your current session stays active — disable maintenance above to bring the system back online.</p>
@@ -255,12 +256,12 @@ export default function SuperadminUserControl() {
               <h3 className="font-headline-lg text-headline-lg text-on-surface">{stats.total}</h3>
             </div>
             <div className="p-2 rounded-lg bg-surface-container-high text-secondary">
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>group</span>
+              <Ph name="group" weight="fill" />
             </div>
           </div>
           <div className="text-sm text-on-surface-variant flex items-center gap-1 z-10 font-caption">Registered resident accounts</div>
           <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <span className="material-symbols-outlined text-8xl" style={{ fontVariationSettings: "'FILL' 1" }}>group</span>
+            <Ph className="text-8xl" name="group" weight="fill" />
           </div>
         </div>
         <div className="bg-surface-container-lowest rounded-xl p-md border border-outline-variant/30 shadow-sm flex flex-col justify-between h-32 relative overflow-hidden group">
@@ -270,14 +271,14 @@ export default function SuperadminUserControl() {
               <h3 className="font-headline-lg text-headline-lg text-on-surface">{stats.verified}</h3>
             </div>
             <div className="p-2 rounded-lg bg-surface-container-high text-[#16a34a]">
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+              <Ph name="verified" weight="fill" />
             </div>
           </div>
           <div className="text-sm text-on-surface-variant flex items-center gap-1 z-10 font-caption">
             <span className="text-on-surface font-medium">{stats.total ? Math.round((stats.verified / stats.total) * 100) : 0}%</span> confirmed
           </div>
           <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <span className="material-symbols-outlined text-8xl" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+            <Ph className="text-8xl" name="verified" weight="fill" />
           </div>
         </div>
         <div className="bg-surface-container-lowest rounded-xl p-md border border-outline-variant/30 shadow-sm flex flex-col justify-between h-32 relative overflow-hidden group border-l-4 border-l-[#eab308]">
@@ -287,12 +288,12 @@ export default function SuperadminUserControl() {
               <h3 className="font-headline-lg text-headline-lg text-on-surface">{stats.pending}</h3>
             </div>
             <div className="p-2 rounded-lg bg-[#fef9c3] text-[#ca8a04]">
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>pending_actions</span>
+              <Ph name="pending_actions" weight="fill" />
             </div>
           </div>
           <div className="text-sm text-on-surface-variant flex items-center gap-1 z-10 font-caption">Awaiting email confirmation</div>
           <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <span className="material-symbols-outlined text-8xl" style={{ fontVariationSettings: "'FILL' 1" }}>pending_actions</span>
+            <Ph className="text-8xl" name="pending_actions" weight="fill" />
           </div>
         </div>
         <div className="bg-surface-container-lowest rounded-xl p-md border border-outline-variant/30 shadow-sm flex flex-col justify-between h-32 relative overflow-hidden group border-l-4 border-l-error">
@@ -302,12 +303,12 @@ export default function SuperadminUserControl() {
               <h3 className="font-headline-lg text-headline-lg text-on-surface">{stats.suspended}</h3>
             </div>
             <div className="p-2 rounded-lg bg-error-container text-on-error-container">
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>block</span>
+              <Ph name="block" weight="fill" />
             </div>
           </div>
           <div className="text-sm text-on-surface-variant flex items-center gap-1 z-10 font-caption">Restricted access</div>
           <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <span className="material-symbols-outlined text-8xl" style={{ fontVariationSettings: "'FILL' 1" }}>block</span>
+            <Ph className="text-8xl" name="block" weight="fill" />
           </div>
         </div>
       </div>
@@ -315,7 +316,7 @@ export default function SuperadminUserControl() {
         <div className="flex-1 bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-sm flex flex-col overflow-hidden relative z-10">
           <div className="p-md border-b border-outline-variant/30 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-sm bg-surface/50 backdrop-blur-md">
             <div className="relative w-full sm:w-72">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+              <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" name="search" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -393,18 +394,18 @@ export default function SuperadminUserControl() {
                       <td className="py-3 px-4">
                         {u.email_confirmed_at ? (
                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#dcfce7] text-[#166534] text-xs font-medium">
-                            <span className="material-symbols-outlined text-[14px]">verified</span> Verified
+                            <Ph className="text-[14px]" name="verified" /> Verified
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#fef9c3] text-[#854d0e] text-xs font-medium">
-                            <span className="material-symbols-outlined text-[14px]">pending</span> Pending
+                            <Ph className="text-[14px]" name="pending" /> Pending
                           </span>
                         )}
                       </td>
                       <td className="py-3 px-4">
                         {u.suspended ? (
                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-error-container text-on-error-container text-xs font-medium">
-                            <span className="material-symbols-outlined text-[14px]">block</span> Suspended
+                            <Ph className="text-[14px]" name="block" /> Suspended
                           </span>
                         ) : (
                           <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface text-xs font-medium border border-outline-variant/30">
@@ -418,7 +419,7 @@ export default function SuperadminUserControl() {
                           onClick={() => setActiveId(u.id)}
                           className="text-on-surface-variant hover:text-secondary p-1 rounded-md hover:bg-surface-variant/50"
                         >
-                          <span className="material-symbols-outlined">more_vert</span>
+                          <Ph name="more_vert" />
                         </button>
                       </td>
                     </tr>
@@ -461,11 +462,11 @@ export default function SuperadminUserControl() {
                 <div className="flex gap-2 justify-center mt-2 flex-wrap">
                   {active.email_confirmed_at ? (
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#dcfce7] text-[#166534] text-xs font-medium border border-[#bbf7d0]">
-                      <span className="material-symbols-outlined text-[14px]">verified</span> Email Verified
+                      <Ph className="text-[14px]" name="verified" /> Email Verified
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#fef9c3] text-[#854d0e] text-xs font-medium border border-[#fde68a]">
-                      <span className="material-symbols-outlined text-[14px]">pending</span> Pending Verification
+                      <Ph className="text-[14px]" name="pending" /> Pending Verification
                     </span>
                   )}
                   <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${active.suspended ? 'bg-error-container text-on-error-container border-error/30' : 'bg-surface-container-high text-on-surface border-outline-variant/30'}`}>
@@ -480,7 +481,7 @@ export default function SuperadminUserControl() {
                   onClick={() => resetPw(active)}
                   className="py-2 border border-secondary text-secondary rounded-lg text-sm font-medium hover:bg-secondary/5 transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
                 >
-                  <span className="material-symbols-outlined text-sm">lock_reset</span> Reset Password
+                  <Ph className="text-sm" name="lock_reset" /> Reset Password
                 </button>
                 <button
                   type="button"
@@ -488,7 +489,7 @@ export default function SuperadminUserControl() {
                   onClick={() => toggleSuspend(active)}
                   className={`py-2 rounded-lg text-sm font-medium transition-colors shadow-sm flex justify-center items-center gap-2 disabled:opacity-50 ${active.suspended ? 'bg-success-green text-on-success-green hover:bg-success-green/90' : 'bg-error text-on-error hover:bg-error/90'}`}
                 >
-                  <span className="material-symbols-outlined text-sm">{active.suspended ? 'check_circle' : 'block'}</span>
+                  <Ph className="text-sm" name={active.suspended ? 'check_circle' : 'block'} />
                   {active.suspended ? 'Re-activate' : 'Suspend'}
                 </button>
               </div>
@@ -497,28 +498,28 @@ export default function SuperadminUserControl() {
                   <h4 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-3 border-b border-outline-variant/30 pb-1">Contact Information</h4>
                   <div className="space-y-3 text-sm">
                     <div className="flex items-start gap-3">
-                      <span className="material-symbols-outlined text-on-surface-variant text-[18px] mt-0.5">mail</span>
+                      <Ph className="text-on-surface-variant text-[18px] mt-0.5" name="mail" />
                       <div>
                         <p className="text-on-surface font-medium break-all">{active.email}</p>
                         <p className="text-xs text-on-surface-variant">{active.email_confirmed_at ? 'Confirmed email' : 'Email not yet confirmed'}</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="material-symbols-outlined text-on-surface-variant text-[18px] mt-0.5">call</span>
+                      <Ph className="text-on-surface-variant text-[18px] mt-0.5" name="call" />
                       <div>
                         <p className="text-on-surface font-medium">{active.phone ? `+63 ${active.phone}` : '—'}</p>
                         <p className="text-xs text-on-surface-variant">Mobile Number</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="material-symbols-outlined text-on-surface-variant text-[18px] mt-0.5">home_pin</span>
+                      <Ph className="text-on-surface-variant text-[18px] mt-0.5" name="home_pin" />
                       <div>
                         <p className="text-on-surface font-medium">{active.address ?? '—'}</p>
                         <p className="text-xs text-on-surface-variant">Registered Address</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="material-symbols-outlined text-on-surface-variant text-[18px] mt-0.5">cake</span>
+                      <Ph className="text-on-surface-variant text-[18px] mt-0.5" name="cake" />
                       <div>
                         <p className="text-on-surface font-medium">{active.dob ?? '—'}</p>
                         <p className="text-xs text-on-surface-variant">{active.gender ? `${active.gender[0].toUpperCase()}${active.gender.slice(1)}` : 'Gender'} • Date of Birth</p>
@@ -548,7 +549,7 @@ export default function SuperadminUserControl() {
                       onClick={() => resetPw(active)}
                       className="w-full text-left py-2 px-3 rounded text-sm text-on-surface hover:bg-surface-variant/50 flex items-center gap-2 transition-colors disabled:opacity-50"
                     >
-                      <span className="material-symbols-outlined text-[18px]">key</span> Force Password Reset
+                      <Ph className="text-[18px]" name="key" /> Force Password Reset
                     </button>
                     <button
                       type="button"
@@ -556,7 +557,7 @@ export default function SuperadminUserControl() {
                       onClick={() => toggleSuspend(active)}
                       className={`w-full text-left py-2 px-3 rounded text-sm hover:bg-surface-variant/50 flex items-center gap-2 transition-colors disabled:opacity-50 ${active.suspended ? 'text-success-green' : 'text-error'}`}
                     >
-                      <span className="material-symbols-outlined text-[18px]">{active.suspended ? 'check_circle' : 'block'}</span>
+                      <Ph className="text-[18px]" name={active.suspended ? 'check_circle' : 'block'} />
                       {active.suspended ? 'Re-activate Account' : 'Suspend Account Access'}
                     </button>
                   </div>
@@ -580,13 +581,11 @@ export default function SuperadminUserControl() {
                     ? 'Enable Maintenance Mode'
                     : 'Disable Maintenance Mode'}
               </h3>
-              <button type="button" onClick={() => setSystemConfirm(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
+              <button type="button" onClick={() => setSystemConfirm(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><Ph name="close" /></button>
             </div>
             <div className="p-5">
               <div className="flex items-start gap-3 mb-4">
-                <span className={`material-symbols-outlined text-3xl ${systemConfirm === 'logout-all' ? 'text-error-red' : 'text-warning-amber'}`}>
-                  {systemConfirm === 'logout-all' ? 'logout' : 'build'}
-                </span>
+                <Ph className={` text-3xl ${systemConfirm === 'logout-all' ? 'text-error-red' : 'text-warning-amber'}`} name={systemConfirm === 'logout-all' ? 'logout' : 'build'} />
                 <p className="text-sm text-on-surface flex-1">
                   {systemConfirm === 'logout-all'
                     ? 'Sign out every user, admin, and officer session across the portals? Your current session will remain active.'

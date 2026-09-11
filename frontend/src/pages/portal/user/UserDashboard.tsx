@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../../supabaseClient';
@@ -127,7 +128,7 @@ useEffect(() => {
     <div className="bg-surface-container-lowest border border-border-subtle border-t-2 border-t-cc-emerald rounded-xl p-4 sm:p-5 shadow-sm">
     <div className="flex items-center justify-between mb-2.5 sm:mb-3">
      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-success-green/15 flex items-center justify-center">
-     <span className="material-symbols-outlined text-success-green text-[18px] sm:text-[22px]">description</span>
+     <Ph className="text-success-green text-[18px] sm:text-[22px]" name="description" />
      </div>
      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-success-green/10 text-success-green border border-success-green/25 text-[11px] font-bold">
      {loading ? '…' : `${active} active`}
@@ -140,7 +141,7 @@ useEffect(() => {
     <div className="bg-surface-container-lowest border border-border-subtle border-t-2 border-t-cc-blue rounded-xl p-4 sm:p-5 shadow-sm">
     <div className="flex items-center justify-between mb-2.5 sm:mb-3">
      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-secondary/15 flex items-center justify-center">
-     <span className="material-symbols-outlined text-secondary text-[18px] sm:text-[22px]">folder_open</span>
+     <Ph className="text-secondary text-[18px] sm:text-[22px]" name="folder_open" />
      </div>
      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-secondary/10 text-secondary border border-secondary/25 text-[11px] font-bold">IN PROGRESS</span>
     </div>
@@ -151,7 +152,7 @@ useEffect(() => {
     <div className="bg-surface-container-lowest border border-border-subtle border-t-2 border-t-cc-teal rounded-xl p-4 sm:p-5 shadow-sm">
     <div className="flex items-center justify-between mb-2.5 sm:mb-3">
      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-tertiary/15 flex items-center justify-center">
-     <span className="material-symbols-outlined text-tertiary text-[18px] sm:text-[22px]">task_alt</span>
+     <Ph className="text-tertiary text-[18px] sm:text-[22px]" name="task_alt" />
      </div>
      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-tertiary/10 text-tertiary border border-tertiary/25 text-[11px] font-bold">CLOSED</span>
     </div>
@@ -162,7 +163,7 @@ useEffect(() => {
     <Link to="/user/advisories" className="bg-surface-container-lowest border border-border-subtle border-t-2 border-t-cc-red rounded-xl p-4 sm:p-5 shadow-sm hover:border-error/40 transition-colors">
     <div className="flex items-center justify-between mb-2.5 sm:mb-3">
      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-error/15 flex items-center justify-center">
-     <span className="material-symbols-outlined text-error text-[18px] sm:text-[22px]">notifications_active</span>
+     <Ph className="text-error text-[18px] sm:text-[22px]" name="notifications_active" />
      </div>
      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-error/10 text-error border border-error/25 text-[11px] font-bold">NEW</span>
     </div>
@@ -178,11 +179,11 @@ useEffect(() => {
     <section className="lg:col-span-8 bg-surface-container-lowest border border-border-subtle rounded-xl shadow-sm overflow-hidden">
     <div className="px-5 py-4 border-b border-border-subtle flex flex-wrap items-center justify-between gap-2">
      <h3 className="font-headline-md text-headline-md font-bold text-on-surface flex items-center gap-2">
-     <span className="material-symbols-outlined text-secondary">assignment</span>
+     <Ph className="text-secondary" name="assignment" />
      My Recent Reports
      </h3>
      <Link to="/user/my-incident-reports" className="inline-flex items-center gap-1 text-xs font-bold text-secondary hover:underline">
-     View All <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+     View All <Ph className="text-[14px]" name="arrow_forward" />
      </Link>
     </div>
     {loading ? (
@@ -191,13 +192,13 @@ useEffect(() => {
      <div className="p-6 sm:p-10 text-center text-sm text-error">{error}</div>
     ) : reports.length === 0 ? (
      <div className="p-6 sm:p-10 text-center">
-     <span className="material-symbols-outlined text-4xl text-on-surface-variant">inbox</span>
+     <Ph className="text-4xl text-on-surface-variant" name="inbox" />
      <p className="text-sm text-on-surface-variant mt-3 mb-4">You haven&apos;t submitted any reports yet.</p>
      <Link
       to="/user/report-incident"
       className="inline-flex items-center gap-2 bg-secondary text-on-secondary px-5 py-2.5 rounded-lg font-bold text-sm hover:opacity-90 transition-all active:scale-[0.98]"
      >
-      <span className="material-symbols-outlined text-[18px]">add</span> Report an Incident
+      <Ph className="text-[18px]" name="add" /> Report an Incident
      </Link>
      </div>
 ) : (
@@ -275,7 +276,7 @@ useEffect(() => {
          {r.priority}
         </span>
         <Link to="/user/my-incident-reports" className="inline-flex items-center gap-1 text-xs font-bold text-secondary hover:underline">
-         Track <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+         Track <Ph className="text-[14px]" name="arrow_forward" />
         </Link>
         </div>
        </div>
@@ -289,7 +290,7 @@ useEffect(() => {
     {/* By Category */}
     <section className="lg:col-span-4 bg-surface-container-lowest border border-border-subtle rounded-xl shadow-sm p-5">
     <h3 className="font-headline-md text-headline-md font-bold text-on-surface flex items-center gap-2 mb-4">
-     <span className="material-symbols-outlined text-secondary">category</span>
+     <Ph className="text-secondary" name="category" />
      By Category
     </h3>
     {reports.length === 0 ? (

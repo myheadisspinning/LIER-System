@@ -1,3 +1,4 @@
+import Ph from '../components/PhIcon';
 import { useState } from 'react';
 import SiteHeader from '../components/SiteHeader';
 import SiteFooter from '../components/SiteFooter';
@@ -123,7 +124,7 @@ export default function TrackCases() {
                   <h4 className="font-headline-md text-[18px] text-on-surface font-bold mb-1">{c.title}</h4>
                   <p className="text-on-surface-variant text-caption line-clamp-1 mb-3">{c.date} &bull; {c.zone}</p>
                   <div className={`flex items-center ${isSelected ? 'text-secondary' : 'text-on-surface-variant'}`}>
-                    <span className="material-symbols-outlined text-base mr-1">{c.icon}</span>
+                    <Ph className="text-base mr-1" name={c.icon} />
                     <span className="text-caption font-bold">{c.status === 'Ongoing' ? 'Currently Investigating' : c.status === 'Pending' ? 'Awaiting Verification' : 'Case Closed'}</span>
                   </div>
                 </button>
@@ -131,7 +132,7 @@ export default function TrackCases() {
             })}
             <div className="flex justify-center pt-2 md:pt-4">
               <button className="flex items-center gap-2 px-6 py-2 border-2 border-secondary text-secondary rounded-xl font-bold text-label-md hover:bg-secondary-container/10 transition-colors active:scale-95 focus:outline-none">
-                <span className="material-symbols-outlined">expand_more</span>
+                <Ph name="expand_more" />
                 Load More Reports
               </button>
             </div>
@@ -154,7 +155,7 @@ export default function TrackCases() {
                 <h3 className="font-headline-md text-headline-md font-bold text-on-surface mt-1">{current.title}</h3>
               </div>
               <button type="button" onClick={closeModal} aria-label="Close" className="text-on-surface-variant hover:text-on-surface shrink-0">
-                <span className="material-symbols-outlined">close</span>
+                <Ph name="close" />
               </button>
             </div>
 
@@ -176,7 +177,7 @@ export default function TrackCases() {
                   {current.timeline.map((step, i) => (
                     <div key={i} className="relative">
                       <div className={`absolute -left-8 w-8 h-8 ${step.active ? 'bg-secondary' : 'bg-outline-variant'} rounded-full flex items-center justify-center text-white z-10`}>
-                        <span className="material-symbols-outlined text-[18px]">{step.icon}</span>
+                        <Ph className="text-[18px]" name={step.icon} />
                       </div>
                       <div className="flex flex-col">
                         <span className={`font-bold text-body-md ${step.active ? 'text-on-surface' : 'text-on-surface-variant'}`}>{step.label}</span>
@@ -189,7 +190,7 @@ export default function TrackCases() {
 
               <div className="bg-surface-container-low p-4 rounded-xl border border-outline-variant/10">
                 <div className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-secondary">info</span>
+                  <Ph className="text-secondary" name="info" />
                   <div>
                     <p className="text-caption text-on-surface font-bold">Estimated Resolution</p>
                     <p className="text-caption text-on-surface-variant">Expected within 48 hours based on current priority level.</p>
@@ -200,8 +201,8 @@ export default function TrackCases() {
               <div>
                 <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Submitted Evidence</h4>
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="aspect-square rounded-xl bg-cover bg-center border border-outline-variant" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCiuqhhAKgqNUo0pg-fWuq6pcNMu_sxTlkESV7rIJ2cVyEjrwbeuEImDxOwaEtyhHnSE2q2M6o-dpxRX0xXG8E76Iha9Amzc_fZ7csmE6suOEsqc9GYQYH1S-ZimNcwLZu7c8HmMfwzTQaEDkgquOySYQ_RkVpnIaarT0GcNOtqrBi8c7UmsL5CjCTn4MW4e0Ekd9xwx6uWDHjP6IIsBNByWI012VM-yQfV3BAlDzXNI-OMkDP2GFy5")' }}></div>
-                  <div className="aspect-square rounded-xl bg-cover bg-center border border-outline-variant" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDGpUwZBeqkrLFVk9DP0z4Wf7MFGBxFnSMlylz44nYJQADVTFrInRBvfLkI_NElQ8o9zT4r4K2PT4X0ck0FdrSFspekCK9_WQRFkwB3QWFxS9Ej5sEIP8a4Oc191zv_IN8_ymxsNm8K_JgJ2tN_7ZBFpyM7RXyUM6sRdA5bMtv1rbM_ZwR6szOhBfJL3KRWutymaLuYfU4BXUouqa_56Vfex0Rj99C4gY0QCFa88jsA1yeqrLm3uNEl")' }}></div>
+                  <div className="aspect-square rounded-xl bg-cover bg-center border border-outline-variant"></div>
+                  <div className="aspect-square rounded-xl bg-cover bg-center border border-outline-variant"></div>
                 </div>
               </div>
             </div>
@@ -211,7 +212,7 @@ export default function TrackCases() {
                 Close
               </button>
               <button type="button" className="bg-secondary hover:bg-secondary/90 text-white font-label-md text-label-md py-2 px-4 rounded-md transition-colors flex items-center gap-2">
-                <span className="material-symbols-outlined text-[18px]">phone_in_talk</span>
+                <Ph className="text-[18px]" name="phone_in_talk" />
                 Contact Officer
               </button>
             </div>

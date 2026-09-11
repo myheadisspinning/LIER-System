@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
 import { divIcon, type Marker as LeafletMarker } from 'leaflet';
@@ -845,13 +846,13 @@ const res = await classifyIncident({
    {/* Critical Notice */}
    <div className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col gap-4">
     <div className="flex items-center gap-2 text-caption text-on-surface-variant">
-     <span className="material-symbols-outlined text-[16px] text-error">warning</span>
+     <Ph className="text-[16px] text-error" name="warning" />
      <p>For immediate life-threatening situations, dial 911 immediately.</p>
     </div>
     {notice === 'draft-prompt' && (
      <div className="bg-secondary/10 border-l-4 border-l-secondary px-3 py-2 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 rounded">
       <div className="flex items-center gap-3 min-w-0 flex-1">
-       <span className="material-symbols-outlined text-secondary shrink-0">draft</span>
+       <Ph className="text-secondary shrink-0" name="draft" />
        <p className="font-body-sm text-body-sm text-on-surface-variant min-w-0 flex-1 sm:truncate">
         You have a saved draft{draftSavedAt ? ` · ${timeAgo(draftSavedAt)}` : ''}.
        </p>
@@ -898,7 +899,7 @@ const res = await classifyIncident({
           >
            {category || 'Select incident category'}
           </button>
-          <span className={`material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-xl transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`}>expand_more</span>
+          <Ph className={` absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-xl transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`} name="expand_more" />
           {isCategoryOpen && (
            <div className="absolute z-50 w-full mt-1 bg-white border border-outline-variant rounded-lg max-h-60 overflow-y-auto">
             {CATEGORIES.map((opt) => (
@@ -959,21 +960,21 @@ const res = await classifyIncident({
       <div className="flex flex-col rounded-xl border border-outline-variant/30 relative overflow-hidden">
        <div className="bg-surface-container-low px-4 py-3 border-b border-outline-variant/30 flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-2 z-10 relative">
         <h3 className="font-label-sm text-[12px] text-on-surface flex items-center gap-2 tracking-wide uppercase font-bold">
-         <span className="material-symbols-outlined text-[16px] text-secondary">map</span>
+         <Ph className="text-[16px] text-secondary" name="map" />
          Realtime Location Map
         </h3>
         <div className="flex items-center gap-2 flex-wrap">
          <div className="grid grid-cols-3 gap-2 w-full sm:flex sm:flex-wrap sm:items-center sm:gap-2 sm:w-auto">
           <button type="button" onClick={useCurrentLocation} disabled={usingCurrent} className="bg-surface-container-low border border-outline-variant hover:border-secondary rounded px-2 py-1.5 sm:px-3 flex items-center justify-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] leading-none text-on-surface transition-colors disabled:opacity-60 sm:justify-start">
-           <span className="material-symbols-outlined text-[12px] sm:text-[14px] text-secondary">{usingCurrent ? 'progress_activity' : 'my_location'}</span>
+           <Ph className="text-[12px] sm:text-[14px] text-secondary" name={usingCurrent ? 'progress_activity' : 'my_location'} />
            {usingCurrent ? 'Locating…' : 'Use Current'}
           </button>
           <button type="button" onClick={() => { setLocation(BARANGAY_HALL_CENTER); setFlyTarget(BARANGAY_HALL_CENTER); }} className="bg-surface-container-low border border-outline-variant hover:border-secondary rounded px-2 py-1.5 sm:px-3 flex items-center justify-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] leading-none text-on-surface transition-colors sm:justify-start">
-           <span className="material-symbols-outlined text-[12px] sm:text-[14px] text-secondary">pin_drop</span>
+           <Ph className="text-[12px] sm:text-[14px] text-secondary" name="pin_drop" />
            Barangay Hall
           </button>
           <button type="button" onClick={() => setTile((t) => (t === 'street' ? 'satellite' : 'street'))} className="bg-surface-container-low border border-outline-variant hover:border-secondary rounded px-2 py-1.5 sm:px-3 flex items-center justify-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] leading-none text-on-surface transition-colors sm:justify-start">
-           <span className="material-symbols-outlined text-[12px] sm:text-[14px] text-secondary">layers</span>
+           <Ph className="text-[12px] sm:text-[14px] text-secondary" name="layers" />
            {tile === 'street' ? 'Satellite' : 'Street'}
           </button>
          </div>
@@ -1017,7 +1018,7 @@ const res = await classifyIncident({
          title={isFullscreen ? 'Exit fullscreen' : 'View fullscreen'}
          aria-label={isFullscreen ? 'Exit fullscreen' : 'View fullscreen'}
         >
-         <span className="material-symbols-outlined text-[20px]">{isFullscreen ? 'fullscreen_exit' : 'fullscreen'}</span>
+         <Ph className="text-[20px]" name={isFullscreen ? 'fullscreen_exit' : 'fullscreen'} />
         </button>
 
         {/* crosshair reticle */}
@@ -1035,7 +1036,7 @@ const res = await classifyIncident({
 
         {/* address + coordinates chip */}
         <div className="absolute top-4 left-4 z-[600] bg-surface/95 border border-outline-variant rounded-lg px-2 py-1 sm:px-3 sm:py-2 flex items-center gap-2 max-w-[calc(100%-5rem)] sm:max-w-[260px]" title={address}>
-         <span className="material-symbols-outlined text-secondary text-[12px] sm:text-[16px] shrink-0">near_me</span>
+         <Ph className="text-secondary text-[12px] sm:text-[16px] shrink-0" name="near_me" />
          <div className="min-w-0">
           <p className="text-[9px] leading-tight sm:text-[11px] text-on-surface font-semibold truncate">{address}</p>
           <p className="text-[9px] sm:text-[10px] text-on-surface-variant font-bold tracking-wide">{location[0].toFixed(5)}°N, {location[1].toFixed(5)}°E</p>
@@ -1049,7 +1050,7 @@ const res = await classifyIncident({
            <div className="flex items-center gap-2 px-3 pt-2">
             <span className="relative inline-flex items-center justify-center">
              <span className="w-6 h-6 rounded-full bg-gradient-to-br from-secondary/30 to-tertiary/15 border border-secondary/30 flex items-center justify-center">
-              <span className="material-symbols-outlined text-secondary text-[13px]">smart_toy</span>
+              <Ph className="text-secondary text-[13px]" name="smart_toy" />
              </span>
              <span className="robot-scan-ring absolute -inset-1 w-8 h-8 rounded-full" />
             </span>
@@ -1060,9 +1061,9 @@ const res = await classifyIncident({
            </div>
            <div className="px-3 pb-2 pt-1.5 flex items-start gap-1.5">
             <span className="mt-[5px] flex gap-1">
-             <span className="ai-thinking-dot w-1 h-1 rounded-full bg-secondary" style={{ animationDelay: '0s' }} />
-             <span className="ai-thinking-dot w-1 h-1 rounded-full bg-secondary" style={{ animationDelay: '0.18s' }} />
-             <span className="ai-thinking-dot w-1 h-1 rounded-full bg-secondary" style={{ animationDelay: '0.36s' }} />
+             <span className="ai-thinking-dot w-1 h-1 rounded-full bg-secondary" />
+             <span className="ai-thinking-dot w-1 h-1 rounded-full bg-secondary" />
+             <span className="ai-thinking-dot w-1 h-1 rounded-full bg-secondary" />
             </span>
             <p className="text-[11px] text-on-surface leading-snug font-medium">Add a report and I will be your guide.</p>
            </div>
@@ -1093,11 +1094,7 @@ const res = await classifyIncident({
           <span className="robot-alert-ring absolute -inset-1 w-14 h-14 rounded-full"></span>
          )}
          <span className="relative inline-flex items-center justify-center">
-          <span className={`material-symbols-outlined text-[24px] ${
-           analyzing ? 'text-on-secondary animate-robot-blink'
-            : robotSeverity ? robotSeverity.icon
-            : 'text-on-surface'
-          }`}>smart_toy</span>
+          <Ph className={` text-[24px] ${ analyzing ? 'text-on-secondary animate-robot-blink' : robotSeverity ? robotSeverity.icon : 'text-on-surface'}`} name="smart_toy" />
           {analyzing && <span className="robot-scan-ring absolute -inset-1 w-[32px] h-[32px] rounded-full" />}
          </span>
          {/* Status badge */}
@@ -1108,7 +1105,7 @@ const res = await classifyIncident({
           </span>
          ) : analysis?.criticalFlag && aiNewResult && !aiSheetOpen ? (
           <span className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-white border-2 border-error flex items-center justify-center">
-           <span className="material-symbols-rounded text-[10px] text-error leading-none">priority_high</span>
+           <Ph className="text-[10px] text-error leading-none" name="priority_high" />
           </span>
          ) : aiNewResult ? (
           <span className="absolute -top-0.5 -right-0.5 flex h-3 w-3">
@@ -1127,7 +1124,7 @@ const res = await classifyIncident({
             <div className="flex items-center gap-2 min-w-0">
              <span className={`relative inline-flex items-center justify-center ${analyzing ? 'animate-robot-analyze' : ''}`}>
               <span className="w-8 h-8 rounded-lg bg-secondary/10 flex items-center justify-center">
-               <span className={`material-symbols-outlined text-[20px] ${analyzing ? 'text-secondary animate-robot-blink' : 'text-secondary'}`}>smart_toy</span>
+               <Ph className={` text-[20px] ${analyzing ? 'text-secondary animate-robot-blink' : 'text-secondary'}`} name="smart_toy" />
               </span>
               {analyzing && <span className="robot-scan-ring absolute inset-0 w-8 h-8 rounded-lg" />}
              </span>
@@ -1137,19 +1134,19 @@ const res = await classifyIncident({
              </div>
             </div>
             <button type="button" onClick={() => setAiSheetOpen(false)} aria-label="Close" className="w-8 h-8 rounded-full bg-outline-variant/30 text-on-surface flex items-center justify-center hover:bg-outline-variant/60 transition-colors active:scale-95">
-             <span className="material-symbols-outlined text-[18px]">close</span>
+             <Ph className="text-[18px]" name="close" />
             </button>
            </div>
            <div className="p-4 space-y-3 overflow-y-auto min-h-0">
             {analyzing && (
              <div className="space-y-2">
               <p className="text-xs text-secondary font-bold flex items-center gap-1.5">
-               <span className="material-symbols-outlined text-[15px] animate-robot-blink">smart_toy</span> Analyzing live…<span className="terminal-cursor text-secondary font-bold">▌</span>
+               <Ph className="text-[15px] animate-robot-blink" name="smart_toy" /> Analyzing live…<span className="terminal-cursor text-secondary font-bold">▌</span>
               </p>
               <div className="flex items-center gap-1.5 py-1" aria-hidden="true">
-               <span className="ai-thinking-dot w-2 h-2 rounded-full bg-secondary" style={{ animationDelay: '0s' }}></span>
-               <span className="ai-thinking-dot w-2 h-2 rounded-full bg-secondary" style={{ animationDelay: '0.18s' }}></span>
-               <span className="ai-thinking-dot w-2 h-2 rounded-full bg-secondary" style={{ animationDelay: '0.36s' }}></span>
+               <span className="ai-thinking-dot w-2 h-2 rounded-full bg-secondary"></span>
+               <span className="ai-thinking-dot w-2 h-2 rounded-full bg-secondary"></span>
+               <span className="ai-thinking-dot w-2 h-2 rounded-full bg-secondary"></span>
               </div>
               <div className="flex flex-col gap-0.5 mt-1">
                <span className="ai-status-step text-[11px] text-secondary/80 font-medium">Reading report…</span>
@@ -1157,26 +1154,26 @@ const res = await classifyIncident({
                <span className="ai-status-step text-[11px] text-secondary/80 font-medium">Preparing dispatch…</span>
               </div>
               <div className="h-1.5 bg-outline-variant/30 rounded-full overflow-hidden mt-1">
-                <div className="h-full bg-secondary rounded-full ai-progress-slide" style={{ width: '40%' }}></div>
+                <div className="h-full bg-secondary rounded-full ai-progress-slide"></div>
               </div>
               </div>
             )}
             {!analyzing && analysis != null && (
               <div className="space-y-3">
                 {reportTitle.trim() && (
-                  <div className="flex items-start gap-1.5 animate-ai-result" style={{ animationDelay: '0s' }}>
-                    <span className="material-symbols-outlined text-[15px] text-secondary mt-[1px]">summarize</span>
+                  <div className="flex items-start gap-1.5 animate-ai-result">
+                    <Ph className="text-[15px] text-secondary mt-[1px]" name="summarize" />
                     <div className="min-w-0">
                       <p className="text-xs text-on-surface-variant mb-0.5">Report Summary</p>
                       <p className="text-[13px] font-semibold text-on-surface leading-tight">{reportTitle}</p>
                     </div>
                   </div>
                 )}
-                <div className="animate-ai-result" style={{ animationDelay: '0.06s' }}>
+                <div className="animate-ai-result">
                   <p className="text-xs text-on-surface-variant mb-1.5">Auto-detected Category</p>
                   <div className="flex items-center justify-between gap-2">
                     <span className="flex items-center gap-1.5 text-[15px] text-on-surface font-bold">
-                      <span className="material-symbols-outlined text-[17px] text-secondary">{CATEGORY_ICONS[ai.category] ?? 'more_horiz'}</span>{ai.category}
+                      <Ph className="text-[17px] text-secondary" name={CATEGORY_ICONS[ai.category] ?? 'more_horiz'} />{ai.category}
                     </span>
                     <span className="text-xs font-bold text-secondary">{ai.confidence}%</span>
                   </div>
@@ -1184,14 +1181,14 @@ const res = await classifyIncident({
                     <div className="h-full bg-secondary rounded-full transition-all duration-700" style={{ width: `${ai.confidence}%` }}></div>
                   </div>
                 </div>
-                <div className="pt-2 border-t border-outline-variant animate-ai-result" style={{ animationDelay: '0.12s' }}>
+                <div className="pt-2 border-t border-outline-variant animate-ai-result">
                   <p className="text-xs text-on-surface-variant mb-1.5">Response Priority</p>
                   <div className="flex items-center gap-1.5">
                     <span className={`px-1.5 py-[2px] rounded text-[10px] font-bold tracking-wide border ${priorityTone}`}>{ai.priority}</span>
                     <span className={`text-[13px] font-bold leading-tight ${ai.priority === 'CRITICAL' ? 'text-error' : 'text-secondary'}`}>{ai.priority} Priority</span>
                   </div>
                 </div>
-                <div className="pt-2 border-t border-outline-variant animate-ai-result" style={{ animationDelay: '0.18s' }}>
+                <div className="pt-2 border-t border-outline-variant animate-ai-result">
                   <p className="text-xs text-on-surface-variant mb-1.5">Threat Level</p>
                   <div className="grid grid-cols-4 gap-1">
                     {THREAT_SEGMENTS.map((seg, i) => (
@@ -1204,31 +1201,31 @@ const res = await classifyIncident({
                     ))}
                   </div>
                 </div>
-                <div className="pt-2 border-t border-outline-variant animate-ai-result" style={{ animationDelay: '0.24s' }}>
+                <div className="pt-2 border-t border-outline-variant animate-ai-result">
                   <p className="text-xs text-on-surface-variant mb-1.5">Recommended Actions for You</p>
                   <ul className="space-y-1.5">
                     {(ai.user_actions?.length ? ai.user_actions : localFallback(ai.category).user_actions).map((action, idx) => (
                       <li key={action} className="flex items-start gap-1.5 text-xs text-on-surface-variant leading-snug animate-ai-result" style={{ animationDelay: `${0.28 + idx * 0.06}s` }}>
-                        <span className="material-symbols-outlined text-[15px] text-success-green mt-[1px] shrink-0">check_circle</span>{action}
+                        <Ph className="text-[15px] text-success-green mt-[1px] shrink-0" name="check_circle" />{action}
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div className="pt-2 border-t border-outline-variant animate-ai-result" style={{ animationDelay: '0.30s' }}>
+                <div className="pt-2 border-t border-outline-variant animate-ai-result">
                   <div className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-secondary/10 border border-secondary/20">
-                    <span className="material-symbols-outlined text-[16px] text-secondary shrink-0">route</span>
+                    <Ph className="text-[16px] text-secondary shrink-0" name="route" />
                     <span className="text-xs font-bold text-on-surface leading-tight">{ai.dispatch}</span>
                   </div>
                 </div>
                 <button type="button" onClick={runAnalysis} className="w-full py-2.5 rounded-lg border border-secondary/50 bg-secondary/10 text-secondary text-xs font-bold hover:bg-secondary/20 transition-colors flex items-center justify-center gap-1.5">
-                  <span className="material-symbols-outlined text-[15px]">refresh</span> Re-analyze
+                  <Ph className="text-[15px]" name="refresh" /> Re-analyze
                 </button>
               </div>
             )}
             {!analyzing && analysis == null && (
               <div className="flex flex-col items-center text-center gap-2 py-6">
                 <span className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center ai-robot-idle">
-                  <span className="material-symbols-outlined text-[26px] text-secondary">smart_toy</span>
+                  <Ph className="text-[26px] text-secondary" name="smart_toy" />
                 </span>
                 <p className="text-sm font-bold text-on-surface">No analysis yet</p>
                 <p className="text-xs text-on-surface-variant leading-relaxed max-w-[260px]">Enter a report title and description — the AI will analyze the incident automatically.</p>
@@ -1262,7 +1259,7 @@ const res = await classifyIncident({
       <div className="flex flex-col gap-4 sm:gap-6 pb-4 sm:pb-6">
        <div className="bg-surface-container-low rounded-xl border border-outline-variant p-4 sm:p-6 space-y-4 sm:space-y-6">
         <div className="flex items-center gap-2">
-         <span className="material-symbols-outlined text-secondary">attachment</span>
+         <Ph className="text-secondary" name="attachment" />
          <h3 className="font-label-md text-label-md font-bold text-on-surface">Evidence Upload</h3>
         </div>
         <div className="grid grid-cols-3 gap-1">
@@ -1273,7 +1270,7 @@ const res = await classifyIncident({
            onClick={() => setMediaType(key)}
            className={`flex flex-col items-center gap-1 p-2 rounded-lg border transition-all ${mediaType === key ? 'border-2 border-secondary bg-secondary/10 text-secondary' : 'border border-outline-variant bg-surface-container-low hover:border-secondary text-on-surface-variant'}`}
           >
-           <span className="material-symbols-outlined text-lg">{MEDIA_TYPES[key]}</span>
+           <Ph className="text-lg" name={MEDIA_TYPES[key]} />
            <span className="text-[10px] font-bold uppercase">{key === 'video' ? 'CCTV / Video' : key === 'photo' ? 'Photo / Image' : 'Audio'}</span>
           </button>
          ))}
@@ -1288,7 +1285,7 @@ const res = await classifyIncident({
          onDrop={(e) => { e.preventDefault(); addFiles(e.dataTransfer.files); }}
          className="border-2 border-dashed border-outline-variant rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center gap-2 sm:gap-3 bg-surface/50 hover:bg-surface transition-colors cursor-pointer"
         >
-         <span className="material-symbols-outlined text-3xl sm:text-4xl text-on-surface-variant">cloud_upload</span>
+         <Ph className="text-3xl sm:text-4xl text-on-surface-variant" name="cloud_upload" />
          <div className="text-center">
           <p className="font-label-sm text-label-sm font-bold text-on-surface">Click to upload or drag and drop</p>
           <p className="text-[10px] text-on-surface-variant uppercase tracking-tighter">PNG, JPG, MP4 or WAV (Max 50MB)</p>
@@ -1305,7 +1302,7 @@ const res = await classifyIncident({
               <img className="w-12 h-12 rounded object-cover border border-outline-variant/30" src={previewUrl} alt={f.name} />
              ) : (
               <div className="w-12 h-12 rounded bg-surface-container-low border border-outline-variant/30 flex items-center justify-center">
-               <span className="material-symbols-outlined text-xl text-secondary">{f.type.startsWith('video') ? 'videocam' : 'mic'}</span>
+               <Ph className="text-xl text-secondary" name={f.type.startsWith('video') ? 'videocam' : 'mic'} />
               </div>
              )}
              <div className="min-w-0 flex-1">
@@ -1313,7 +1310,7 @@ const res = await classifyIncident({
               <p className="text-[10px] text-on-surface-variant font-bold uppercase">{formatBytes(f.size)}</p>
              </div>
              <button type="button" onClick={() => removeFile(f.name, f.size)} className="text-on-surface-variant hover:text-error transition-colors shrink-0">
-              <span className="material-symbols-outlined text-[18px]">close</span>
+              <Ph className="text-[18px]" name="close" />
              </button>
             </div>
            );
@@ -1332,7 +1329,7 @@ const res = await classifyIncident({
         <div className={`absolute top-0 left-0 w-1 h-full ${ai.priority === 'CRITICAL' ? 'bg-error' : 'bg-secondary'}`}></div>
         <div className="flex items-start gap-3 sm:gap-6 flex-wrap">
          <div className="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center shrink-0">
-          <span className="material-symbols-outlined text-error">smart_toy</span>
+          <Ph className="text-error" name="smart_toy" />
          </div>
          <div className="min-w-0 flex-1">
           <div className="font-caps-xs text-[10px] text-on-surface-variant mb-1">AI Tactical Analysis Complete</div>
@@ -1349,7 +1346,7 @@ const res = await classifyIncident({
           <p className="font-label-sm text-[11px] text-on-surface-variant mb-1.5">Auto-detected Category</p>
           <div className="flex items-center justify-between gap-2">
            <span className="flex items-center gap-1.5 font-label-md text-[14px] text-on-surface font-bold">
-            <span className="material-symbols-outlined text-[15px] text-secondary">{CATEGORY_ICONS[ai.category] ?? 'more_horiz'}</span>
+            <Ph className="text-[15px] text-secondary" name={CATEGORY_ICONS[ai.category] ?? 'more_horiz'} />
             {ai.category}
            </span>
            <span className="text-[11px] font-bold text-secondary">{ai.confidence}%</span>
@@ -1377,14 +1374,14 @@ const res = await classifyIncident({
          <ul className="space-y-1.5">
           {(ai.user_actions?.length ? ai.user_actions : localFallback(ai.category).user_actions).map((action) => (
            <li key={action} className="flex items-start gap-1.5 text-[11px] text-on-surface-variant leading-tight">
-            <span className="material-symbols-outlined text-[13px] text-success-green mt-[1px]">check_circle</span>
+            <Ph className="text-[13px] text-success-green mt-[1px]" name="check_circle" />
             {action}
            </li>
           ))}
          </ul>
         </div>
         <div className="mt-4 flex items-center gap-2 px-2 py-1.5 rounded-lg bg-secondary/10 border border-secondary/20">
-         <span className="material-symbols-outlined text-[14px] text-secondary">route</span>
+         <Ph className="text-[14px] text-secondary" name="route" />
          <span className="text-[10px] font-bold text-on-surface leading-tight">{ai.dispatch}</span>
         </div>
        </div>
@@ -1425,7 +1422,7 @@ const res = await classifyIncident({
           </MapContainer>
           <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent pointer-events-none"></div>
           <div className="absolute bottom-3 left-3 right-3 flex items-center gap-1">
-           <span className="material-symbols-outlined text-secondary">location_on</span>
+           <Ph className="text-secondary" name="location_on" />
            <span className="font-label-sm text-label-sm text-on-surface">{address}</span>
           </div>
          </div>
@@ -1455,12 +1452,12 @@ const res = await classifyIncident({
             <div key={`${f.name}-${f.size}`} className="w-24 h-24 rounded border border-outline-variant/30 relative overflow-hidden group">
              <img className="w-full h-full object-cover" alt={f.name} src={previewUrl} />
              <a href={previewUrl} target="_blank" rel="noreferrer" className="absolute inset-0 bg-cc-bg/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="material-symbols-outlined text-on-surface">visibility</span>
+              <Ph className="text-on-surface" name="visibility" />
              </a>
             </div>
            ) : (
             <div key={`${f.name}-${f.size}`} className="w-32 rounded border border-outline-variant/30 bg-surface-container-low flex flex-col items-center justify-center gap-1 px-2 py-3 text-on-surface-variant">
-             <span className="material-symbols-outlined">{f.type.startsWith('video') ? 'videocam' : 'mic'}</span>
+             <Ph name={f.type.startsWith('video') ? 'videocam' : 'mic'} />
              <span className="font-caps-xs text-caps-xs text-center break-all">{f.name}</span>
              <span className="text-[9px] text-on-surface-variant font-bold uppercase">{formatBytes(f.size)}</span>
             </div>
@@ -1510,13 +1507,13 @@ const res = await classifyIncident({
    {notice === 'draft-saved' && (
     <div className="fixed top-3 right-3 z-[150] w-[min(260px,calc(100vw-1.5rem))] sm:w-[min(360px,calc(100vw-2rem))] bg-secondary text-white rounded-lg p-3 sm:p-4 animate-toast-in">
      <div className="flex items-start gap-2 sm:gap-3">
-      <span className="material-symbols-outlined text-lg sm:text-xl shrink-0">check_circle</span>
+      <Ph className="text-lg sm:text-xl shrink-0" name="check_circle" />
       <div className="min-w-0 flex-1">
        <p className="font-label-sm sm:font-label-md text-label-sm sm:text-label-md font-bold mb-0.5">Success</p>
        <p className="text-[11px] sm:text-caption text-white/90 break-words leading-snug">Draft saved on this device.</p>
       </div>
       <button type="button" onClick={() => setNotice(null)} className="ml-auto shrink-0 text-white/70 hover:text-white transition-colors" aria-label="Close notification">
-       <span className="material-symbols-outlined text-lg">close</span>
+       <Ph className="text-lg" name="close" />
       </button>
      </div>
     </div>
@@ -1526,26 +1523,26 @@ const res = await classifyIncident({
     {step === 1 && (
      <>
       <button type="button" onClick={handleSaveDraft} className="px-5 py-2.5 rounded-xl border border-outline-variant text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-[13px] font-medium w-full sm:w-auto">Save Draft</button>
-      <button type="button" onClick={() => goToStep(2)} className="px-5 py-2.5 rounded-xl bg-secondary text-on-secondary font-label-md text-[13px] hover:bg-secondary/90 transition-all flex items-center justify-center gap-1.5 font-medium w-full sm:w-auto">Next Step <span className="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+      <button type="button" onClick={() => goToStep(2)} className="px-5 py-2.5 rounded-xl bg-secondary text-on-secondary font-label-md text-[13px] hover:bg-secondary/90 transition-all flex items-center justify-center gap-1.5 font-medium w-full sm:w-auto">Next Step <Ph className="text-[16px]" name="arrow_forward" /></button>
      </>
     )}
     {step === 2 && (
      <>
       <button type="button" onClick={() => setStep(1)} className="px-6 py-3 rounded-xl border border-outline-variant text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md flex items-center justify-center gap-1 w-full sm:w-auto">
-       <span className="material-symbols-outlined text-sm">arrow_back</span> Back
+       <Ph className="text-sm" name="arrow_back" /> Back
       </button>
-      <button type="button" onClick={() => goToStep(3)} className="px-6 py-3 rounded-xl bg-secondary text-on-secondary font-label-md text-label-md hover:bg-secondary/90 transition-all flex items-center justify-center gap-1 w-full sm:w-auto">Next: Final Review <span className="material-symbols-outlined text-sm">arrow_forward</span></button>
+      <button type="button" onClick={() => goToStep(3)} className="px-6 py-3 rounded-xl bg-secondary text-on-secondary font-label-md text-label-md hover:bg-secondary/90 transition-all flex items-center justify-center gap-1 w-full sm:w-auto">Next: Final Review <Ph className="text-sm" name="arrow_forward" /></button>
      </>
     )}
     {step === 3 && (
      <>
       <button type="button" onClick={() => setStep(2)} className="px-6 py-3 rounded-xl border border-outline-variant text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md flex items-center justify-center gap-1 w-full sm:w-auto">
-       <span className="material-symbols-outlined text-sm">arrow_back</span> Back
+       <Ph className="text-sm" name="arrow_back" /> Back
       </button>
       <div className="flex items-center gap-3 w-full sm:w-auto">
        <button type="button" onClick={handleSaveDraft} className="px-5 py-2.5 rounded-xl border border-outline-variant text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-[13px] font-medium">Save Draft</button>
        <button type="button" onClick={handleSubmit} disabled={submitting || !confirm1 || !confirm2} className="px-6 py-3 rounded-xl bg-secondary text-on-secondary font-label-md text-label-md hover:bg-secondary/90 transition-all flex items-center justify-center gap-1 flex-1 sm:flex-initial disabled:opacity-60 disabled:cursor-not-allowed">
-        {submitting ? 'Submitting…' : 'Submit Report'} <span className="material-symbols-outlined text-sm">send</span>
+        {submitting ? 'Submitting…' : 'Submit Report'} <Ph className="text-sm" name="send" />
        </button>
       </div>
      </>

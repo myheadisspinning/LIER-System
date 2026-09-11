@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '../../../supabaseClient';
@@ -159,7 +160,7 @@ export default function OfficerAlerts() {
           ))}
         </div>
         <div className="relative w-full md:w-auto">
-          <span className="material-symbols-outlined text-on-surface-variant absolute left-3 top-1/2 -translate-y-1/2">search</span>
+          <Ph className="text-on-surface-variant absolute left-3 top-1/2 -translate-y-1/2" name="search" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -196,7 +197,7 @@ export default function OfficerAlerts() {
                 <div className="p-4 sm:p-6 flex flex-col flex-1">
                   <div className="flex justify-between items-start mb-3 sm:mb-4">
                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-caps-xs text-caps-xs uppercase tracking-wider ${toneClasses[a.tone]}`}>
-                      <span className="material-symbols-outlined text-[14px]">{iconFor(a.type)}</span>
+                      <Ph className="text-[14px]" name={iconFor(a.type)} />
                       {a.type}
                     </span>
                     <span className="text-on-surface-variant font-label-sm text-label-sm">{a.time}</span>
@@ -241,11 +242,11 @@ export default function OfficerAlerts() {
               <div className="px-4 py-3 sm:px-6 sm:py-4 flex justify-between items-center shrink-0 border-b border-border-subtle z-10 bg-surface-container-lowest">
                 <div className="flex items-center gap-3">
                   <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-caps-xs text-caps-xs uppercase tracking-wider ${toneClasses[selectedAdvisory.tone]}`}>
-                    <span className="material-symbols-outlined text-[14px]">{iconFor(selectedAdvisory.type)}</span>
+                    <Ph className="text-[14px]" name={iconFor(selectedAdvisory.type)} />
                     {selectedAdvisory.type}
                   </span>
                   <span className="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[16px]">schedule</span>
+                    <Ph className="text-[16px]" name="schedule" />
                     {selectedAdvisory.time}
                   </span>
                 </div>
@@ -254,7 +255,7 @@ export default function OfficerAlerts() {
                   onClick={() => setSelectedAdvisory(null)}
                   className="text-on-surface-variant hover:text-on-surface p-2 rounded-full hover:bg-surface-container transition-colors"
                 >
-                  <span className="material-symbols-outlined text-2xl">close</span>
+                  <Ph className="text-2xl" name="close" />
                 </button>
               </div>
               <div className="flex-1 overflow-y-auto">

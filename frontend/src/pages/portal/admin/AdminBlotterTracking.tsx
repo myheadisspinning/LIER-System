@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { fmtDate, logAudit } from '../../../lib/admin';
@@ -202,7 +203,7 @@ export default function AdminBlotterTracking() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-3 flex-1">
           <div className="relative w-full max-w-md">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+            <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]" name="search" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -225,7 +226,7 @@ export default function AdminBlotterTracking() {
           </div>
         </div>
         <button type="button" onClick={() => setFormOpen(true)} className="bg-[#1E40AF] hover:bg-[#1E40AF]/90 text-white font-label-md text-label-md py-2 px-4 rounded-lg flex items-center gap-2 transition-colors shrink-0">
-          <span className="material-symbols-outlined text-[18px]">add</span>
+          <Ph className="text-[18px]" name="add" />
           File New Blotter Entry
         </button>
       </div>
@@ -280,7 +281,7 @@ export default function AdminBlotterTracking() {
                         </span>
                       </td>
                       <td className="px-5 py-4 text-right">
-                        <button type="button" onClick={() => setActiveId(b.id)} className="text-on-surface-variant hover:text-secondary p-1"><span className="material-symbols-outlined text-[20px]">visibility</span></button>
+                        <button type="button" onClick={() => setActiveId(b.id)} className="text-on-surface-variant hover:text-secondary p-1"><Ph className="text-[20px]" name="visibility" /></button>
                       </td>
                     </tr>
                   ))}
@@ -326,7 +327,7 @@ export default function AdminBlotterTracking() {
                   <div className="flex justify-between items-center mb-4">
                     <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-widest">Lupon Hearing Logs</h4>
                     <button type="button" onClick={() => setHearingOpen(true)} className="text-xs font-semibold text-secondary flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[14px]">add</span> Add Hearing
+                      <Ph className="text-[14px]" name="add" /> Add Hearing
                     </button>
                   </div>
                   {!active.hearing_logs?.length ? (
@@ -383,7 +384,7 @@ export default function AdminBlotterTracking() {
           <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">File New Blotter Entry</h3>
-              <button type="button" onClick={() => setFormOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
+              <button type="button" onClick={() => setFormOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><Ph name="close" /></button>
             </div>
             <div className="p-5 space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -429,7 +430,7 @@ export default function AdminBlotterTracking() {
           <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Log Hearing — {active.blotter_no}</h3>
-              <button type="button" onClick={() => setHearingOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
+              <button type="button" onClick={() => setHearingOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><Ph name="close" /></button>
             </div>
             <div className="p-5 space-y-4">
               <div>

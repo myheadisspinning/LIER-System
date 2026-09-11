@@ -1,3 +1,4 @@
+import Ph from '../components/PhIcon';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
@@ -195,13 +196,13 @@ export default function SignIn() {
           <div className="relative z-20 flex gap-md items-center mt-xl">
             <div className="flex -space-x-2">
               <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-lg">security</span>
+                <Ph className="text-white text-lg" name="security" />
               </div>
               <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-lg">verified_user</span>
+                <Ph className="text-white text-lg" name="verified_user" />
               </div>
               <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-lg">local_police</span>
+                <Ph className="text-white text-lg" name="local_police" />
               </div>
             </div>
             <p className="text-white/80 font-caption text-caption">Join over 15,000 verified residents and administrators.</p>
@@ -226,7 +227,7 @@ export default function SignIn() {
                 <div className="space-y-1">
                   <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="identity">Email Address</label>
                   <div className="relative">
-                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">mail</span>
+                    <Ph className="absolute left-4 top-1/2 -translate-y-1/2 text-outline" name="mail" />
                     <input className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-2.5"
                       id="identity" placeholder="name@example.com" required type="email"
                       value={identity} onChange={(e) => setIdentity(e.target.value)} />
@@ -239,7 +240,7 @@ export default function SignIn() {
                     <Link className="text-secondary font-label-md text-label-md hover:underline" to="/forgot-password">Forgot password?</Link>
                   </div>
                   <div className="relative">
-                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
+                    <Ph className="absolute left-4 top-1/2 -translate-y-1/2 text-outline" name="lock" />
                     <input className="w-full pl-12 pr-12 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-2.5"
                       id="password" placeholder="••••••••" required
                       type={showPassword ? 'text' : 'password'}
@@ -247,7 +248,7 @@ export default function SignIn() {
                     <button className="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface"
                       id="toggle-password" type="button"
                       onClick={() => setShowPassword((prev) => !prev)}>
-                      <span className="material-symbols-outlined">{showPassword ? 'visibility_off' : 'visibility'}</span>
+                      <Ph name={showPassword ? 'visibility_off' : 'visibility'} />
                     </button>
                   </div>
                 </div>
@@ -264,7 +265,7 @@ export default function SignIn() {
                 <button className="w-full bg-secondary rounded-lg text-white font-semibold text-body-lg shadow-lg hover:bg-secondary/90 transition-all active:scale-[0.98] flex items-center justify-center gap-base py-2.5"
                   type="submit" disabled={loading}>
                   {loading ? 'Loading...' : 'Login'}
-                  <span className="material-symbols-outlined">login</span>
+                  <Ph name="login" />
                 </button>
               </form>
               {/* Resend confirmation email option */}
@@ -281,12 +282,12 @@ export default function SignIn() {
                   >
                     {resending ? (
                       <>
-                        <span className="material-symbols-outlined animate-spin">hourglass_empty</span>
+                        <Ph className="animate-spin" name="hourglass_empty" />
                         Sending...
                       </>
                     ) : (
                       <>
-                        <span className="material-symbols-outlined">mark_email_unread</span>
+                        <Ph name="mark_email_unread" />
                         Resend Confirmation Email
                       </>
                     )}
@@ -340,7 +341,7 @@ export default function SignIn() {
             </div>
             {/* Footer */}
             <div className="mt-auto border-t border-outline-variant/10 flex items-center justify-center gap-base text-on-surface-variant/40 pt-3 pb-2">
-              <span className="material-symbols-outlined text-sm">verified_user</span>
+              <Ph className="text-sm" name="verified_user" />
               <span className="font-caption text-[10px] uppercase tracking-widest font-bold">
                 OFFICIAL BARANGAY CULIAT GOV PORTAL • ENCRYPTED
               </span>

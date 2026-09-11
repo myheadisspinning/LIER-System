@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { fmtDate, logAudit } from '../../../lib/admin';
@@ -161,7 +162,7 @@ export default function AdminStatusNotifications() {
     <div className="space-y-6">
       <div className="flex justify-between items-end">
         <button type="button" onClick={() => setComposerOpen(true)} className="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary rounded-lg text-label-md font-medium hover:bg-secondary/90 transition-colors">
-          <span className="material-symbols-outlined text-[18px]">add_alert</span>
+          <Ph className="text-[18px]" name="add_alert" />
           Create New Broadcast Alert
         </button>
       </div>
@@ -198,7 +199,7 @@ export default function AdminStatusNotifications() {
             {paginatedBroadcasts.map((b) => (
               <div key={b.id} className="px-5 py-4 flex flex-wrap items-start gap-4">
                 <span className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${TYPE_COLOR[b.type]}`}>
-                  <span className="material-symbols-outlined text-[20px]">{b.type === 'Alert' || b.type === 'Emergency' ? 'campaign' : b.type === 'Weather' ? 'cloud' : 'notifications'}</span>
+                  <Ph className="text-[20px]" name={b.type === 'Alert' || b.type === 'Emergency' ? 'campaign' : b.type === 'Weather' ? 'cloud' : 'notifications'} />
                 </span>
                 <div className="flex-1 min-w-[200px]">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -254,7 +255,7 @@ export default function AdminStatusNotifications() {
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">New Broadcast Alert</h3>
               <button type="button" onClick={() => setComposerOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
-                <span className="material-symbols-outlined">close</span>
+                <Ph name="close" />
               </button>
             </div>
             <div className="p-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -305,7 +306,7 @@ export default function AdminStatusNotifications() {
                   )}
                   <input type="file" accept="image/*" id="broadcast-image" onChange={(e) => setImageFile(e.target.files?.[0] ?? null)} className="hidden" />
                   <label htmlFor="broadcast-image" className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 text-secondary rounded-lg text-sm font-medium hover:bg-secondary/20 cursor-pointer transition-colors">
-                    <span className="material-symbols-outlined text-[18px]">upload</span>
+                    <Ph className="text-[18px]" name="upload" />
                     Choose Image
                   </label>
                   {imageFile && <span className="text-xs text-on-surface-variant ml-2">{imageFile.name}</span>}
@@ -326,7 +327,7 @@ export default function AdminStatusNotifications() {
                   <div className="bg-white rounded-xl border border-border-subtle overflow-hidden shadow-sm">
                     <div className="px-5 py-4 flex items-start gap-4">
                       <span className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${TYPE_COLOR[form.type]}`}>
-                        <span className="material-symbols-outlined text-[20px]">{form.type === 'Alert' || form.type === 'Emergency' ? 'campaign' : form.type === 'Weather' ? 'cloud' : 'notifications'}</span>
+                        <Ph className="text-[20px]" name={form.type === 'Alert' || form.type === 'Emergency' ? 'campaign' : form.type === 'Weather' ? 'cloud' : 'notifications'} />
                       </span>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
@@ -350,7 +351,7 @@ export default function AdminStatusNotifications() {
                   </div>
                 ) : (
                   <div className="bg-white rounded-xl border border-dashed border-border-subtle p-10 flex flex-col items-center gap-2 text-on-surface-variant">
-                    <span className="material-symbols-outlined text-3xl">visibility</span>
+                    <Ph className="text-3xl" name="visibility" />
                     <p className="text-sm text-center">Start typing to see a live preview of your broadcast.</p>
                   </div>
                 )}
@@ -365,7 +366,7 @@ export default function AdminStatusNotifications() {
           <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <span className="w-10 h-10 rounded-full bg-error-red/10 flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-[20px] text-error-red">warning</span>
+                <Ph className="text-[20px] text-error-red" name="warning" />
               </span>
               <div>
                 <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Delete Broadcast</h3>
@@ -392,9 +393,7 @@ export default function AdminStatusNotifications() {
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10">
               <div className="flex items-center gap-3">
                 <span className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${TYPE_COLOR[viewingBroadcast.type]}`}>
-                  <span className="material-symbols-outlined text-[20px]">
-                    {viewingBroadcast.type === 'Alert' || viewingBroadcast.type === 'Emergency' ? 'campaign' : viewingBroadcast.type === 'Weather' ? 'cloud' : 'notifications'}
-                  </span>
+                  <Ph className="text-[20px]" name={viewingBroadcast.type === 'Alert' || viewingBroadcast.type === 'Emergency' ? 'campaign' : viewingBroadcast.type === 'Weather' ? 'cloud' : 'notifications'} />
                 </span>
                 <div>
                   <h3 className="font-headline-md text-headline-md font-bold text-on-surface">{viewingBroadcast.title}</h3>
@@ -406,7 +405,7 @@ export default function AdminStatusNotifications() {
                 </div>
               </div>
               <button type="button" onClick={() => setViewingBroadcast(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
-                <span className="material-symbols-outlined">close</span>
+                <Ph name="close" />
               </button>
             </div>
             <div className="p-5 space-y-4">

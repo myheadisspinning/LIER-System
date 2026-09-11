@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '../../../supabaseClient';
@@ -233,7 +234,7 @@ useEffect(() => {
 
  <div className="flex flex-col md:flex-row gap-4 mb-4 sm:mb-6">
  <div className="relative flex-1">
-  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+  <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-outline" name="search" />
   <input
   className="w-full pl-10 pr-4 py-2 border border-outline-variant rounded-lg font-body-sm text-body-sm bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary"
   placeholder="Search files by name, date, or hash..."
@@ -257,7 +258,7 @@ useEffect(() => {
    ))}
    </div>
  <label className="bg-gradient-to-r from-primary to-[#2b2b2b] text-on-primary px-6 py-2 rounded-lg flex items-center justify-center gap-2 font-body-sm font-semibold shrink-0 transition-all duration-200 active:scale-[0.98] cursor-pointer">
-  <span className="material-symbols-outlined text-[18px]">{uploading ? 'hourglass_empty' : 'upload'}</span>
+  <Ph className="text-[18px]" name={uploading ? 'hourglass_empty' : 'upload'} />
   {uploading ? 'Uploading...' : 'Upload New File'}
   <input type="file" multiple accept="image/*,video/*,audio/*" onChange={handleUpload} className="hidden" disabled={uploading} />
  </label>
@@ -274,11 +275,11 @@ useEffect(() => {
   </div>
  </div>
  <div className="flex items-center gap-2 shrink-0 text-on-surface-variant">
-  <span className="material-symbols-outlined text-[18px]">lock</span>
+  <Ph className="text-[18px]" name="lock" />
   <span className="font-body-sm text-body-sm text-xs">Unlinked files auto-purge after 30 days.</span>
  </div>
  <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/5 border border-secondary/20 text-secondary shrink-0">
-  <span className="material-symbols-outlined text-[18px]">shield</span>
+  <Ph className="text-[18px]" name="shield" />
   <span className="font-body-sm text-body-sm text-xs font-semibold">{unlinkedCount} file{unlinkedCount !== 1 ? 's' : ''} unlinked</span>
  </div>
  </div>
@@ -286,7 +287,7 @@ useEffect(() => {
  {unlinkedCount > 0 && (
  <div className="bg-secondary-fixed text-on-secondary-fixed p-4 rounded-lg border border-secondary-fixed-dim mb-6 sm:mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
   <div className="flex items-center gap-3">
-  <span className="material-symbols-outlined text-secondary">info</span>
+  <Ph className="text-secondary" name="info" />
   <span className="font-body-sm text-body-sm">You have {unlinkedCount} unlinked media file{unlinkedCount !== 1 ? 's' : ''}. Want to attach {unlinkedCount !== 1 ? 'them' : 'it'} to an open incident report?</span>
   </div>
   <button
@@ -300,11 +301,11 @@ useEffect(() => {
 
  {loading ? (
  <div className="flex items-center justify-center py-12">
-  <span className="material-symbols-outlined text-4xl text-secondary animate-spin">progress_activity</span>
+  <Ph className="text-4xl text-secondary animate-spin" name="progress_activity" />
  </div>
  ) : visible.length === 0 ? (
  <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-8 sm:p-12 text-center">
-  <span className="material-symbols-outlined text-6xl text-on-surface-variant mb-4">folder_open</span>
+  <Ph className="text-6xl text-on-surface-variant mb-4" name="folder_open" />
   <p className="font-headline-md text-headline-md text-on-surface mb-2">No evidence files found</p>
   <p className="font-body-sm text-body-sm text-on-surface-variant">Upload files to get started</p>
  </div>
@@ -319,11 +320,11 @@ useEffect(() => {
   <div className="absolute top-4 right-4 z-10">
   {item.linked ? (
    <span className="px-2 py-1 rounded-full font-label-md text-label-md flex items-center gap-1 bg-surface-container-lowest border border-secondary/20 text-secondary">
-   <span className="material-symbols-outlined text-[12px]">link</span> Linked to Case #{item.linkedCase}
+   <Ph className="text-[12px]" name="link" /> Linked to Case #{item.linkedCase}
    </span>
   ) : (
    <span className="px-2 py-1 rounded-full font-label-md text-label-md flex items-center gap-1 bg-warning-amber/10 text-warning-amber border border-warning-amber/30">
-   <span className="material-symbols-outlined text-[12px]">warning</span> Unlinked
+   <Ph className="text-[12px]" name="warning" /> Unlinked
    </span>
   )}
   </div>
@@ -335,14 +336,12 @@ useEffect(() => {
    <img className="bg-cover bg-center w-full h-full object-cover" alt={item.name} src={item.thumb} />
   ) : (
    <div className="w-full h-full flex items-center justify-center">
-   <span className="material-symbols-outlined text-6xl text-on-surface-variant">
-   {item.kind === 'video' ? 'videocam' : item.kind === 'audio' ? 'mic' : 'image'}
-   </span>
+   <Ph className="text-6xl text-on-surface-variant" name={item.kind === 'video' ? 'videocam' : item.kind === 'audio' ? 'mic' : 'image'} />
    </div>
   )}
   {item.kind === 'video' && item.thumb && (
    <div className="absolute inset-0 flex items-center justify-center">
-   <span className="material-symbols-outlined text-white text-4xl drop-shadow-lg">play_circle</span>
+   <Ph className="text-white text-4xl drop-shadow-lg" name="play_circle" />
    </div>
   )}
   {item.duration && (
@@ -359,26 +358,26 @@ useEffect(() => {
   {item.autoDelete && (
   <div className="mb-4">
    <span className="text-error px-2 py-1 rounded font-body-sm text-[12px] flex items-center gap-1 bg-error-container border border-error-container w-fit">
-   <span className="material-symbols-outlined text-[14px]">timer</span> {item.autoDelete}
+   <Ph className="text-[14px]" name="timer" /> {item.autoDelete}
    </span>
   </div>
   )}
   <div className="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
   <div className="flex gap-2">
    <button type="button" onClick={() => handleView(item)} className="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 font-body-sm text-body-sm">
-   <span className="material-symbols-outlined text-[18px]">visibility</span> View
+   <Ph className="text-[18px]" name="visibility" /> View
    </button>
    <button type="button" onClick={() => handleDownload(item)} className="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 font-body-sm text-body-sm ml-2">
-   <span className="material-symbols-outlined text-[18px]">download</span> Download
+   <Ph className="text-[18px]" name="download" /> Download
    </button>
   </div>
   {item.linked ? (
    <button type="button" className="text-error hover:text-on-error-container transition-colors flex items-center gap-1 font-body-sm text-body-sm">
-   <span className="material-symbols-outlined text-[18px]">link_off</span> Unlink
+   <Ph className="text-[18px]" name="link_off" /> Unlink
    </button>
   ) : (
    <button type="button" className="text-primary hover:text-primary-container font-semibold transition-colors flex items-center gap-1 font-body-sm text-body-sm">
-   <span className="material-symbols-outlined text-[18px]">add</span> Link to Incident
+   <Ph className="text-[18px]" name="add" /> Link to Incident
    </button>
   )}
   </div>
@@ -407,7 +406,7 @@ useEffect(() => {
   <div className="flex justify-between items-center p-4 border-b border-outline-variant">
   <h2 className="font-headline-md text-headline-md text-on-surface truncate pr-4">{inspect.name}</h2>
   <button type="button" className="text-on-surface-variant hover:text-on-surface transition-colors" onClick={() => setInspect(null)}>
-  <span className="material-symbols-outlined">close</span>
+  <Ph name="close" />
   </button>
   </div>
   <div className="flex-1 overflow-y-auto p-6 bg-surface-container-low">
@@ -415,15 +414,13 @@ useEffect(() => {
   {inspect.thumb ? (
    <img className="w-full h-full object-cover" alt={inspect.name} src={inspect.thumb} />
   ) : (
-<span className="material-symbols-outlined text-white text-6xl drop-shadow-lg">
-    {inspect.kind === 'video' ? 'videocam' : inspect.kind === 'audio' ? 'mic' : 'image'}
-    </span>
+<Ph className="text-white text-6xl drop-shadow-lg" name={inspect.kind === 'video' ? 'videocam' : inspect.kind === 'audio' ? 'mic' : 'image'} />
    )}
    {inspect.kind === 'video' && inspect.thumb && (
     <>
     <span className="absolute text-white text-6xl drop-shadow-lg">play_circle</span>
    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent flex gap-4 items-center">
-   <span className="material-symbols-outlined text-white">play_arrow</span>
+   <Ph className="text-white" name="play_arrow" />
    <div className="h-1 flex-1 bg-white/50 rounded-full">
    <div className="h-full w-1/3 bg-primary rounded-full"></div>
    </div>
@@ -437,21 +434,21 @@ useEffect(() => {
    <h4 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4 border-b border-outline-variant pb-2">File Details</h4>
    <div className="flex flex-col gap-2">
    <div className="flex items-start gap-2">
-   <span className="material-symbols-outlined text-on-surface-variant text-[16px] mt-0.5">description</span>
+   <Ph className="text-on-surface-variant text-[16px] mt-0.5" name="description" />
    <div>
    <span className="block font-body-sm text-xs text-on-surface-variant">File Name</span>
    <span className="text-sm font-semibold">{inspect.name}</span>
    </div>
    </div>
    <div className="flex items-start gap-2 mt-2">
-   <span className="material-symbols-outlined text-on-surface-variant text-[16px] mt-0.5">data_usage</span>
+   <Ph className="text-on-surface-variant text-[16px] mt-0.5" name="data_usage" />
    <div>
    <span className="block font-body-sm text-xs text-on-surface-variant">File Size</span>
    <span className="font-body-sm text-sm">{inspect.size}</span>
    </div>
    </div>
    <div className="flex items-start gap-2 mt-2">
-   <span className="material-symbols-outlined text-on-surface-variant text-[16px] mt-0.5">schedule</span>
+   <Ph className="text-on-surface-variant text-[16px] mt-0.5" name="schedule" />
    <div>
    <span className="block font-body-sm text-xs text-on-surface-variant">Uploaded</span>
    <span className="text-sm font-semibold">{inspect.uploaded}</span>
@@ -462,7 +459,7 @@ useEffect(() => {
   <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col">
    <h4 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4 border-b border-outline-variant pb-2">Case Association</h4>
    <div className="bg-primary-fixed/30 border border-primary-fixed p-3 rounded mb-4 flex items-center gap-3">
-   <span className="material-symbols-outlined text-primary text-[20px]">link</span>
+   <Ph className="text-primary text-[20px]" name="link" />
    <div>
    <span className="block font-body-sm text-xs text-primary font-semibold">{inspect.linked ? 'Currently Linked' : 'Not Linked'}</span>
    <span className="text-sm text-on-surface">

@@ -1,3 +1,4 @@
+﻿import Ph from './PhIcon';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from '../supabaseClient';
 import { useScrollLock } from '../lib/useScrollLock';
@@ -181,7 +182,7 @@ export default function OTPVerificationModal({
       <div className="bg-surface-container-lowest rounded-xl shadow-2xl w-full max-w-2xl mx-4 p-6">
         <div className="text-center mb-6">
           <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="material-symbols-outlined text-secondary text-3xl">shield</span>
+            <Ph className="text-secondary text-3xl" name="shield" />
           </div>
           <h2 className="text-xl font-bold text-on-background mb-1">Two-Factor Authentication</h2>
           <p className="text-body-sm text-on-surface-variant">
@@ -199,7 +200,7 @@ export default function OTPVerificationModal({
                 : 'text-on-surface-variant hover:text-on-surface'
             }`}
           >
-            <span className="material-symbols-outlined text-[18px]">mail</span>
+            <Ph className="text-[18px]" name="mail" />
             Email OTP
           </button>
           <button
@@ -212,7 +213,7 @@ export default function OTPVerificationModal({
                 : 'text-on-surface-variant hover:text-on-surface'
             } disabled:opacity-40 disabled:cursor-not-allowed`}
           >
-            <span className="material-symbols-outlined text-[18px]">sms</span>
+            <Ph className="text-[18px]" name="sms" />
             Phone OTP
           </button>
         </div>
@@ -234,7 +235,7 @@ export default function OTPVerificationModal({
         {devOtp && (
           <div className="mb-4 p-3 bg-warning-amber/10 border border-warning-amber/30 rounded-lg">
             <div className="flex items-center gap-2 mb-1">
-              <span className="material-symbols-outlined text-warning-amber text-[16px]">construction</span>
+              <Ph className="text-warning-amber text-[16px]" name="construction" />
               <p className="text-body-sm font-semibold text-warning-amber">Dev Mode</p>
             </div>
             <p className="text-body-sm text-on-surface-variant">
@@ -281,12 +282,12 @@ export default function OTPVerificationModal({
           >
             {loading ? (
               <>
-                <span className="material-symbols-outlined animate-spin">progress_activity</span>
+                <Ph className="animate-spin" name="progress_activity" />
                 Verifying...
               </>
             ) : (
               <>
-                <span className="material-symbols-outlined">check_circle</span>
+                <Ph name="check_circle" />
                 Verify OTP
               </>
             )}
@@ -299,22 +300,22 @@ export default function OTPVerificationModal({
           >
             {sending ? (
               <>
-                <span className="material-symbols-outlined animate-spin">progress_activity</span>
+                <Ph className="animate-spin" name="progress_activity" />
                 Sending...
               </>
             ) : !isChannelSent ? (
               <>
-                <span className="material-symbols-outlined">send</span>
+                <Ph name="send" />
                 Send Code
               </>
             ) : canResend ? (
               <>
-                <span className="material-symbols-outlined">refresh</span>
+                <Ph name="refresh" />
                 Resend OTP
               </>
             ) : (
               <>
-                <span className="material-symbols-outlined">timer</span>
+                <Ph name="timer" />
                 Resend in {countdown}s
               </>
             )}
@@ -337,7 +338,7 @@ export default function OTPVerificationModal({
               </p>
             ) : (
               <p className="text-caption text-error font-medium">
-                Code expired — resend to get a new one
+                Code expired â€” resend to get a new one
               </p>
             )}
           </div>

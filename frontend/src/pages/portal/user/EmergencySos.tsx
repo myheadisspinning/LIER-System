@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useRef, useState } from 'react';
 
 interface Hotline {
@@ -83,7 +84,7 @@ export default function EmergencySos() {
  <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-8">
   <div className="flex-1 text-center md:text-left">
   <div className="inline-flex items-center px-3 py-1 rounded-full bg-error-red/10 text-error-red font-caps-xs text-caps-xs font-bold mb-4">
-  <span className="material-symbols-outlined text-[14px] mr-1">cell_tower</span>
+  <Ph className="text-[14px] mr-1" name="cell_tower" />
   PRIORITY CONNECTION ACTIVE
   </div>
   <h3 className="font-label-md text-label-md sm:font-headline-md sm:text-headline-md sm:font-headline-lg sm:text-headline-lg text-on-surface mb-3">Emergency? Don't Wait.</h3>
@@ -122,7 +123,6 @@ export default function EmergencySos() {
    strokeWidth="8"
    strokeDasharray="283"
    strokeDashoffset={pressing ? 0 : 283}
-   style={{ transition: pressing ? 'stroke-dashoffset 3s linear' : 'stroke-dashoffset 0.1s' }}
   ></circle>
   </svg>
   <div
@@ -130,9 +130,7 @@ export default function EmergencySos() {
    pressing ? 'bg-error active:scale-95' : 'bg-error-red hover:bg-error'
   }`}
   >
-  <span className="material-symbols-outlined text-white text-3xl sm:text-5xl mb-1" style={{ fontVariationSettings: "'FILL' 1" }}>
-   sos
-  </span>
+  <Ph className="text-white text-3xl sm:text-5xl mb-1" name="sos" weight="fill" />
 <span className="text-white text-[9px] leading-[11px] text-center px-1 mt-1 font-bold uppercase sm:hidden">
    {pressing ? 'DISPATCHING...' : 'HOLD TO DISPATCH'}
   </span>
@@ -147,7 +145,7 @@ export default function EmergencySos() {
  {dispatched && (
   <div className="relative z-10 mt-4 bg-white/80 border border-error-red/30 rounded-lg p-4 text-center">
   <p className="font-label-sm text-label-sm sm:font-label-md sm:text-label-md font-bold text-error-red flex items-center justify-center gap-2">
-  <span className="material-symbols-outlined">check_circle</span>
+  <Ph name="check_circle" />
   DISPATCH TRIGGERED: Location and details sent to Command Center.
   </p>
   </div>
@@ -156,7 +154,7 @@ export default function EmergencySos() {
 
  <div>
  <h3 className="font-label-md text-label-md sm:font-headline-md sm:text-headline-md text-on-surface mb-2 sm:mb-6 flex items-center">
-  <span className="material-symbols-outlined mr-2 text-secondary">contact_phone</span>
+  <Ph className="mr-2 text-secondary" name="contact_phone" />
   Direct Action Hotlines
  </h3>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
@@ -176,7 +174,7 @@ export default function EmergencySos() {
   </span>
   </div>
   <div className="flex items-center mb-2 sm:mb-6 text-on-surface-variant">
-  <span className="material-symbols-outlined mr-2 text-outline">{h.icon}</span>
+  <Ph className="mr-2 text-outline" name={h.icon} />
   <span className="font-body-sm text-body-sm sm:font-body-md sm:text-body-md">{h.number}</span>
   </div>
   <button
@@ -187,7 +185,7 @@ export default function EmergencySos() {
    : 'bg-surface-container-high hover:bg-surface-dim text-on-surface border border-outline-variant'
   }`}
   >
-  <span className="material-symbols-outlined mr-2 text-sm">{h.primary ? 'phone_forwarded' : 'call'}</span>
+  <Ph className="mr-2 text-sm" name={h.primary ? 'phone_forwarded' : 'call'} />
   {h.primary ? 'Call Desk Now' : `Call ${h.label.split(' ')[0]}`}
   </button>
   </div>

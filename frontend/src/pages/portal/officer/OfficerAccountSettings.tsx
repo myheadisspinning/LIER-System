@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { getAdminProfile } from '../../../lib/admin';
@@ -104,12 +105,12 @@ export default function OfficerAccountSettings() {
                 <p className="text-sm text-on-surface-variant break-all mt-0.5">{email}</p>
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-secondary/10 text-secondary border border-secondary/20 rounded-full font-label-sm text-label-sm">
-                    <span className="material-symbols-outlined text-[14px]">admin_panel_settings</span>
+                    <Ph className="text-[14px]" name="admin_panel_settings" />
                     Duty Officer
                   </span>
                   {unitName && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-success-green/10 text-success-green border border-success-green/20 rounded-full font-label-sm text-label-sm">
-                      <span className="material-symbols-outlined text-[14px]">shield_person</span>
+                      <Ph className="text-[14px]" name="shield_person" />
                       {unitName} · {unitType}
                     </span>
                   )}
@@ -148,7 +149,7 @@ export default function OfficerAccountSettings() {
                           className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-outline hover:text-on-surface transition-colors"
                           aria-label={showFields.current ? 'Hide password' : 'Show password'}
                         >
-                          <span className="material-symbols-outlined">{showFields.current ? 'visibility_off' : 'visibility'}</span>
+                          <Ph name={showFields.current ? 'visibility_off' : 'visibility'} />
                         </button>
                       )}
                     </div>
@@ -170,7 +171,7 @@ export default function OfficerAccountSettings() {
                           className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-outline hover:text-on-surface transition-colors"
                           aria-label={showFields.newPass ? 'Hide password' : 'Show password'}
                         >
-                          <span className="material-symbols-outlined">{showFields.newPass ? 'visibility_off' : 'visibility'}</span>
+                          <Ph name={showFields.newPass ? 'visibility_off' : 'visibility'} />
                         </button>
                       )}
                     </div>
@@ -192,7 +193,7 @@ export default function OfficerAccountSettings() {
                           className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-outline hover:text-on-surface transition-colors"
                           aria-label={showFields.confirm ? 'Hide password' : 'Show password'}
                         >
-                          <span className="material-symbols-outlined">{showFields.confirm ? 'visibility_off' : 'visibility'}</span>
+                          <Ph name={showFields.confirm ? 'visibility_off' : 'visibility'} />
                         </button>
                       )}
                     </div>
@@ -203,7 +204,7 @@ export default function OfficerAccountSettings() {
                     disabled={pwSaving}
                     className="mt-3 inline-flex items-center gap-2 bg-secondary text-on-secondary font-label-md text-label-md py-2 px-5 rounded-lg hover:bg-secondary/90 transition-colors disabled:opacity-60"
                   >
-                    <span className="material-symbols-outlined text-[18px]">lock_reset</span>
+                    <Ph className="text-[18px]" name="lock_reset" />
                     {pwSaving ? 'Updating…' : 'Update Password'}
                   </button>
                 </div>
@@ -213,7 +214,7 @@ export default function OfficerAccountSettings() {
                     <div className="bg-surface-bg border border-border-subtle rounded-xl overflow-hidden">
                       <div className="px-4 py-3 border-b border-border-subtle flex items-center justify-between gap-2">
                         <span className="font-label-sm text-label-sm text-on-surface flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[18px] text-secondary">devices</span>
+                          <Ph className="text-[18px] text-secondary" name="devices" />
                           Signed-In Devices
                         </span>
                         <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-success-green/10 text-success-green border border-success-green/25 text-[10px] font-bold uppercase tracking-wider">
@@ -226,7 +227,7 @@ export default function OfficerAccountSettings() {
                       </div>
                       <div className="p-3 sm:p-4 flex items-center gap-3">
                         <div className={`w-11 h-11 shrink-0 rounded-xl flex items-center justify-center ${isCoarsePointer ? 'bg-secondary/10 text-secondary' : 'bg-surface-container-highest text-on-surface-variant'}`}>
-                          <span className="material-symbols-outlined text-[22px]">{isCoarsePointer ? 'smartphone' : 'desktop_windows'}</span>
+                          <Ph className="text-[22px]" name={isCoarsePointer ? 'smartphone' : 'desktop_windows'} />
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="font-label-sm text-label-sm text-on-surface">{isCoarsePointer ? 'Mobile Device' : 'Desktop Device'}</div>
@@ -241,7 +242,7 @@ export default function OfficerAccountSettings() {
                   </div>
                   <div className="bg-surface-bg border border-border-subtle rounded-lg p-4">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="material-symbols-outlined text-success-green text-xl">verified_user</span>
+                      <Ph className="text-success-green text-xl" name="verified_user" />
                       <span className="font-label-md text-label-md text-on-surface">Password Sign-In</span>
                     </div>
                     <p className="font-body-sm text-body-sm text-on-surface-variant">
@@ -253,7 +254,7 @@ export default function OfficerAccountSettings() {
             ) : (
               <div className="bg-surface-bg border border-border-subtle rounded-lg p-4">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="material-symbols-outlined text-secondary text-xl">shield</span>
+                  <Ph className="text-secondary text-xl" name="shield" />
                   <span className="font-label-md text-label-md text-on-surface">External Sign-In Account</span>
                 </div>
                 <p className="font-body-sm text-body-sm text-on-surface-variant">Your account uses an external provider. Password management is handled by that provider.</p>

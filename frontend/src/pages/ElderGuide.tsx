@@ -1,3 +1,4 @@
+import Ph from '../components/PhIcon';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SiteHeader from '../components/SiteHeader';
@@ -40,7 +41,7 @@ export default function ElderGuide() {
               <p className="text-body-md text-on-surface-variant mb-6 md:mb-8 max-w-2xl">A dedicated resource for our elders in Barangay Culiat. We are committed to providing a secure environment, continuing the legacy of community service through easy-to-use digital tools and local support.</p>
               <div className="flex flex-wrap gap-3 md:gap-4 justify-center md:justify-start">
                 <button onClick={() => navigate('/signin')} className="bg-secondary text-white font-bold py-3 px-6 md:px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 text-base md:text-lg">
-                  <span className="material-symbols-outlined">shield_person</span> Get Started
+                  <Ph name="shield_person" /> Get Started
                 </button>
                 <button className="bg-surface-container-high border-2 border-outline-variant text-on-surface font-bold py-3 px-6 md:px-8 rounded-2xl hover:bg-surface-container-highest transition-all text-base md:text-lg">
                   Watch Video Guide
@@ -68,7 +69,7 @@ export default function ElderGuide() {
               ].map((step, i) => (
                 <div key={i} className="glass-card p-6 md:p-10 rounded-3xl flex flex-col items-center text-center shadow-sm hover:shadow-xl transition-all group bg-white/50 backdrop-blur-sm">
                   <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full ${step.bg} ${step.color} flex items-center justify-center mb-4 md:mb-8 group-hover:scale-110 transition-transform`}>
-                    <span className="material-symbols-outlined text-4xl md:text-5xl" style={{ fontVariationSettings: '"FILL" 1' }}>{step.icon}</span>
+                    <Ph className="text-4xl md:text-5xl" name={step.icon} weight="fill" />
                   </div>
                   <h3 className="text-headline-md font-bold mb-2 md:mb-4">{step.title}</h3>
                   <p className="text-on-surface-variant text-body-lg">{step.desc}</p>
@@ -86,7 +87,7 @@ export default function ElderGuide() {
                 <p className="text-on-surface-variant">Advice from your neighbors and the Culiat local council.</p>
               </div>
               <button className="text-secondary font-bold flex items-center gap-2 hover:translate-x-2 transition-transform">
-                View All Tips <span className="material-symbols-outlined">arrow_forward</span>
+                View All Tips <Ph name="arrow_forward" />
               </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
@@ -118,7 +119,7 @@ export default function ElderGuide() {
               <div className="space-y-6 md:space-y-8">
                 <div className="flex items-start gap-4 md:gap-6">
                   <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-secondary flex items-center justify-center flex-shrink-0 shadow-lg shadow-secondary/20">
-                    <span className="material-symbols-outlined text-white text-2xl md:text-3xl">location_on</span>
+                    <Ph className="text-white text-2xl md:text-3xl" name="location_on" />
                   </div>
                   <div>
                     <h4 className="font-bold text-2xl mb-1 text-white">Visit the Barangay Hall</h4>
@@ -127,7 +128,7 @@ export default function ElderGuide() {
                 </div>
                 <div className="flex items-start gap-4 md:gap-6">
                   <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-secondary flex items-center justify-center flex-shrink-0 shadow-lg shadow-secondary/20">
-                    <span className="material-symbols-outlined text-white text-2xl md:text-3xl">support_agent</span>
+                    <Ph className="text-white text-2xl md:text-3xl" name="support_agent" />
                   </div>
                   <div>
                     <h4 className="font-bold text-2xl mb-1 text-white">Call our Digital Help Desk</h4>

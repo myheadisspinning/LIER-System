@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
@@ -468,23 +469,23 @@ export default function AdminIncidentReporting() {
         <section className="flex-1 flex flex-col bg-white rounded-xl border border-border-subtle shadow-sm overflow-hidden h-full">
           <div className="p-4 border-b border-border-subtle flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-secondary">map</span>
+              <Ph className="text-secondary" name="map" />
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Incident Locations Map</h3>
               <span className="bg-secondary/10 text-secondary px-2 py-0.5 rounded-full text-[11px] font-bold">{mapPins.length} PIN{mapPins.length === 1 ? '' : 'S'}</span>
             </div>
             <div className="flex items-center gap-3">
               {Object.entries(PRIORITY_COLORS).filter(([k]) => k !== 'LOW').map(([p, c]) => (
                 <span key={p} className="flex items-center gap-1.5 text-[11px] font-semibold text-on-surface-variant">
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: c }}></span>
+                  <span className="w-2.5 h-2.5 rounded-full"></span>
                   {p}
                 </span>
               ))}
               <button type="button" onClick={() => setTile((t) => (t === 'street' ? 'satellite' : 'street'))} className="flex items-center gap-1 px-2 py-1 bg-surface-container-low border border-border-subtle rounded hover:bg-surface-container-high transition-colors text-[11px]">
-                <span className="material-symbols-outlined text-[14px]">layers</span>
+                <Ph className="text-[14px]" name="layers" />
                 {tile === 'street' ? 'Satellite' : 'Street'}
               </button>
               <button type="button" onClick={() => setRecenterTrigger((t) => t + 1)} className="flex items-center gap-1 px-2 py-1 bg-surface-container-low border border-border-subtle rounded hover:bg-surface-container-high transition-colors text-[11px]">
-                <span className="material-symbols-outlined text-[14px]">pin_drop</span>
+                <Ph className="text-[14px]" name="pin_drop" />
                 Barangay Hall
               </button>
             </div>
@@ -515,9 +516,9 @@ export default function AdminIncidentReporting() {
               <div className="p-4 border-b border-border-subtle flex justify-between items-center shrink-0">
                 <h3 className="font-headline-md text-headline-md font-bold text-on-surface">{selected.report_no ?? 'Report'}</h3>
                 <div className="flex gap-2">
-                  <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="View full details" onClick={() => openModal(selected.id)}><span className="material-symbols-outlined">visibility</span></button>
-                  <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="Print"><span className="material-symbols-outlined">print</span></button>
-                  <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
+                  <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="View full details" onClick={() => openModal(selected.id)}><Ph name="visibility" /></button>
+                  <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="Print"><Ph name="print" /></button>
+                  <button type="button" className="text-on-surface-variant hover:text-secondary" aria-label="Close"><Ph name="close" /></button>
                 </div>
               </div>
               <div className="flex-1 p-4 space-y-4 overflow-y-auto">
@@ -525,7 +526,7 @@ export default function AdminIncidentReporting() {
                   <AiVerdictBanner assessment={selected.ai_assessment} />
                 )}
                 <div className="bg-surface-container-low border border-border-subtle p-3 rounded-lg flex items-center gap-2">
-                  <span className="material-symbols-outlined text-secondary text-[18px]">local_shipping</span>
+                  <Ph className="text-secondary text-[18px]" name="local_shipping" />
                   <p className="text-sm text-on-surface">Assigned Unit: <span className="font-medium">{selected.dispatch_unit_name ?? 'None'}</span></p>
                 </div>
                 <div>
@@ -569,7 +570,7 @@ export default function AdminIncidentReporting() {
                       <div>
                         <div className="flex items-center justify-between gap-2 mb-1">
                           <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
-                            <span className="material-symbols-outlined text-[14px] text-secondary">smart_toy</span>
+                            <Ph className="text-[14px] text-secondary" name="smart_toy" />
                             AI Recommended Dispatch Actions
                           </p>
                           <button
@@ -578,20 +579,20 @@ export default function AdminIncidentReporting() {
                             disabled={aiAnalyzing}
                             className="bg-surface-container-low hover:bg-surface-container-high border border-border-subtle text-secondary text-[11px] font-semibold px-2 py-1 rounded-md transition-colors flex items-center gap-1 disabled:opacity-60 shrink-0"
                           >
-                            <span className={`material-symbols-outlined text-[13px] ${aiAnalyzing ? 'animate-spin' : ''}`}>{aiAnalyzing ? 'progress_activity' : 'refresh'}</span>
+                            <Ph className={` text-[13px] ${aiAnalyzing ? 'animate-spin' : ''}`} name={aiAnalyzing ? 'progress_activity' : 'refresh'} />
                             {aiAnalyzing ? 'Analyzing…' : (selected.ai_actions ?? []).length > 0 ? 'Regenerate with AI' : 'Generate AI Recommendation'}
                           </button>
                         </div>
                         {aiAnalyzing ? (
                           <p className="text-xs text-secondary font-medium flex items-center gap-1.5 leading-relaxed">
-                            <span className="material-symbols-outlined text-[14px] animate-spin">progress_activity</span>
+                            <Ph className="text-[14px] animate-spin" name="progress_activity" />
                             AI is analyzing the incident to recommend dispatch actions…
                           </p>
                         ) : (selected.ai_actions ?? []).length > 0 ? (
                           <ul className="grid grid-cols-2 gap-2">
                             {selected.ai_actions.map((a) => (
                               <li key={a} className="flex items-start gap-1.5 text-sm text-on-surface">
-                                <span className="material-symbols-outlined text-[14px] text-success-green">check_circle</span>
+                                <Ph className="text-[14px] text-success-green" name="check_circle" />
                                 {a}
                               </li>
                             ))}
@@ -603,7 +604,7 @@ export default function AdminIncidentReporting() {
                       <div className="pt-2 border-t border-border-subtle">
                         <div className="flex items-center justify-between gap-2 mb-1">
                           <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
-                            <span className="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+                            <Ph className="text-[14px] text-secondary" name="verified_user" />
                             AI Credibility
                           </p>
                           <button
@@ -612,20 +613,20 @@ export default function AdminIncidentReporting() {
                             disabled={assessing}
                             className="bg-surface-container-low hover:bg-surface-container-high border border-border-subtle text-secondary text-[11px] font-semibold px-2 py-1 rounded-md transition-colors flex items-center gap-1 disabled:opacity-60 shrink-0"
                           >
-                            <span className={`material-symbols-outlined text-[13px] ${assessing ? 'animate-spin' : ''}`}>{assessing ? 'progress_activity' : 'refresh'}</span>
+                            <Ph className={` text-[13px] ${assessing ? 'animate-spin' : ''}`} name={assessing ? 'progress_activity' : 'refresh'} />
                             {assessing ? 'Assessing…' : selected.ai_assessment?.verdict ? 'Re-check with AI' : 'Check with AI'}
                           </button>
                         </div>
                         {assessing ? (
                           <p className="text-xs text-secondary font-medium flex items-center gap-1.5 leading-relaxed">
-                            <span className="material-symbols-outlined text-[14px] animate-spin">progress_activity</span>
+                            <Ph className="text-[14px] animate-spin" name="progress_activity" />
                             AI is reviewing this report's credibility…
                           </p>
                         ) : selected.ai_assessment?.verdict ? (
                           <div className="space-y-2">
                             <div className="flex items-center justify-between gap-2 flex-wrap">
                               <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide flex items-center gap-1 ${VERDICT_STYLES[selected.ai_assessment.verdict]?.badge ?? 'bg-slate-100 text-slate-600'}`}>
-                                <span className="material-symbols-outlined text-[12px]">{VERDICT_STYLES[selected.ai_assessment.verdict]?.icon ?? 'info'}</span>
+                                <Ph className="text-[12px]" name={VERDICT_STYLES[selected.ai_assessment.verdict]?.icon ?? 'info'} />
                                 {VERDICT_STYLES[selected.ai_assessment.verdict]?.label ?? selected.ai_assessment.verdict}
                               </span>
                             </div>
@@ -639,7 +640,7 @@ export default function AdminIncidentReporting() {
                               </div>
                             </div>
                             <div className="flex items-start gap-1.5">
-                              <span className={`material-symbols-outlined text-[14px] mt-[1px] ${selected.ai_assessment.worth_dispatch ? 'text-success-green' : 'text-warning-amber'}`}>{selected.ai_assessment.worth_dispatch ? 'check_circle' : 'help'}</span>
+                              <Ph className={` text-[14px] mt-[1px] ${selected.ai_assessment.worth_dispatch ? 'text-success-green' : 'text-warning-amber'}`} name={selected.ai_assessment.worth_dispatch ? 'check_circle' : 'help'} />
                               <p className="text-sm text-on-surface leading-tight">
                                 <span className="font-semibold">Recommended action: </span>
                                 <span className={selected.ai_assessment.worth_dispatch ? 'text-success-green font-semibold' : 'text-warning-amber font-semibold'}>
@@ -669,7 +670,7 @@ export default function AdminIncidentReporting() {
                   <div>
                     <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-2">Reporter Info</h4>
                     <div className="bg-surface-container-low rounded-lg border border-border-subtle p-3 flex items-center gap-2 text-sm text-on-surface-variant min-h-[120px]">
-                      <span className="material-symbols-outlined text-[18px]">visibility_off</span>
+                      <Ph className="text-[18px]" name="visibility_off" />
                       Anonymous report — reporter identity withheld.
                     </div>
                   </div>
@@ -694,7 +695,7 @@ export default function AdminIncidentReporting() {
                       {reporterMap[selected.user_id].emergency_contact_name && (
                         <div className="pt-3 border-t border-border-subtle">
                           <p className="text-xs text-error-red font-semibold uppercase mb-2 flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[14px]">emergency</span>
+                            <Ph className="text-[14px]" name="emergency" />
                             Emergency Contact
                           </p>
                           <div className="grid grid-cols-3 gap-4">
@@ -725,12 +726,12 @@ export default function AdminIncidentReporting() {
                           <a key={ev.url} href={ev.url} target="_blank" rel="noreferrer" className="aspect-square bg-surface-container-highest rounded-md border border-border-subtle overflow-hidden group relative block">
                             <img className="w-full h-full object-cover" src={ev.url} alt={ev.name} />
                             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/50 transition-opacity">
-                              <span className="material-symbols-outlined text-white">zoom_in</span>
+                              <Ph className="text-white" name="zoom_in" />
                             </div>
                           </a>
                         ) : (
                           <a key={ev.url} href={ev.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 px-2 py-1.5 rounded-md border border-border-subtle bg-surface-container-low hover:bg-surface-container-highest transition-colors text-on-surface-variant">
-                            <span className="material-symbols-outlined text-[16px]">{ev.type.startsWith('video') ? 'videocam' : 'mic'}</span>
+                            <Ph className="text-[16px]" name={ev.type.startsWith('video') ? 'videocam' : 'mic'} />
                             <span className="text-[10px] font-semibold truncate">{ev.name}</span>
                           </a>
                         ),
@@ -749,7 +750,7 @@ export default function AdminIncidentReporting() {
                     disabled={busy}
                     className="w-full bg-secondary hover:bg-secondary/90 text-on-secondary font-label-md text-label-md py-2 px-4 rounded-md transition-colors flex justify-center items-center disabled:opacity-60"
                   >
-                    <span className="material-symbols-outlined mr-2 text-[18px]">directions_run</span>
+                    <Ph className="mr-2 text-[18px]" name="directions_run" />
                     {busy ? 'Updating…' : 'Acknowledge & Start Processing'}
                   </button>
                 )}
@@ -759,7 +760,7 @@ export default function AdminIncidentReporting() {
                   disabled={busy || selected.status !== 'Progress'}
                   className="w-full bg-success-green hover:bg-success-green/90 text-white font-label-md text-label-md py-2 px-4 rounded-md transition-colors flex justify-center items-center disabled:opacity-60"
                 >
-                  <span className="material-symbols-outlined mr-2 text-[18px]">check_circle</span>
+                  <Ph className="mr-2 text-[18px]" name="check_circle" />
                   {selected.status === 'Resolved' ? 'Resolved' : selected.status !== 'Progress' ? 'Awaiting Process' : busy ? 'Updating…' : 'Mark as Resolved'}
                 </button>
                 <div className="flex gap-2">
@@ -782,7 +783,7 @@ export default function AdminIncidentReporting() {
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3 flex-1 flex-wrap">
           <div className="relative w-64">
-            <span className="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-[20px]">search</span>
+            <Ph className="absolute left-3 top-2.5 text-on-surface-variant text-[20px]" name="search" />
             <input
               className="w-full bg-surface-container-low border border-border-subtle text-on-surface rounded-md pl-10 pr-3 py-2 font-body-sm text-body-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary"
               placeholder="Search Incident ID..."
@@ -809,11 +810,11 @@ export default function AdminIncidentReporting() {
             onClick={() => navigate('/admin/incident-archive')}
             className="bg-surface-container-low hover:bg-surface-container-high border border-border-subtle text-on-surface font-label-md text-label-md py-2 px-4 rounded-md flex items-center transition-colors"
           >
-            <span className="material-symbols-outlined mr-2 text-[18px]">archive</span>
+            <Ph className="mr-2 text-[18px]" name="archive" />
             Open Archive
           </button>
           <button type="button" className="bg-secondary hover:bg-secondary/90 text-on-secondary font-label-md text-label-md py-2 px-4 rounded-md flex items-center transition-colors">
-            <span className="material-symbols-outlined mr-2 text-[18px]">add</span>
+            <Ph className="mr-2 text-[18px]" name="add" />
             Log New Incident
           </button>
         </div>
@@ -861,13 +862,13 @@ export default function AdminIncidentReporting() {
                     <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${STATUS_STYLES[r.status] ?? 'bg-slate-100 text-slate-600'}`}>{r.status}</span></td>
                      <td className="py-3 px-4 text-right whitespace-nowrap">
                        <div className="relative inline-flex">
-                         <button type="button" className="text-on-surface-variant hover:text-secondary" onClick={(e) => { e.stopPropagation(); const next = openMenuId === r.id ? null : r.id; setOpenMenuId(next); if (next) { const rect = e.currentTarget.getBoundingClientRect(); const MENU_H = 44; const GAP = 6; if (rect.bottom + GAP + MENU_H <= window.innerHeight) { setMenuPos({ left: rect.right - 176, top: rect.bottom + GAP, bottom: 0 }); } else { setMenuPos({ left: rect.right - 176, bottom: window.innerHeight - rect.top + GAP, top: 0 }); } } }} aria-label="More options" aria-expanded={openMenuId === r.id}><span className="material-symbols-outlined text-[18px]">more_vert</span></button>
+                         <button type="button" className="text-on-surface-variant hover:text-secondary" onClick={(e) => { e.stopPropagation(); const next = openMenuId === r.id ? null : r.id; setOpenMenuId(next); if (next) { const rect = e.currentTarget.getBoundingClientRect(); const MENU_H = 44; const GAP = 6; if (rect.bottom + GAP + MENU_H <= window.innerHeight) { setMenuPos({ left: rect.right - 176, top: rect.bottom + GAP, bottom: 0 }); } else { setMenuPos({ left: rect.right - 176, bottom: window.innerHeight - rect.top + GAP, top: 0 }); } } }} aria-label="More options" aria-expanded={openMenuId === r.id}><Ph className="text-[18px]" name="more_vert" /></button>
                          {openMenuId === r.id && menuPos && (
                            <>
                              <div className="fixed inset-0 z-40" onClick={() => setOpenMenuId(null)} />
                              <div className="fixed w-44 z-50 bg-surface-container-lowest rounded-lg border border-border-subtle shadow-lg py-1" style={{ left: menuPos.left, ...(menuPos.top ? { top: menuPos.top } : { bottom: menuPos.bottom }) }}>
                                <button type="button" onClick={(e) => { e.stopPropagation(); handleStatusChange(r.id, 'Rejected'); }} className="w-full flex items-center gap-2 px-3 py-2 text-left text-sm text-error-red hover:bg-error-red/5 transition-colors">
-                                 <span className="material-symbols-outlined text-[16px]">block</span>Reject
+                                 <Ph className="text-[16px]" name="block" />Reject
                                </button>
                              </div>
                            </>

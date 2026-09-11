@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
@@ -155,7 +156,7 @@ export default function UserLayout() {
                  </p>
                </div>
                <button type="button" onClick={handleSignOut} className="text-on-surface-variant hover:text-on-surface transition-colors" aria-label="Sign out">
-                 <span className="material-symbols-outlined" style={{ fontSize: 18 }}>logout</span>
+                 <Ph name="logout" />
                </button>
              </div>
            </div>
@@ -171,7 +172,7 @@ export default function UserLayout() {
               className="lg:hidden p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors"
               aria-label="Open menu"
             >
-              <span className="material-symbols-outlined text-sm">menu</span>
+              <Ph className="text-sm" name="menu" />
             </button>
                 <div className="min-w-0">
                 <h2 className="text-sm sm:text-lg font-bold text-on-surface leading-tight truncate">{pageTitle}</h2>
@@ -180,12 +181,7 @@ export default function UserLayout() {
           </div>
           <div className="flex items-center gap-5">
             <div className="relative hidden md:block">
-              <span
-                className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant"
-                style={{ fontSize: 18 }}
-              >
-                search
-              </span>
+              <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" name="search" />
               <input
                 className="pl-9 pr-4 py-2 bg-white border border-outline-variant/30 rounded-lg focus:ring-1 focus:ring-cc-accent w-72 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none"
                 placeholder={userNav.searchPlaceholder}
@@ -200,17 +196,17 @@ export default function UserLayout() {
                  title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
                  aria-label="Toggle color theme"
                >
-                 <span className="material-symbols-outlined text-sm">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
+                 <Ph className="text-sm" name={theme === 'dark' ? 'light_mode' : 'dark_mode'} />
                </button>
               <span className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-green/10 text-success-green border border-cc-emerald/20 text-xs font-bold">
                 <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span> LIVE
               </span>
               <button type="button" className="hidden sm:inline-flex p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full relative transition-colors">
-                <span className="material-symbols-outlined">notifications</span>
+                <Ph name="notifications" />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full border-2 border-cc-header"></span>
               </button>
               <button type="button" className="hidden sm:inline-flex p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors">
-                <span className="material-symbols-outlined">help_outline</span>
+                <Ph name="help_outline" />
               </button>
               <div className="relative" ref={profileRef}>
                 <button
@@ -235,7 +231,7 @@ export default function UserLayout() {
                       }}
                       className="w-full flex items-center gap-2.5 px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors text-left"
                     >
-                      <span className="material-symbols-outlined text-base md:text-lg text-secondary">person</span> Profile
+                      <Ph className="text-base md:text-lg text-secondary" name="person" /> Profile
                     </button>
                     <button
                       type="button"
@@ -245,14 +241,14 @@ export default function UserLayout() {
                       }}
                       className="w-full flex items-center gap-2.5 px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors text-left"
                     >
-                      <span className="material-symbols-outlined text-base md:text-lg text-secondary">home</span> Home
+                      <Ph className="text-base md:text-lg text-secondary" name="home" /> Home
                     </button>
                     <button
                       type="button"
                       onClick={handleSignOut}
                       className="w-full flex items-center gap-2.5 px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm text-error hover:bg-surface-container-low transition-colors text-left border-t border-outline-variant/30"
                     >
-                      <span className="material-symbols-outlined text-base md:text-lg">logout</span> Sign Out
+                      <Ph className="text-base md:text-lg" name="logout" /> Sign Out
                     </button>
                   </div>
                 )}
@@ -264,10 +260,6 @@ export default function UserLayout() {
         <main className="relative flex-1 p-4 lg:p-8 min-h-[calc(100vh-4rem)] bg-surface-bg">
           <div
             className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                'radial-gradient(1100px 480px at 85% -10%, rgba(59,130,246,0.10), transparent 60%), radial-gradient(900px 420px at -10% 0%, rgba(49,107,243,0.07), transparent 55%)',
-            }}
           ></div>
           <div className="relative mx-auto w-full max-w-[1440px]">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -321,7 +313,7 @@ export default function UserLayout() {
                 className="p-2 text-on-surface-variant hover:text-on-surface rounded-full transition-transform hover:rotate-90"
                 aria-label="Close menu"
               >
-                <span className="material-symbols-outlined">close</span>
+                <Ph name="close" />
               </button>
             </div>
           </div>
@@ -338,7 +330,7 @@ export default function UserLayout() {
                 </p>
               </div>
               <button type="button" onClick={handleSignOut} className="text-on-surface-variant hover:text-on-surface transition-colors" aria-label="Sign out">
-                <span className="material-symbols-outlined" style={{ fontSize: 18 }}>logout</span>
+                <Ph name="logout" />
               </button>
             </div>
           </div>
@@ -372,9 +364,7 @@ function SidebarLink({ item, pathname, unreadCounts, onNavigate }: { item: NavIt
       }`}
     >
       {isActive && <span className="w-1 h-7 rounded-full bg-secondary absolute -left-0.5"></span>}
-      <span className={`material-symbols-outlined shrink-0 flex items-center justify-center ${isActive ? 'text-secondary' : 'text-on-surface-variant'}`} style={{ fontSize: 18 }}>
-        {item.icon ?? 'radio_button_unchecked'}
-      </span>
+      <Ph className={` shrink-0 flex items-center justify-center ${isActive ? 'text-secondary' : 'text-on-surface-variant'}`} name={item.icon ?? 'radio_button_unchecked'} />
       <span className="flex flex-col min-w-0">
         <span className={`text-xs truncate ${isActive ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>
         {item.subLabel && <span className="text-[8px] text-on-surface-variant truncate">{item.subLabel}</span>}

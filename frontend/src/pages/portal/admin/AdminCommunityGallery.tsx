@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { logAudit } from '../../../lib/admin';
@@ -220,7 +221,7 @@ export default function AdminCommunityGallery() {
             tab === 'carousel' ? 'bg-secondary text-on-secondary shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-bg'
           }`}
         >
-          <span className="material-symbols-outlined text-[16px] mr-1.5 align-middle">photo_library</span>
+          <Ph className="text-[16px] mr-1.5 align-middle" name="photo_library" />
           Carousel
         </button>
         <button
@@ -230,7 +231,7 @@ export default function AdminCommunityGallery() {
             tab === 'sections' ? 'bg-secondary text-on-secondary shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-bg'
           }`}
         >
-          <span className="material-symbols-outlined text-[16px] mr-1.5 align-middle">dashboard_customize</span>
+          <Ph className="text-[16px] mr-1.5 align-middle" name="dashboard_customize" />
           Homepage Sections
         </button>
       </div>
@@ -243,7 +244,7 @@ export default function AdminCommunityGallery() {
               onClick={startCreate}
               className="bg-secondary hover:bg-secondary/90 text-on-secondary px-5 py-2 rounded-lg font-label-md text-label-md flex items-center gap-2 shadow-sm transition-colors"
             >
-              <span className="material-symbols-outlined text-[18px]">add_photo_alternate</span>
+              <Ph className="text-[18px]" name="add_photo_alternate" />
               Add Image
             </button>
           </div>
@@ -273,7 +274,7 @@ export default function AdminCommunityGallery() {
                         onClick={() => startEdit(item)}
                         className="flex-1 py-1.5 px-3 rounded-lg border border-outline-variant text-on-surface font-label-sm text-label-sm hover:bg-surface-bg transition-colors flex items-center justify-center gap-1 disabled:opacity-50"
                       >
-                        <span className="material-symbols-outlined text-[14px]">edit</span> Edit
+                        <Ph className="text-[14px]" name="edit" /> Edit
                       </button>
                       <button
                         type="button"
@@ -281,7 +282,7 @@ export default function AdminCommunityGallery() {
                         onClick={() => toggleVisible(item)}
                         className={`py-1.5 px-3 rounded-lg border font-label-sm text-label-sm transition-colors flex items-center justify-center gap-1 disabled:opacity-50 ${item.visible ? 'border-success-green/30 text-success-green hover:bg-success-green/5' : 'border-outline-variant text-on-surface-variant hover:bg-surface-bg'}`}
                       >
-                        <span className="material-symbols-outlined text-[14px]">{item.visible ? 'visibility' : 'visibility_off'}</span>
+                        <Ph className="text-[14px]" name={item.visible ? 'visibility' : 'visibility_off'} />
                         {item.visible ? 'Visible' : 'Hidden'}
                       </button>
                       <button
@@ -290,7 +291,7 @@ export default function AdminCommunityGallery() {
                         onClick={() => setConfirmDelete(item)}
                         className="py-1.5 px-3 rounded-lg border border-error-red/30 text-error-red font-label-sm text-label-sm hover:bg-error-red/5 transition-colors flex items-center justify-center gap-1 disabled:opacity-50"
                       >
-                        <span className="material-symbols-outlined text-[14px]">delete</span>
+                        <Ph className="text-[14px]" name="delete" />
                       </button>
                     </div>
                   </div>
@@ -322,7 +323,7 @@ export default function AdminCommunityGallery() {
             <div className="space-y-8">
               <div>
                 <h3 className="font-headline-sm text-headline-sm text-on-surface mb-4 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-secondary">home_repair_service</span>
+                  <Ph className="text-secondary" name="home_repair_service" />
                   LGU Public Safety Services
                 </h3>
                 <p className="font-body-sm text-on-surface-variant mb-4">Images displayed in the 4 service cards on the homepage.</p>
@@ -343,7 +344,7 @@ export default function AdminCommunityGallery() {
                           }}
                           className="w-full py-1.5 px-3 rounded-lg border border-outline-variant text-on-surface font-label-sm text-label-sm hover:bg-surface-bg transition-colors flex items-center justify-center gap-1"
                         >
-                          <span className="material-symbols-outlined text-[14px]">edit</span> Edit
+                          <Ph className="text-[14px]" name="edit" /> Edit
                         </button>
                       </div>
                     </div>
@@ -353,7 +354,7 @@ export default function AdminCommunityGallery() {
 
               <div>
                 <h3 className="font-headline-sm text-headline-sm text-on-surface mb-4 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-secondary">menu_book</span>
+                  <Ph className="text-secondary" name="menu_book" />
                   Community Safety Guides
                 </h3>
                 <p className="font-body-sm text-on-surface-variant mb-4">Images displayed in the 3 guide cards on the homepage.</p>
@@ -374,7 +375,7 @@ export default function AdminCommunityGallery() {
                           }}
                           className="w-full py-1.5 px-3 rounded-lg border border-outline-variant text-on-surface font-label-sm text-label-sm hover:bg-surface-bg transition-colors flex items-center justify-center gap-1"
                         >
-                          <span className="material-symbols-outlined text-[14px]">edit</span> Edit
+                          <Ph className="text-[14px]" name="edit" /> Edit
                         </button>
                       </div>
                     </div>
@@ -392,7 +393,7 @@ export default function AdminCommunityGallery() {
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">{editing ? 'Edit Gallery Item' : 'Add Gallery Item'}</h3>
               <button type="button" onClick={cancel} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
-                <span className="material-symbols-outlined">close</span>
+                <Ph name="close" />
               </button>
             </div>
             <div className="p-5 space-y-4">
@@ -427,7 +428,7 @@ export default function AdminCommunityGallery() {
                 />
                 <div className="flex items-center gap-2">
                   <label htmlFor="gallery-image" className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 text-secondary rounded-lg text-sm font-medium hover:bg-secondary/20 cursor-pointer transition-colors">
-                    <span className="material-symbols-outlined text-[18px]">upload</span>
+                    <Ph className="text-[18px]" name="upload" />
                     Choose File
                   </label>
                   {imageFile && <span className="text-xs text-on-surface-variant">{imageFile.name}</span>}
@@ -477,7 +478,7 @@ export default function AdminCommunityGallery() {
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Edit Section Item</h3>
               <button type="button" onClick={cancelSectionEdit} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
-                <span className="material-symbols-outlined">close</span>
+                <Ph name="close" />
               </button>
             </div>
             <div className="p-5 space-y-4">
@@ -514,7 +515,7 @@ export default function AdminCommunityGallery() {
                 />
                 <div className="flex items-center gap-2">
                   <label htmlFor="section-image" className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 text-secondary rounded-lg text-sm font-medium hover:bg-secondary/20 cursor-pointer transition-colors">
-                    <span className="material-symbols-outlined text-[18px]">upload</span>
+                    <Ph className="text-[18px]" name="upload" />
                     {sectionFile ? 'Change File' : 'Choose File'}
                   </label>
                   {sectionFile && <span className="text-xs text-on-surface-variant">{sectionFile.name}</span>}
@@ -541,7 +542,7 @@ export default function AdminCommunityGallery() {
           <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <span className="w-10 h-10 rounded-full bg-error-red/10 flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-[20px] text-error-red">warning</span>
+                <Ph className="text-[20px] text-error-red" name="warning" />
               </span>
               <div>
                 <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Delete Gallery Image</h3>

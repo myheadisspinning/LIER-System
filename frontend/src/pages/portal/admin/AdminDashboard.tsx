@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { fmtDurationMs, PRIORITY_BADGE, STATUS_BADGE, deriveUnitStatus, fetchOpenUnitAssignments } from '../../../lib/admin';
@@ -110,7 +111,7 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-12 gap-4">
             <div className="col-span-12 md:col-span-6 xl:col-span-3 bg-surface-container-lowest border border-border-subtle border-t-2 border-t-error rounded-xl p-5 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <span className="material-symbols-outlined text-error text-[22px]">emergency_home</span>
+                <Ph className="text-error text-[22px]" name="emergency_home" />
                 <span className="px-2 py-1 rounded-full bg-error/10 text-error text-[11px] font-bold">{stats.critical} critical</span>
               </div>
               <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Active Incidents</p>
@@ -119,7 +120,7 @@ export default function AdminDashboard() {
             </div>
             <div className="col-span-12 md:col-span-6 xl:col-span-3 bg-surface-container-lowest border border-border-subtle border-t-2 border-t-secondary rounded-xl p-5 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <span className="material-symbols-outlined text-secondary text-[22px]">local_police</span>
+                <Ph className="text-secondary text-[22px]" name="local_police" />
                 <span className="px-2 py-1 rounded-full bg-secondary/10 text-sky-700 text-[11px] font-bold">{stats.unitBusy} busy</span>
               </div>
               <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Units On Field</p>
@@ -128,7 +129,7 @@ export default function AdminDashboard() {
             </div>
             <div className="col-span-12 md:col-span-6 xl:col-span-3 bg-surface-container-lowest border border-border-subtle border-t-2 border-t-tertiary rounded-xl p-5 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <span className="material-symbols-outlined text-tertiary text-[22px]">timer</span>
+                <Ph className="text-tertiary text-[22px]" name="timer" />
                 <span className="px-2 py-1 rounded-full bg-tertiary/10 text-teal-700 text-[11px] font-bold">{stats.resolved} done</span>
               </div>
               <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Avg Resolution Time</p>
@@ -137,7 +138,7 @@ export default function AdminDashboard() {
             </div>
             <div className="col-span-12 md:col-span-6 xl:col-span-3 bg-surface-container-lowest border border-border-subtle border-t-2 border-t-secondary rounded-xl p-5 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <span className="material-symbols-outlined text-secondary text-[22px]">verified</span>
+                <Ph className="text-secondary text-[22px]" name="verified" />
                 <span className="px-2 py-1 rounded-full bg-secondary/10 text-secondary text-[11px] font-bold">{stats.resolved}</span>
               </div>
               <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Clearance Rate</p>
@@ -154,7 +155,7 @@ export default function AdminDashboard() {
             <div className="col-span-12 xl:col-span-8 bg-surface-container-lowest border border-border-subtle rounded-xl shadow-sm overflow-hidden">
               <div className="px-5 py-4 border-b border-border-subtle flex flex-wrap items-center justify-between gap-2">
                 <h3 className="font-headline-md text-headline-md font-bold text-on-surface flex items-center gap-2">
-                  <span className="material-symbols-outlined text-secondary">assignment</span>
+                  <Ph className="text-secondary" name="assignment" />
                   Latest Reports
                 </h3>
                 <span className="text-xs text-on-surface-variant">most recent first</span>
@@ -203,7 +204,7 @@ export default function AdminDashboard() {
             {/* Category breakdown */}
             <div className="col-span-12 xl:col-span-4 bg-surface-container-lowest border border-border-subtle rounded-xl shadow-sm p-5">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface flex items-center gap-2 mb-4">
-                <span className="material-symbols-outlined text-secondary">category</span>
+                <Ph className="text-secondary" name="category" />
                 By Category
               </h3>
               {byCategory.length === 0 ? (

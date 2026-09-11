@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
@@ -147,7 +148,7 @@ export default function SuperadminReportRegistry() {
           {profile?.phone && <span className="text-[11px] text-cc-muted">+63 {profile.phone}</span>}
           {profile?.emergency_contact_name && (
             <span className="text-[10px] text-cc-red flex items-center gap-1">
-              <span className="material-symbols-outlined text-[11px]">emergency</span>
+              <Ph className="text-[11px]" name="emergency" />
               {profile.emergency_contact_name} ({profile.emergency_contact_relationship}) — +63 {profile.emergency_contact_phone}
             </span>
           )}
@@ -166,7 +167,7 @@ export default function SuperadminReportRegistry() {
             {profile.phone && <span className="text-[11px] text-cc-muted">+63 {profile.phone}</span>}
             {profile.emergency_contact_name && (
               <span className="text-[10px] text-cc-red flex items-center gap-1">
-                <span className="material-symbols-outlined text-[11px]">emergency</span>
+                <Ph className="text-[11px]" name="emergency" />
                 {profile.emergency_contact_name} ({profile.emergency_contact_relationship}) — +63 {profile.emergency_contact_phone}
               </span>
             )}
@@ -177,7 +178,7 @@ export default function SuperadminReportRegistry() {
           onClick={() => toggleReveal(r.id)}
           className="text-[10px] font-bold uppercase tracking-wider text-cc-accent hover:underline flex items-center gap-1"
         >
-          <span className="material-symbols-outlined text-[13px]">{isRevealed ? 'visibility_off' : 'visibility'}</span>
+          <Ph className="text-[13px]" name={isRevealed ? 'visibility_off' : 'visibility'} />
           {isRevealed ? 'Hide identity' : 'Reveal identity'}
         </button>
       </div>
@@ -189,7 +190,7 @@ export default function SuperadminReportRegistry() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h3 className="font-headline-md text-headline-md font-bold text-cc-heading flex items-center gap-2">
-            <span className="material-symbols-outlined text-cc-accent">list_alt</span>
+            <Ph className="text-cc-accent" name="list_alt" />
             Report Registry
           </h3>
           <p className="text-sm text-cc-body mt-1">Every submitted incident report with reporter attribution. Anonymous identities are visible only to the superadmin.</p>
@@ -212,7 +213,7 @@ export default function SuperadminReportRegistry() {
             </button>
           </div>
           <div className="relative">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-cc-muted text-lg">search</span>
+            <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-cc-muted text-lg" name="search" />
             <input
               type="text"
               value={search}
@@ -254,7 +255,7 @@ export default function SuperadminReportRegistry() {
                     </td>
                     <td className="px-6 py-4 max-w-[260px]">
                       <p className="text-sm font-semibold text-cc-heading truncate" title={r.title}>{r.title}</p>
-                      {r.address && <p className="text-[11px] text-cc-muted truncate flex items-center gap-1 mt-0.5"><span className="material-symbols-outlined text-[12px]">location_on</span>{r.address}</p>}
+                      {r.address && <p className="text-[11px] text-cc-muted truncate flex items-center gap-1 mt-0.5"><Ph className="text-[12px]" name="location_on" />{r.address}</p>}
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-xs text-cc-body font-medium">{r.category}</span>
@@ -270,7 +271,7 @@ export default function SuperadminReportRegistry() {
                     <td className="px-6 py-4 text-xs text-cc-muted">{new Date(r.incident_time ?? r.created_at).toLocaleString('en-PH', { dateStyle: 'short', timeStyle: 'short' })}</td>
                     <td className="px-6 py-4 text-right">
                       <span className="inline-flex items-center gap-1 text-xs text-cc-muted">
-                        <span className="material-symbols-outlined text-[14px]">attach_file</span>
+                        <Ph className="text-[14px]" name="attach_file" />
                         {(r.evidence ?? []).length}
                       </span>
                     </td>
@@ -296,7 +297,7 @@ export default function SuperadminReportRegistry() {
       </div>
 
       <div className="bg-cc-card border border-cc-border rounded-xl p-4 flex items-start gap-3">
-        <span className="material-symbols-outlined text-cc-accent">verified_user</span>
+        <Ph className="text-cc-accent" name="verified_user" />
         <p className="text-xs text-cc-body leading-relaxed">
           Reports posted anonymously are labeled "Anonymous" by default. Only the superadmin can reveal the real reporter identity — click any row for full details or use the Reveal identity action.
         </p>

@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 export default function SuperadminAuditLogs() {
   return (
     <div>
@@ -8,11 +9,11 @@ export default function SuperadminAuditLogs() {
         </div>
         <div className="flex gap-3 shrink-0">
           <button type="button" className="px-4 py-2 border-1.5 border-secondary text-secondary hover:bg-secondary/5 rounded-lg font-label-md text-label-md transition-all flex items-center gap-2 bg-surface">
-            <span className="material-symbols-outlined text-[18px]">download</span>
+            <Ph className="text-[18px]" name="download" />
             Export Logs
           </button>
           <button type="button" className="px-4 py-2 bg-gradient-to-r from-secondary to-[#003ea8] text-on-primary rounded-lg font-label-md text-label-md shadow-sm hover:shadow-md transition-all flex items-center gap-2">
-            <span className="material-symbols-outlined text-[18px]">summarize</span>
+            <Ph className="text-[18px]" name="summarize" />
             Generate Audit Report
           </button>
         </div>
@@ -22,7 +23,7 @@ export default function SuperadminAuditLogs() {
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-surface-container-highest rounded-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div className="flex items-center gap-2 text-on-surface-variant mb-4">
-              <span className="material-symbols-outlined text-[20px]">database</span>
+              <Ph className="text-[20px]" name="database" />
               <span className="font-label-md text-label-md uppercase tracking-wider">Total Logs</span>
             </div>
             <div>
@@ -34,7 +35,7 @@ export default function SuperadminAuditLogs() {
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-surface-container-low rounded-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div className="flex items-center gap-2 text-on-surface-variant mb-4">
-              <span className="material-symbols-outlined text-[20px]">today</span>
+              <Ph className="text-[20px]" name="today" />
               <span className="font-label-md text-label-md uppercase tracking-wider">Today's Activities</span>
             </div>
             <div className="flex items-end gap-2">
@@ -46,7 +47,7 @@ export default function SuperadminAuditLogs() {
         <div className="bg-surface-container-lowest rounded-2xl p-5 border-l-4 border-l-error shadow-sm relative overflow-hidden">
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div className="flex items-center gap-2 text-error mb-4">
-              <span className="material-symbols-outlined text-[20px]">security</span>
+              <Ph className="text-[20px]" name="security" />
               <span className="font-label-md text-label-md uppercase tracking-wider font-bold">Security Events</span>
             </div>
             <div className="flex items-center justify-between">
@@ -59,7 +60,7 @@ export default function SuperadminAuditLogs() {
           <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-secondary/5"></div>
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div className="flex items-center gap-2 text-secondary mb-4">
-              <span className="material-symbols-outlined text-[20px]">psychology</span>
+              <Ph className="text-[20px]" name="psychology" />
               <span className="font-label-md text-label-md uppercase tracking-wider font-bold">AI Activities</span>
             </div>
             <div>
@@ -83,7 +84,7 @@ export default function SuperadminAuditLogs() {
             </div>
             <div className="p-4 bg-surface-bright flex flex-wrap items-center gap-3 rounded-b-2xl">
               <div className="relative flex-1 min-w-[200px]">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+                <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" name="search" />
                 <input className="w-full pl-9 pr-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-body-md focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary min-h-[40px]" placeholder="Search keywords..." type="text" />
               </div>
               <select className="py-2 pl-3 pr-8 bg-surface-container-lowest border border-outline-variant rounded-lg text-body-md focus:outline-none focus:border-secondary text-on-surface-variant min-h-[40px] appearance-none cursor-pointer">
@@ -97,7 +98,7 @@ export default function SuperadminAuditLogs() {
                 <option>AI Dispatch</option>
               </select>
               <button type="button" className="px-4 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md flex items-center gap-2 min-h-[40px]">
-                <span className="material-symbols-outlined text-[18px]">calendar_month</span>
+                <Ph className="text-[18px]" name="calendar_month" />
                 Date Range
               </button>
               <button type="button" className="px-3 py-2 text-secondary hover:bg-secondary/10 rounded-lg transition-colors font-label-md min-h-[40px]">
@@ -138,7 +139,7 @@ export default function SuperadminAuditLogs() {
                     </td>
                     <td className="py-3 px-4 text-center">
                       <button type="button" className="text-on-surface-variant hover:text-secondary p-1 rounded transition-colors" title="View Details">
-                        <span className="material-symbols-outlined text-[20px]">visibility</span>
+                        <Ph className="text-[20px]" name="visibility" />
                       </button>
                     </td>
                   </tr>
@@ -159,7 +160,7 @@ export default function SuperadminAuditLogs() {
                     </td>
                     <td className="py-3 px-4 text-center">
                       <button type="button" className="text-on-surface-variant hover:text-secondary p-1 rounded transition-colors" title="View Details">
-                        <span className="material-symbols-outlined text-[20px]">visibility</span>
+                        <Ph className="text-[20px]" name="visibility" />
                       </button>
                     </td>
                   </tr>
@@ -180,7 +181,7 @@ export default function SuperadminAuditLogs() {
                     </td>
                     <td className="py-3 px-4 text-center">
                       <button type="button" className="text-error hover:bg-error-container p-1 rounded transition-colors" title="Investigate">
-                        <span className="material-symbols-outlined text-[20px]">lowercase</span>
+                        <Ph className="text-[20px]" name="lowercase" />
                       </button>
                     </td>
                   </tr>
@@ -201,7 +202,7 @@ export default function SuperadminAuditLogs() {
                     </td>
                     <td className="py-3 px-4 text-center">
                       <button type="button" className="text-on-surface-variant hover:text-secondary p-1 rounded transition-colors" title="View Details">
-                        <span className="material-symbols-outlined text-[20px]">visibility</span>
+                        <Ph className="text-[20px]" name="visibility" />
                       </button>
                     </td>
                   </tr>
@@ -212,14 +213,14 @@ export default function SuperadminAuditLogs() {
               <span className="font-caption text-caption text-on-surface-variant">Showing 1-4 of 48,294</span>
               <div className="flex items-center gap-2">
                 <button type="button" className="p-1 rounded hover:bg-surface-container-low text-outline-variant disabled:opacity-50" disabled>
-                  <span className="material-symbols-outlined text-[20px]">chevron_left</span>
+                  <Ph className="text-[20px]" name="chevron_left" />
                 </button>
                 <button type="button" className="w-8 h-8 rounded bg-secondary text-on-secondary font-label-md text-label-md flex items-center justify-center">1</button>
                 <button type="button" className="w-8 h-8 rounded hover:bg-surface-container-low text-on-surface font-label-md text-label-md flex items-center justify-center">2</button>
                 <button type="button" className="w-8 h-8 rounded hover:bg-surface-container-low text-on-surface font-label-md text-label-md flex items-center justify-center">3</button>
                 <span className="text-on-surface-variant">...</span>
                 <button type="button" className="p-1 rounded hover:bg-surface-container-low text-on-surface-variant">
-                  <span className="material-symbols-outlined text-[20px]">chevron_right</span>
+                  <Ph className="text-[20px]" name="chevron_right" />
                 </button>
               </div>
             </div>
@@ -229,7 +230,7 @@ export default function SuperadminAuditLogs() {
           <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-sm p-5 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-bl-full pointer-events-none"></div>
             <h3 className="font-headline-md text-headline-md-mobile text-on-surface mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary">memory</span>
+              <Ph className="text-secondary" name="memory" />
               AI Performance
             </h3>
             <div className="space-y-4 relative z-10">
@@ -241,7 +242,7 @@ export default function SuperadminAuditLogs() {
                 <span className="font-body-md text-body-md text-on-surface-variant">Gemini Responses</span>
                 <div className="flex items-center gap-1 text-[#166534]">
                   <span className="font-label-md text-label-md">100% Success</span>
-                  <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                  <Ph className="text-[16px]" name="check_circle" />
                 </div>
               </div>
               <div className="flex justify-between items-center pb-3 border-b border-outline-variant border-dashed">
@@ -259,12 +260,12 @@ export default function SuperadminAuditLogs() {
           </div>
           <div className="bg-surface-container-lowest rounded-2xl border border-error/30 shadow-sm overflow-hidden flex flex-col">
             <div className="bg-error-container/50 px-5 py-3 border-b border-error/20 flex items-center gap-2 text-error">
-              <span className="material-symbols-outlined animate-pulse">notification_important</span>
+              <Ph className="animate-pulse" name="notification_important" />
               <h3 className="font-label-md text-label-md uppercase tracking-wider font-bold">Active Security Alerts</h3>
             </div>
             <div className="p-4 space-y-3 flex-1 overflow-y-auto max-h-[300px] custom-scrollbar">
               <div className="bg-surface p-3 rounded-lg border-l-2 border-error flex items-start gap-3">
-                <span className="material-symbols-outlined text-error text-[20px] mt-0.5">login</span>
+                <Ph className="text-error text-[20px] mt-0.5" name="login" />
                 <div>
                   <p className="font-caption text-caption text-on-surface font-medium mb-1">Failed Login Attempt</p>
                   <p className="font-caption text-[11px] text-on-surface-variant">Multiple attempts from IP: <span className="font-mono bg-surface-container-low px-1 rounded">192.168.1.45</span></p>
@@ -272,7 +273,7 @@ export default function SuperadminAuditLogs() {
                 </div>
               </div>
               <div className="bg-surface p-3 rounded-lg border-l-2 border-error flex items-start gap-3">
-                <span className="material-symbols-outlined text-error text-[20px] mt-0.5">gpp_bad</span>
+                <Ph className="text-error text-[20px] mt-0.5" name="gpp_bad" />
                 <div>
                   <p className="font-caption text-caption text-on-surface font-medium mb-1">Unauthorized Access Attempt</p>
                   <p className="font-caption text-[11px] text-on-surface-variant">Target: <span className="font-mono bg-surface-container-low px-1 rounded">/ai-config</span> by Officer role.</p>
@@ -280,7 +281,7 @@ export default function SuperadminAuditLogs() {
                 </div>
               </div>
               <div className="bg-surface p-3 rounded-lg border-l-2 border-tertiary-fixed-dim flex items-start gap-3">
-                <span className="material-symbols-outlined text-tertiary-fixed-dim text-[20px] mt-0.5">warning</span>
+                <Ph className="text-tertiary-fixed-dim text-[20px] mt-0.5" name="warning" />
                 <div>
                   <p className="font-caption text-caption text-on-surface font-medium mb-1">Password brute-force detected</p>
                   <p className="font-caption text-[11px] text-on-surface-variant">Target Sector: 4. Account locked temporarily.</p>

@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { fmtDate, isOnlineSince, logAudit, timeAgo } from '../../../lib/admin';
@@ -408,7 +409,7 @@ export default function AdminAccountSettings() {
           ))}
           <div className="h-6 w-[1px] bg-border-subtle mx-2 hidden xl:block"></div>
           <div className="relative flex-1 max-w-xs hidden xl:block">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+            <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" name="search" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -423,7 +424,7 @@ export default function AdminAccountSettings() {
           onClick={() => setFormOpen(true)}
           className="bg-secondary hover:bg-secondary/90 text-on-secondary px-5 py-2 rounded-lg font-label-md text-label-md flex items-center gap-2 shadow-sm transition-colors whitespace-nowrap"
         >
-          <span className="material-symbols-outlined text-[18px]">person_add</span>
+          <Ph className="text-[18px]" name="person_add" />
           Register New Account
         </button>
       </div>
@@ -594,7 +595,7 @@ export default function AdminAccountSettings() {
                 {(active.emergency_contact_name || active.emergency_contact_phone) && (
                   <div>
                     <h4 className="font-caps-xs text-caps-xs text-error-red uppercase tracking-wider font-bold mb-3 flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[14px]">emergency</span>
+                      <Ph className="text-[14px]" name="emergency" />
                       Emergency Contact
                     </h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
@@ -628,12 +629,12 @@ export default function AdminAccountSettings() {
                       <div className="font-body-sm text-body-sm font-medium">
                         {active.email_confirmed_at ? (
                           <span className="inline-flex items-center gap-1.5 text-success-green">
-                            <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                            <Ph className="text-[16px]" name="check_circle" />
                             Verified on {fmtDate(active.email_confirmed_at, 'short')}
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1.5 text-warning-amber">
-                            <span className="material-symbols-outlined text-[16px]">pending</span>
+                            <Ph className="text-[16px]" name="pending" />
                             Pending Verification
                           </span>
                         )}
@@ -668,7 +669,7 @@ export default function AdminAccountSettings() {
                       onClick={() => openEdit(active)}
                       className="w-full py-2 px-4 rounded-lg border border-outline-variant text-on-surface font-label-md text-label-md hover:bg-surface-bg transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
                     >
-                      <span className="material-symbols-outlined text-[18px]">edit</span>
+                      <Ph className="text-[18px]" name="edit" />
                       Edit User Information
                     </button>
                     <button
@@ -677,7 +678,7 @@ export default function AdminAccountSettings() {
                       onClick={() => setConfirmAction('reset-pw')}
                       className="w-full py-2 px-4 rounded-lg border border-outline-variant text-on-surface font-label-md text-label-md hover:bg-surface-bg transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
                     >
-                      <span className="material-symbols-outlined text-[18px]">lock_reset</span>
+                      <Ph className="text-[18px]" name="lock_reset" />
                       Trigger Password Reset
                     </button>
                     <button
@@ -686,7 +687,7 @@ export default function AdminAccountSettings() {
                       onClick={() => setConfirmAction(active.suspended ? 'reactivate' : 'suspend')}
                       className={`w-full py-2 px-4 rounded-lg border font-label-md text-label-md transition-colors flex justify-center items-center gap-2 disabled:opacity-50 ${active.suspended ? 'border-success-green/30 text-success-green hover:bg-success-green/5' : 'border-error-red/30 text-error-red hover:bg-error-red/5'}`}
                     >
-                      <span className="material-symbols-outlined text-[18px]">{active.suspended ? 'check_circle' : 'block'}</span>
+                      <Ph className="text-[18px]" name={active.suspended ? 'check_circle' : 'block'} />
                       {active.suspended ? 'Re-activate Account' : 'Suspend Account Access'}
                     </button>
                     <button
@@ -695,7 +696,7 @@ export default function AdminAccountSettings() {
                       onClick={() => setConfirmAction('logout')}
                       className="w-full py-2 px-4 rounded-lg border border-outline-variant text-on-surface font-label-md text-label-md hover:bg-surface-bg transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
                     >
-                      <span className="material-symbols-outlined text-[18px]">logout</span>
+                      <Ph className="text-[18px]" name="logout" />
                       Log Out User
                     </button>
                     <button
@@ -704,7 +705,7 @@ export default function AdminAccountSettings() {
                       onClick={() => setConfirmAction('delete')}
                       className="w-full py-2 px-4 rounded-lg border border-error-red/30 text-error-red font-label-md text-label-md hover:bg-error-red/5 transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
                     >
-                      <span className="material-symbols-outlined text-[18px]">delete</span>
+                      <Ph className="text-[18px]" name="delete" />
                       Delete Account
                     </button>
                   </div>
@@ -722,7 +723,7 @@ export default function AdminAccountSettings() {
           <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Register New Account</h3>
-              <button type="button" onClick={() => setFormOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
+              <button type="button" onClick={() => setFormOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><Ph name="close" /></button>
             </div>
             <div className="p-5 space-y-4">
               <div>
@@ -773,7 +774,7 @@ export default function AdminAccountSettings() {
           <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Edit User Information</h3>
-              <button type="button" onClick={() => setEditOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
+              <button type="button" onClick={() => setEditOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><Ph name="close" /></button>
             </div>
             <div className="p-5 space-y-4">
               <div>
@@ -821,11 +822,11 @@ export default function AdminAccountSettings() {
           <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl">
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
               <h3 className={`font-headline-md text-headline-md font-bold ${CONFIRM_META[confirmAction].danger ? 'text-error-red' : 'text-on-surface'}`}>{CONFIRM_META[confirmAction].title}</h3>
-              <button type="button" onClick={() => setConfirmAction(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
+              <button type="button" onClick={() => setConfirmAction(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><Ph name="close" /></button>
             </div>
             <div className="p-5">
               <div className="flex items-start gap-3 mb-4">
-                <span className={`material-symbols-outlined text-3xl ${CONFIRM_META[confirmAction].danger ? 'text-error-red' : 'text-secondary'}`}>{CONFIRM_META[confirmAction].icon}</span>
+                <Ph className={` text-3xl ${CONFIRM_META[confirmAction].danger ? 'text-error-red' : 'text-secondary'}`} name={CONFIRM_META[confirmAction].icon} />
                 <div className="flex-1">
                   <p className="text-sm text-on-surface">{CONFIRM_META[confirmAction].message(active.fullname)}</p>
                   {confirmAction === 'delete' && (

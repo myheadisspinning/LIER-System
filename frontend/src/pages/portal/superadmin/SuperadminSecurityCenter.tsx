@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 export default function SuperadminSecurityCenter() {
   return (
     <div>
@@ -8,11 +9,11 @@ export default function SuperadminSecurityCenter() {
         </div>
         <div className="flex gap-3">
           <button type="button" className="border-[1.5px] border-secondary text-secondary hover:bg-secondary/5 transition-colors px-6 py-2.5 rounded-lg text-label-md font-label-md flex items-center gap-2">
-            <span className="material-symbols-outlined text-sm">download</span>
+            <Ph className="text-sm" name="download" />
             Generate Security Report
           </button>
           <button type="button" className="bg-gradient-to-r from-secondary to-[#003ea8] text-white shadow-md hover:shadow-lg transition-all px-6 py-2.5 rounded-lg text-label-md font-label-md flex items-center gap-2">
-            <span className="material-symbols-outlined text-sm">radar</span>
+            <Ph className="text-sm" name="radar" />
             Run Security Scan
           </button>
         </div>
@@ -22,7 +23,7 @@ export default function SuperadminSecurityCenter() {
           <div className="flex justify-between items-start mb-4">
             <span className="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Security Status</span>
             <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-              <span className="material-symbols-outlined text-green-600 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>shield</span>
+              <Ph className="text-green-600 text-sm" name="shield" weight="fill" />
             </div>
           </div>
           <div>
@@ -34,31 +35,31 @@ export default function SuperadminSecurityCenter() {
           <div className="flex justify-between items-start mb-4">
             <span className="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Active Threats</span>
             <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center">
-              <span className="material-symbols-outlined text-on-surface-variant text-sm">bug_report</span>
+              <Ph className="text-on-surface-variant text-sm" name="bug_report" />
             </div>
           </div>
           <div>
             <span className="text-headline-md font-headline-md text-on-surface font-bold block">0</span>
-            <span className="text-caption font-caption text-green-600 mt-1 flex items-center gap-1"><span className="material-symbols-outlined text-[10px]">trending_down</span> -2 from yesterday</span>
+            <span className="text-caption font-caption text-green-600 mt-1 flex items-center gap-1"><Ph className="text-[10px]" name="trending_down" /> -2 from yesterday</span>
           </div>
         </div>
         <div className="glass-card rounded-2xl p-5 flex flex-col justify-between border-l-4 border-l-orange-500">
           <div className="flex justify-between items-start mb-4">
             <span className="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Failed Logins</span>
             <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">
-              <span className="material-symbols-outlined text-orange-600 text-sm">warning</span>
+              <Ph className="text-orange-600 text-sm" name="warning" />
             </div>
           </div>
           <div>
             <span className="text-headline-md font-headline-md text-orange-600 font-bold block">12</span>
-            <span className="text-caption font-caption text-orange-600 mt-1 flex items-center gap-1"><span className="material-symbols-outlined text-[10px]">trending_up</span> +3 in last hour</span>
+            <span className="text-caption font-caption text-orange-600 mt-1 flex items-center gap-1"><Ph className="text-[10px]" name="trending_up" /> +3 in last hour</span>
           </div>
         </div>
         <div className="glass-card rounded-2xl p-5 flex flex-col justify-between">
           <div className="flex justify-between items-start mb-4">
             <span className="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Active Sessions</span>
             <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center">
-              <span className="material-symbols-outlined text-secondary text-sm">person</span>
+              <Ph className="text-secondary text-sm" name="person" />
             </div>
           </div>
           <div>
@@ -70,7 +71,7 @@ export default function SuperadminSecurityCenter() {
           <div className="flex justify-between items-start mb-4">
             <span className="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">API Health</span>
             <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center">
-              <span className="material-symbols-outlined text-teal-600 text-sm">check_circle</span>
+              <Ph className="text-teal-600 text-sm" name="check_circle" />
             </div>
           </div>
           <div>
@@ -93,7 +94,7 @@ export default function SuperadminSecurityCenter() {
           <div className="glass-card rounded-2xl overflow-hidden flex flex-col h-[400px]">
             <div className="p-5 border-b border-outline-variant bg-surface-container-lowest/50 flex justify-between items-center">
               <h3 className="text-headline-md font-headline-md text-on-surface text-lg flex items-center gap-2">
-                <span className="material-symbols-outlined text-secondary">notifications_active</span>
+                <Ph className="text-secondary" name="notifications_active" />
                 Recent Security Alerts
               </h3>
               <button type="button" className="text-label-md font-label-md text-secondary hover:underline">View All</button>
@@ -119,8 +120,8 @@ export default function SuperadminSecurityCenter() {
                     <td className="py-3 px-5 text-on-surface-variant text-sm">10 mins ago</td>
                     <td className="py-3 px-5">
                       <div className="flex gap-2">
-                        <button type="button" className="p-1.5 text-secondary hover:bg-secondary/10 rounded transition-colors" title="Investigate"><span className="material-symbols-outlined text-sm">search</span></button>
-                        <button type="button" className="p-1.5 text-error hover:bg-error/10 rounded transition-colors" title="Block IP"><span className="material-symbols-outlined text-sm">block</span></button>
+                        <button type="button" className="p-1.5 text-secondary hover:bg-secondary/10 rounded transition-colors" title="Investigate"><Ph className="text-sm" name="search" /></button>
+                        <button type="button" className="p-1.5 text-error hover:bg-error/10 rounded transition-colors" title="Block IP"><Ph className="text-sm" name="block" /></button>
                       </div>
                     </td>
                   </tr>
@@ -133,8 +134,8 @@ export default function SuperadminSecurityCenter() {
                     <td className="py-3 px-5 text-on-surface-variant text-sm">1 hour ago</td>
                     <td className="py-3 px-5">
                       <div className="flex gap-2">
-                        <button type="button" className="p-1.5 text-secondary hover:bg-secondary/10 rounded transition-colors" title="Investigate"><span className="material-symbols-outlined text-sm">search</span></button>
-                        <button type="button" className="p-1.5 text-secondary hover:bg-secondary/10 rounded transition-colors" title="Force Logout"><span className="material-symbols-outlined text-sm">logout</span></button>
+                        <button type="button" className="p-1.5 text-secondary hover:bg-secondary/10 rounded transition-colors" title="Investigate"><Ph className="text-sm" name="search" /></button>
+                        <button type="button" className="p-1.5 text-secondary hover:bg-secondary/10 rounded transition-colors" title="Force Logout"><Ph className="text-sm" name="logout" /></button>
                       </div>
                     </td>
                   </tr>
@@ -147,8 +148,8 @@ export default function SuperadminSecurityCenter() {
                     <td className="py-3 px-5 text-on-surface-variant text-sm">3 hours ago</td>
                     <td className="py-3 px-5">
                       <div className="flex gap-2">
-                        <button type="button" className="p-1.5 text-secondary hover:bg-secondary/10 rounded transition-colors" title="Investigate"><span className="material-symbols-outlined text-sm">search</span></button>
-                        <button type="button" className="p-1.5 text-green-600 hover:bg-green-100 rounded transition-colors" title="Resolve"><span className="material-symbols-outlined text-sm">check</span></button>
+                        <button type="button" className="p-1.5 text-secondary hover:bg-secondary/10 rounded transition-colors" title="Investigate"><Ph className="text-sm" name="search" /></button>
+                        <button type="button" className="p-1.5 text-green-600 hover:bg-green-100 rounded transition-colors" title="Resolve"><Ph className="text-sm" name="check" /></button>
                       </div>
                     </td>
                   </tr>
@@ -160,13 +161,13 @@ export default function SuperadminSecurityCenter() {
         <div className="space-y-6">
           <div className="glass-card rounded-2xl p-5">
             <h3 className="text-headline-md font-headline-md text-on-surface text-lg flex items-center gap-2 mb-4">
-              <span className="material-symbols-outlined text-secondary">bolt</span>
+              <Ph className="text-secondary" name="bolt" />
               Quick Security Actions
             </h3>
             <div className="space-y-3">
               <button type="button" className="w-full flex items-center gap-3 p-3 rounded-lg border border-outline-variant hover:border-secondary hover:bg-surface-container-low transition-all text-left group">
                 <div className="w-8 h-8 rounded-full bg-error-container text-on-error-container flex items-center justify-center group-hover:bg-error group-hover:text-on-error transition-colors">
-                  <span className="material-symbols-outlined text-sm">lock</span>
+                  <Ph className="text-sm" name="lock" />
                 </div>
                 <div>
                   <span className="block text-label-md font-label-md text-on-surface">Lock Specific Account</span>
@@ -175,7 +176,7 @@ export default function SuperadminSecurityCenter() {
               </button>
               <button type="button" className="w-full flex items-center gap-3 p-3 rounded-lg border border-outline-variant hover:border-secondary hover:bg-surface-container-low transition-all text-left group">
                 <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-colors">
-                  <span className="material-symbols-outlined text-sm">person_off</span>
+                  <Ph className="text-sm" name="person_off" />
                 </div>
                 <div>
                   <span className="block text-label-md font-label-md text-on-surface">Terminate Sessions</span>
@@ -186,29 +187,29 @@ export default function SuperadminSecurityCenter() {
           </div>
           <div className="glass-card rounded-2xl p-5">
             <h3 className="text-headline-md font-headline-md text-on-surface text-lg flex items-center gap-2 mb-4">
-              <span className="material-symbols-outlined text-secondary">router</span>
+              <Ph className="text-secondary" name="router" />
               System Integrations
             </h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-secondary">psychology</span>
+                  <Ph className="text-secondary" name="psychology" />
                   <span className="text-body-md font-body-md text-on-surface font-medium">Gemini AI Engine</span>
                 </div>
                 <span className="flex items-center gap-1 text-caption font-caption text-green-600 bg-green-50 px-2 py-1 rounded-full"><span className="w-2 h-2 rounded-full bg-green-500"></span> Online</span>
               </div>
               <div className="w-full bg-surface-variant rounded-full h-1.5">
-                <div className="bg-green-500 h-1.5 rounded-full" style={{ width: "100%" }}></div>
+                <div className="bg-green-500 h-1.5 rounded-full"></div>
               </div>
               <div className="flex items-center justify-between pt-2">
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-secondary">database</span>
+                  <Ph className="text-secondary" name="database" />
                   <span className="text-body-md font-body-md text-on-surface font-medium">Supabase Auth</span>
                 </div>
                 <span className="flex items-center gap-1 text-caption font-caption text-green-600 bg-green-50 px-2 py-1 rounded-full"><span className="w-2 h-2 rounded-full bg-green-500"></span> Online</span>
               </div>
               <div className="w-full bg-surface-variant rounded-full h-1.5">
-                <div className="bg-green-500 h-1.5 rounded-full" style={{ width: "98%" }}></div>
+                <div className="bg-green-500 h-1.5 rounded-full"></div>
               </div>
               <div className="pt-4 border-t border-outline-variant/50 flex justify-between items-center">
                 <span className="text-label-md font-label-md text-on-surface-variant">Strict Privacy Mode</span>

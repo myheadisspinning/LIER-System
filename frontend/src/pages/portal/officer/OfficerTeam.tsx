@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { getAdminProfile, deriveUnitStatus, fetchOpenUnitAssignments, UNIT_STATUS_DOT } from '../../../lib/admin';
@@ -93,7 +94,7 @@ export default function OfficerTeam() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <span className={`w-10 h-10 rounded-lg flex items-center justify-center ${TYPE_BADGE[u.type] ?? 'bg-slate-100'}`}>
-                      <span className="material-symbols-outlined text-[20px]">{u.type === 'Medical' ? 'local_hospital' : u.type === 'BFP' ? 'local_fire_department' : u.type === 'PNP' ? 'local_police' : 'shield_person'}</span>
+                      <Ph className="text-[20px]" name={u.type === 'Medical' ? 'local_hospital' : u.type === 'BFP' ? 'local_fire_department' : u.type === 'PNP' ? 'local_police' : 'shield_person'} />
                     </span>
                     <div>
                       <div className="font-label-md text-label-md text-on-surface font-bold">{u.name}</div>

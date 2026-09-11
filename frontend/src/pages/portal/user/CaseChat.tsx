@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '../../../supabaseClient';
@@ -334,7 +335,7 @@ if (loading) {
   {startingChat ? (
   <div className="flex-1 flex flex-col items-center justify-center p-6">
    <div className="w-16 h-16 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center mb-4">
-   <span className="material-symbols-outlined text-3xl animate-spin">hourglass_top</span>
+   <Ph className="text-3xl animate-spin" name="hourglass_top" />
    </div>
    <h3 className="font-headline-md text-headline-md text-on-surface mb-2">Starting your chat…</h3>
    <p className="font-body-sm text-body-sm text-outline">Connecting you to the Barangay desk</p>
@@ -345,7 +346,7 @@ if (loading) {
    <div className="text-center mb-8">
     <div className="relative inline-block mb-4">
     <div className="w-20 h-20 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center">
-     <span className="material-symbols-outlined text-4xl">policy</span>
+     <Ph className="text-4xl" name="policy" />
     </div>
     {onlineStaffCount > 0 && (
      <span className="absolute bottom-0 right-0 w-5 h-5 rounded-full bg-success-green border-2 border-surface-container-lowest"></span>
@@ -371,13 +372,13 @@ if (loading) {
     >
      <div className="flex items-start gap-3">
      <div className="w-10 h-10 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0">
-      <span className="material-symbols-outlined text-[20px]">help</span>
+      <Ph className="text-[20px]" name="help" />
      </div>
      <div className="flex-1 min-w-0">
       <h4 className="font-label-md text-label-md font-bold text-on-surface mb-1">General Inquiry</h4>
       <p className="font-body-sm text-body-sm text-on-surface-variant">Ask the admin anything</p>
      </div>
-     <span className="material-symbols-outlined text-outline group-hover:text-secondary transition-colors">arrow_forward</span>
+     <Ph className="text-outline group-hover:text-secondary transition-colors" name="arrow_forward" />
      </div>
     </button>
     {incidents.map((inc) => (
@@ -389,13 +390,13 @@ if (loading) {
      >
      <div className="flex items-start gap-3">
       <div className="w-10 h-10 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0">
-      <span className="material-symbols-outlined text-[20px]">{caseIcon(inc.category)}</span>
+      <Ph className="text-[20px]" name={caseIcon(inc.category)} />
       </div>
       <div className="flex-1 min-w-0">
       <h4 className="font-label-md text-label-md font-bold text-on-surface mb-1">{caseLabel(inc)}</h4>
       <p className="font-body-sm text-body-sm text-on-surface-variant truncate">{inc.title}</p>
       </div>
-      <span className="material-symbols-outlined text-outline group-hover:text-secondary transition-colors">arrow_forward</span>
+      <Ph className="text-outline group-hover:text-secondary transition-colors" name="arrow_forward" />
      </div>
      </button>
     ))}
@@ -426,12 +427,12 @@ if (loading) {
      className="-ml-1 p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors shrink-0"
      aria-label="Back to current chat"
     >
-     <span className="material-symbols-outlined">arrow_back</span>
+     <Ph name="arrow_back" />
     </button>
     )}
     <div className="relative">
     <div className="w-10 h-10 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center">
-     <span className="material-symbols-outlined text-[20px] text-secondary">policy</span>
+     <Ph className="text-[20px] text-secondary" name="policy" />
     </div>
     {!isViewingPast && onlineStaffCount > 0 && (
      <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-success-green border-2 border-surface-container-lowest"></span>
@@ -463,7 +464,7 @@ if (loading) {
      aria-label="Past chats"
      title="Past chats"
     >
-     <span className="material-symbols-outlined text-[20px]">history</span>
+     <Ph className="text-[20px]" name="history" />
     </button>
     )}
    </div>
@@ -496,7 +497,7 @@ if (loading) {
      <div key={item.key} className="flex justify-start items-end gap-2 max-w-[75%]">
      {item.showMeta && (
       <div className="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0 mb-1">
-      <span className="material-symbols-outlined text-[16px] text-secondary">policy</span>
+      <Ph className="text-[16px] text-secondary" name="policy" />
       </div>
      )}
      <div className="flex-1 min-w-0">
@@ -524,9 +525,7 @@ if (loading) {
    {isClosed ? (
    <div className="p-4 border-t border-border-subtle bg-surface/30">
     <div className="flex items-center gap-3 bg-surface-container-lowest border border-border-subtle rounded-xl p-3">
-    <span className={`material-symbols-outlined text-[22px] shrink-0 ${active.status === 'Resolved' ? 'text-success-green' : 'text-outline'}`}>
-     {active.status === 'Resolved' ? 'task_alt' : 'archive'}
-    </span>
+    <Ph className={` text-[22px] shrink-0 ${active.status === 'Resolved' ? 'text-success-green' : 'text-outline'}`} name={active.status === 'Resolved' ? 'task_alt' : 'archive'} />
     <div>
      <p className="font-body-sm text-body-sm text-on-surface font-semibold">This conversation is {active.status === 'Resolved' ? 'resolved' : 'closed'} — it is now read-only.</p>
      {!isViewingPast && <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">You can start a new chat once this one is archived.</p>}
@@ -542,7 +541,6 @@ if (loading) {
       className="w-full bg-transparent border-none outline-none resize-none py-1 font-body-sm text-body-sm focus:ring-0 focus:outline-none text-on-surface max-h-32 overflow-y-auto placeholder:text-outline"
       placeholder="Type a message..."
       rows={1}
-      style={{ minHeight: 28 }}
       value={draft}
       onChange={(e) => setDraft(e.target.value)}
      onKeyDown={(e) => {
@@ -558,7 +556,7 @@ if (loading) {
      disabled={sending || !draft.trim()}
      className="bg-secondary text-white rounded-full hover:bg-on-secondary-fixed-variant transition-colors shrink-0 flex items-center justify-center h-9 w-9 disabled:opacity-50"
     >
-     <span className="material-symbols-outlined text-[18px]">{sending ? 'hourglass_top' : 'send'}</span>
+     <Ph className="text-[18px]" name={sending ? 'hourglass_top' : 'send'} />
     </button>
     </div>
     <p className="text-center font-caps-xs text-[9px] text-outline mt-2">Direct line to the Barangay desk — conversations are logged for transparency.</p>
@@ -573,7 +571,7 @@ if (loading) {
    <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
     <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Start a new chat</h3>
     <button type="button" onClick={() => setComposerOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
-    <span className="material-symbols-outlined">close</span>
+    <Ph name="close" />
     </button>
    </div>
    <div className="p-5 space-y-4">
@@ -621,7 +619,7 @@ if (loading) {
    <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
     <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Past Chats</h3>
     <button type="button" onClick={() => setPastChatsOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
-    <span className="material-symbols-outlined">close</span>
+    <Ph name="close" />
     </button>
    </div>
    <div className="flex-1 overflow-y-auto p-4">

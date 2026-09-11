@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 export default function SuperadminAiConfig() {
   return (
     <div className="space-y-6">
@@ -5,7 +6,7 @@ export default function SuperadminAiConfig() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary text-lg">settings_input_component</span>
+              <Ph className="text-secondary text-lg" name="settings_input_component" />
               AI Configuration
             </h3>
             <span className="px-2.5 py-0.5 bg-green-50 text-green-700 text-[10px] font-bold rounded-full border border-green-100 flex items-center gap-1">
@@ -42,14 +43,14 @@ export default function SuperadminAiConfig() {
               </div>
             </div>
             <button type="button" className="w-full py-2.5 bg-on-primary-fixed text-white text-sm font-bold rounded-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-2">
-              <span className="material-symbols-outlined text-sm">tune</span>
+              <Ph className="text-sm" name="tune" />
               Configure AI usage settings
             </button>
           </div>
         </div>
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
           <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-lg">monitoring</span>
+            <Ph className="text-secondary text-lg" name="monitoring" />
             AI Model Monitoring
           </h3>
           <div className="grid grid-cols-2 gap-4 mb-6">
@@ -89,7 +90,7 @@ export default function SuperadminAiConfig() {
               <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">AI Uptime</p>
               <div className="flex items-center gap-2">
                 <span className="text-xl font-bold text-slate-900 tracking-tighter">99.9%</span>
-                <span className="material-symbols-outlined text-green-500 text-sm">trending_up</span>
+                <Ph className="text-green-500 text-sm" name="trending_up" />
               </div>
             </div>
           </div>
@@ -120,15 +121,15 @@ export default function SuperadminAiConfig() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary text-lg">terminal</span>
+              <Ph className="text-secondary text-lg" name="terminal" />
               Fallback Rule Engine
             </h3>
             <button type="button" className="p-1.5 text-secondary hover:bg-slate-50 rounded transition-colors">
-              <span className="material-symbols-outlined">add_box</span>
+              <Ph name="add_box" />
             </button>
           </div>
           <div className="mb-4 relative">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+            <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm" name="search" />
             <input className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border-slate-200 rounded-lg text-xs" placeholder="Search fallback rules..." type="text" />
           </div>
           <div className="overflow-x-auto">
@@ -163,13 +164,13 @@ export default function SuperadminAiConfig() {
         </div>
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
           <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-lg">account_tree</span>
+            <Ph className="text-secondary text-lg" name="account_tree" />
             Classification Settings
           </h3>
           <div className="space-y-4">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-slate-400 text-lg">folder_open</span>
+                <Ph className="text-slate-400 text-lg" name="folder_open" />
                 <span className="text-xs font-bold text-slate-700 uppercase">Crime</span>
               </div>
               <div className="pl-6 space-y-1.5 border-l border-slate-100 ml-2">
@@ -189,7 +190,7 @@ export default function SuperadminAiConfig() {
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-slate-400 text-lg">emergency_home</span>
+                <Ph className="text-slate-400 text-lg" name="emergency_home" />
                 <span className="text-xs font-bold text-slate-700 uppercase">Emergency</span>
               </div>
               <div className="pl-6 space-y-1.5 border-l border-slate-100 ml-2">
@@ -201,7 +202,7 @@ export default function SuperadminAiConfig() {
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-slate-400 text-lg">groups</span>
+                <Ph className="text-slate-400 text-lg" name="groups" />
                 <span className="text-xs font-bold text-slate-700 uppercase">Community</span>
               </div>
               <div className="pl-6 space-y-1.5 border-l border-slate-100 ml-2">
@@ -219,7 +220,7 @@ export default function SuperadminAiConfig() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary text-lg">history_edu</span>
+              <Ph className="text-secondary text-lg" name="history_edu" />
               AI Audit Logs
             </h3>
             <a className="text-[10px] font-bold text-secondary uppercase hover:underline" href="#">Full Audit</a>
@@ -228,7 +229,7 @@ export default function SuperadminAiConfig() {
             <div className="p-3 bg-slate-50 rounded-lg border-l-4 border-secondary">
               <div className="flex justify-between items-start mb-1">
                 <span className="text-[9px] font-bold text-slate-400">14:22:01 | Root_Admin</span>
-                <span className="material-symbols-outlined text-sm text-slate-400">visibility</span>
+                <Ph className="text-sm text-slate-400" name="visibility" />
               </div>
               <p className="text-[11px] text-slate-700 font-medium">Modified API Response Limit from 512 to 1024 tokens.</p>
               <p className="text-[9px] text-slate-400 mt-1 italic">Reason: Performance optimization for complex reports.</p>
@@ -236,7 +237,7 @@ export default function SuperadminAiConfig() {
             <div className="p-3 bg-slate-50 rounded-lg border-l-4 border-green-500">
               <div className="flex justify-between items-start mb-1">
                 <span className="text-[9px] font-bold text-slate-400">14:15:30 | AI_System</span>
-                <span className="material-symbols-outlined text-sm text-slate-400">smart_toy</span>
+                <Ph className="text-sm text-slate-400" name="smart_toy" />
               </div>
               <p className="text-[11px] text-slate-700 font-medium">Successfully classified Report #9422 as "Theft (High Priority)".</p>
               <p className="text-[9px] text-slate-400 mt-1 italic">Action: AI suggestion reviewed and approved by Officer.</p>
@@ -244,7 +245,7 @@ export default function SuperadminAiConfig() {
             <div className="p-3 bg-slate-50 rounded-lg border-l-4 border-amber-500">
               <div className="flex justify-between items-start mb-1">
                 <span className="text-[9px] font-bold text-slate-400">13:50:12 | Root_Admin</span>
-                <span className="material-symbols-outlined text-sm text-slate-400">edit_note</span>
+                <Ph className="text-sm text-slate-400" name="edit_note" />
               </div>
               <p className="text-[11px] text-slate-700 font-medium">Updated Fallback Rule for "Fire" category.</p>
               <p className="text-[9px] text-slate-400 mt-1 italic">Action: Added keywords 'ignition' and 'combustion'.</p>

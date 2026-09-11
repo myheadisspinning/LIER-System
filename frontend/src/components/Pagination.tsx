@@ -1,3 +1,4 @@
+﻿import Ph from './PhIcon';
 import { useMemo } from 'react';
 
 type PaginationProps = {
@@ -92,7 +93,7 @@ export default function Pagination({
           disabled={safeCurrentPage === 1}
           className="shrink-0 w-7 h-7 flex items-center justify-center border border-border-subtle rounded text-on-surface hover:bg-surface-variant transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          <span className="material-symbols-outlined text-[16px]">chevron_left</span>
+          <Ph className="text-[16px]" name="chevron_left" />
         </button>
 
         <div className="flex items-center gap-0.5">
@@ -132,7 +133,7 @@ export default function Pagination({
           disabled={safeCurrentPage === safeTotalPages}
           className="shrink-0 w-7 h-7 flex items-center justify-center border border-border-subtle rounded text-on-surface hover:bg-surface-variant transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+          <Ph className="text-[16px]" name="chevron_right" />
         </button>
       </div>
     </div>

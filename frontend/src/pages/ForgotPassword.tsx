@@ -1,3 +1,4 @@
+import Ph from '../components/PhIcon';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
@@ -81,13 +82,13 @@ export default function ForgotPassword() {
           <div className="relative z-20 flex gap-md items-center mt-xl">
             <div className="flex -space-x-2">
               <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-lg">security</span>
+                <Ph className="text-white text-lg" name="security" />
               </div>
               <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-lg">verified_user</span>
+                <Ph className="text-white text-lg" name="verified_user" />
               </div>
               <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-lg">local_police</span>
+                <Ph className="text-white text-lg" name="local_police" />
               </div>
             </div>
             <p className="text-white/80 font-caption text-caption">Join over 15,000 verified residents and administrators.</p>
@@ -100,7 +101,7 @@ export default function ForgotPassword() {
             {/* Back arrow */}
             <div className="mb-4">
               <Link to="/signin" className="inline-flex items-center justify-center w-9 h-9 rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant">
-                <span className="material-symbols-outlined">arrow_back</span>
+                <Ph name="arrow_back" />
               </Link>
             </div>
             {/* Logo for mobile */}
@@ -124,7 +125,7 @@ export default function ForgotPassword() {
                   <div className="space-y-1">
                     <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="email">Email Address</label>
                     <div className="relative">
-                      <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">mail</span>
+                      <Ph className="absolute left-4 top-1/2 -translate-y-1/2 text-outline" name="mail" />
                       <input className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-2.5"
                         id="email" placeholder="name@example.com" required type="email"
                         value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -134,13 +135,13 @@ export default function ForgotPassword() {
                   <button className="w-full bg-secondary rounded-lg text-white font-semibold text-body-lg shadow-lg hover:bg-secondary/90 transition-all active:scale-[0.98] flex items-center justify-center gap-base py-2.5"
                     type="submit" disabled={loading}>
                     {loading ? 'Sending...' : 'Send Reset Link'}
-                    <span className="material-symbols-outlined">send</span>
+                    <Ph name="send" />
                   </button>
                 </form>
               ) : (
                 <div className="space-y-4">
                   <div className="p-4 bg-success-green/10 border border-success-green/30 rounded-lg flex items-center gap-3">
-                    <span className="material-symbols-outlined text-success-green">mark_email_read</span>
+                    <Ph className="text-success-green" name="mark_email_read" />
                     <p className="text-body-sm text-on-surface">
                       A password reset link has been sent to <strong>{email}</strong>. Please check your inbox and follow the instructions. Don't forget to check your spam or junk folder.
                     </p>
@@ -150,7 +151,7 @@ export default function ForgotPassword() {
                     onClick={() => { setSent(false); setEmail(''); }}
                     className="w-full bg-surface-container-low border border-outline-variant/50 rounded-lg text-on-surface font-semibold text-body-sm hover:bg-surface-container transition-all active:scale-[0.98] flex items-center justify-center gap-2 py-2.5"
                   >
-                    <span className="material-symbols-outlined">refresh</span>
+                    <Ph name="refresh" />
                     Send to a different email
                   </button>
                 </div>
@@ -158,7 +159,7 @@ export default function ForgotPassword() {
             </div>
             {/* Footer */}
             <div className="mt-auto border-t border-outline-variant/10 flex items-center justify-center gap-base text-on-surface-variant/40 pt-4 pb-2">
-              <span className="material-symbols-outlined text-sm">verified_user</span>
+              <Ph className="text-sm" name="verified_user" />
               <span className="font-caption text-[10px] uppercase tracking-widest font-bold">
                 OFFICIAL BARANGAY CULIAT GOV PORTAL • ENCRYPTED
               </span>

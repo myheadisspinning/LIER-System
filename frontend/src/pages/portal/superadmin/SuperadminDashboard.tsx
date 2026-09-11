@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 export default function SuperadminDashboard() {
   return (
     <div className="-m-8 bg-surface-container-low text-on-surface font-body min-h-[calc(100vh-64px)] px-10 py-8 relative overflow-hidden">
@@ -6,7 +7,7 @@ export default function SuperadminDashboard() {
         <section>
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-headline-md text-headline-md font-bold text-on-surface flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary">dns</span>
+              <Ph className="text-secondary" name="dns" />
               System Infrastructure Overview
             </h3>
             <span className="inline-flex items-center gap-1.5 text-xs font-bold text-on-surface-variant uppercase tracking-widest">
@@ -26,14 +27,14 @@ export default function SuperadminDashboard() {
                     <span className="text-on-surface-variant">CPU Load</span>
                     <span className="font-semibold text-on-surface">24%</span>
                   </div>
-                  <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden"><div className="bg-tertiary h-full" style={{ width: '24%' }}></div></div>
+                  <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden"><div className="bg-tertiary h-full"></div></div>
                 </div>
                 <div>
                   <div className="flex justify-between text-sm mb-1.5">
                     <span className="text-on-surface-variant">Memory</span>
                     <span className="font-semibold text-on-surface">4.2 / 16 GB</span>
                   </div>
-                  <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden"><div className="bg-tertiary h-full" style={{ width: '35%' }}></div></div>
+                  <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden"><div className="bg-tertiary h-full"></div></div>
                 </div>
               </div>
             </div>
@@ -41,7 +42,7 @@ export default function SuperadminDashboard() {
             <div className="col-span-12 md:col-span-6 lg:col-span-3 bg-white p-6 rounded-2xl border border-border-subtle border-t-2 border-t-cc-blue shadow-sm">
               <div className="flex justify-between items-start mb-5">
                 <p className="text-sm font-medium text-on-surface-variant">Database Connectivity</p>
-                <span className="material-symbols-outlined text-on-surface-variant">database</span>
+                <Ph className="text-on-surface-variant" name="database" />
               </div>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
@@ -61,7 +62,7 @@ export default function SuperadminDashboard() {
             <div className="col-span-12 md:col-span-6 lg:col-span-3 bg-white p-6 rounded-2xl border border-border-subtle border-t-2 border-t-cc-teal shadow-sm">
               <div className="flex justify-between items-start mb-5">
                 <p className="text-sm font-medium text-on-surface-variant">Network Traffic</p>
-                <span className="material-symbols-outlined text-on-surface-variant">show_chart</span>
+                <Ph className="text-on-surface-variant" name="show_chart" />
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between text-xs">
@@ -85,7 +86,7 @@ export default function SuperadminDashboard() {
             <div className="col-span-12 md:col-span-6 lg:col-span-3 bg-white p-6 rounded-2xl border border-border-subtle border-t-2 border-t-cc-accent shadow-sm">
               <div className="flex justify-between items-start mb-5">
                 <p className="text-sm font-medium text-on-surface-variant">Security Level</p>
-                <span className="material-symbols-outlined text-secondary">verified_user</span>
+                <Ph className="text-secondary" name="verified_user" />
               </div>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
@@ -110,11 +111,11 @@ export default function SuperadminDashboard() {
         <section>
           <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <h3 className="font-headline-md text-headline-md font-bold text-on-surface flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary">manage_accounts</span>
+              <Ph className="text-secondary" name="manage_accounts" />
               Admin &amp; User Control
             </h3>
             <button type="button" className="px-4 py-2 bg-secondary text-on-secondary text-xs font-bold rounded-lg flex items-center gap-2 hover:opacity-90 transition-opacity">
-              <span className="material-symbols-outlined text-sm">add</span> Create New User
+              <Ph className="text-sm" name="add" /> Create New User
             </button>
           </div>
           <div className="bg-white rounded-2xl border border-border-subtle shadow-sm overflow-hidden">
@@ -145,9 +146,9 @@ export default function SuperadminDashboard() {
                     <td className="px-6 py-4"><div className="flex items-center gap-1.5 text-xs text-success-green font-medium"><span className="w-1.5 h-1.5 bg-success-green rounded-full"></span> Active</div></td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
-                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-lg">edit</span></button>
-                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-lg">key</span></button>
-                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-error transition-colors"><span className="material-symbols-outlined text-lg">block</span></button>
+                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><Ph className="text-lg" name="edit" /></button>
+                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><Ph className="text-lg" name="key" /></button>
+                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-error transition-colors"><Ph className="text-lg" name="block" /></button>
                       </div>
                     </td>
                   </tr>
@@ -166,9 +167,9 @@ export default function SuperadminDashboard() {
                     <td className="px-6 py-4"><div className="flex items-center gap-1.5 text-xs text-on-surface-variant font-medium"><span className="w-1.5 h-1.5 bg-cc-muted rounded-full"></span> Suspended</div></td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
-                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-lg">edit</span></button>
-                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-lg">key</span></button>
-                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-success-green transition-colors"><span className="material-symbols-outlined text-lg">check_circle</span></button>
+                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><Ph className="text-lg" name="edit" /></button>
+                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><Ph className="text-lg" name="key" /></button>
+                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-success-green transition-colors"><Ph className="text-lg" name="check_circle" /></button>
                       </div>
                     </td>
                   </tr>
@@ -187,9 +188,9 @@ export default function SuperadminDashboard() {
                     <td className="px-6 py-4"><div className="flex items-center gap-1.5 text-xs text-success-green font-medium"><span className="w-1.5 h-1.5 bg-success-green rounded-full"></span> Active</div></td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
-                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-lg">edit</span></button>
-                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-lg">key</span></button>
-                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-error transition-colors"><span className="material-symbols-outlined text-lg">block</span></button>
+                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><Ph className="text-lg" name="edit" /></button>
+                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-secondary transition-colors"><Ph className="text-lg" name="key" /></button>
+                        <button type="button" className="p-1.5 text-on-surface-variant hover:text-error transition-colors"><Ph className="text-lg" name="block" /></button>
                       </div>
                     </td>
                   </tr>
@@ -203,7 +204,7 @@ export default function SuperadminDashboard() {
         <section>
           <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <h3 className="font-headline-md text-headline-md font-bold text-on-surface flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary">assignment</span>
+              <Ph className="text-secondary" name="assignment" />
               Recent System Events
             </h3>
             <button type="button" className="text-xs font-bold text-secondary hover:underline uppercase tracking-widest">View Full Audit Log</button>

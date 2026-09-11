@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { fmtDate, isOnlineSince, logAudit, markInquiryRead, useUnreadCounts } from '../../../lib/admin';
@@ -470,7 +471,7 @@ export default function AdminContactsInbox() {
             ))}
           </div>
           <div className="relative">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+            <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]" name="search" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -561,7 +562,7 @@ export default function AdminContactsInbox() {
                   className="xl:hidden -ml-1 p-1.5 rounded-lg text-on-surface-variant hover:bg-black/5 transition-colors shrink-0"
                   aria-label="Back to inbox"
                 >
-                  <span className="material-symbols-outlined">arrow_back</span>
+                  <Ph name="arrow_back" />
                 </button>
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm overflow-hidden ${
                   active.status === 'Open' ? 'bg-error-red' : active.status === 'In Progress' ? 'bg-warning-amber' : 'bg-slate-400'
@@ -591,7 +592,7 @@ export default function AdminContactsInbox() {
                   onClick={() => setDetailReportId(active.incident_id)}
                   className="flex items-center gap-1.5 px-3 py-1.5 bg-secondary/10 text-secondary border border-secondary/25 rounded-lg text-label-md font-medium hover:bg-secondary/20 transition-colors"
                 >
-                  <span className="material-symbols-outlined text-[18px]">description</span>
+                  <Ph className="text-[18px]" name="description" />
                   View case details
                 </button>
               )}
@@ -631,7 +632,7 @@ export default function AdminContactsInbox() {
                         <p className="font-body-md text-body-md text-on-secondary-fixed">{m.message}</p>
                         <div className="text-right mt-1 flex items-center justify-end gap-1">
                           <span className="font-label-sm text-label-sm text-on-secondary-fixed-variant">{timeShort(m.created_at)}</span>
-                          <span className="material-symbols-outlined text-[14px] text-secondary">done_all</span>
+                          <Ph className="text-[14px] text-secondary" name="done_all" />
                         </div>
                       </div>
                     </div>
@@ -653,7 +654,7 @@ export default function AdminContactsInbox() {
               <div className="p-4 border-t border-border-subtle bg-slate-50">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   <div className="flex items-center gap-2 text-sm text-slate-500">
-                    <span className="material-symbols-outlined text-[18px]">archive</span>
+                    <Ph className="text-[18px]" name="archive" />
                     <span>This conversation is archived. Re-open it to send replies.</span>
                   </div>
                   <button
@@ -662,7 +663,7 @@ export default function AdminContactsInbox() {
                     onClick={() => void reopenInquiry()}
                     className="flex items-center gap-2 bg-secondary text-white px-4 py-2 rounded-lg font-label-md text-label-md font-semibold hover:bg-secondary/90 transition-colors disabled:opacity-50"
                   >
-                    <span className="material-symbols-outlined text-[18px]">unarchive</span>
+                    <Ph className="text-[18px]" name="unarchive" />
                     {sending ? 'Reopening…' : 'Reopen Inquiry'}
                   </button>
                 </div>
@@ -693,9 +694,9 @@ export default function AdminContactsInbox() {
                     }`}
                     title="Insert the closing-reminder message into the composer"
                   >
-                    <span className="material-symbols-outlined text-[16px]">lock</span>
+                    <Ph className="text-[16px]" name="lock" />
                     Close chat
-                    <span className={`material-symbols-outlined text-[16px] transition-transform ${closeOpen ? 'rotate-180' : ''}`}>expand_more</span>
+                    <Ph className={` text-[16px] transition-transform ${closeOpen ? 'rotate-180' : ''}`} name="expand_more" />
                   </button>
                   {closeOpen && (
                     <div className="absolute bottom-full left-0 mb-2 z-40 w-[22rem] max-w-[calc(100vw-2rem)] bg-white border border-border-subtle rounded-xl shadow-sm-hover overflow-hidden">
@@ -713,7 +714,7 @@ export default function AdminContactsInbox() {
                           }}
                           className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-surface-bg transition-colors flex items-start gap-2.5 disabled:opacity-50"
                         >
-                          <span className="material-symbols-outlined text-[18px] text-error mt-0.5 shrink-0">lock</span>
+                          <Ph className="text-[18px] text-error mt-0.5 shrink-0" name="lock" />
                           <span className="min-w-0">
                             <span className="block font-label-md text-label-md font-semibold text-on-surface">Insert closing reminder</span>
                             <span className="block font-body-sm text-body-sm text-on-surface-variant leading-snug line-clamp-3">{CLOSING_MESSAGE}</span>
@@ -732,9 +733,9 @@ export default function AdminContactsInbox() {
                       quickOpen ? 'border-secondary bg-secondary/10 text-secondary' : 'border-border-subtle text-on-surface hover:border-secondary hover:text-secondary'
                     }`}
                   >
-                    <span className="material-symbols-outlined text-[16px]">bolt</span>
+                    <Ph className="text-[16px]" name="bolt" />
                     Quick replies
-                    <span className={`material-symbols-outlined text-[16px] transition-transform ${quickOpen ? 'rotate-180' : ''}`}>expand_more</span>
+                    <Ph className={` text-[16px] transition-transform ${quickOpen ? 'rotate-180' : ''}`} name="expand_more" />
                   </button>
                   {quickOpen && (
                     <div className="absolute bottom-full left-0 mb-2 z-40 w-[22rem] max-w-[calc(100vw-2rem)] bg-white border border-border-subtle rounded-xl shadow-sm-hover overflow-hidden">
@@ -753,7 +754,7 @@ export default function AdminContactsInbox() {
                             }}
                             className="w-full text-left px-3 py-2.5 border-b border-border-subtle last:border-0 hover:bg-surface-bg transition-colors flex items-start gap-2.5"
                           >
-                            <span className="material-symbols-outlined text-[18px] text-secondary mt-0.5 shrink-0">chat_bubble</span>
+                            <Ph className="text-[18px] text-secondary mt-0.5 shrink-0" name="chat_bubble" />
                             <span className="min-w-0">
                               <span className="block font-label-md text-label-md font-semibold text-on-surface">{c.label}</span>
                               <span className="block font-body-sm text-body-sm text-on-surface-variant leading-snug line-clamp-2">{c.message}</span>
@@ -770,7 +771,6 @@ export default function AdminContactsInbox() {
                     className="w-full bg-transparent border-none outline-none resize-none py-1 font-body-sm text-body-sm focus:ring-0 text-on-surface max-h-32 overflow-y-auto placeholder:text-outline"
                     placeholder="Type a response..."
                     rows={1}
-                    style={{ minHeight: 28 }}
                     value={reply}
                     onChange={(e) => setReply(e.target.value)}
                     onKeyDown={(e) => {
@@ -786,7 +786,7 @@ export default function AdminContactsInbox() {
                     onClick={() => void sendReply()}
                     className="bg-secondary text-white rounded-full hover:bg-on-secondary-fixed-variant transition-colors shrink-0 flex items-center justify-center h-9 w-9 shadow-sm disabled:opacity-50"
                   >
-                    <span className="material-symbols-outlined text-[18px]">{sending ? 'hourglass_top' : 'send'}</span>
+                    <Ph className="text-[18px]" name={sending ? 'hourglass_top' : 'send'} />
                   </button>
                 </div>
               </div>
@@ -823,7 +823,7 @@ export default function AdminContactsInbox() {
             <div className="mb-6">
               <div className="font-caps-xs text-caps-xs text-outline font-bold uppercase mb-3">Thread Stats</div>
               <div className="flex items-start gap-2 mb-2">
-                <span className="material-symbols-outlined text-[16px] text-outline mt-0.5">forum</span>
+                <Ph className="text-[16px] text-outline mt-0.5" name="forum" />
                 <div>
                   <div className="font-label-md text-label-md text-on-surface">{thread.length} messages</div>
                   <div className="font-label-sm text-label-sm text-outline">
@@ -840,7 +840,7 @@ export default function AdminContactsInbox() {
                   onClick={() => void reopenInquiry()}
                   className="w-full bg-secondary text-white py-2 px-4 rounded font-label-md text-label-md font-semibold hover:bg-secondary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                 >
-                  <span className="material-symbols-outlined text-[18px]">unarchive</span>
+                  <Ph className="text-[18px]" name="unarchive" />
                   {sending ? 'Reopening…' : 'Reopen Inquiry'}
                 </button>
               ) : (
@@ -851,7 +851,7 @@ export default function AdminContactsInbox() {
                     onClick={() => setStatus('Resolved')}
                     className="w-full bg-success-green text-white py-2 px-4 rounded font-label-md text-label-md font-semibold hover:bg-success-green/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                   >
-                    <span className="material-symbols-outlined text-[18px]">check</span>
+                    <Ph className="text-[18px]" name="check" />
                     Mark as Resolved
                   </button>
                   <button
@@ -860,7 +860,7 @@ export default function AdminContactsInbox() {
                     onClick={() => setStatus('Closed')}
                     className="w-full bg-surface-dim text-on-surface py-2 px-4 rounded font-label-md text-label-md font-medium hover:bg-outline-variant transition-colors flex items-center justify-center gap-2 border border-border-subtle disabled:opacity-50"
                   >
-                    <span className="material-symbols-outlined text-[18px]">lock</span>
+                    <Ph className="text-[18px]" name="lock" />
                     Close Inquiry
                   </button>
                 </>

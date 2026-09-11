@@ -1,3 +1,4 @@
+﻿import Ph from './PhIcon';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
@@ -171,13 +172,13 @@ export default function SiteHeader({
                     setProfileOpen(false);
                   }}
                 >
-                  <span className="material-symbols-outlined text-lg leading-none">notifications</span>
+                  <Ph className="text-lg leading-none" name="notifications" />
                 </button>
                 {notifOpen && (
                   <div className="absolute right-0 mt-2 w-72 bg-background rounded-lg shadow-2xl border border-outline-variant/30 overflow-hidden">
                     <p className="font-label-md text-label-md font-bold px-4 py-3 text-on-surface border-b border-outline-variant/30">Notifications</p>
                     <div className="px-4 py-8 flex flex-col items-center gap-sm text-on-surface-variant">
-                      <span className="material-symbols-outlined text-3xl">notifications_off</span>
+                      <Ph className="text-3xl" name="notifications_off" />
                       <p className="text-caption text-center">No new notifications yet.</p>
                     </div>
                   </div>
@@ -201,7 +202,7 @@ export default function SiteHeader({
                       getInitial()
                     )}
                   </span>
-                  <span className="material-symbols-outlined text-base md:text-xl text-surface-bright lg:text-base">{profileOpen ? 'expand_less' : 'expand_more'}</span>
+                  <Ph className="text-base md:text-xl text-surface-bright lg:text-base" name={profileOpen ? 'expand_less' : 'expand_more'} />
                 </button>
                 {profileOpen && (
                   <div className="absolute right-0 mt-2 w-52 bg-background rounded-lg shadow-2xl border border-outline-variant/30 overflow-hidden">
@@ -216,11 +217,11 @@ export default function SiteHeader({
                       className="w-full flex items-center gap-3 px-4 py-3 text-on-surface hover:bg-surface-container-low transition-colors font-label-md text-label-md lg:hidden"
                       onClick={() => setNotifOpen((v) => !v)}
                     >
-                      <span className="material-symbols-outlined text-lg">notifications</span> Notifications
+                      <Ph className="text-lg" name="notifications" /> Notifications
                     </button>
                     {notifOpen && (
                       <div className="px-4 py-2.5 flex flex-col items-center gap-sm text-on-surface-variant border-b border-outline-variant/30 lg:hidden">
-                        <span className="material-symbols-outlined text-xl">notifications_off</span>
+                        <Ph className="text-xl" name="notifications_off" />
                         <p className="text-caption text-center">No new notifications yet.</p>
                       </div>
                     )}
@@ -229,14 +230,14 @@ export default function SiteHeader({
                       className="flex items-center gap-3 px-4 py-3 text-on-surface hover:bg-surface-container-low transition-colors font-label-md text-label-md"
                       onClick={() => setProfileOpen(false)}
                     >
-                      <span className="material-symbols-outlined text-lg">person</span> Profile
+                      <Ph className="text-lg" name="person" /> Profile
                     </Link>
                     <button
                       className="w-full flex items-center gap-3 px-4 py-3 text-error hover:bg-error-container/40 transition-colors font-label-md text-label-md"
                       type="button"
                       onClick={handleLogout}
                     >
-                      <span className="material-symbols-outlined text-lg">logout</span> Logout
+                      <Ph className="text-lg" name="logout" /> Logout
                     </button>
                   </div>
                 )}
@@ -255,7 +256,7 @@ export default function SiteHeader({
             onClick={() => setDrawerOpen(true)}
             aria-label="Open menu"
           >
-            <span className="material-symbols-outlined text-xl md:text-[22px] leading-none">menu</span>
+            <Ph className="text-xl md:text-[22px] leading-none" name="menu" />
           </button>
         </div>
       </header>
@@ -266,7 +267,7 @@ export default function SiteHeader({
           <div className="flex justify-between items-center mb-4">
             <span className="font-headline-md text-lg font-bold text-on-surface">Menu</span>
             <button className="text-on-surface-variant hover:text-primary p-1.5 transition-transform hover:rotate-90" onClick={() => setDrawerOpen(false)} aria-label="Close menu">
-              <span className="material-symbols-outlined text-2xl">close</span>
+              <Ph className="text-2xl" name="close" />
             </button>
           </div>
           {user && (
@@ -308,7 +309,7 @@ export default function SiteHeader({
                 type="button"
                 onClick={handleLogout}
               >
-                <span className="material-symbols-outlined text-lg">logout</span> Logout
+                <Ph className="text-lg" name="logout" /> Logout
               </button>
             ) : (
               <Link
@@ -317,7 +318,7 @@ export default function SiteHeader({
                 onClick={() => setDrawerOpen(false)}
                 aria-label="Login"
               >
-                <span className="material-symbols-outlined text-sm leading-none" style={{ fontVariationSettings: "'FILL' 1" }}>login</span>
+                <Ph className="text-sm leading-none" name="login" weight="fill" />
                 <span className="uppercase">Login</span>
               </Link>
             )}

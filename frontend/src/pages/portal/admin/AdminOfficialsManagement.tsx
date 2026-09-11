@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { logAudit } from '../../../lib/admin';
@@ -144,7 +145,7 @@ export default function AdminOfficialsManagement() {
     <div className="space-y-6">
       <div className="flex justify-between items-end">
         <button type="button" onClick={startCreate} className="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary rounded-lg text-label-md font-medium hover:bg-secondary/90 transition-colors">
-          <span className="material-symbols-outlined text-[18px]">add</span>
+          <Ph className="text-[18px]" name="add" />
           Add New Official
         </button>
       </div>
@@ -163,7 +164,7 @@ export default function AdminOfficialsManagement() {
                     <img src={o.photo_url} alt={o.fullname} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-on-surface-variant">
-                      <span className="material-symbols-outlined text-[40px]">person</span>
+                      <Ph className="text-[40px]" name="person" />
                     </div>
                   )}
                   <div className="absolute top-2 right-2 flex gap-1.5">
@@ -206,7 +207,7 @@ export default function AdminOfficialsManagement() {
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">{editing ? `Edit: ${editing.fullname}` : 'Add New Official'}</h3>
               <button type="button" onClick={() => { setCreating(false); setEditing(null); }} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
-                <span className="material-symbols-outlined">close</span>
+                <Ph name="close" />
               </button>
             </div>
             <div className="p-5 space-y-4">
@@ -272,7 +273,7 @@ export default function AdminOfficialsManagement() {
                   className="hidden"
                 />
                 <label htmlFor="official-photo" className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 text-secondary rounded-lg text-sm font-medium hover:bg-secondary/20 cursor-pointer transition-colors">
-                  <span className="material-symbols-outlined text-[18px]">upload</span>
+                  <Ph className="text-[18px]" name="upload" />
                   Choose File
                 </label>
                 {photoFile && <span className="text-xs text-on-surface-variant ml-2">{photoFile.name}</span>}
@@ -295,7 +296,7 @@ export default function AdminOfficialsManagement() {
           <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-2xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <span className="w-10 h-10 rounded-full bg-error-red/10 flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-[20px] text-error-red">warning</span>
+                <Ph className="text-[20px] text-error-red" name="warning" />
               </span>
               <div>
                 <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Remove Official</h3>

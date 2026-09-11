@@ -1,3 +1,4 @@
+﻿import Ph from './PhIcon';
 import { useEffect, useRef } from 'react';
 
 interface ConfirmDialogProps {
@@ -43,7 +44,7 @@ export default function ConfirmDialog({
       <div className="bg-surface-container-lowest rounded-2xl shadow-2xl border border-outline-variant/40 overflow-hidden animate-toast-in">
         <div className="flex items-start gap-2.5 sm:gap-3 px-3.5 pt-3.5 sm:px-5 sm:pt-5">
           <div className="w-8 h-8 sm:w-10 sm:h-10 shrink-0 rounded-full bg-error-container flex items-center justify-center">
-            <span className="material-symbols-outlined text-error text-lg sm:text-xl">{icon}</span>
+            <Ph className="text-error text-lg sm:text-xl" name={icon} />
           </div>
           <div className="min-w-0 flex-1">
             <h2 className="font-label-sm sm:font-label-md text-label-sm sm:text-label-md font-bold text-on-surface leading-tight">{title}</h2>
@@ -55,7 +56,7 @@ export default function ConfirmDialog({
             aria-label="Close confirmation"
             className="shrink-0 -m-1 p-1 text-on-surface-variant hover:text-on-surface rounded-full transition-colors"
           >
-            <span className="material-symbols-outlined text-lg">close</span>
+            <Ph className="text-lg" name="close" />
           </button>
         </div>
         <div className="flex gap-2 sm:gap-2.5 px-3.5 pb-3.5 sm:px-5 sm:pb-5 mt-3 sm:mt-4">

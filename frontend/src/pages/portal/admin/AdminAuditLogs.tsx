@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { downloadCsv, fmtDate, timeAgo } from '../../../lib/admin';
@@ -83,7 +84,7 @@ export default function AdminAuditLogs() {
         </div>
         <div className="flex flex-wrap items-center gap-3 bg-surface-container-lowest p-3 border border-border-subtle rounded-lg">
           <div className="relative flex-1 min-w-[200px]">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+            <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]" name="search" />
             <input className="w-full bg-[#f1f5f9] border-none rounded text-body-sm pl-10 pr-3 py-2 text-on-surface focus:ring-1 focus:ring-secondary outline-none" placeholder="Search actors, actions, details..." type="text" value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
           <div className="flex items-center gap-3">
@@ -95,7 +96,7 @@ export default function AdminAuditLogs() {
             </select>
           </div>
           <button type="button" onClick={exportCsv} className="flex items-center gap-2 px-4 py-2 border border-border-subtle rounded text-label-md font-medium text-on-surface hover:bg-surface-variant transition-colors ml-auto">
-            <span className="material-symbols-outlined text-[18px]">download</span>
+            <Ph className="text-[18px]" name="download" />
             Export Audit Log (CSV)
           </button>
         </div>
@@ -137,7 +138,7 @@ export default function AdminAuditLogs() {
                       <td className="py-2.5 px-4 text-body-sm text-on-surface-variant hidden lg:table-cell max-w-[280px] truncate">{l.detail ?? '—'}</td>
                       <td className="py-2.5 px-4 text-right">
                         <button type="button" onClick={() => setSelected(l)} className="text-on-surface-variant hover:text-secondary" aria-label="View audit record">
-                          <span className="material-symbols-outlined text-[18px]">visibility</span>
+                          <Ph className="text-[18px]" name="visibility" />
                         </button>
                       </td>
                     </tr>
@@ -170,7 +171,7 @@ export default function AdminAuditLogs() {
               <div className="px-5 py-4 border-b border-border-subtle flex items-center justify-between">
                 <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Audit Event</h3>
                 <button type="button" onClick={() => setSelected(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
-                  <span className="material-symbols-outlined">close</span>
+                  <Ph name="close" />
                 </button>
               </div>
               <div className="p-5 space-y-4">

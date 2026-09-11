@@ -1,3 +1,4 @@
+import Ph from '../../components/PhIcon';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
@@ -104,7 +105,7 @@ export default function Profile() {
       ) : !user ? (
         <main className="min-h-screen flex items-center justify-center px-4 pt-20">
           <div className="text-center max-w-md">
-            <span className="material-symbols-outlined text-5xl text-on-surface-variant">person_off</span>
+            <Ph className="text-5xl text-on-surface-variant" name="person_off" />
             <h2 className="font-headline-md text-headline-md mt-4">You are not signed in</h2>
             <p className="text-on-surface-variant mt-2">Sign in to view your profile.</p>
             <Link
@@ -136,7 +137,7 @@ export default function Profile() {
               <div className="space-y-3">
                 {rows.map((row) => (
                   <div key={row.label} className="flex items-center gap-4 bg-surface-container-low rounded-lg px-4 py-3">
-                    <span className="material-symbols-outlined text-on-surface-variant">{row.icon}</span>
+                    <Ph className="text-on-surface-variant" name={row.icon} />
                     <div className="min-w-0">
                       <p className="text-caption text-on-surface-variant">{row.label}</p>
                       <p className="font-label-md text-label-md text-on-surface break-words">{row.value}</p>
@@ -150,7 +151,7 @@ export default function Profile() {
                 type="button"
                 onClick={handleLogout}
               >
-                <span className="material-symbols-outlined">logout</span> Logout
+                <Ph name="logout" /> Logout
               </button>
             </div>
           </div>

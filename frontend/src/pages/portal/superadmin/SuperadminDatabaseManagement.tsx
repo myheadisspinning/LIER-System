@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 export default function SuperadminDatabaseManagement() {
   return (
     <div className="flex flex-col gap-gutter">
@@ -5,7 +6,7 @@ export default function SuperadminDatabaseManagement() {
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-md mb-sm">
         <div className="flex flex-col gap-xs">
           <div className="flex items-center gap-sm text-secondary font-label-md text-label-md uppercase tracking-wider">
-            <span className="material-symbols-outlined text-[18px]">database</span>
+            <Ph className="text-[18px]" name="database" />
             <span>System Administration</span>
           </div>
           <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface tracking-tight">Database Management</h1>
@@ -13,15 +14,15 @@ export default function SuperadminDatabaseManagement() {
         </div>
         <div className="flex flex-wrap items-center gap-sm mt-sm lg:mt-0">
           <button type="button" className="flex items-center justify-center gap-xs px-md py-sm rounded-lg border-[1.5px] border-secondary text-secondary font-label-md text-label-md hover:bg-secondary/5 transition-all shadow-sm">
-            <span className="material-symbols-outlined text-[18px]">restore</span>
+            <Ph className="text-[18px]" name="restore" />
             Restore Backup
           </button>
           <button type="button" className="flex items-center justify-center gap-xs px-md py-sm rounded-lg bg-surface-variant text-on-surface font-label-md text-label-md hover:bg-secondary-fixed transition-all shadow-sm">
-            <span className="material-symbols-outlined text-[18px]">speed</span>
+            <Ph className="text-[18px]" name="speed" />
             Optimize
           </button>
           <button type="button" className="flex items-center justify-center gap-xs px-md py-sm rounded-lg bg-gradient-to-r from-secondary to-primary-container text-on-primary font-label-md text-label-md hover:shadow-md transition-all shadow-sm hover:-translate-y-0.5">
-            <span className="material-symbols-outlined text-[18px]">cloud_upload</span>
+            <Ph className="text-[18px]" name="cloud_upload" />
             Create Backup
           </button>
         </div>
@@ -40,7 +41,7 @@ export default function SuperadminDatabaseManagement() {
               </div>
             </div>
             <div className="p-sm bg-surface-container rounded-lg text-secondary">
-              <span className="material-symbols-outlined text-[24px]">hard_drive</span>
+              <Ph className="text-[24px]" name="hard_drive" />
             </div>
           </div>
           <div className="relative z-10 w-full h-2 bg-surface-variant rounded-full overflow-hidden">
@@ -59,12 +60,12 @@ export default function SuperadminDatabaseManagement() {
               <span className="font-headline-lg text-headline-lg text-on-surface">32</span>
             </div>
             <div className="p-sm bg-surface-container rounded-lg text-on-primary-fixed-variant">
-              <span className="material-symbols-outlined text-[24px]">table_chart</span>
+              <Ph className="text-[24px]" name="table_chart" />
             </div>
           </div>
           <div className="flex items-center gap-xs font-caption text-caption">
             <span className="flex items-center text-secondary">
-              <span className="material-symbols-outlined text-[14px]">trending_up</span>
+              <Ph className="text-[14px]" name="trending_up" />
               +2
             </span>
             <span className="text-on-surface-variant">this month</span>
@@ -78,12 +79,12 @@ export default function SuperadminDatabaseManagement() {
               <span className="font-headline-lg text-headline-lg text-on-surface">128,450</span>
             </div>
             <div className="p-sm bg-surface-container rounded-lg text-on-primary-fixed-variant">
-              <span className="material-symbols-outlined text-[24px]">data_object</span>
+              <Ph className="text-[24px]" name="data_object" />
             </div>
           </div>
           <div className="flex items-center gap-xs font-caption text-caption">
             <span className="flex items-center text-secondary">
-              <span className="material-symbols-outlined text-[14px]">trending_up</span>
+              <Ph className="text-[14px]" name="trending_up" />
               +12.4k
             </span>
             <span className="text-on-surface-variant">this week</span>
@@ -98,7 +99,7 @@ export default function SuperadminDatabaseManagement() {
               <span className="font-headline-lg text-headline-lg text-[#059669]">Healthy</span>
             </div>
             <div className="p-sm bg-[#10B981]/10 rounded-lg text-[#10B981]">
-              <span className="material-symbols-outlined text-[24px]">check_circle</span>
+              <Ph className="text-[24px]" name="check_circle" />
             </div>
           </div>
           <div className="flex items-center gap-sm font-caption text-caption relative z-10">
@@ -120,7 +121,7 @@ export default function SuperadminDatabaseManagement() {
             {/* Overview */}
             <div className="glass-panel rounded-2xl p-md flex flex-col h-full">
               <div className="flex items-center gap-sm mb-md">
-                <span className="material-symbols-outlined text-secondary text-[20px]">info</span>
+                <Ph className="text-secondary text-[20px]" name="info" />
                 <h2 className="font-headline-md text-headline-md text-on-surface">Configuration</h2>
               </div>
               <div className="grid grid-cols-2 gap-y-sm gap-x-md flex-grow">
@@ -157,7 +158,7 @@ export default function SuperadminDatabaseManagement() {
             <div className="bg-surface rounded-2xl border border-outline-variant/20 p-md premium-shadow flex flex-col h-full">
               <div className="flex justify-between items-center mb-md">
                 <div className="flex items-center gap-sm">
-                  <span className="material-symbols-outlined text-secondary text-[20px]">monitor_heart</span>
+                  <Ph className="text-secondary text-[20px]" name="monitor_heart" />
                   <h2 className="font-headline-md text-headline-md text-on-surface">Resource Health</h2>
                 </div>
                 <button type="button" className="text-secondary hover:text-secondary-fixed transition-colors font-label-md text-label-md">Details</button>
@@ -188,7 +189,7 @@ export default function SuperadminDatabaseManagement() {
               </div>
               <div className="mt-4 flex items-center justify-between bg-surface-container-low p-2 rounded-lg">
                 <span className="font-caption text-caption text-on-surface-variant flex items-center gap-1">
-                  <span className="material-symbols-outlined text-[14px]">timer</span>
+                  <Ph className="text-[14px]" name="timer" />
                   Avg Query Time
                 </span>
                 <span className="font-label-md text-label-md text-on-surface">45ms</span>
@@ -199,12 +200,12 @@ export default function SuperadminDatabaseManagement() {
           <div className="bg-surface rounded-2xl border border-outline-variant/20 premium-shadow overflow-hidden flex flex-col">
             <div className="p-md border-b border-outline-variant/20 flex flex-col sm:flex-row sm:items-center justify-between gap-sm bg-surface-container-lowest">
               <div className="flex items-center gap-sm">
-                <span className="material-symbols-outlined text-secondary text-[20px]">table</span>
+                <Ph className="text-secondary text-[20px]" name="table" />
                 <h2 className="font-headline-md text-headline-md text-on-surface">Database Tables</h2>
               </div>
               <div className="flex gap-2">
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+                  <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]" name="search" />
                   <input className="pl-9 pr-4 py-2 bg-surface-container rounded-lg border-none text-body-md font-body-md focus:ring-2 focus:ring-secondary/50 w-full sm:w-64" placeholder="Search tables..." type="text" />
                 </div>
               </div>
@@ -225,7 +226,7 @@ export default function SuperadminDatabaseManagement() {
                     <td className="py-4 px-md">
                       <div className="flex items-center gap-sm">
                         <div className="w-8 h-8 rounded bg-secondary/10 flex items-center justify-center text-secondary">
-                          <span className="material-symbols-outlined text-[16px]">description</span>
+                          <Ph className="text-[16px]" name="description" />
                         </div>
                         <span className="font-medium text-on-surface">incident_reports</span>
                       </div>
@@ -239,15 +240,15 @@ export default function SuperadminDatabaseManagement() {
                       </span>
                     </td>
                     <td className="py-4 px-md text-right">
-                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors" title="View Details"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
-                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors" title="Optimize"><span className="material-symbols-outlined text-[18px]">build</span></button>
+                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors" title="View Details"><Ph className="text-[18px]" name="visibility" /></button>
+                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors" title="Optimize"><Ph className="text-[18px]" name="build" /></button>
                     </td>
                   </tr>
                   <tr className="hover:bg-surface-container/30 transition-colors group">
                     <td className="py-4 px-md">
                       <div className="flex items-center gap-sm">
                         <div className="w-8 h-8 rounded bg-secondary/10 flex items-center justify-center text-secondary">
-                          <span className="material-symbols-outlined text-[16px]">group</span>
+                          <Ph className="text-[16px]" name="group" />
                         </div>
                         <span className="font-medium text-on-surface">user_accounts</span>
                       </div>
@@ -261,15 +262,15 @@ export default function SuperadminDatabaseManagement() {
                       </span>
                     </td>
                     <td className="py-4 px-md text-right">
-                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
-                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-[18px]">build</span></button>
+                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors"><Ph className="text-[18px]" name="visibility" /></button>
+                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors"><Ph className="text-[18px]" name="build" /></button>
                     </td>
                   </tr>
                   <tr className="hover:bg-surface-container/30 transition-colors group">
                     <td className="py-4 px-md">
                       <div className="flex items-center gap-sm">
                         <div className="w-8 h-8 rounded bg-secondary/10 flex items-center justify-center text-secondary">
-                          <span className="material-symbols-outlined text-[16px]">folder_special</span>
+                          <Ph className="text-[16px]" name="folder_special" />
                         </div>
                         <span className="font-medium text-on-surface">evidence_files_meta</span>
                       </div>
@@ -283,15 +284,15 @@ export default function SuperadminDatabaseManagement() {
                       </span>
                     </td>
                     <td className="py-4 px-md text-right">
-                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
-                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-[18px]">build</span></button>
+                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors"><Ph className="text-[18px]" name="visibility" /></button>
+                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors"><Ph className="text-[18px]" name="build" /></button>
                     </td>
                   </tr>
                   <tr className="hover:bg-surface-container/30 transition-colors group">
                     <td className="py-4 px-md">
                       <div className="flex items-center gap-sm">
                         <div className="w-8 h-8 rounded bg-secondary/10 flex items-center justify-center text-secondary">
-                          <span className="material-symbols-outlined text-[16px]">history</span>
+                          <Ph className="text-[16px]" name="history" />
                         </div>
                         <span className="font-medium text-on-surface">system_logs</span>
                       </div>
@@ -305,8 +306,8 @@ export default function SuperadminDatabaseManagement() {
                       </span>
                     </td>
                     <td className="py-4 px-md text-right">
-                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
-                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors"><span className="material-symbols-outlined text-[18px]">build</span></button>
+                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors"><Ph className="text-[18px]" name="visibility" /></button>
+                      <button type="button" className="p-1 text-on-surface-variant hover:text-secondary transition-colors"><Ph className="text-[18px]" name="build" /></button>
                     </td>
                   </tr>
                 </tbody>
@@ -322,29 +323,29 @@ export default function SuperadminDatabaseManagement() {
           {/* Security Status Card */}
           <div className="bg-primary-container text-on-primary rounded-2xl p-md shadow-lg relative overflow-hidden">
             {/* Subtle background pattern */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '20px 20px' }}></div>
+            <div className="absolute inset-0 opacity-10 pointer-events-none"></div>
             <div className="flex items-center gap-sm mb-md relative z-10">
-              <span className="material-symbols-outlined text-secondary-fixed text-[20px]">shield</span>
+              <Ph className="text-secondary-fixed text-[20px]" name="shield" />
               <h2 className="font-headline-md text-headline-md">Security Protocols</h2>
             </div>
             <div className="flex flex-col gap-sm relative z-10">
               <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
                 <div className="flex items-center gap-sm">
-                  <span className="material-symbols-outlined text-[#10B981] text-[18px]">lock</span>
+                  <Ph className="text-[#10B981] text-[18px]" name="lock" />
                   <span className="font-label-md text-label-md">SSL Encryption</span>
                 </div>
                 <span className="font-caption text-caption bg-[#10B981]/20 text-[#10B981] px-2 py-0.5 rounded text-xs">Active</span>
               </div>
               <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
                 <div className="flex items-center gap-sm">
-                  <span className="material-symbols-outlined text-[#10B981] text-[18px]">policy</span>
+                  <Ph className="text-[#10B981] text-[18px]" name="policy" />
                   <span className="font-label-md text-label-md">Row Level Security</span>
                 </div>
                 <span className="font-caption text-caption bg-[#10B981]/20 text-[#10B981] px-2 py-0.5 rounded text-xs">Enforced</span>
               </div>
               <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
                 <div className="flex items-center gap-sm">
-                  <span className="material-symbols-outlined text-[#F59E0B] text-[18px]">receipt_long</span>
+                  <Ph className="text-[#F59E0B] text-[18px]" name="receipt_long" />
                   <span className="font-label-md text-label-md">Audit Logging</span>
                 </div>
                 <span className="font-caption text-caption bg-[#F59E0B]/20 text-[#F59E0B] px-2 py-0.5 rounded text-xs">Partial</span>
@@ -354,7 +355,7 @@ export default function SuperadminDatabaseManagement() {
           {/* Storage Distribution */}
           <div className="bg-surface rounded-2xl border border-outline-variant/20 p-md premium-shadow">
             <h2 className="font-headline-md text-headline-md text-on-surface mb-md flex items-center gap-sm">
-              <span className="material-symbols-outlined text-secondary text-[20px]">pie_chart</span>
+              <Ph className="text-secondary text-[20px]" name="pie_chart" />
               Storage Usage
             </h2>
             <div className="flex flex-col gap-4">
@@ -404,7 +405,7 @@ export default function SuperadminDatabaseManagement() {
           <div className="bg-surface rounded-2xl border border-outline-variant/20 p-md premium-shadow flex-grow">
             <div className="flex justify-between items-center mb-md">
               <h2 className="font-headline-md text-headline-md text-on-surface flex items-center gap-sm">
-                <span className="material-symbols-outlined text-secondary text-[20px]">notifications_active</span>
+                <Ph className="text-secondary text-[20px]" name="notifications_active" />
                 Recent Activity
               </h2>
             </div>

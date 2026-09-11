@@ -1,6 +1,8 @@
+import Ph from '../components/PhIcon';
 import { useEffect, useRef } from 'react';
 import SiteHeader from '../components/SiteHeader';
 import SiteFooter from '../components/SiteFooter';
+import styles from '../styles/modules/About.module.css';
 
 
 export default function About() {
@@ -28,12 +30,12 @@ export default function About() {
     <div className="bg-background text-on-surface font-body-md selection:bg-secondary-fixed-dim selection:text-on-secondary-fixed -mt-6">
       <SiteHeader active="/about" logoAlt="Barangay Culiat Logo" />
 
-      <div className="w-full h-2 relative z-[90] bg-cover bg-center" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLxqqtZLoB8H8kAKno2uvkDiBWWGz49WTKAVMRQiU3iJn9z_9aXs8td9JMSokNoEd5PaoEiEmknOI7ZgfskWtnaOK4Gvq2Trr6Nf1wh-JD3_Don9GXbwwdvpfzD0i4u4ezPpi5Dz1ZNJIDOCuq1mjUgOH4nyu_h-4IwxL4eax68k9rkebNunNd-r1I9hFzZ9qcxpE-8OsAyXDtJTIVZanLrKx2ZHP4F-VAceCBwuleMpvAsRjSVYLbJnScLK54pJNEkh6U2sBLouM")' }}></div>
+      <div className="w-full h-2 relative z-[90] bg-cover bg-center"></div>
 
       <main className="pt-16 md:pt-20">
         <section className="relative min-h-[20vh] py-10 md:py-24 lg:py-32 flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
-            <div className="w-full h-full bg-cover bg-center brightness-50" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBO9a7tgmBd3TIpjJycGCeGSUqYaTms92D67dfZ8VrKupV2w8AEhzx7g26qv_LVKaxyw90_38k6a69jjBG2Yte-RZCX-UPhYw6VgwIOwI46PSsIkIFZtZNaa7kZZTfTGjdh0-EiodRgWk_urSzUtu7xU70XuNIyVWmmmNz9FMTu6lHEIk36r8RX00mwp8ko6WHLR3K_b3LP8xk2st8xGm2JQ7PzV35lOPqY_A2gJwF-D54lBmn_-M-Rd21ImffbPhxGVg")', backgroundSize: 'cover', backgroundPosition: 'center center' }}></div>
+            <div className={`w-full h-full bg-cover bg-center brightness-50 ${styles.heroBg}`}></div>
             <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-primary-container/40"></div>
           </div>
           <div className="relative z-10 text-center px-margin-mobile md:px-0">
@@ -44,8 +46,8 @@ export default function About() {
           </div>
         </section>
 
-        <section className="px-margin-mobile md:px-margin-desktop py-10 md:py-xl max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-gutter">
+        <section className="py-10 md:py-xl bg-surface-container-lowest">
+          <div className="px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-gutter">
             <div ref={(el) => { sectionRefs.current[0] = el; }} className="md:col-span-7 glass-card p-5 md:p-lg rounded-2xl flex flex-col justify-center border border-outline-variant/20 bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-700">
               <span className="text-secondary font-label-md text-label-md uppercase tracking-widest mb-sm">The Mission</span>
               <h3 className="font-headline-lg text-2xl md:text-[28px] mb-3 md:mb-md text-on-background">A Safe Culiat for All</h3>
@@ -54,11 +56,11 @@ export default function About() {
               </p>
               <div className="flex flex-wrap gap-4 md:gap-md">
                 <div className="flex items-center gap-sm">
-                  <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: '"FILL" 1' }}>verified_user</span>
+                  <Ph className="text-secondary" name="verified_user" weight="fill" />
                   <span className="font-label-md text-label-md">24/7 Monitoring</span>
                 </div>
                 <div className="flex items-center gap-sm">
-                  <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: '"FILL" 1' }}>groups</span>
+                  <Ph className="text-secondary" name="groups" weight="fill" />
                   <span className="font-label-md text-label-md">Citizen-First Design</span>
                 </div>
               </div>
@@ -74,7 +76,8 @@ export default function About() {
           </div>
         </section>
 
-        <section className="bg-surface-container-low py-10 md:py-xl px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
+        <section className="py-10 md:py-xl bg-surface-container-low">
+          <div className="px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12" ref={(el) => { sectionRefs.current[2] = el; }}>
               <div className="flex-1">
@@ -96,9 +99,11 @@ export default function About() {
               </div>
             </div>
           </div>
+          </div>
         </section>
 
-        <section className="py-10 md:py-xl px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
+        <section className="py-10 md:py-xl bg-surface-container-lowest">
+          <div className="px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
           <div className="text-center mb-8 md:mb-12">
             <h3 className="font-headline-lg text-2xl md:text-[28px] mb-sm">Our Core Values</h3>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full"></div>
@@ -111,16 +116,18 @@ export default function About() {
             ].map((v, i) => (
               <div key={i} ref={(el) => { sectionRefs.current[3 + i] = el; }} className="p-5 md:p-lg rounded-2xl bg-surface-bright border border-outline-variant/30 hover:shadow-lg transition-shadow duration-300">
                 <div className={`w-14 h-14 md:w-16 md:h-16 rounded-xl ${v.bg} flex items-center justify-center mb-3 md:mb-md`}>
-                  <span className={`material-symbols-outlined ${v.color} text-3xl md:text-4xl`} style={{ fontVariationSettings: '"FILL" 1' }}>{v.icon}</span>
+                  <Ph className={` ${v.color} text-3xl md:text-4xl`} name={v.icon} weight="fill" />
                 </div>
                 <h4 className="font-headline-md text-lg md:text-xl mb-sm">{v.title}</h4>
                 <p className="font-body-md text-body-md text-on-surface-variant">{v.desc}</p>
               </div>
             ))}
           </div>
+          </div>
         </section>
 
-        <section className="mb-10 md:mb-xl px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
+        <section className="py-10 md:py-xl bg-surface-container-low">
+          <div className="px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
           <div className="bg-on-background rounded-[2.5rem] p-6 md:p-xl relative overflow-hidden">
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
               <div className="max-w-ml">
@@ -131,19 +138,20 @@ export default function About() {
               </div>
               <div className="flex flex-col gap-3 md:gap-md w-full md:w-auto">
                 <div className="bg-surface-bright/10 backdrop-blur-md p-3 md:p-md rounded-xl border border-white/10 flex items-center gap-3 md:gap-md">
-                  <span className="material-symbols-outlined text-secondary-fixed-dim">analytics</span>
+                  <Ph className="text-secondary-fixed-dim" name="analytics" />
                   <span className="text-surface-bright font-label-md text-label-md">Real-time Data Integration</span>
                 </div>
                 <div className="bg-surface-bright/10 backdrop-blur-md p-3 md:p-md rounded-xl border border-white/10 flex items-center gap-3 md:gap-md">
-                  <span className="material-symbols-outlined text-secondary-fixed-dim">smart_toy</span>
+                  <Ph className="text-secondary-fixed-dim" name="smart_toy" />
                   <span className="text-surface-bright font-label-md text-label-md">AI-Driven Dispatch Logic</span>
                 </div>
                 <div className="bg-surface-bright/10 backdrop-blur-md p-3 md:p-md rounded-xl border border-white/10 flex items-center gap-3 md:gap-md">
-                  <span className="material-symbols-outlined text-secondary-fixed-dim">shield_person</span>
+                  <Ph className="text-secondary-fixed-dim" name="shield_person" />
                   <span className="text-surface-bright font-label-md text-label-md">Community Accountability Portal</span>
                 </div>
               </div>
             </div>
+          </div>
           </div>
         </section>
       </main>

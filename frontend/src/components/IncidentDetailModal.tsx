@@ -1,3 +1,4 @@
+﻿import Ph from './PhIcon';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
@@ -58,7 +59,7 @@ const meterColor = (v: number) => (v >= 70 ? 'bg-error-red' : v >= 40 ? 'bg-warn
 
 const ASSESSMENT_VERDICT_STYLES: Record<string, { badge: string; label: string; icon: string }> = {
   legitimate: { badge: 'bg-success-green/10 text-success-green border border-success-green/20', label: 'Genuine Report', icon: 'verified' },
-  ambiguous: { badge: 'bg-warning-amber/10 text-warning-amber border border-warning-amber/20', label: 'Unclear · Needs Verification', icon: 'help' },
+  ambiguous: { badge: 'bg-warning-amber/10 text-warning-amber border border-warning-amber/20', label: 'Unclear Â· Needs Verification', icon: 'help' },
   spam_or_troll: { badge: 'bg-error-red/10 text-error-red border border-error-red/20', label: 'Possible Spam / Troll', icon: 'report' },
 };
 
@@ -181,7 +182,7 @@ export default function IncidentDetailModal({
         <div className="p-5 border-b border-border-subtle flex justify-between items-start gap-4 shrink-0">
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[11px] font-bold text-blue-600 uppercase tracking-wider">{active?.report_no ?? '—'}</span>
+              <span className="text-[11px] font-bold text-blue-600 uppercase tracking-wider">{active?.report_no ?? 'â€”'}</span>
               {active && (
                 <>
                   <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${PRIORITY_BADGE[active.priority] ?? ''}`}>{active.priority}</span>
@@ -189,15 +190,15 @@ export default function IncidentDetailModal({
                 </>
               )}
             </div>
-            <h3 className="font-headline-md text-headline-md font-bold text-on-surface mt-1 truncate">{active?.title ?? 'Loading incident…'}</h3>
+            <h3 className="font-headline-md text-headline-md font-bold text-on-surface mt-1 truncate">{active?.title ?? 'Loading incidentâ€¦'}</h3>
           </div>
           <button type="button" onClick={onClose} aria-label="Close" className="text-on-surface-variant hover:text-on-surface shrink-0">
-            <span className="material-symbols-outlined">close</span>
+            <Ph name="close" />
           </button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-5 space-y-5">
-          {loading && <div className="py-12 text-center text-sm text-on-surface-variant">Loading full details…</div>}
+          {loading && <div className="py-12 text-center text-sm text-on-surface-variant">Loading full detailsâ€¦</div>}
           {!loading && activeError && <div className="py-12 text-center text-sm text-error-red">{activeError}</div>}
 
             {!loading && active && (
@@ -234,7 +235,7 @@ export default function IncidentDetailModal({
                 {isAdmin && (
                   <div>
                     <p className="text-xs text-on-surface-variant">Responder Unit</p>
-                    <p className="text-sm text-on-surface">{active.dispatch_unit_name ?? '—'}</p>
+                    <p className="text-sm text-on-surface">{active.dispatch_unit_name ?? 'â€”'}</p>
                   </div>
                 )}
               </div>
@@ -263,7 +264,7 @@ export default function IncidentDetailModal({
               {!isAdmin && (active.confidence != null || active.threat != null || active.priority || active.ai_actions.length > 0 || active.user_actions.length > 0) && (
                 <div>
                   <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-base text-secondary">psychology</span>
+                    <Ph className="text-base text-secondary" name="psychology" />
                     AI Tactical Analysis
                   </h4>
                   <div className="bg-gradient-to-r from-secondary/5 to-surface-container-low border border-secondary/20 rounded-lg p-4 space-y-4">
@@ -305,7 +306,7 @@ export default function IncidentDetailModal({
                         <ul className="space-y-1.5">
                           {active.user_actions.map((action, i) => (
                             <li key={i} className="flex items-start gap-1.5 text-sm text-on-surface">
-                              <span className="material-symbols-outlined text-[14px] text-success-green mt-[1px] shrink-0">check_circle</span>
+                              <Ph className="text-[14px] text-success-green mt-[1px] shrink-0" name="check_circle" />
                               {action}
                             </li>
                           ))}
@@ -315,7 +316,7 @@ export default function IncidentDetailModal({
                     {active.ai_dispatch && (
                       <div className="pt-2 border-t border-border-subtle">
                         <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-secondary/10 border border-secondary/20">
-                          <span className="material-symbols-outlined text-[14px] text-secondary">route</span>
+                          <Ph className="text-[14px] text-secondary" name="route" />
                           <span className="text-[11px] font-bold text-on-surface leading-tight">{active.ai_dispatch}</span>
                         </div>
                       </div>
@@ -330,7 +331,7 @@ export default function IncidentDetailModal({
                   <div className="bg-surface-container-low rounded-lg border border-border-subtle p-4 space-y-4">
                     {active.ai_dispatch && (
                       <div className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[18px] text-secondary mt-0.5">smart_toy</span>
+                        <Ph className="text-[18px] text-secondary mt-0.5" name="smart_toy" />
                         <p className="text-sm text-on-surface">{active.ai_dispatch}</p>
                       </div>
                     )}
@@ -338,7 +339,7 @@ export default function IncidentDetailModal({
                       <ul className="space-y-1.5">
                         {active.ai_actions.map((a) => (
                           <li key={a} className="flex items-start gap-1.5 text-sm text-on-surface">
-                            <span className="material-symbols-outlined text-[14px] text-success-green mt-0.5">check_circle</span>
+                            <Ph className="text-[14px] text-success-green mt-0.5" name="check_circle" />
                             {a}
                           </li>
                         ))}
@@ -348,7 +349,7 @@ export default function IncidentDetailModal({
                       <div className="border-t border-border-subtle pt-3 space-y-2">
                         <div className="flex items-center flex-wrap gap-2">
                           <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wide flex items-center gap-1 ${ASSESSMENT_VERDICT_STYLES[active.ai_assessment.verdict]?.badge ?? 'bg-slate-100 text-slate-600'}`}>
-                            <span className="material-symbols-outlined text-[13px]">{ASSESSMENT_VERDICT_STYLES[active.ai_assessment.verdict]?.icon ?? 'info'}</span>
+                            <Ph className="text-[13px]" name={ASSESSMENT_VERDICT_STYLES[active.ai_assessment.verdict]?.icon ?? 'info'} />
                             {ASSESSMENT_VERDICT_STYLES[active.ai_assessment.verdict]?.label ?? active.ai_assessment.verdict}
                           </span>
                           <span className="text-[11px] text-on-surface-variant">Spam likelihood {active.ai_assessment.spam_confidence}%</span>
@@ -399,15 +400,15 @@ export default function IncidentDetailModal({
                   <h4 className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-3">Reporter Info</h4>
                   {active.anonymous && !unmaskAnonymous ? (
                     <div className="bg-surface-container-low rounded-lg border border-border-subtle p-4 flex items-center gap-2 text-sm text-on-surface-variant">
-                      <span className="material-symbols-outlined text-[18px]">visibility_off</span>
-                      Anonymous report — reporter identity withheld.
+                      <Ph className="text-[18px]" name="visibility_off" />
+                      Anonymous report â€” reporter identity withheld.
                     </div>
                   ) : activeReporter ? (
                     <div className={`bg-surface-container-low rounded-lg border p-4 space-y-3 ${active.anonymous ? 'border-warning-amber/40' : 'border-border-subtle'}`}>
                       {active.anonymous && (
                         <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-warning-amber">
-                          <span className="material-symbols-outlined text-[14px]">admin_panel_settings</span>
-                          Identity unmasked · Superadmin privilege
+                          <Ph className="text-[14px]" name="admin_panel_settings" />
+                          Identity unmasked Â· Superadmin privilege
                         </p>
                       )}
                       <div className="grid grid-cols-2 gap-4">
@@ -417,17 +418,17 @@ export default function IncidentDetailModal({
                         </div>
                         <div>
                           <p className="text-xs text-on-surface-variant">Phone</p>
-                          <p className="text-sm text-on-surface font-medium">{activeReporter.phone ? `+63 ${activeReporter.phone}` : '—'}</p>
+                          <p className="text-sm text-on-surface font-medium">{activeReporter.phone ? `+63 ${activeReporter.phone}` : 'â€”'}</p>
                         </div>
                         <div className="col-span-2">
                           <p className="text-xs text-on-surface-variant">Address</p>
-                          <p className="text-sm text-on-surface font-medium">{activeReporter.address || '—'}</p>
+                          <p className="text-sm text-on-surface font-medium">{activeReporter.address || 'â€”'}</p>
                         </div>
                       </div>
                       {activeReporter.emergency_contact_name && (
                         <div className="pt-3 border-t border-border-subtle">
                           <p className="text-xs text-error-red font-semibold uppercase mb-2 flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[14px]">emergency</span>
+                            <Ph className="text-[14px]" name="emergency" />
                             Emergency Contact
                           </p>
                           <div className="grid grid-cols-3 gap-4">
@@ -441,7 +442,7 @@ export default function IncidentDetailModal({
                             </div>
                             <div>
                               <p className="text-xs text-on-surface-variant">Phone</p>
-                              <p className="text-sm text-on-surface font-medium">{activeReporter.emergency_contact_phone ? `+63 ${activeReporter.emergency_contact_phone}` : '—'}</p>
+                              <p className="text-sm text-on-surface font-medium">{activeReporter.emergency_contact_phone ? `+63 ${activeReporter.emergency_contact_phone}` : 'â€”'}</p>
                             </div>
                           </div>
                         </div>
@@ -462,12 +463,12 @@ export default function IncidentDetailModal({
                         <a key={ev.url} href={ev.url} target="_blank" rel="noreferrer" className="aspect-square bg-surface-container-highest rounded-md border border-border-subtle overflow-hidden group relative block">
                           <img className="w-full h-full object-cover" src={ev.url} alt={ev.name} />
                           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/50 transition-opacity">
-                            <span className="material-symbols-outlined text-white">zoom_in</span>
+                            <Ph className="text-white" name="zoom_in" />
                           </div>
                         </a>
                       ) : (
                         <a key={ev.url} href={ev.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 px-2 py-1.5 rounded-md border border-border-subtle bg-surface-container-low hover:bg-surface-container-highest transition-colors text-on-surface-variant h-fit">
-                          <span className="material-symbols-outlined text-[16px]">{ev.type.startsWith('video') ? 'videocam' : 'mic'}</span>
+                          <Ph className="text-[16px]" name={ev.type.startsWith('video') ? 'videocam' : 'mic'} />
                           <span className="text-[10px] font-semibold truncate">{ev.name}</span>
                         </a>
                       ),
@@ -496,7 +497,7 @@ export default function IncidentDetailModal({
               disabled={!active}
               className="bg-secondary hover:bg-secondary/90 text-white font-label-md text-label-md py-2 px-4 rounded-md transition-colors flex items-center gap-2 disabled:opacity-60"
             >
-              <span className="material-symbols-outlined text-[18px]">open_in_new</span>
+              <Ph className="text-[18px]" name="open_in_new" />
               Open in Incident Reporting
             </button>
           )}

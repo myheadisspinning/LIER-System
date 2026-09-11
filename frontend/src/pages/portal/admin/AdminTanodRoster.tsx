@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { logAudit, DUTY_DAYS, dutyDaysLabel, deriveUnitStatus, fetchOpenUnitAssignments, isOnDutyToday, UNIT_STATUS_BADGE, UNIT_STATUS_DOT, UNIT_STATUS_CHOICES } from '../../../lib/admin';
@@ -247,11 +248,11 @@ export default function AdminTanodRoster() {
       <div className="flex justify-between items-end">
         <div className="flex gap-3">
           <button type="button" onClick={printShift} className="flex items-center gap-2 px-4 py-2 border border-border-subtle rounded-lg text-label-md font-medium text-on-surface hover:bg-surface-variant transition-colors">
-            <span className="material-symbols-outlined text-[18px]">print</span>
+            <Ph className="text-[18px]" name="print" />
             Print Shift Sheet
           </button>
           <button type="button" onClick={openCreate} className="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary rounded-lg text-label-md font-medium hover:bg-secondary/90 transition-colors">
-            <span className="material-symbols-outlined text-[18px]">person_add</span>
+            <Ph className="text-[18px]" name="person_add" />
             Register New Responder
           </button>
         </div>
@@ -296,7 +297,7 @@ export default function AdminTanodRoster() {
                 {onDutyToday.map((u) => (
                   <div key={u.id} className="border border-border-subtle rounded-lg p-4 flex items-start gap-3">
                     <span className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${TYPE_COLOR[u.type]}`}>
-                      <span className="material-symbols-outlined text-[20px]">{TYPE_ICON[u.type] ?? 'shield_person'}</span>
+                      <Ph className="text-[20px]" name={TYPE_ICON[u.type] ?? 'shield_person'} />
                     </span>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
@@ -336,13 +337,13 @@ export default function AdminTanodRoster() {
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-3">
                             <span className={`w-9 h-9 rounded-lg flex items-center justify-center ${TYPE_COLOR[u.type]}`}>
-                              <span className="material-symbols-outlined text-[18px]">{TYPE_ICON[u.type] ?? 'shield_person'}</span>
+                              <Ph className="text-[18px]" name={TYPE_ICON[u.type] ?? 'shield_person'} />
                             </span>
                             <div className="min-w-0">
                               <div className="font-medium text-on-surface truncate">{u.name}</div>
                               {u.lead_officer_id && (
                                 <div className="text-[10px] text-on-surface-variant truncate flex items-center gap-0.5">
-                                  <span className="material-symbols-outlined text-[11px]">person</span>{officerName(u.lead_officer_id) ?? 'Linked officer'}
+                                  <Ph className="text-[11px]" name="person" />{officerName(u.lead_officer_id) ?? 'Linked officer'}
                                 </div>
                               )}
                             </div>
@@ -379,7 +380,7 @@ export default function AdminTanodRoster() {
                               aria-label={`Actions for ${u.name}`}
                               aria-expanded={openMenuId === u.id}
                             >
-                              <span className="material-symbols-outlined text-[20px]">more_vert</span>
+                              <Ph className="text-[20px]" name="more_vert" />
                             </button>
                             {openMenuId === u.id && menuPos && (
                               <>
@@ -393,28 +394,28 @@ export default function AdminTanodRoster() {
                                     onClick={() => { setViewing(u); setOpenMenuId(null); }}
                                     className="w-full flex items-center gap-2 px-3 py-2 text-left text-sm text-on-surface hover:bg-surface-variant transition-colors"
                                   >
-                                    <span className="material-symbols-outlined text-[16px]">visibility</span>View
+                                    <Ph className="text-[16px]" name="visibility" />View
                                   </button>
                                   <button
                                     type="button"
                                     onClick={() => { openEdit(u); setOpenMenuId(null); }}
                                     className="w-full flex items-center gap-2 px-3 py-2 text-left text-sm text-on-surface hover:bg-surface-variant transition-colors"
                                   >
-                                    <span className="material-symbols-outlined text-[16px]">edit</span>Edit
+                                    <Ph className="text-[16px]" name="edit" />Edit
                                   </button>
                                   <button
                                     type="button"
                                     onClick={() => openStatus(u)}
                                     className="w-full flex items-center gap-2 px-3 py-2 text-left text-sm text-on-surface hover:bg-surface-variant transition-colors"
                                   >
-                                    <span className="material-symbols-outlined text-[16px]">tune</span>Status
+                                    <Ph className="text-[16px]" name="tune" />Status
                                   </button>
                                   <button
                                     type="button" 
                                     onClick={() => { setDeleteTarget(u); setOpenMenuId(null); }}
                                     className="w-full flex items-center gap-2 px-3 py-2 text-left text-sm text-error-red hover:bg-error-red/5 transition-colors"
                                   >
-                                    <span className="material-symbols-outlined text-[16px]">delete</span>Delete
+                                    <Ph className="text-[16px]" name="delete" />Delete
                                   </button>
                                 </div>
                               </>
@@ -450,13 +451,13 @@ export default function AdminTanodRoster() {
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Responder Information</h3>
               <button type="button" onClick={() => setViewing(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
-                <span className="material-symbols-outlined">close</span>
+                <Ph name="close" />
               </button>
             </div>
             <div className="p-5 space-y-4">
               <div className="flex items-center gap-4">
                 <span className={`w-12 h-12 rounded-xl flex items-center justify-center ${TYPE_COLOR[viewing.type]}`}>
-                  <span className="material-symbols-outlined text-[24px]">{TYPE_ICON[viewing.type] ?? 'shield_person'}</span>
+                  <Ph className="text-[24px]" name={TYPE_ICON[viewing.type] ?? 'shield_person'} />
                 </span>
                 <div>
                   <div className="font-headline-md text-headline-md font-bold text-on-surface">{viewing.name}</div>
@@ -486,7 +487,7 @@ export default function AdminTanodRoster() {
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">{editing ? 'Update Responder' : 'Register New Responder'}</h3>
               <button type="button" onClick={() => setModalOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
-                <span className="material-symbols-outlined">close</span>
+                <Ph name="close" />
               </button>
             </div>
             <div className="p-5 space-y-4">
@@ -547,7 +548,7 @@ export default function AdminTanodRoster() {
                   </div>
                   <div className="col-span-2">
                     <div className="flex items-start gap-2 bg-surface-bg border border-border-subtle rounded-md p-3 text-xs text-on-surface-variant">
-                      <span className="material-symbols-outlined text-[16px] mt-0.5">info</span>
+                      <Ph className="text-[16px] mt-0.5" name="info" />
                       <span>Specialized units (BFP / Medical / PNP / Barangay) are not linked to a human officer account. Case progression for these units is handled by the admin.</span>
                     </div>
                   </div>
@@ -567,7 +568,7 @@ export default function AdminTanodRoster() {
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Manual Override — {statusTarget.name}</h3>
               <button type="button" onClick={() => setStatusTarget(null)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
-                <span className="material-symbols-outlined">close</span>
+                <Ph name="close" />
               </button>
             </div>
             <div className="p-5 space-y-4">
@@ -581,8 +582,8 @@ export default function AdminTanodRoster() {
                   onClick={() => setStatusValue('Auto')}
                   className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg border text-sm transition-colors ${statusValue === 'Auto' ? 'border-secondary bg-secondary/5 text-secondary font-semibold' : 'border-border-subtle text-on-surface hover:bg-surface-variant'}`}
                 >
-                  <span className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px]">autorenew</span>Auto (derived)</span>
-                  {statusValue === 'Auto' && <span className="material-symbols-outlined text-[18px]">check_circle</span>}
+                  <span className="flex items-center gap-2"><Ph className="text-[16px]" name="autorenew" />Auto (derived)</span>
+                  {statusValue === 'Auto' && <Ph className="text-[18px]" name="check_circle" />}
                 </button>
                 {UNIT_STATUS_CHOICES.map((s) => (
                   <button
@@ -595,7 +596,7 @@ export default function AdminTanodRoster() {
                       <span className={`w-2 h-2 rounded-full ${UNIT_STATUS_DOT[s.value]}`} />
                       {s.label}
                     </span>
-                    {statusValue === s.value && <span className="material-symbols-outlined text-[18px]">check_circle</span>}
+                    {statusValue === s.value && <Ph className="text-[18px]" name="check_circle" />}
                   </button>
                 ))}
               </div>
@@ -613,13 +614,13 @@ export default function AdminTanodRoster() {
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
               <h3 className="font-headline-md text-headline-md font-bold text-error-red">Delete Responder</h3>
               <button type="button" onClick={() => setDeleteTarget(null)} disabled={deleting} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
-                <span className="material-symbols-outlined">close</span>
+                <Ph name="close" />
               </button>
             </div>
             <div className="p-5 space-y-4">
               <div className="flex items-center gap-3">
                 <span className={`w-11 h-11 rounded-lg flex items-center justify-center ${TYPE_COLOR[deleteTarget.type]}`}>
-                  <span className="material-symbols-outlined text-[22px]">{TYPE_ICON[deleteTarget.type] ?? 'shield_person'}</span>
+                  <Ph className="text-[22px]" name={TYPE_ICON[deleteTarget.type] ?? 'shield_person'} />
                 </span>
                 <div>
                   <div className="font-headline-md text-headline-md font-bold text-on-surface">{deleteTarget.name}</div>
@@ -635,7 +636,7 @@ export default function AdminTanodRoster() {
                   Cancel
                 </button>
                 <button type="button" onClick={confirmDelete} disabled={deleting} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-error-red text-white text-label-md font-medium hover:bg-error-red/90 disabled:opacity-50 transition-colors">
-                  <span className="material-symbols-outlined text-[16px]">delete</span>
+                  <Ph className="text-[16px]" name="delete" />
                   {deleting ? 'Deleting…' : 'Delete'}
                 </button>
               </div>

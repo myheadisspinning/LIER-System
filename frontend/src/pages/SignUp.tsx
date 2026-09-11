@@ -1,3 +1,4 @@
+import Ph from '../components/PhIcon';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
@@ -225,19 +226,19 @@ export default function SignUp() {
           <div className="relative z-20 space-y-4">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-lg">notifications_active</span>
+                <Ph className="text-white text-lg" name="notifications_active" />
               </div>
               <p className="text-white/80 font-body-md">Real-time Incident Alerts</p>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-lg">support_agent</span>
+                <Ph className="text-white text-lg" name="support_agent" />
               </div>
               <p className="text-white/80 font-body-md">Direct Support Access</p>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-lg">verified_user</span>
+                <Ph className="text-white text-lg" name="verified_user" />
               </div>
               <p className="text-white/80 font-body-md">Official Verified Status</p>
             </div>
@@ -268,7 +269,7 @@ export default function SignUp() {
                       Full Name
                     </label>
                     <div className="relative">
-                      <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">person</span>
+                      <Ph className="absolute left-4 top-1/2 -translate-y-1/2 text-outline" name="person" />
                       <input
                         className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
                         id="fullname"
@@ -288,7 +289,7 @@ export default function SignUp() {
                         Date of Birth
                       </label>
                       <div className="relative">
-                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">calendar_today</span>
+                        <Ph className="absolute left-4 top-1/2 -translate-y-1/2 text-outline" name="calendar_today" />
                         <input
                           className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
                           id="dob"
@@ -307,7 +308,7 @@ export default function SignUp() {
                         Gender
                       </label>
                       <div className="relative">
-                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">group</span>
+                        <Ph className="absolute left-4 top-1/2 -translate-y-1/2 text-outline" name="group" />
                         <select
                           className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface appearance-none py-1.5"
                           id="gender"
@@ -323,9 +324,7 @@ export default function SignUp() {
                           <option value="female">Female</option>
                           <option value="other">Other</option>
                         </select>
-                        <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline pointer-events-none">
-                          expand_more
-                        </span>
+                        <Ph className="absolute right-4 top-1/2 -translate-y-1/2 text-outline pointer-events-none" name="expand_more" />
                       </div>
                     </div>
                   </div>
@@ -335,7 +334,7 @@ export default function SignUp() {
                       Address in Barangay Culiat
                     </label>
                     <div className="relative">
-                      <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">location_on</span>
+                      <Ph className="absolute left-4 top-1/2 -translate-y-1/2 text-outline" name="location_on" />
                       <textarea
                         className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface resize-none py-1.5"
                         id="address"
@@ -374,7 +373,7 @@ export default function SignUp() {
                         Email Address
                       </label>
                       <div className="relative">
-                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">mail</span>
+                        <Ph className="absolute left-4 top-1/2 -translate-y-1/2 text-outline" name="mail" />
                         <input
                           className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
                           id="email"
@@ -410,7 +409,7 @@ export default function SignUp() {
                             </div>
                           );
                         })()}
-                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline z-20">lock</span>
+                        <Ph className="absolute left-4 top-1/2 -translate-y-1/2 text-outline z-20" name="lock" />
                         <input
                           className="relative w-full pl-12 pr-12 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5 z-10"
                           id="password"
@@ -428,9 +427,7 @@ export default function SignUp() {
                           type="button"
                           onClick={() => setShowPassword((prev) => !prev)}
                         >
-                          <span className="material-symbols-outlined" id="eye-icon-password">
-                            {showPassword ? 'visibility_off' : 'visibility'}
-                          </span>
+                          <Ph id="eye-icon-password" name={showPassword ? 'visibility_off' : 'visibility'} />
                         </button>
                         {passwordFocused && (
                           <div className="absolute top-full left-0 right-0 mt-1 z-30">
@@ -463,7 +460,7 @@ export default function SignUp() {
                         Confirm Password
                       </label>
                       <div className="relative">
-                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
+                        <Ph className="absolute left-4 top-1/2 -translate-y-1/2 text-outline" name="lock" />
                         <input
                           className="w-full pl-12 pr-12 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface py-1.5"
                           id="confirm_password"
@@ -479,9 +476,7 @@ export default function SignUp() {
                           type="button"
                           onClick={() => setShowConfirmPassword((prev) => !prev)}
                         >
-                          <span className="material-symbols-outlined" id="eye-icon-confirm">
-                            {showConfirmPassword ? 'visibility_off' : 'visibility'}
-                          </span>
+                          <Ph id="eye-icon-confirm" name={showConfirmPassword ? 'visibility_off' : 'visibility'} />
                         </button>
                       </div>
                     </div>
@@ -508,7 +503,7 @@ export default function SignUp() {
                     disabled={loading}
                   >
                     {loading ? 'Processing...' : 'Register Now'}
-                    <span className="material-symbols-outlined">arrow_forward</span>
+                    <Ph name="arrow_forward" />
                   </button>
                 </form>
 
@@ -530,13 +525,13 @@ export default function SignUp() {
                     onClick={() => setSignupSuccess(false)}
                     className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-low transition-colors"
                   >
-                    <span className="material-symbols-outlined text-on-surface">arrow_back</span>
+                    <Ph className="text-on-surface" name="arrow_back" />
                   </button>
                   <h2 className="font-headline-md text-headline-md text-on-background">Verify Your Email</h2>
                 </div>
 
                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-secondary/10 flex items-center justify-center mb-4 md:mb-6">
-                  <span className="material-symbols-outlined text-secondary text-4xl md:text-5xl">mark_email_read</span>
+                  <Ph className="text-secondary text-4xl md:text-5xl" name="mark_email_read" />
                 </div>
 
                 <p className="text-body-lg text-on-surface mb-2">
@@ -558,12 +553,12 @@ export default function SignUp() {
                   >
                     {resending ? (
                       <>
-                        <span className="material-symbols-outlined animate-spin">hourglass_empty</span>
+                        <Ph className="animate-spin" name="hourglass_empty" />
                         Sending...
                       </>
                     ) : (
                       <>
-                        <span className="material-symbols-outlined">mark_email_unread</span>
+                        <Ph name="mark_email_unread" />
                         Resend Confirmation Email
                       </>
                     )}
@@ -572,7 +567,7 @@ export default function SignUp() {
                     to="/signin"
                     className="w-full bg-surface-container-lowest border border-outline text-on-surface rounded-lg font-semibold text-body-sm shadow-sm hover:bg-surface-container-low transition-all active:scale-[0.98] flex items-center justify-center gap-2 py-2.5"
                   >
-                    <span className="material-symbols-outlined">login</span>
+                    <Ph name="login" />
                     Go to Login
                   </Link>
                 </div>
@@ -585,7 +580,7 @@ export default function SignUp() {
           </div>
 
           <div className="mt-auto border-t border-outline-variant/10 flex items-center justify-center gap-base text-on-surface-variant/40 pt-2">
-            <span className="material-symbols-outlined text-sm">verified_user</span>
+            <Ph className="text-sm" name="verified_user" />
             <span className="font-caption text-[10px] uppercase tracking-widest font-bold">OFFICIAL BARANGAY CULIAT GOV PORTAL • ENCRYPTED</span>
           </div>
         </section>

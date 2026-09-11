@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import Toast from '../../../components/Toast';
@@ -91,7 +92,7 @@ export default function SuperadminAiDispatch() {
         <section className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-secondary">api</span>
+              <Ph className="text-secondary" name="api" />
               <h3 className="font-bold text-slate-900">API &amp; Model Management</h3>
             </div>
             <span className="text-[10px] font-black text-slate-300">SECTION 01</span>
@@ -130,7 +131,6 @@ export default function SuperadminAiDispatch() {
                   max="100" min="0" type="range"
                   value={Math.round((Number(g('temperature', { value: 0.1 }).value) || 0) * 100)}
                   onChange={(e) => set('temperature', { value: Math.round(Number(e.target.value)) / 100 })}
-                  style={{ accentColor: '#0051d5' }}
                 />
                 <div className="flex justify-between text-[10px] text-slate-400 mt-2">
                   <span>0.0 (Precise)</span>
@@ -154,7 +154,7 @@ export default function SuperadminAiDispatch() {
               <div className="flex items-center justify-between p-4 bg-blue-50/30 rounded-xl border border-blue-100/50">
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                    <span className="material-symbols-outlined">auto_awesome</span>
+                    <Ph name="auto_awesome" />
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-slate-900">Global AI Assistance</h4>
@@ -176,7 +176,7 @@ export default function SuperadminAiDispatch() {
         <section className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-secondary">verified_user</span>
+              <Ph className="text-secondary" name="verified_user" />
               <h3 className="font-bold text-slate-900">Confidence &amp; Automated Triage Thresholds</h3>
             </div>
             <span className="text-[10px] font-black text-slate-300">SECTION 02</span>
@@ -189,7 +189,7 @@ export default function SuperadminAiDispatch() {
                     <span>Auto-Dispatch Confidence Threshold</span>
                     <span className="text-secondary">{Number(g('auto_dispatch_threshold', { value: 95 }).value) || 95}%</span>
                   </div>
-                  <input className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer" max="100" min="50" type="range" value={Number(g('auto_dispatch_threshold', { value: 95 }).value) || 95} onChange={(e) => set('auto_dispatch_threshold', { value: Number(e.target.value) })} style={{ accentColor: '#0051d5' }} />
+                  <input className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer" max="100" min="50" type="range" value={Number(g('auto_dispatch_threshold', { value: 95 }).value) || 95} onChange={(e) => set('auto_dispatch_threshold', { value: Number(e.target.value) })} />
                   <p className="text-[10px] text-slate-400 mt-2 italic">Threshold for fully autonomous unit assignment.</p>
                 </div>
                 <div>
@@ -197,7 +197,7 @@ export default function SuperadminAiDispatch() {
                     <span>Critical Incident Flag Threshold</span>
                     <span className="text-error font-bold">{Number(g('critical_threshold', { value: 85 }).value) || 85}%</span>
                   </div>
-                  <input className="w-full h-2 bg-red-50 rounded-lg appearance-none cursor-pointer" max="100" min="50" type="range" value={Number(g('critical_threshold', { value: 85 }).value) || 85} onChange={(e) => set('critical_threshold', { value: Number(e.target.value) })} style={{ accentColor: '#0051d5' }} />
+                  <input className="w-full h-2 bg-red-50 rounded-lg appearance-none cursor-pointer" max="100" min="50" type="range" value={Number(g('critical_threshold', { value: 85 }).value) || 85} onChange={(e) => set('critical_threshold', { value: Number(e.target.value) })} />
                   <p className="text-[10px] text-slate-400 mt-2 italic">Minimum confidence to auto-escalate to priority level.</p>
                 </div>
               </div>
@@ -237,7 +237,7 @@ export default function SuperadminAiDispatch() {
         <section className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-secondary">gavel</span>
+              <Ph className="text-secondary" name="gavel" />
               <h3 className="font-bold text-slate-900">Audit, Compliance &amp; Data Retention</h3>
             </div>
             <span className="text-[10px] font-black text-slate-300">SECTION 03</span>
@@ -274,7 +274,7 @@ export default function SuperadminAiDispatch() {
 
         <div className="flex justify-end gap-3">
           <button type="button" onClick={save} disabled={saving || loading} className="px-6 py-3 bg-slate-900 text-white text-sm font-bold rounded-lg hover:bg-black transition-all disabled:opacity-60 flex items-center gap-2">
-            <span className="material-symbols-outlined text-sm">save</span>
+            <Ph className="text-sm" name="save" />
             {saving ? 'Saving…' : 'Save Configuration'}
           </button>
         </div>
@@ -286,7 +286,7 @@ export default function SuperadminAiDispatch() {
         <section className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="px-5 py-3 border-b border-slate-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary text-lg">monitoring</span>
+              <Ph className="text-secondary text-lg" name="monitoring" />
               <h4 className="text-sm font-bold text-slate-900">AI Model Monitoring</h4>
             </div>
             <span className="text-[10px] text-green-500 font-bold flex items-center gap-1">
@@ -338,7 +338,7 @@ export default function SuperadminAiDispatch() {
         <section className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="px-5 py-3 border-b border-slate-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary text-lg">history</span>
+              <Ph className="text-secondary text-lg" name="history" />
               <h4 className="text-sm font-bold text-slate-900">Recent AI Actions</h4>
             </div>
             <button type="button" onClick={load} className="text-[10px] font-bold text-secondary uppercase hover:underline">Refresh</button>

@@ -1,3 +1,4 @@
+import Ph from '../components/PhIcon';
 import { useState } from 'react';
 import SiteHeader from '../components/SiteHeader';
 import SiteFooter from '../components/SiteFooter';
@@ -48,18 +49,18 @@ export default function Contact() {
             </p>
             <div className="mt-6 md:mt-lg flex flex-wrap gap-2 md:gap-md">
               <div className="flex items-center gap-xs text-secondary-fixed-dim font-medium px-md py-xs bg-white/10 rounded-full shadow-sm border border-outline-variant/30 backdrop-blur-md">
-                <span className="material-symbols-outlined text-[18px] md:text-[20px]">verified_user</span>
+                <Ph className="text-[18px] md:text-[20px]" name="verified_user" />
                 <span className="font-label-md text-[12px] md:text-label-md text-white">Accredited LGU Service</span>
               </div>
               <div className="flex items-center gap-xs text-secondary-fixed-dim font-medium px-md py-xs bg-white/10 rounded-full shadow-sm border border-outline-variant/30 backdrop-blur-md">
-                <span className="material-symbols-outlined text-[18px] md:text-[20px]">support_agent</span>
+                <Ph className="text-[18px] md:text-[20px]" name="support_agent" />
                 <span className="font-label-md text-[12px] md:text-label-md text-white">24/7 Response Unit</span>
               </div>
             </div>
           </div>
         </header>
 
-        <section className="px-margin-mobile md:px-margin-desktop py-8 md:py-xl bg-background">
+        <section className="px-margin-mobile md:px-margin-desktop py-8 md:py-xl bg-surface-container-low">
           <div className="flex flex-col gap-5 sm:gap-8 md:gap-lg max-w-5xl mx-auto">
             <div className="w-full order-1">
               <div className="glass-card rounded-2xl p-4 md:p-lg shadow-sm border border-outline-variant/50 !bg-white !border-t-2 transition-all hover:-translate-y-1 hover:shadow-lg">
@@ -71,7 +72,7 @@ export default function Contact() {
               <div className="space-y-4 md:space-y-md">
                     <div className="flex flex-col items-center text-center gap-2 md:gap-sm py-6 md:py-md">
                       <span className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-success-green/10 text-success-green flex items-center justify-center">
-                        <span className="material-symbols-outlined text-3xl">check_circle</span>
+                        <Ph className="text-3xl" name="check_circle" />
                       </span>
                       <h3 className="font-headline-md text-headline-md text-on-surface">Inquiry Sent</h3>
                       <p className="font-body-md text-body-md text-on-surface-variant max-w-md">
@@ -112,7 +113,7 @@ export default function Contact() {
                   </div>
                   {error && <p className="font-body-sm text-body-sm text-error-red">{error}</p>}
                   <button className="w-full md:w-auto px-lg py-3 bg-secondary text-white font-label-md text-label-md rounded-xl shadow-md hover:shadow-lg active:scale-95 transition-all flex items-center justify-center gap-base disabled:opacity-50" type="submit" disabled={sending}>
-                    <span className="material-symbols-outlined">{sending ? 'hourglass_top' : 'send'}</span>
+                    <Ph name={sending ? 'hourglass_top' : 'send'} />
                     {sending ? 'Sending…' : 'Submit Inquiry'}
                   </button>
                 </form>
@@ -128,7 +129,7 @@ export default function Contact() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-md">
                   <div className="flex items-center gap-3 md:gap-md p-3.5 sm:p-4 md:p-md bg-white rounded-xl border border-outline-variant/30 shadow-sm border-t-2 border-secondary">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-error-container rounded-lg flex items-center justify-center flex-shrink-0">
-                      <span className="material-symbols-outlined text-error font-bold">call</span>
+                      <Ph className="text-error font-bold" name="call" />
                     </div>
                     <div>
                       <p className="font-caption text-caption text-on-surface-variant uppercase tracking-widest">Emergency Hotline</p>
@@ -137,7 +138,7 @@ export default function Contact() {
                   </div>
                   <div className="flex items-center gap-3 md:gap-md p-3.5 sm:p-4 md:p-md bg-white rounded-xl border border-outline-variant/30 shadow-sm border-t-2 border-secondary">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-surface-container-high rounded-lg flex items-center justify-center flex-shrink-0">
-                      <span className="material-symbols-outlined text-secondary">mail</span>
+                      <Ph className="text-secondary" name="mail" />
                     </div>
                     <div className="overflow-hidden">
                       <p className="font-caption text-caption text-on-surface-variant uppercase tracking-widest">Official Email</p>
@@ -163,7 +164,7 @@ export default function Contact() {
                 <div className="absolute inset-0 bg-secondary/5"></div>
                 <div className="relative flex-1 flex items-center justify-center">
                   <div className="text-center">
-                    <span className="material-symbols-outlined text-secondary text-4xl mb-xs drop-shadow-md animate-bounce">location_on</span>
+                    <Ph className="text-secondary text-4xl mb-xs drop-shadow-md animate-bounce" name="location_on" />
                     <p className="font-label-md text-label-md text-on-surface">View on Google Maps</p>
                   </div>
                 </div>
@@ -176,9 +177,9 @@ export default function Contact() {
           </div>
         </section>
 
-        <section className="bg-surface-container-low py-8 md:py-xl border-y border-outline-variant/30">
+        <section className="bg-surface-container-lowest py-8 md:py-xl">
           <div className="px-margin-mobile md:px-margin-desktop text-center max-w-3xl mx-auto">
-            <span className="material-symbols-outlined text-secondary text-4xl mb-3 md:mb-md">verified</span>
+            <Ph className="text-secondary text-4xl mb-3 md:mb-md" name="verified" />
             <h2 className="font-headline-lg text-headline-lg-mobile md:text-[28px] text-on-surface mb-3 md:mb-md">Integrity and Transparency</h2>
             <p className="font-body-md text-body-md text-on-surface-variant mb-6 md:mb-lg">
               We are committed to providing every citizen with the support they deserve. Reach out via our official portal for feedback or FOI requests.

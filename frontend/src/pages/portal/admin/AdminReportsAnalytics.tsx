@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { downloadCsv } from '../../../lib/admin';
@@ -112,7 +113,7 @@ export default function AdminReportsAnalytics() {
           <div className="flex justify-between items-end">
             <div className="flex gap-3">
               <button type="button" onClick={exportCsv} className="flex items-center gap-2 px-4 py-2 border border-border-subtle rounded-lg text-label-md font-medium text-on-surface hover:bg-surface-variant transition-colors">
-                <span className="material-symbols-outlined text-[18px]">download</span>
+                <Ph className="text-[18px]" name="download" />
                 Export Raw CSV
               </button>
             </div>

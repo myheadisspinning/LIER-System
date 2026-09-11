@@ -1,3 +1,4 @@
+﻿import Ph from './PhIcon';
 import { useEffect } from 'react';
 
 export type ToastType = 'success' | 'error';
@@ -26,9 +27,7 @@ export default function Toast({ type, message, onClose }: ToastProps) {
       }`}
       role="alert"
     >
-      <span className="material-symbols-outlined text-lg sm:text-xl shrink-0">
-        {type === 'success' ? 'check_circle' : 'error'}
-      </span>
+      <Ph className="text-lg sm:text-xl shrink-0" name={type === 'success' ? 'check_circle' : 'error'} />
       <div className="min-w-0">
         <p className="font-label-sm sm:font-label-md text-label-sm sm:text-label-md font-bold mb-0.5">
           {type === 'success' ? 'Success' : 'Error'}
@@ -41,7 +40,7 @@ export default function Toast({ type, message, onClose }: ToastProps) {
         onClick={onClose}
         aria-label="Close notification"
       >
-        <span className="material-symbols-outlined text-lg">close</span>
+        <Ph className="text-lg" name="close" />
       </button>
     </div>
   );

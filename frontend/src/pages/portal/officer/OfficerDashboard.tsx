@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { getAdminProfile, deriveUnitStatus, fetchOpenUnitAssignments, fmtDate, fmtDurationMs, logAudit, PRIORITY_BADGE } from '../../../lib/admin';
@@ -211,17 +212,17 @@ return (
                 <div className="flex items-center gap-2">
                   {i.status === 'Assigned' && (
                     <button type="button" disabled={busyId === i.id} onClick={() => acknowledge(i)} className="px-4 py-2 bg-secondary text-on-secondary rounded-lg text-xs font-semibold hover:bg-secondary/90 disabled:opacity-50 transition-colors flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-[16px]">check_circle</span> Acknowledge
+                      <Ph className="text-[16px]" name="check_circle" /> Acknowledge
                     </button>
                   )}
                   {(i.status === 'Progress' || i.status === 'Assigned') && (
                     <button type="button" disabled={busyId === i.id} onClick={() => resolve(i)} className="px-4 py-2 bg-success-green text-white rounded-lg text-xs font-semibold hover:bg-success-green/90 disabled:opacity-50 transition-colors flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-[16px]">task_alt</span> Mark Resolved
+                      <Ph className="text-[16px]" name="task_alt" /> Mark Resolved
                     </button>
                   )}
 {i.status === 'Resolved' && (
                     <span className="inline-flex items-center gap-1 text-xs font-semibold text-success-green">
-                      <span className="material-symbols-outlined text-[16px]">verified</span> Completed
+                      <Ph className="text-[16px]" name="verified" /> Completed
                     </span>
                   )}
                 </div>

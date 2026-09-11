@@ -1,3 +1,4 @@
+﻿import Ph from './PhIcon';
 import type { IncidentAssessment } from '../lib/ai';
 
 type VerdictMeta = {
@@ -15,7 +16,7 @@ const VERDICT_META: Record<string, VerdictMeta> = {
     text: 'text-success-green',
   },
   ambiguous: {
-    label: 'Unclear · Needs Verification',
+    label: 'Unclear Â· Needs Verification',
     icon: 'help',
     banner: 'bg-warning-amber/10 border-warning-amber/30',
     text: 'text-warning-amber',
@@ -30,7 +31,7 @@ const VERDICT_META: Record<string, VerdictMeta> = {
 
 /**
  * Adaptive AI credibility banner. Shows the verdict and the specific findings
- * (flags) from the credibility check — for every report, not only flagged ones.
+ * (flags) from the credibility check â€” for every report, not only flagged ones.
  *
  * `compact` renders a tight layout for map pin popups.
  */
@@ -48,7 +49,7 @@ export default function AiVerdictBanner({
     // Map popups stay minimal: verdict warning only, no surrounding box.
     return (
       <p className={`text-[10px] font-bold uppercase leading-tight flex items-center gap-1 ${meta.text}`}>
-        <span className="material-symbols-outlined text-[11px]">{meta.icon}</span>
+        <Ph className="text-[11px]" name={meta.icon} />
         {meta.label}
       </p>
     );
@@ -56,7 +57,7 @@ export default function AiVerdictBanner({
 
   return (
     <div className={`${meta.banner} border rounded-lg p-3 flex items-start gap-2`}>
-      <span className={`material-symbols-outlined ${meta.text} text-[18px] shrink-0`}>{meta.icon}</span>
+      <Ph className={` ${meta.text} text-[18px] shrink-0`} name={meta.icon} />
       <div className={`text-sm ${meta.text} leading-snug min-w-0`}>
         <p className="font-semibold">{meta.label}</p>
         {flags.length > 0 && (

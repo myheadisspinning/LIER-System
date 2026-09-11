@@ -1,3 +1,4 @@
+import Ph from '../components/PhIcon';
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
@@ -112,7 +113,7 @@ export default function Services() {
       <SiteHeader active="/services" />
 
       <main className="pt-20 w-full flex flex-col">
-        <section className="relative py-8 md:py-xl px-4 md:px-margin-desktop flex flex-col items-center text-center w-full">
+        <section className="relative py-8 md:py-xl px-4 md:px-margin-desktop flex flex-col items-center text-center w-full bg-surface-container-lowest">
           <div className="absolute -top-24 -left-24 w-64 h-64 md:w-96 md:h-96 bg-secondary/10 blur-[80px] md:blur-[100px] rounded-full"></div>
           <div className="absolute -bottom-24 -right-24 w-64 h-64 md:w-96 md:h-96 bg-primary-fixed/30 blur-[80px] md:blur-[100px] rounded-full"></div>
           <div className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center">
@@ -130,14 +131,14 @@ export default function Services() {
                   setModalOpen(true);
                 }}
               >
-                <span className="material-symbols-outlined">report</span>File an Incident Report
+                <Ph name="report" />File an Incident Report
               </button>
               <button className="px-lg py-3 border-2 border-secondary text-secondary rounded-xl font-label-md text-label-md bg-white/50 backdrop-blur-sm whitespace-nowrap transition-all hover:bg-secondary/5">View System Guide</button>
             </div>
           </div>
         </section>
 
-        <section className="py-8 md:py-xl px-4 md:px-margin-desktop bg-surface w-full flex flex-col">
+        <section className="py-8 md:py-xl px-4 md:px-margin-desktop bg-surface-container-low w-full flex flex-col">
           <div className="max-w-7xl mx-auto w-full flex flex-col">
           <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-6 md:mb-lg gap-3 md:gap-md w-full">
             <div className="max-w-ml text-center md:text-left">
@@ -146,10 +147,10 @@ export default function Services() {
             </div>
             <div className="hidden md:flex gap-sm">
               <button className="w-12 h-12 rounded-full flex items-center justify-center border border-outline-variant text-secondary hover:bg-secondary hover:text-white transition-all">
-                <span className="material-symbols-outlined">chevron_left</span>
+                <Ph name="chevron_left" />
               </button>
               <button className="w-12 h-12 rounded-full flex items-center justify-center border border-outline-variant text-secondary hover:bg-secondary hover:text-white transition-all">
-                <span className="material-symbols-outlined">chevron_right</span>
+                <Ph name="chevron_right" />
               </button>
             </div>
           </div>
@@ -165,7 +166,7 @@ export default function Services() {
               <div key={i} className="glass-card p-4 md:p-md rounded-2xl flex flex-col justify-between w-full border border-outline-variant/30 bg-surface-bright/50 backdrop-blur-sm shadow-sm hover:shadow-lg transition-all duration-700">
                 <div>
                   <div className="w-12 h-12 md:w-14 md:h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-3 md:mb-md">
-                    <span className="material-symbols-outlined service-icon text-[28px] md:text-[32px] text-secondary" style={{ fontVariationSettings: '"FILL" 1' }}>{svc.icon}</span>
+                    <Ph className="service-icon text-[28px] md:text-[32px] text-secondary" name={svc.icon} weight="fill" />
                   </div>
                   <h3 className="font-headline-md text-lg md:text-xl text-primary mb-sm">{svc.title}</h3>
                   <p className="font-body-md text-body-md text-on-surface-variant mb-4 md:mb-lg">{svc.desc}</p>
@@ -177,20 +178,20 @@ export default function Services() {
           </div>
         </section>
 
-        <section ref={(el) => { sectionRefs.current[0] = el; }} className="px-4 md:px-margin-desktop py-8 md:py-xl w-full opacity-0 translate-y-10 transition-all duration-700">
+        <section ref={(el) => { sectionRefs.current[0] = el; }} className="px-4 md:px-margin-desktop py-8 md:py-xl w-full bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-700">
           <div className="qc-services-banner rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row items-stretch w-full max-w-7xl mx-auto bg-on-background relative">
             <div className="absolute -right-20 -top-20 w-64 h-64 bg-secondary rounded-full blur-[100px] opacity-20"></div>
             <div className="flex-1 p-6 md:p-lg flex flex-col justify-center items-center text-center w-full relative z-10">
               <div className="flex items-center gap-sm mb-3 md:mb-md">
                 <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-md">
-                  <span className="material-symbols-outlined text-secondary-fixed-dim text-[20px]">devices</span>
+                  <Ph className="text-secondary-fixed-dim text-[20px]" name="devices" />
                 </div>
                 <span className="text-on-primary-container font-label-md text-xs uppercase tracking-widest">Innovation Hub</span>
               </div>
               <h2 className="font-headline-lg text-2xl md:text-[28px] text-surface-bright mb-3 md:mb-md">Tactical Command Integration</h2>
               <p className="font-body-lg text-base text-on-primary-container leading-relaxed mb-6 md:mb-lg">Our system bridges the gap between citizens and the Barangay Public Safety Officers (BPSO), providing a unified dashboard for localized enforcement and incident management.</p>
               <div className="flex flex-col sm:flex-row gap-3 md:gap-md justify-center w-full md:w-auto">
-                <Link className="inline-flex items-center justify-center gap-sm bg-white text-primary px-lg py-3 rounded-xl font-bold hover:scale-105 transition-transform" to="#">Access Officer Portal <span className="material-symbols-outlined">admin_panel_settings</span></Link>
+                <Link className="inline-flex items-center justify-center gap-sm bg-white text-primary px-lg py-3 rounded-xl font-bold hover:scale-105 transition-transform" to="#">Access Officer Portal <Ph name="admin_panel_settings" /></Link>
                 <Link className="inline-flex items-center justify-center gap-sm text-surface-bright border border-white/20 px-lg py-3 rounded-xl font-label-md text-label-md hover:bg-white/5 transition-colors" to="#">System Documentation</Link>
               </div>
             </div>
@@ -201,7 +202,7 @@ export default function Services() {
           </div>
         </section>
 
-        <section ref={(el) => { sectionRefs.current[1] = el; }} className="py-8 md:py-xl px-4 md:px-margin-desktop bg-surface-container-low/30 w-full flex flex-col opacity-0 translate-y-10 transition-all duration-700">
+        <section ref={(el) => { sectionRefs.current[1] = el; }} className="py-8 md:py-xl px-4 md:px-margin-desktop bg-surface-container-low w-full flex flex-col opacity-0 translate-y-10 transition-all duration-700">
           <div className="max-w-3xl mx-auto text-center mb-6 md:mb-lg w-full">
             <h2 className="font-headline-lg text-2xl md:text-[28px] text-primary mb-sm">Frequently Asked Questions</h2>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full mb-3 md:mb-md"></div>
@@ -229,14 +230,14 @@ export default function Services() {
         <div className="relative bg-surface w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-2xl shadow-2xl border border-outline-variant/30 flex flex-col">
           <div className="bg-surface-container-low px-4 py-3 md:px-6 md:py-4 flex justify-between items-center shrink-0 border-b border-outline-variant/30 z-20">
             <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-secondary">verified_user</span>
+              <Ph className="text-secondary" name="verified_user" />
               <div>
                 <h2 className="font-headline-md text-on-surface text-lg md:text-xl">File an Incident Report</h2>
                 <p className="text-on-surface-variant text-xs opacity-80">Barangay Culiat Safety Portal</p>
               </div>
             </div>
             <button className="text-on-surface-variant hover:text-on-surface p-2 bg-surface-container-high hover:bg-surface-container-highest rounded-full transition-colors" onClick={() => setModalOpen(false)}>
-              <span className="material-symbols-outlined text-2xl">close</span>
+              <Ph className="text-2xl" name="close" />
             </button>
           </div>
           <div className="flex-1 min-h-0 flex flex-col">

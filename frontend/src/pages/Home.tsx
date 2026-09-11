@@ -1,3 +1,4 @@
+import Ph from '../components/PhIcon';
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
@@ -151,7 +152,7 @@ function CommunityGallery() {
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 hidden md:flex w-10 h-10 rounded-full bg-white shadow-lg items-center justify-center text-on-surface hover:bg-surface-container-low transition-colors z-10"
             aria-label="Previous"
           >
-            <span className="material-symbols-outlined text-xl">chevron_left</span>
+            <Ph className="text-xl" name="chevron_left" />
           </button>
           <button
             type="button"
@@ -159,7 +160,7 @@ function CommunityGallery() {
             className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 hidden md:flex w-10 h-10 rounded-full bg-white shadow-lg items-center justify-center text-on-surface hover:bg-surface-container-low transition-colors z-10"
             aria-label="Next"
           >
-            <span className="material-symbols-outlined text-xl">chevron_right</span>
+            <Ph className="text-xl" name="chevron_right" />
           </button>
         </>
       )}
@@ -307,11 +308,11 @@ export default function Home() {
               >
                 <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <span className="relative z-10">Report an Incident</span>
-                <span className="material-symbols-outlined relative z-10">campaign</span>
+                <Ph className="relative z-10" name="campaign" />
               </button>
               <div className="w-full sm:w-auto glass-card rounded-2xl p-sm flex items-center gap-sm border border-white/10 hover:bg-white/10 transition-colors">
                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center overflow-hidden">
-                  <span className="material-symbols-outlined text-secondary-fixed-dim text-2xl">monitoring</span>
+                  <Ph className="text-secondary-fixed-dim text-2xl" name="monitoring" />
                 </div>
                 <div className="text-left">
                   <p className="text-xs font-bold text-secondary-fixed-dim">System Uptime: 99.9%</p>
@@ -329,25 +330,25 @@ export default function Home() {
         </div>
       </header>
 
-      <section ref={(el) => { sectionRefs.current[1] = el; }} className="py-md md:py-xl -mt-8 md:-mt-xl relative z-20 opacity-0 translate-y-10 transition-all duration-1000 delay-100">
+      <section ref={(el) => { sectionRefs.current[1] = el; }} className="py-md md:py-xl -mt-8 md:-mt-xl relative z-20 bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-1000 delay-100">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
           <div className="bg-white/95 backdrop-blur-md p-3 md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
-            <span className="material-symbols-outlined text-secondary text-2xl md:text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>assignment</span>
+            <Ph className="text-secondary text-2xl md:text-4xl" name="assignment" weight="fill" />
             <CountUp target={2450} suffix="+" />
             <span className="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Total Incidents</span>
           </div>
           <div className="bg-white/95 backdrop-blur-md p-3 md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border-l-4 border-l-error border-y border-r border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
-            <span className="material-symbols-outlined text-error text-2xl md:text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>warning</span>
+            <Ph className="text-error text-2xl md:text-4xl" name="warning" weight="fill" />
             <CountUp target={124} />
             <span className="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Active Cases</span>
           </div>
           <div className="bg-white/95 backdrop-blur-md p-3 md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border-l-4 border-l-secondary border-y border-r border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
-            <span className="material-symbols-outlined text-secondary text-2xl md:text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>check_circle</span>
+            <Ph className="text-secondary text-2xl md:text-4xl" name="check_circle" weight="fill" />
             <CountUp target={2210} />
             <span className="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Resolved Cases</span>
           </div>
           <div className="bg-white/95 backdrop-blur-md p-3 md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
-            <span className="material-symbols-outlined text-secondary text-2xl md:text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>groups</span>
+            <Ph className="text-secondary text-2xl md:text-4xl" name="groups" weight="fill" />
             <CountUp target={15000} suffix="+" />
             <span className="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Registered Users</span>
           </div>
@@ -374,7 +375,7 @@ export default function Home() {
                 </div>
                 <div className="relative p-4 sm:p-5 md:p-lg h-full flex flex-col justify-end">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-600/80 flex items-center justify-center text-white mb-2 sm:mb-sm group-hover:bg-secondary transition-colors duration-300">
-                    <span className="material-symbols-outlined text-xl sm:text-2xl">{svc.icon}</span>
+                    <Ph className="text-xl sm:text-2xl" name={svc.icon} />
                   </div>
                   <h3 className="font-headline-md text-base sm:text-lg md:text-xl mb-xs text-white">{svc.title}</h3>
                   <p className="font-body-md text-white/90 text-sm">{svc.desc}</p>
@@ -385,7 +386,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[3] = el; }} className="py-10 md:py-xl opacity-0 translate-y-10 transition-all duration-1000 delay-100">
+      <section ref={(el) => { sectionRefs.current[3] = el; }} className="py-10 md:py-xl bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-1000 delay-100">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
           <div className="text-center mb-8 md:mb-12">
             <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-base">Barangay Culiat in Action</h2>
@@ -395,12 +396,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[4] = el; }} className="py-10 md:py-xl bg-surface-container-highest/30 opacity-0 translate-y-10 transition-all duration-1000 delay-200">
+      <section ref={(el) => { sectionRefs.current[4] = el; }} className="py-10 md:py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-1000 delay-200">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="order-2 lg:order-1 text-center lg:text-left" data-section="impact">
               <div className="inline-flex items-center gap-sm bg-secondary/10 px-md py-xs rounded-full mb-3 md:mb-md mx-auto lg:mx-0">
-                <span className="material-symbols-outlined text-secondary text-sm">auto_awesome</span>
+                <Ph className="text-secondary text-sm" name="auto_awesome" />
                 <span className="text-secondary font-label-md text-xs tracking-wider uppercase">COMMUNITY IMPACT</span>
               </div>
               <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-3 md:mb-md leading-tight">Digital Dispatch: A 4-Minute Success Story</h2>
@@ -408,7 +409,7 @@ export default function Home() {
                 Last Tuesday, our AI-assisted dispatch routed an emergency call in record time, resulting in a 4-minute response. This is how smart governance saves lives.
               </p>
               <button className="w-full sm:w-auto px-lg py-sm bg-secondary text-on-secondary font-label-md rounded-lg hover:bg-secondary-container hover:shadow-lg transition-all flex items-center justify-center gap-xs group">
-                Read Full Story <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                Read Full Story <Ph className="group-hover:translate-x-1 transition-transform" name="arrow_forward" />
               </button>
             </div>
             <div className="order-1 lg:order-2" data-section="impact">
@@ -423,7 +424,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[5] = el; }} className="py-10 md:py-xl bg-surface opacity-0 translate-y-10 transition-all duration-1000 delay-100">
+      <section ref={(el) => { sectionRefs.current[5] = el; }} className="py-10 md:py-xl bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-1000 delay-100">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
           <div className="text-center mb-8 md:mb-12" data-section="guides">
             <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-base">Community Safety Guides</h2>
@@ -450,7 +451,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[6] = el; }} className="py-10 md:py-xl bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-1000 delay-200">
+      <section ref={(el) => { sectionRefs.current[6] = el; }} className="py-10 md:py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-1000 delay-200">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
           <div className="text-center mb-8 md:mb-12" data-section="hotlines">
             <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-base">Emergency Hotlines</h2>
@@ -460,7 +461,7 @@ export default function Home() {
             <div className="bg-white p-5 md:p-lg rounded-2xl border-l-4 border-l-secondary shadow-md hover:shadow-xl hover:-translate-y-1 transition-all" data-section="hotlines">
               <div className="flex items-center gap-3 mb-3 md:gap-md md:mb-md">
                 <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-secondary/10 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-secondary text-3xl" style={{ fontVariationSettings: '"FILL" 1' }}>local_police</span>
+                  <Ph className="text-secondary text-3xl" name="local_police" weight="fill" />
                 </div>
                 <div>
                   <h3 className="font-headline-md text-lg text-on-surface">Barangay Hotline</h3>
@@ -475,7 +476,7 @@ export default function Home() {
             <div className="bg-white p-5 md:p-lg rounded-2xl border-l-4 border-l-error shadow-md hover:shadow-xl hover:-translate-y-1 transition-all" data-section="hotlines">
               <div className="flex items-center gap-3 mb-3 md:gap-md md:mb-md">
                 <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-error/10 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-error text-3xl" style={{ fontVariationSettings: '"FILL" 1' }}>emergency</span>
+                  <Ph className="text-error text-3xl" name="emergency" weight="fill" />
                 </div>
                 <div>
                   <h3 className="font-headline-md text-lg text-on-surface">PNP Helpline</h3>
@@ -488,7 +489,7 @@ export default function Home() {
             <div className="bg-white p-5 md:p-lg rounded-2xl border-l-4 border-l-tertiary shadow-md hover:shadow-xl hover:-translate-y-1 transition-all" data-section="hotlines">
               <div className="flex items-center gap-3 mb-3 md:gap-md md:mb-md">
                 <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-tertiary/10 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-tertiary text-3xl" style={{ fontVariationSettings: '"FILL" 1' }}>apartment</span>
+                  <Ph className="text-tertiary text-3xl" name="apartment" weight="fill" />
                 </div>
                 <div>
                   <h3 className="font-headline-md text-lg text-on-surface">QC Emergency</h3>

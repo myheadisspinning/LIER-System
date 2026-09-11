@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
@@ -180,7 +181,7 @@ export default function OfficerMyIncidents() {
           </div>
           <div className="flex items-center gap-3 w-full sm:w-auto">
             <div className="relative flex-1 sm:w-64">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+              <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]" name="search" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -218,18 +219,18 @@ export default function OfficerMyIncidents() {
                   <div className="flex flex-wrap gap-2 pt-1">
                     {i.status === 'Assigned' && (
                       <button type="button" disabled={busyId === i.id} onClick={() => acknowledge(i)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-secondary text-on-secondary rounded-md text-xs font-semibold hover:bg-secondary/90 disabled:opacity-50 transition-colors whitespace-nowrap">
-                        <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                        <Ph className="text-[16px]" name="check_circle" />
                         Acknowledge
                       </button>
                     )}
                     {(i.status === 'Progress' || i.status === 'Assigned') && (
                       <button type="button" disabled={busyId === i.id} onClick={() => resolve(i)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-success-green text-white rounded-md text-xs font-semibold hover:bg-success-green/90 disabled:opacity-50 transition-colors whitespace-nowrap">
-                        <span className="material-symbols-outlined text-[16px]">task_alt</span>
+                        <Ph className="text-[16px]" name="task_alt" />
                         Resolve
                       </button>
                     )}
                     <button type="button" onClick={() => setSelectedIncidentId(i.id)} className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-border-subtle rounded-md text-xs font-semibold text-on-surface-variant hover:border-secondary hover:text-secondary transition-colors whitespace-nowrap">
-                      <span className="material-symbols-outlined text-[16px]">visibility</span>
+                      <Ph className="text-[16px]" name="visibility" />
                       View Details
                     </button>
                   </div>
@@ -262,18 +263,18 @@ export default function OfficerMyIncidents() {
                         <div className="flex flex-wrap items-center justify-end gap-2">
                           {i.status === 'Assigned' && (
                             <button type="button" disabled={busyId === i.id} onClick={() => acknowledge(i)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-secondary text-on-secondary rounded-md text-xs font-semibold hover:bg-secondary/90 disabled:opacity-50 transition-colors whitespace-nowrap">
-                              <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                              <Ph className="text-[16px]" name="check_circle" />
                               Acknowledge
                             </button>
                           )}
                           {(i.status === 'Progress' || i.status === 'Assigned') && (
                             <button type="button" disabled={busyId === i.id} onClick={() => resolve(i)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-success-green text-white rounded-md text-xs font-semibold hover:bg-success-green/90 disabled:opacity-50 transition-colors whitespace-nowrap">
-                              <span className="material-symbols-outlined text-[16px]">task_alt</span>
+                              <Ph className="text-[16px]" name="task_alt" />
                               Resolve
                             </button>
                           )}
                           <button type="button" onClick={() => setSelectedIncidentId(i.id)} className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-border-subtle rounded-md text-xs font-semibold text-on-surface-variant hover:border-secondary hover:text-secondary transition-colors whitespace-nowrap">
-                            <span className="material-symbols-outlined text-[16px]">visibility</span>
+                            <Ph className="text-[16px]" name="visibility" />
                             View Details
                           </button>
                         </div>

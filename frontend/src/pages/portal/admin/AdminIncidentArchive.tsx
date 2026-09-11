@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
@@ -152,7 +153,7 @@ export default function AdminIncidentArchive() {
           </div>
           <div className="flex items-center gap-3 flex-wrap">
             <div className="relative w-64">
-              <span className="material-symbols-outlined absolute left-3 top-2 text-on-surface-variant text-[20px]">search</span>
+              <Ph className="absolute left-3 top-2 text-on-surface-variant text-[20px]" name="search" />
               <input
                 className="w-full bg-surface-container-low border border-border-subtle text-on-surface rounded-md pl-10 pr-3 py-2 font-body-sm text-body-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary"
                 placeholder="Search archive..."

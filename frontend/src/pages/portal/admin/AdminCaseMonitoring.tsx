@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { latLngBounds } from 'leaflet';
@@ -268,7 +269,7 @@ export default function AdminCaseMonitoring() {
           <div className="font-caps-xs text-caps-xs text-error-red mb-2">ACTIVE HIGH-RISK INCIDENTS</div>
           <div className="font-display-lg text-display-lg text-error-red">{stats.criticalActive}</div>
           <div className="mt-2 font-body-sm text-body-sm text-error-red/80 flex items-center gap-1">
-            <span className="material-symbols-outlined text-[16px]">gavel</span>
+            <Ph className="text-[16px]" name="gavel" />
             Requires immediate review
           </div>
         </div>
@@ -280,7 +281,7 @@ export default function AdminCaseMonitoring() {
           <div className="flex items-center gap-3 text-xs">
             {trendMeta.deltaPct != null && (
               <span className={`flex items-center gap-1 font-semibold ${trendMeta.deltaPct > 0 ? 'text-error-red' : 'text-success-green'}`}>
-                <span className="material-symbols-outlined text-[14px]">{trendMeta.deltaPct > 0 ? 'trending_up' : 'trending_down'}</span>
+                <Ph className="text-[14px]" name={trendMeta.deltaPct > 0 ? 'trending_up' : 'trending_down'} />
                 {trendMeta.deltaPct > 0 ? '+' : ''}
                 {trendMeta.deltaPct}% vs prior week
               </span>
@@ -347,7 +348,7 @@ export default function AdminCaseMonitoring() {
             {prioritySplit.map((p) => (
               <div key={p.priority} className="flex items-center justify-between">
                 <span className="flex items-center gap-2 text-sm font-medium text-on-surface">
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: PRIORITY_COLORS[p.priority] }}></span>
+                  <span className="w-2.5 h-2.5 rounded-full"></span>
                   {p.priority}
                 </span>
                 <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${PRIORITY_BADGE[p.priority]}`}>{p.count}</span>
@@ -374,18 +375,18 @@ export default function AdminCaseMonitoring() {
       <section className="bg-white rounded-xl border border-border-subtle shadow-sm overflow-hidden">
         <div className="p-4 border-b border-border-subtle flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-3">
-            <span className="material-symbols-outlined text-secondary">map</span>
+            <Ph className="text-secondary" name="map" />
             <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Incident Hotspot Map</h3>
             <span className="bg-secondary/10 text-secondary px-2 py-0.5 rounded-full text-[11px] font-bold">{mapPins.length} PIN{mapPins.length === 1 ? '' : 'S'}</span>
           </div>
           <div className="flex items-center gap-3 flex-wrap">
             <span className="flex items-center gap-1.5 text-[11px] font-semibold text-on-surface-variant">
-              <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#94a3b8' }}></span>
+              <span className="w-2.5 h-2.5 rounded-full"></span>
               Closed
             </span>
             {(['CRITICAL', 'HIGH', 'MEDIUM'] as const).map((p) => (
               <span key={p} className="flex items-center gap-1.5 text-[11px] font-semibold text-on-surface-variant">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ background: PRIORITY_COLORS[p] }}></span>
+                <span className="w-2.5 h-2.5 rounded-full"></span>
                 {p}
               </span>
             ))}
@@ -406,7 +407,7 @@ export default function AdminCaseMonitoring() {
               </button>
             </div>
             <button type="button" onClick={() => setTile((t) => (t === 'street' ? 'satellite' : 'street'))} className="flex items-center gap-1 px-2 py-1 bg-surface-container-low border border-border-subtle rounded hover:bg-surface-container-high transition-colors text-[11px]">
-              <span className="material-symbols-outlined text-[14px]">layers</span>
+              <Ph className="text-[14px]" name="layers" />
               {tile === 'street' ? 'Satellite' : 'Street'}
             </button>
           </div>
@@ -469,7 +470,7 @@ export default function AdminCaseMonitoring() {
                 <div className="flex items-center gap-2 shrink-0">
                   <span className={`px-2 py-1 rounded-full text-xs font-semibold ${PRIORITY_BADGE[r.priority] ?? 'bg-slate-100 text-slate-600'}`}>{r.priority}</span>
                   <span className={`px-2 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${ageBadgeClass(ageMs)}`}>{fmtAge(ageMs)} open</span>
-                  <span className="material-symbols-outlined text-[18px] text-on-surface-variant">chevron_right</span>
+                  <Ph className="text-[18px] text-on-surface-variant" name="chevron_right" />
                 </div>
               </button>
             ))}
@@ -526,7 +527,7 @@ export default function AdminCaseMonitoring() {
                     <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${PRIORITY_BADGE[r.priority]}`}>{r.priority}</span></td>
                     <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-semibold ${STATUS_BADGE[r.status] ?? 'bg-slate-100 text-slate-600'}`}>{r.status}</span></td>
                     <td className="py-3 px-4 text-on-surface-variant whitespace-nowrap">{fmtDate(r.created_at, 'short')}</td>
-                    <td className="py-3 px-4 text-right"><span className="material-symbols-outlined text-[18px] text-on-surface-variant">open_in_new</span></td>
+                    <td className="py-3 px-4 text-right"><Ph className="text-[18px] text-on-surface-variant" name="open_in_new" /></td>
                   </tr>
                 ))}
               </tbody>

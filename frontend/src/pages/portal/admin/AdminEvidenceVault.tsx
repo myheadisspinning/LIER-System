@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { downloadCsv, fmtBytes, logAudit, timeAgo } from '../../../lib/admin';
@@ -161,11 +162,11 @@ export default function AdminEvidenceVault() {
       <div className="flex justify-between items-end">
         <div className="flex gap-3">
           <button type="button" onClick={exportCsv} className="flex items-center gap-2 px-4 py-2 border border-border-subtle rounded-lg text-label-md font-medium text-on-surface hover:bg-surface-variant transition-colors">
-            <span className="material-symbols-outlined text-[18px]">download</span>
+            <Ph className="text-[18px]" name="download" />
             Export Manifest (CSV)
           </button>
           <button type="button" onClick={() => setModalOpen(true)} className="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary rounded-lg text-label-md font-medium hover:bg-secondary/90 transition-colors">
-            <span className="material-symbols-outlined text-[18px]">upload</span>
+            <Ph className="text-[18px]" name="upload" />
             Upload Evidence
           </button>
         </div>
@@ -179,7 +180,7 @@ export default function AdminEvidenceVault() {
             <div className="bg-surface-container-lowest border border-border-subtle rounded-lg p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Total Evidence</span>
-                <span className="material-symbols-outlined text-on-surface-variant text-lg">inventory_2</span>
+                <Ph className="text-on-surface-variant text-lg" name="inventory_2" />
               </div>
               <div className="font-headline-md text-headline-md font-bold">{stats.totalFiles} files</div>
               <div className="font-label-sm text-label-sm text-on-surface-variant">{fmtBytes(stats.totalSize)} total</div>
@@ -187,7 +188,7 @@ export default function AdminEvidenceVault() {
             <div className="bg-surface-container-lowest border border-border-subtle rounded-lg p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Photos</span>
-                <span className="material-symbols-outlined text-on-surface-variant text-lg">photo_camera</span>
+                <Ph className="text-on-surface-variant text-lg" name="photo_camera" />
               </div>
               <div className="font-headline-md text-headline-md font-bold">{stats.photos}</div>
               <div className="font-label-sm text-label-sm text-on-surface-variant">indexed</div>
@@ -195,7 +196,7 @@ export default function AdminEvidenceVault() {
             <div className="bg-surface-container-lowest border border-border-subtle rounded-lg p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider">Video / Audio</span>
-                <span className="material-symbols-outlined text-on-surface-variant text-lg">videocam</span>
+                <Ph className="text-on-surface-variant text-lg" name="videocam" />
               </div>
               <div className="font-headline-md text-headline-md font-bold">{stats.videos}</div>
               <div className="font-label-sm text-label-sm text-on-surface-variant">clips</div>
@@ -203,7 +204,7 @@ export default function AdminEvidenceVault() {
             <div className="bg-surface-container-lowest border border-success-green/30 rounded-lg p-4 bg-success-green/5">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-caps-xs text-caps-xs text-success-green uppercase tracking-wider">Linked Reports</span>
-                <span className="material-symbols-outlined text-success-green text-lg">verified_user</span>
+                <Ph className="text-success-green text-lg" name="verified_user" />
               </div>
               <div className="font-headline-md text-headline-md font-bold text-success-green">{stats.linkedReports}</div>
               <div className="font-label-sm text-label-sm text-success-green font-medium">with attachments</div>
@@ -230,7 +231,7 @@ export default function AdminEvidenceVault() {
                         </div>
                       ) : (
                         <div className="aspect-video bg-slate-100 flex flex-col items-center justify-center gap-1 text-on-surface-variant">
-                          <span className="material-symbols-outlined text-[28px]">{e.type.startsWith('video') ? 'videocam' : e.type.startsWith('audio') ? 'mic' : 'description'}</span>
+                          <Ph className="text-[28px]" name={e.type.startsWith('video') ? 'videocam' : e.type.startsWith('audio') ? 'mic' : 'description'} />
                           <span className="text-[10px] font-semibold">{MEDIA_KIND(e.type)}</span>
                         </div>
                       )}
@@ -286,7 +287,7 @@ export default function AdminEvidenceVault() {
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Upload Evidence</h3>
               <button type="button" onClick={() => setModalOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
-                <span className="material-symbols-outlined">close</span>
+                <Ph name="close" />
               </button>
             </div>
             <div className="p-5 space-y-4">

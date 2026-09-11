@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
@@ -179,7 +180,7 @@ export default function MyIncidentReports() {
             </div>
             <div className="flex items-center gap-3 w-full sm:w-auto">
               <div className="relative flex-1 sm:w-64">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+                <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]" name="search" />
                 <input
                   className="w-full bg-surface-container-lowest border border-border-subtle rounded-md py-1.5 pl-9 pr-3 text-body-sm focus:border-secondary focus:ring-1 focus:ring-secondary transition-all"
                   placeholder="Search Case ID, title, category..."
@@ -228,7 +229,7 @@ export default function MyIncidentReports() {
                     </div>
                     <div className="flex gap-2 pt-1">
                       <button type="button" onClick={() => handleViewDetails(c.dbId)} className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-border-subtle rounded-md text-xs font-semibold text-on-surface-variant hover:border-secondary hover:text-secondary transition-colors whitespace-nowrap">
-                        <span className="material-symbols-outlined text-[16px]">visibility</span>
+                        <Ph className="text-[16px]" name="visibility" />
                         View Details
                       </button>
                     </div>

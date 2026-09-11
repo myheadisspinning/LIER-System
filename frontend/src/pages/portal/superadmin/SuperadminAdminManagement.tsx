@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { fmtDate, logAudit } from '../../../lib/admin';
@@ -199,15 +200,15 @@ export default function SuperadminAdminManagement() {
         </div>
         <div className="flex flex-wrap gap-3">
           <button type="button" onClick={() => setFormOpen(true)} className="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary rounded-lg font-label-md text-label-md shadow-sm hover:shadow-md transition-shadow">
-            <span className="material-symbols-outlined text-[18px]">person_add</span>
+            <Ph className="text-[18px]" name="person_add" />
             + Add Admin
           </button>
           <button type="button" className="flex items-center gap-2 px-4 py-2 bg-primary-container text-on-primary rounded-lg font-label-md text-label-md shadow-sm hover:shadow-md transition-shadow">
-            <span className="material-symbols-outlined text-[18px]">local_police</span>
+            <Ph className="text-[18px]" name="local_police" />
             + Add Officer
           </button>
           <button type="button" className="flex items-center gap-2 px-4 py-2 border-1.5 border-outline-variant text-on-surface bg-surface rounded-lg font-label-md text-label-md hover:bg-surface-container-low transition-colors">
-            <span className="material-symbols-outlined text-[18px]">download</span>
+            <Ph className="text-[18px]" name="download" />
             Export List
           </button>
         </div>
@@ -216,7 +217,7 @@ export default function SuperadminAdminManagement() {
         <div className="bg-surface rounded-2xl p-md border border-outline-variant/30 shadow-sm relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary-fixed/30 rounded-full blur-xl group-hover:bg-primary-fixed/50 transition-colors"></div>
           <div className="flex items-center gap-3 mb-4 text-on-surface-variant">
-            <span className="material-symbols-outlined bg-surface-container-high p-2 rounded-lg text-secondary">shield_person</span>
+            <Ph className="bg-surface-container-high p-2 rounded-lg text-secondary" name="shield_person" />
             <span className="font-label-md text-label-md uppercase tracking-wider">Total Admins</span>
           </div>
           <div className="font-display-lg-mobile text-display-lg-mobile text-on-background">{stats.admins}</div>
@@ -224,7 +225,7 @@ export default function SuperadminAdminManagement() {
         <div className="bg-surface rounded-2xl p-md border border-outline-variant/30 shadow-sm relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-secondary-fixed/30 rounded-full blur-xl group-hover:bg-secondary-fixed/50 transition-colors"></div>
           <div className="flex items-center gap-3 mb-4 text-on-surface-variant">
-            <span className="material-symbols-outlined bg-surface-container-high p-2 rounded-lg text-secondary-container">local_police</span>
+            <Ph className="bg-surface-container-high p-2 rounded-lg text-secondary-container" name="local_police" />
             <span className="font-label-md text-label-md uppercase tracking-wider">Total Officers</span>
           </div>
           <div className="font-display-lg-mobile text-display-lg-mobile text-on-background">{stats.officers}</div>
@@ -232,7 +233,7 @@ export default function SuperadminAdminManagement() {
         <div className="bg-surface rounded-2xl p-md border border-outline-variant/30 shadow-sm relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-surface-container-highest/50 rounded-full blur-xl group-hover:bg-surface-container-highest transition-colors"></div>
           <div className="flex items-center gap-3 mb-4 text-on-surface-variant">
-            <span className="material-symbols-outlined bg-surface-container-high p-2 rounded-lg text-on-secondary-fixed-variant">check_circle</span>
+            <Ph className="bg-surface-container-high p-2 rounded-lg text-on-secondary-fixed-variant" name="check_circle" />
             <span className="font-label-md text-label-md uppercase tracking-wider">Active Accounts</span>
           </div>
           <div className="font-display-lg-mobile text-display-lg-mobile text-on-background">{stats.active}</div>
@@ -240,7 +241,7 @@ export default function SuperadminAdminManagement() {
         <div className="bg-surface rounded-2xl p-md border-l-4 border-l-error shadow-sm relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-error-container/30 rounded-full blur-xl group-hover:bg-error-container/50 transition-colors"></div>
           <div className="flex items-center gap-3 mb-4 text-on-surface-variant">
-            <span className="material-symbols-outlined bg-error-container/50 p-2 rounded-lg text-error">gpp_bad</span>
+            <Ph className="bg-error-container/50 p-2 rounded-lg text-error" name="gpp_bad" />
             <span className="font-label-md text-label-md uppercase tracking-wider">Suspended</span>
           </div>
           <div className="font-display-lg-mobile text-display-lg-mobile text-error">{stats.suspended}</div>
@@ -264,7 +265,7 @@ export default function SuperadminAdminManagement() {
               </div>
               <div className="flex gap-2">
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+                  <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" name="search" />
                   <input
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
@@ -329,7 +330,7 @@ export default function SuperadminAdminManagement() {
                         )}
                       </td>
                       <td className="py-3 px-md text-right">
-                        <button type="button" className="text-outline hover:text-secondary p-1 rounded transition-colors"><span className="material-symbols-outlined">more_vert</span></button>
+                        <button type="button" className="text-outline hover:text-secondary p-1 rounded transition-colors"><Ph name="more_vert" /></button>
                       </td>
                     </tr>
                   ))}
@@ -356,7 +357,7 @@ export default function SuperadminAdminManagement() {
             <div className="relative h-32 bg-primary-container p-md flex items-end">
               <div className="absolute inset-0 bg-gradient-to-t from-primary-container to-transparent opacity-50"></div>
               <button type="button" onClick={() => setActiveId(null)} className="absolute top-4 right-4 text-on-primary/70 hover:text-on-primary bg-black/20 rounded-full p-1 transition-colors">
-                <span className="material-symbols-outlined">close</span>
+                <Ph name="close" />
               </button>
               <div className="relative flex items-center gap-4 translate-y-8">
                 <div className="w-20 h-20 rounded-xl bg-white p-1 shadow-md flex items-center justify-center overflow-hidden">
@@ -377,7 +378,7 @@ export default function SuperadminAdminManagement() {
             <div className="flex-1 overflow-y-auto mt-10 p-md space-y-6">
               <div className="flex justify-between items-center bg-surface-container-low p-3 rounded-xl border border-outline-variant/20">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-secondary text-[20px]">directions_run</span>
+                  <Ph className="text-secondary text-[20px]" name="directions_run" />
                   <span className="font-label-md text-label-md text-on-surface">Duty Status</span>
                 </div>
                 <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-label-md text-label-md border ${active.suspended ? 'bg-error-container/20 text-error border-error/30' : 'bg-secondary-container/20 text-secondary-container border-secondary-container/30'}`}>
@@ -420,14 +421,14 @@ export default function SuperadminAdminManagement() {
                       <div className="font-label-md text-label-md text-on-surface group-hover:text-secondary transition-colors">Force Password Reset</div>
                       <div className="text-caption text-outline mt-0.5">Require user to change password on next login.</div>
                     </div>
-                    <span className="material-symbols-outlined text-outline group-hover:text-secondary">lock_reset</span>
+                    <Ph className="text-outline group-hover:text-secondary" name="lock_reset" />
                   </button>
                   <button type="button" disabled={busyId === active.id} onClick={() => toggleSuspend(active)} className={`w-full flex justify-between items-center px-4 py-3 border rounded-xl transition-colors text-left group disabled:opacity-50 ${active.suspended ? 'bg-success-green/5 border-success-green/30 hover:bg-success-green/10' : 'bg-error-container/20 border-error/30 hover:bg-error-container/40'}`}>
                     <div>
                       <div className={`font-label-md text-label-md ${active.suspended ? 'text-success-green' : 'text-error'}`}>{active.suspended ? 'Re-activate Account' : 'Suspend Account Access'}</div>
                        <div className={`text-caption ${active.suspended ? 'text-on-surface-variant' : 'text-on-error-container/70'} mt-0.5`}>{active.suspended ? 'Restore account access.' : 'Block user from signing in.'}</div>
                     </div>
-                    <span className={`material-symbols-outlined ${active.suspended ? 'text-success-green' : 'text-error'}`}>{active.suspended ? 'check_circle' : 'block'}</span>
+                    <Ph className={` ${active.suspended ? 'text-success-green' : 'text-error'}`} name={active.suspended ? 'check_circle' : 'block'} />
                   </button>
                 </div>
               </div>
@@ -440,7 +441,7 @@ export default function SuperadminAdminManagement() {
           <div className="bg-surface-container-lowest rounded-xl border border-border-subtle shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10">
               <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Register New Account</h3>
-              <button type="button" onClick={() => setFormOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><span className="material-symbols-outlined">close</span></button>
+              <button type="button" onClick={() => setFormOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close"><Ph name="close" /></button>
             </div>
             <div className="p-5 space-y-4">
               <div>

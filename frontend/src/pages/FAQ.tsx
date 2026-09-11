@@ -1,3 +1,4 @@
+import Ph from '../components/PhIcon';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import SiteHeader from '../components/SiteHeader';
@@ -132,7 +133,7 @@ export default function FAQ() {
               <div key={section.category}>
                 <div className="flex items-center gap-3 mb-4 md:mb-6">
                   <div className="w-11 h-11 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center">
-                    <span className="material-symbols-outlined">{section.icon}</span>
+                    <Ph name={section.icon} />
                   </div>
                   <div>
                     <h2 className="font-headline-md text-headline-md text-on-surface font-bold">{section.category}</h2>
@@ -151,7 +152,7 @@ export default function FAQ() {
                           className="w-full flex items-center justify-between gap-4 p-5 text-left focus:outline-none"
                         >
                           <span className="font-label-md text-label-md text-on-surface font-bold">{item.q}</span>
-                          <span className={`material-symbols-outlined text-secondary shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>expand_more</span>
+                          <Ph className={` text-secondary shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} name="expand_more" />
                         </button>
                         <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
                           <div className="overflow-hidden min-h-0">
@@ -167,10 +168,10 @@ export default function FAQ() {
 
             <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
               <Link className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-secondary text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all" to="/services">
-                <span className="material-symbols-outlined">arrow_back</span> Back to Services
+                <Ph name="arrow_back" /> Back to Services
               </Link>
               <Link className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-secondary text-secondary font-bold rounded-xl hover:bg-secondary/5 transition-all" to="/contact">
-                Contact Us <span className="material-symbols-outlined">support_agent</span>
+                Contact Us <Ph name="support_agent" />
               </Link>
             </div>
           </div>

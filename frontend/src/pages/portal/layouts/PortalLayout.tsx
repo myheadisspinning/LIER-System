@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
@@ -141,7 +142,7 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
               </p>
             </div>
             <button type="button" onClick={handleSignOut} className="text-on-surface-variant hover:text-on-surface transition-colors" aria-label="Sign out">
-              <span className="material-symbols-outlined" style={{ fontSize: 20 }}>logout</span>
+              <Ph name="logout" />
             </button>
           </div>
         </div>
@@ -158,12 +159,7 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
           </div>
           <div className="flex items-center gap-5">
             <div className="relative hidden md:block">
-              <span
-                className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant"
-                style={{ fontSize: 18 }}
-              >
-                search
-              </span>
+              <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" name="search" />
               <input
                 className="pl-9 pr-4 py-2 bg-white border border-outline-variant/30 rounded-lg focus:ring-1 focus:ring-cc-accent w-72 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none"
                 placeholder={nav.searchPlaceholder}
@@ -178,17 +174,17 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
                 title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
                 aria-label="Toggle color theme"
               >
-                <span className="material-symbols-outlined">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
+                <Ph name={theme === 'dark' ? 'light_mode' : 'dark_mode'} />
               </button>
               <span className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-green/10 text-success-green border border-cc-emerald/20 text-xs font-bold">
                 <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span> LIVE
               </span>
               <button type="button" className="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full relative transition-colors">
-                <span className="material-symbols-outlined">notifications</span>
+                <Ph name="notifications" />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full border-2 border-cc-header"></span>
               </button>
               <button type="button" className="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-full transition-colors">
-                <span className="material-symbols-outlined">help_outline</span>
+                <Ph name="help_outline" />
               </button>
               <div className="w-7 h-7 rounded-full bg-secondary/15 ring-1 ring-cc-border-strong flex items-center justify-center overflow-hidden">
                 {avatarUrl() ? <img src={avatarUrl()!} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-secondary">{initials()}</span>}
@@ -207,7 +203,7 @@ export default function PortalLayout({ nav, fab, fabLabel = 'QUICK DISPATCH' }: 
           type="button"
           className="fixed bottom-8 right-8 w-14 h-14 bg-secondary text-on-secondary rounded-full shadow-sm-hover flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group border-4 border-cc-header"
         >
-          <span className="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform">bolt</span>
+          <Ph className="text-2xl group-hover:rotate-12 transition-transform" name="bolt" />
           <span className="absolute right-16 bg-cc-heading text-cc-bg text-[10px] font-bold px-3 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
             {fabLabel}
           </span>
@@ -240,9 +236,7 @@ if (item.children && item.children.length > 0) {
         }`}>
           {childActive && <span className="w-1 h-7 rounded-full bg-secondary absolute -left-0.5"></span>}
           <NavLink to={item.to!} className="flex items-center gap-3 min-w-0 flex-1">
-            <span className={`material-symbols-outlined text-[20px] shrink-0 ${childActive ? 'text-secondary' : 'text-on-surface-variant'}`}>
-              {item.icon ?? 'radio_button_unchecked'}
-            </span>
+            <Ph className={` text-[20px] shrink-0 ${childActive ? 'text-secondary' : 'text-on-surface-variant'}`} name={item.icon ?? 'radio_button_unchecked'} />
             <span className="flex flex-col min-w-0">
               <span className={`text-sm truncate ${childActive ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>
               {item.subLabel && <span className="text-[10px] text-on-surface-variant truncate">{item.subLabel}</span>}
@@ -254,9 +248,7 @@ if (item.children && item.children.length > 0) {
             className="shrink-0 p-1 rounded-md hover:bg-surface-container-low transition-colors"
             aria-label={expanded ? 'Collapse submenu' : 'Expand submenu'}
           >
-            <span className={`material-symbols-outlined text-sm text-on-surface-variant transition-transform ${expanded ? 'rotate-180' : ''}`}>
-              expand_more
-            </span>
+            <Ph className={` text-sm text-on-surface-variant transition-transform ${expanded ? 'rotate-180' : ''}`} name="expand_more" />
           </button>
         </div>
         {expanded && (
@@ -288,9 +280,7 @@ if (item.children && item.children.length > 0) {
       }`}
     >
       {pathname === item.to && <span className="w-1 h-7 rounded-full bg-secondary absolute -left-0.5"></span>}
-      <span className={`material-symbols-outlined text-[20px] shrink-0 ${pathname === item.to ? 'text-secondary' : 'text-on-surface-variant'}`}>
-        {item.icon ?? 'radio_button_unchecked'}
-      </span>
+      <Ph className={` text-[20px] shrink-0 ${pathname === item.to ? 'text-secondary' : 'text-on-surface-variant'}`} name={item.icon ?? 'radio_button_unchecked'} />
       <span className="flex flex-col min-w-0">
         <span className={`text-sm truncate ${pathname === item.to ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>
         {item.subLabel && <span className="text-[10px] text-on-surface-variant truncate">{item.subLabel}</span>}

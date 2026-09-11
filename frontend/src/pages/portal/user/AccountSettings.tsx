@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../../supabaseClient';
@@ -278,7 +279,7 @@ const isEmailProvider = authProvider === 'email';
   <div className="min-w-0">
   <h3 className="text-lg font-headline-md sm:text-headline-md text-on-background break-words text-center sm:text-left">{profile.fullname}</h3>
   <div className="flex items-start justify-center sm:justify-start gap-1.5 mt-1 text-on-surface-variant font-body-sm text-body-sm max-w-2xl mx-auto sm:mx-0">
-   <span className="material-symbols-outlined text-[16px] shrink-0 mt-0.5">location_on</span>
+   <Ph className="text-[16px] shrink-0 mt-0.5" name="location_on" />
    <p className="min-w-0 break-words">{profile.address || 'House No., Street, Purok/Area, Barangay Culiat'}</p>
   </div>
   </div>
@@ -303,34 +304,34 @@ const isEmailProvider = authProvider === 'email';
    <div className="space-y-1">
    <label className="font-label-sm text-label-sm text-on-surface-variant block">Full Name</label>
    <div className="relative">
-   <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">person</span>
+   <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" name="person" />
    <input className={inputClass} type="text" value={profile.fullname} onChange={(e) => setField('fullname', e.target.value)} />
    </div>
    </div>
    <div className="space-y-1">
    <label className="font-label-sm text-label-sm text-on-surface-variant block">Date of Birth</label>
    <div className="relative">
-   <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">calendar_today</span>
+   <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" name="calendar_today" />
    <input className={inputClass} type="date" value={profile.dob} onChange={(e) => setField('dob', e.target.value)} />
    </div>
    </div>
    <div className="space-y-1">
    <label className="font-label-sm text-label-sm text-on-surface-variant block">Gender</label>
    <div className="relative">
-   <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">wc</span>
+   <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" name="wc" />
    <select className={`${inputClass} appearance-none`} value={profile.gender} onChange={(e) => setField('gender', e.target.value)}>
    <option value="">Select gender...</option>
    <option value="male">Male</option>
    <option value="female">Female</option>
    <option value="other">Other</option>
    </select>
-   <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline text-[18px] pointer-events-none">expand_more</span>
+   <Ph className="absolute right-3 top-1/2 -translate-y-1/2 text-outline text-[18px] pointer-events-none" name="expand_more" />
    </div>
    </div>
    <div className="space-y-1 md:col-span-2">
    <label className="font-label-sm text-label-sm text-on-surface-variant block">Registered Address</label>
    <div className="relative">
-   <span className="material-symbols-outlined absolute left-3 top-3 text-outline text-[18px]">home</span>
+   <Ph className="absolute left-3 top-3 text-outline text-[18px]" name="home" />
    <textarea
    className="w-full pl-9 pr-3 py-2 bg-surface-bg border border-border-subtle rounded-lg text-body-sm font-body-sm focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-shadow resize-none"
    rows={2}
@@ -351,7 +352,7 @@ const isEmailProvider = authProvider === 'email';
    <div className="space-y-1">
    <label className="font-label-sm text-label-sm text-on-surface-variant block">Email Address</label>
    <div className="relative">
-   <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">mail</span>
+   <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" name="mail" />
    <input className={inputClass} type="email" value={profile.email} disabled />
    </div>
    </div>
@@ -368,7 +369,7 @@ const isEmailProvider = authProvider === 'email';
   <div className="absolute top-0 left-0 w-full h-1 bg-error-red"></div>
   <div className="p-4 sm:p-6 border-b border-border-subtle bg-error-container/10 rounded-t-xl mt-1">
   <h3 className="font-caps-xs text-caps-xs text-error-red uppercase tracking-wider mb-1 flex items-center gap-1">
-   <span className="material-symbols-outlined text-[14px]">emergency</span>
+   <Ph className="text-[14px]" name="emergency" />
    Critical Info
   </h3>
   <h2 className="text-lg font-headline-md sm:text-headline-md text-on-background">Emergency Contact</h2>
@@ -378,21 +379,21 @@ const isEmailProvider = authProvider === 'email';
   <div className="space-y-1">
    <label className="font-label-sm text-label-sm text-on-surface-variant block">Contact Name</label>
    <div className="relative">
-   <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">person_alert</span>
+   <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" name="person_alert" />
    <input className="w-full pl-9 pr-3 py-1.5 sm:py-2 bg-surface-bg border border-border-subtle rounded-lg text-body-sm font-body-sm focus:border-error-red focus:ring-1 focus:ring-error-red outline-none transition-shadow" placeholder="e.g., Maria Dela Cruz" type="text" value={profile.emergency_contact_name} onChange={(e) => setField('emergency_contact_name', e.target.value)} />
    </div>
   </div>
   <div className="space-y-1">
    <label className="font-label-sm text-label-sm text-on-surface-variant block">Relationship to Resident</label>
    <div className="relative">
-   <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">family_restroom</span>
+   <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" name="family_restroom" />
    <select className="w-full pl-9 pr-3 py-1.5 sm:py-2 bg-surface-bg border border-border-subtle rounded-lg text-body-sm font-body-sm focus:border-error-red focus:ring-1 focus:ring-error-red outline-none transition-shadow appearance-none" value={profile.emergency_contact_relationship} onChange={(e) => setField('emergency_contact_relationship', e.target.value)}>
    <option value="">Select relationship...</option>
    {RELATIONSHIPS.map((r) => (
    <option key={r.value} value={r.value}>{r.label}</option>
    ))}
    </select>
-   <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline text-[18px] pointer-events-none">expand_more</span>
+   <Ph className="absolute right-3 top-1/2 -translate-y-1/2 text-outline text-[18px] pointer-events-none" name="expand_more" />
    </div>
   </div>
   <div className="space-y-1">
@@ -407,7 +408,7 @@ const isEmailProvider = authProvider === 'email';
   </div>
   <div className="p-4 sm:p-6 border-t border-border-subtle bg-surface/30 rounded-b-xl">
   <button type="button" onClick={saveEmergencyContact} disabled={saving} className="w-full px-4 py-3 bg-secondary hover:bg-secondary-container text-on-secondary font-label-md text-label-md font-bold rounded-lg transition-colors flex justify-center items-center gap-2 disabled:opacity-60">
-   <span className="material-symbols-outlined text-[20px]">save</span>
+   <Ph className="text-[20px]" name="save" />
    {saving ? 'Saving…' : 'Save Emergency Contact'}
   </button>
   </div>
@@ -444,7 +445,7 @@ const isEmailProvider = authProvider === 'email';
   </div>
   <div className="py-3 flex items-center justify-between">
   <div className="flex items-start space-x-3">
-   <span className="material-symbols-outlined text-warning-amber mt-0.5">volume_up</span>
+   <Ph className="text-warning-amber mt-0.5" name="volume_up" />
    <div>
    <div className="font-label-md text-label-md text-on-surface">High-Priority Siren Alerts</div>
    <div className="font-body-sm text-body-sm text-on-surface-variant">Play loud audible alarm for severe weather or direct threats, overriding silent mode.</div>
@@ -470,7 +471,7 @@ const isEmailProvider = authProvider === 'email';
      <input className="w-full bg-surface-bg border border-border-subtle rounded pl-3 pr-10 py-1.5 sm:py-2 text-body-sm font-body-sm focus:ring-1 focus:ring-secondary focus:border-secondary transition-all" placeholder="••••••••" type={showFields.current ? 'text' : 'password'} value={pw.current} onChange={(e) => setPw({ ...pw, current: e.target.value })} />
      {pw.current && (
      <button type="button" onClick={() => setShowFields((s) => ({ ...s, current: !s.current }))} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-outline hover:text-on-surface transition-colors" aria-label={showFields.current ? 'Hide password' : 'Show password'}>
-      <span className="material-symbols-outlined">{showFields.current ? 'visibility_off' : 'visibility'}</span>
+      <Ph name={showFields.current ? 'visibility_off' : 'visibility'} />
      </button>
      )}
      </div>
@@ -481,7 +482,7 @@ const isEmailProvider = authProvider === 'email';
      <input className="w-full bg-surface-bg border border-border-subtle rounded pl-3 pr-10 py-1.5 sm:py-2 text-body-sm font-body-sm focus:ring-1 focus:ring-secondary focus:border-secondary transition-all" placeholder="••••••••" type={showFields.newPass ? 'text' : 'password'} value={pw.newPass} onChange={(e) => setPw({ ...pw, newPass: e.target.value })} />
      {pw.newPass && (
      <button type="button" onClick={() => setShowFields((s) => ({ ...s, newPass: !s.newPass }))} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-outline hover:text-on-surface transition-colors" aria-label={showFields.newPass ? 'Hide password' : 'Show password'}>
-      <span className="material-symbols-outlined">{showFields.newPass ? 'visibility_off' : 'visibility'}</span>
+      <Ph name={showFields.newPass ? 'visibility_off' : 'visibility'} />
      </button>
      )}
      </div>
@@ -492,7 +493,7 @@ const isEmailProvider = authProvider === 'email';
      <input className="w-full bg-surface-bg border border-border-subtle rounded pl-3 pr-10 py-1.5 sm:py-2 text-body-sm font-body-sm focus:ring-1 focus:ring-secondary focus:border-secondary transition-all" placeholder="••••••••" type={showFields.confirm ? 'text' : 'password'} value={pw.confirm} onChange={(e) => setPw({ ...pw, confirm: e.target.value })} />
      {pw.confirm && (
      <button type="button" onClick={() => setShowFields((s) => ({ ...s, confirm: !s.confirm }))} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-outline hover:text-on-surface transition-colors" aria-label={showFields.confirm ? 'Hide password' : 'Show password'}>
-      <span className="material-symbols-outlined">{showFields.confirm ? 'visibility_off' : 'visibility'}</span>
+      <Ph name={showFields.confirm ? 'visibility_off' : 'visibility'} />
      </button>
      )}
      </div>
@@ -504,7 +505,7 @@ const isEmailProvider = authProvider === 'email';
   ) : (
    <div className="bg-surface-bg border border-border-subtle rounded-lg p-4">
    <div className="flex items-center gap-3 mb-2">
-   <span className="material-symbols-outlined text-secondary text-xl">shield</span>
+   <Ph className="text-secondary text-xl" name="shield" />
    <span className="font-label-md text-label-md text-on-surface">Google Sign-In Account</span>
    </div>
    <p className="font-body-sm text-body-sm text-on-surface-variant">Your account uses Google Sign-In. Password management is handled by Google.</p>
@@ -530,7 +531,7 @@ const isEmailProvider = authProvider === 'email';
    <div className="bg-surface-bg border border-border-subtle rounded-xl overflow-hidden">
     <div className="px-4 py-3 border-b border-border-subtle flex items-center justify-between gap-2">
     <span className="font-label-sm text-label-sm text-on-surface flex items-center gap-2">
-     <span className="material-symbols-outlined text-[18px] text-secondary">devices</span>
+     <Ph className="text-[18px] text-secondary" name="devices" />
      Signed-In Devices
     </span>
     <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-success-green/10 text-success-green border border-success-green/25 text-[10px] font-bold uppercase tracking-wider">
@@ -543,7 +544,7 @@ const isEmailProvider = authProvider === 'email';
     </div>
     <div className="p-3 sm:p-4 flex items-center gap-3">
     <div className={`w-11 h-11 shrink-0 rounded-xl flex items-center justify-center ${isCoarsePointer ? 'bg-secondary/10 text-secondary' : 'bg-surface-container-highest text-on-surface-variant'}`}>
-     <span className="material-symbols-outlined text-[22px]">{isCoarsePointer ? 'smartphone' : 'desktop_windows'}</span>
+     <Ph className="text-[22px]" name={isCoarsePointer ? 'smartphone' : 'desktop_windows'} />
     </div>
     <div className="min-w-0 flex-1">
      <div className="font-label-sm text-label-sm text-on-surface">{isCoarsePointer ? 'Mobile Device' : 'Desktop Device'}</div>

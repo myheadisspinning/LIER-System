@@ -1,3 +1,4 @@
+import Ph from '../components/PhIcon';
 import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import SiteHeader from '../components/SiteHeader';
@@ -125,7 +126,7 @@ export default function AdvisoriesPage() {
       <section className="pt-20 pb-8 md:pb-10 bg-primary-container">
           <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop text-center">
           <div className="inline-flex items-center gap-sm bg-white/15 backdrop-blur-sm px-md py-xs rounded-full mb-base">
-            <span className="material-symbols-outlined text-sm text-white">notifications_active</span>
+            <Ph className="text-sm text-white" name="notifications_active" />
             <span className="text-white font-label-md text-xs tracking-wider uppercase font-bold">Official Advisories</span>
           </div>
           <h1 className="font-display-lg text-3xl md:text-5xl text-white font-bold mb-sm">Community Alerts &amp; Advisories</h1>
@@ -133,7 +134,7 @@ export default function AdvisoriesPage() {
         </div>
       </section>
 
-      <section className="py-xl flex-1">
+      <section className="py-xl flex-1 bg-surface-container-low">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
           <div className="bg-surface-container-lowest rounded-xl border border-border-subtle p-4 flex flex-col md:flex-row justify-between items-center mb-8 md:mb-12 gap-4 shadow-sm">
             <div className="flex flex-wrap gap-2">
@@ -153,7 +154,7 @@ export default function AdvisoriesPage() {
               ))}
             </div>
             <div className="relative w-full md:w-auto">
-              <span className="material-symbols-outlined text-on-surface-variant absolute left-3 top-1/2 -translate-y-1/2 text-lg">search</span>
+              <Ph className="text-on-surface-variant absolute left-3 top-1/2 -translate-y-1/2 text-lg" name="search" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -168,7 +169,7 @@ export default function AdvisoriesPage() {
             <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 md:p-12 text-center text-sm text-on-surface-variant shadow-sm">Loading advisories...</div>
           ) : advisories.length === 0 ? (
             <div className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-6 md:p-12 text-center text-on-surface-variant shadow-sm">
-              <span className="material-symbols-outlined text-4xl text-on-surface-variant/40 mb-3 block">notifications_off</span>
+              <Ph className="text-4xl text-on-surface-variant/40 mb-3 block" name="notifications_off" />
               <p className="font-body-md">No official advisories have been published yet.</p>
             </div>
           ) : visible.length === 0 ? (
@@ -194,7 +195,7 @@ export default function AdvisoriesPage() {
                     <div className="p-4 md:p-6 flex flex-col flex-1">
                       <div className="flex justify-between items-start mb-3 md:mb-4">
                         <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-caps-xs text-caps-xs uppercase tracking-wider ${toneClasses[a.tone]}`}>
-                          <span className="material-symbols-outlined text-[14px]">{iconFor(a.type)}</span>
+                          <Ph className="text-[14px]" name={iconFor(a.type)} />
                           {a.type}
                         </span>
                         <span className="text-on-surface-variant font-label-sm text-label-sm">{a.time}</span>
@@ -243,11 +244,11 @@ export default function AdvisoriesPage() {
             <div className="px-6 py-4 flex justify-between items-center shrink-0 border-b border-border-subtle z-10 bg-surface-container-lowest">
               <div className="flex items-center gap-3">
                 <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-caps-xs text-caps-xs uppercase tracking-wider ${toneClasses[selectedAdvisory.tone]}`}>
-                  <span className="material-symbols-outlined text-[14px]">{iconFor(selectedAdvisory.type)}</span>
+                  <Ph className="text-[14px]" name={iconFor(selectedAdvisory.type)} />
                   {selectedAdvisory.type}
                 </span>
                 <span className="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
-                  <span className="material-symbols-outlined text-[16px]">schedule</span>
+                  <Ph className="text-[16px]" name="schedule" />
                   {selectedAdvisory.time} -+ {selectedAdvisory.audience}
                 </span>
               </div>
@@ -256,7 +257,7 @@ export default function AdvisoriesPage() {
                 onClick={() => setSelectedAdvisory(null)}
                 className="text-on-surface-variant hover:text-on-surface p-2 rounded-full hover:bg-surface-container transition-colors"
               >
-                <span className="material-symbols-outlined text-2xl">close</span>
+                <Ph className="text-2xl" name="close" />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto">

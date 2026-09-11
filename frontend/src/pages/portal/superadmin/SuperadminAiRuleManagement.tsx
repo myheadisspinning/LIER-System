@@ -1,3 +1,4 @@
+import Ph from '../../../components/PhIcon';
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
 import Toast from '../../../components/Toast';
@@ -180,7 +181,7 @@ export default function SuperadminAiRuleManagement() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary text-lg">settings_input_component</span>
+              <Ph className="text-secondary text-lg" name="settings_input_component" />
               AI Configuration
             </h3>
             <span className="px-2.5 py-0.5 bg-green-50 text-green-700 text-[10px] font-bold rounded-full border border-green-100 flex items-center gap-1">
@@ -212,14 +213,14 @@ export default function SuperadminAiRuleManagement() {
                 <label className="text-xs font-semibold text-slate-500">AI Response Limits (Max Tokens)</label>
                 <span className="text-xs font-bold text-secondary">{maxTokens} Tokens</span>
               </div>
-              <input className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer" max="4096" min="256" type="range" value={maxTokens} onChange={(e) => setMaxTokens(Number(e.target.value))} style={{ accentColor: '#0051d5' }} />
+              <input className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer" max="4096" min="256" type="range" value={maxTokens} onChange={(e) => setMaxTokens(Number(e.target.value))} />
               <div className="flex justify-between mt-1">
                 <span className="text-[10px] text-slate-400">256</span>
                 <span className="text-[10px] text-slate-400">4096</span>
               </div>
             </div>
             <button type="button" onClick={saveTokens} disabled={busy} className="w-full py-2.5 bg-on-primary-fixed text-white text-sm font-bold rounded-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-2 disabled:opacity-60">
-              <span className="material-symbols-outlined text-sm">tune</span>
+              <Ph className="text-sm" name="tune" />
               Save response limits
             </button>
           </div>
@@ -228,7 +229,7 @@ export default function SuperadminAiRuleManagement() {
         {/* SECTION 2: AI Model Monitoring */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
           <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-lg">monitoring</span>
+            <Ph className="text-secondary text-lg" name="monitoring" />
             AI Model Monitoring
           </h3>
           {loading ? (
@@ -272,12 +273,12 @@ export default function SuperadminAiRuleManagement() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary text-lg">terminal</span>
+              <Ph className="text-secondary text-lg" name="terminal" />
               Fallback Rule Engine
             </h3>
           </div>
           <div className="mb-4 relative">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+            <Ph className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm" name="search" />
             <input className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border-slate-200 rounded-lg text-xs" placeholder="Search fallback rules..." type="text" value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
           <div className="overflow-x-auto">
@@ -303,7 +304,7 @@ export default function SuperadminAiRuleManagement() {
                       </button>
                     </td>
                     <td className="py-2.5 text-right">
-                      <button type="button" onClick={() => deleteRule(rule)} className="text-slate-400 hover:text-error transition-colors"><span className="material-symbols-outlined text-sm">delete</span></button>
+                      <button type="button" onClick={() => deleteRule(rule)} className="text-slate-400 hover:text-error transition-colors"><Ph className="text-sm" name="delete" /></button>
                     </td>
                   </tr>
                 ))}
@@ -351,7 +352,7 @@ export default function SuperadminAiRuleManagement() {
         {/* SECTION 4: Incident Classification Settings */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
           <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-lg">account_tree</span>
+            <Ph className="text-secondary text-lg" name="account_tree" />
             Classification Settings
           </h3>
           <div className="space-y-4">
@@ -360,7 +361,7 @@ export default function SuperadminAiRuleManagement() {
               return (
                 <div key={cat} className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-slate-400 text-lg">folder_open</span>
+                    <Ph className="text-slate-400 text-lg" name="folder_open" />
                     <span className="text-xs font-bold text-slate-700 uppercase">{cat}</span>
                   </div>
                   <div className="pl-6 space-y-1.5 border-l border-slate-100 ml-2">
@@ -385,7 +386,7 @@ export default function SuperadminAiRuleManagement() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary text-lg">history_edu</span>
+              <Ph className="text-secondary text-lg" name="history_edu" />
               AI Audit Logs
             </h3>
             <button type="button" onClick={load} className="text-[10px] font-bold text-secondary uppercase hover:underline">Refresh</button>
@@ -395,7 +396,7 @@ export default function SuperadminAiRuleManagement() {
               <div key={a.id} className="p-3 bg-slate-50 rounded-lg border-l-4 border-secondary">
                 <div className="flex justify-between items-start mb-1">
                   <span className="text-[9px] font-bold text-slate-400">{new Date(a.created_at).toLocaleTimeString('en-PH')} | {a.actor}</span>
-                  <span className="material-symbols-outlined text-sm text-slate-400">smart_toy</span>
+                  <Ph className="text-sm text-slate-400" name="smart_toy" />
                 </div>
                 <p className="text-[11px] text-slate-700 font-medium">{a.action}</p>
                 <p className="text-[9px] text-slate-400 mt-1 italic">{a.detail}</p>
