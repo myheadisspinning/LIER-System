@@ -125,6 +125,13 @@ const PRIORITY_STYLES: Record<AiAnalysis['priority'], string> = {
  LOW: 'bg-secondary/10 text-secondary border-secondary/20',
 };
 
+const ROBOT_SEVERITY_STYLES: Record<AiAnalysis['priority'], { fab: string; icon: string }> = {
+ CRITICAL: { fab: 'bg-error border-error', icon: 'text-on-error' },
+ HIGH: { fab: 'bg-tertiary border-tertiary', icon: 'text-on-tertiary' },
+ MEDIUM: { fab: 'bg-secondary border-secondary', icon: 'text-on-secondary' },
+ LOW: { fab: 'bg-success-green border-success-green', icon: 'text-white' },
+};
+
 const THREAT_SEGMENTS = [
  { label: 'Low', color: 'bg-success-green' },
  { label: 'Med', color: 'bg-secondary' },
@@ -136,7 +143,26 @@ const THREAT_SEGMENTS = [
 // describes a real, actionable incident. If the text matches none of these and
 // is too short to be a genuine description, the AI tactical analysis is skipped
 // (the AI shouldn't "analyze" gibberish, test input, or off-topic text).
-const INCIDENT_KEYWORDS = ['fire', 'sunog', 'apoy', 'usok', 'burn', 'flame', 'smoke', 'liyab', 'nagliliyab', 'nagniningas', 'siga', 'sumabog', 'pagsabog', 'sabog', 'explosion', 'bomba', 'blast', 'gas', 'gasolina', 'fuel', 'kuryente', 'nakuryente', 'short circuit', 'electrical', 'natupok', 'medical', 'emergency', 'hospital', 'ambulance', 'ambulan', 'ambulansya', 'injured', 'injury', 'bleeding', 'bleed', 'wound', 'sugat', 'sugatan', 'nasugatan', 'dugo', 'dumudugo', 'dinudugo', 'blood', 'himatay', 'hinimatay', 'walang malay', 'unconscious', 'aksid', 'akid', 'aksidente', 'naaksidente', 'akidente', 'atake', 'atake sa puso', 'heart attack', 'stroke', 'seizure', 'kombulsyon', 'convulsion', 'hika', 'asthma', 'kagat', 'nakagat', 'tinuka', 'bite', 'bitten', 'buntis', 'nanganganak', 'manganganak', 'nanganak', 'labor', 'giving birth', 'saktan', 'nasaktan', 'sakit', 'masakit', 'sagasaan', 'nasagasaan', 'sasagasaan', 'bangga', 'nabangga', 'nalunod', 'nalulunod', 'drown', 'drowning', 'drowned', 'lason', 'nalason', 'pagkalason', 'poison', 'poisoning', 'overdose', 'nahulog', 'nahulugan', 'fell', 'fell down', 'binaril', 'natamaan', 'nasaksak', 'tinusok', 'high blood', 'coma', 'accident', 'crash', 'collision', 'sasakyan', 'sasakyang', 'kotse', 'motor', 'motorsiklo', 'jeep', 'jeepney', 'dyip', 'bus', 'traysikel', 'tricycle', 'kuliglig', 'truck', 'traffic', 'trapik', 'trapiko', 'harang', 'bara', 'barado', 'aberya', 'nakaaberya', 'roadblock', 'debris', 'overturned', 'counterflow', 'overspeed', 'speeding', 'nakaharang', 'crime', 'nakaw', 'ninakaw', 'nanakaw', 'magnanakaw', 'nagnanakaw', 'theft', 'steal', 'stole', 'stolen', 'snatch', 'snatcher', 'snatched', 'holdap', 'holdup', 'holdaper', 'robbery', 'robber', 'rob', 'saksak', 'sinaksak', 'nasaksak', 'stab', 'stabbed', 'baril', 'binaril', 'namaril', 'pamamaril', 'barilin', 'gun', 'gunshot', 'shoot', 'shot', 'shooting', 'patay', 'pinatay', 'pumatay', 'patayan', 'nasawi', 'kill', 'killed', 'murder', 'homicide', 'bangkay', 'cadaver', 'kidnap', 'kidnapped', 'kinidnap', 'nangikidnap', 'dukot', 'dinukot', 'mandurukot', 'carnap', 'carnapping', 'droga', 'drugs', 'shabu', 'pusher', 'tulak', 'vandal', 'vandalism', 'sinira', 'basag', 'binasag', 'gulpi', 'ginulpi', 'bugbog', 'binugbog', 'bugbugan', 'suntukan', 'suntok', 'assault', 'mauling', 'attacked', 'threat', 'pananakot', 'nananakot', 'armas', 'patalim', 'kutsilyo', 'papatayin', 'papapatayin', 'ipapapatay', 'babarilin', 'barilin', 'sasaktan', 'saktan', 'hostage', 'blackmail', 'extort', 'panggigipit', 'killer', 'magsasabog', 'patayin', 'kaladkad', 'disaster', 'baha', 'bumaha', 'pagbaha', 'bahain', 'flood', 'flooded', 'flooding', 'lindol', 'lumindol', 'earthquake', 'aftershock', 'bagyo', 'bagyong', 'typhoon', 'storm', 'storm surge', 'daluyong', 'buhawi', 'tornado', 'landslide', 'guho', 'gumuho', 'pagguho', 'nagguho', 'natabunan', 'collapsed', 'natumba', 'fallen tree', 'natumbang puno', 'bumagsak na puno', 'ulan', 'heavy rain', 'malakas na ulan', 'habagat', 'amihan', 'disturbance', 'away', 'nag-aaway', 'nagaway', 'inaaway', 'brawl', 'rumble', 'rambol', 'sapakan', 'sabunutan', 'lasing', 'drunk', 'videoke', 'sound system', 'istambay', 'tambay', 'gulo', 'nagkagulo', 'kaguluhan', 'maingay', 'ingay', 'noise', 'infrastructure', 'brownout', 'blackout', 'power outage', 'power interruption', 'walang kuryente', 'putol ang kuryente', 'no electricity', 'elektrisidad', 'poste', 'tangke', 'tubig', 'water interruption', 'walang tubig', 'leakage', 'tagas ng tubig', 'butas', 'pothole', 'butas ng daan', 'sira ng kalsada', 'kalsada', 'damaged road', 'ilaw', 'streetlight', 'ilaw ng kalsada', 'wire', 'kable', 'cable', 'nakasabit na kable', 'manhole', 'drainage', 'kanal', 'baradong kanal', 'derelict', 'abandoned', 'missing', 'nawawala', 'nawala', 'wala', 'hindi na umuwi', 'di na umuwi', 'hinanap', 'hanapin', 'lost', 'lost child', 'animal', 'aso', 'dog', 'dogs', 'rabid', 'ahas', 'snake', 'kagat ng aso', 'kagat ng ahas', 'nagkagat', 'bubuyog', 'bee', 'bees', 'putakte', 'hayop', 'buwaya', 'crocodile', 'baka', 'toro', 'bull', 'kalabaw', 'baboy ramo', 'wild boar', 'sexual', 'rape', 'ginahasa', 'nirape', 'manyakis', 'molest', 'harass', 'harassment', 'hubad', 'bastos', 'catcall', 'stalker', 'libog', 'lascivious', 'lewd', 'porn', 'pornography', 'groping', 'touching', 'nanggipit', 'abuse', 'abuso', 'kantutan', 'suicide', 'magpakamatay', 'nagpakamatay', 'pagpapakamatay', 'nagpapakamatay', 'nagbigti', 'bigti', 'hijaw', 'hijiw', 'self-harm', 'attempt', 'cutting', 'wrist', 'pills', 'help', 'tulong', 'evacuate', 'police', 'tanod', 'barangay', 'sunugin', 'nagliliyab'];
+const INCIDENT_KEYWORDS = ['fire', 'sunog', 'apoy', 'usok', 'burn', 'flame', 'smoke', 'liyab', 'nagliliyab', 'nagniningas', 'siga', 'sumabog', 'pagsabog', 'sabog', 'explosion', 'bomba', 'blast', 'gas', 'gasolina', 'fuel', 'kuryente', 'nakuryente', 'short circuit', 'electrical', 'natupok', 'medical', 'emergency', 'hospital', 'ambulance', 'ambulan', 'ambulansya', 'injured', 'injury', 'bleeding', 'bleed', 'wound', 'sugat', 'sugatan', 'nasugatan', 'dugo', 'dumudugo', 'dinudugo', 'blood', 'himatay', 'hinimatay', 'walang malay', 'unconscious', 'aksid', 'akid', 'aksidente', 'naaksidente', 'akidente', 'atake', 'atake sa puso', 'heart attack', 'stroke', 'seizure', 'kombulsyon', 'convulsion', 'hika', 'asthma', 'kagat', 'nakagat', 'tinuka', 'bite', 'bitten', 'buntis', 'nanganganak', 'manganganak', 'nanganak', 'labor', 'giving birth', 'saktan', 'nasaktan', 'sakit', 'masakit', 'sagasaan', 'nasagasaan', 'sasagasaan', 'bangga', 'nabangga', 'nalunod', 'nalulunod', 'drown', 'drowning', 'drowned', 'lason', 'nalason', 'pagkalason', 'poison', 'poisoning', 'overdose', 'nahulog', 'nahulugan', 'fell', 'fell down', 'binaril', 'natamaan', 'nasaksak', 'tinusok', 'high blood', 'coma', 'accident', 'crash', 'collision', 'sasakyan', 'sasakyang', 'kotse', 'motor', 'motorsiklo', 'jeep', 'jeepney', 'dyip', 'bus', 'traysikel', 'tricycle', 'kuliglig', 'truck', 'traffic', 'trapik', 'trapiko', 'harang', 'bara', 'barado', 'aberya', 'nakaaberya', 'roadblock', 'debris', 'overturned', 'counterflow', 'overspeed', 'speeding', 'nakaharang', 'crime', 'nakaw', 'ninakaw', 'nanakaw', 'magnanakaw', 'nagnanakaw', 'theft', 'steal', 'stole', 'stolen', 'snatch', 'snatcher', 'snatched', 'holdap', 'holdup', 'holdaper', 'robbery', 'robber', 'rob', 'saksak', 'sinaksak', 'nasaksak', 'stab', 'stabbed', 'baril', 'binaril', 'namaril', 'pamamaril', 'barilin', 'gun', 'gunshot', 'shoot', 'shot', 'shooting', 'patay', 'pinatay', 'pumatay', 'patayan', 'nasawi', 'kill', 'killed', 'murder', 'homicide', 'bangkay', 'cadaver', 'kidnap', 'kidnapped', 'kinidnap', 'nangikidnap', 'dukot', 'dinukot', 'mandurukot', 'carnap', 'carnapping', 'droga', 'drugs', 'shabu', 'pusher', 'tulak', 'vandal', 'vandalism', 'sinira', 'basag', 'binasag', 'gulpi', 'ginulpi', 'bugbog', 'binugbog', 'bugbugan', 'suntukan', 'suntok', 'assault', 'mauling', 'attacked', 'threat', 'pananakot', 'nananakot', 'armas', 'patalim', 'kutsilyo', 'papatayin', 'papapatayin', 'ipapapatay', 'babarilin', 'barilin', 'sasaktan', 'saktan', 'hostage', 'blackmail', 'extort', 'panggigipit', 'killer', 'magsasabog', 'patayin', 'kaladkad', 'disaster', 'baha', 'bumaha', 'pagbaha', 'bahain', 'flood', 'flooded', 'flooding', 'lindol', 'lumindol', 'earthquake', 'aftershock', 'bagyo', 'bagyong', 'typhoon', 'storm', 'storm surge', 'daluyong', 'buhawi', 'tornado', 'landslide', 'guho', 'gumuho', 'pagguho', 'nagguho', 'natabunan', 'collapsed', 'natumba', 'fallen tree', 'natumbang puno', 'bumagsak na puno', 'ulan', 'heavy rain', 'malakas na ulan', 'habagat', 'amihan', 'disturbance', 'away', 'nag-aaway', 'nagaway', 'inaaway', 'brawl', 'rumble', 'rambol', 'sapakan', 'sabunutan', 'lasing', 'drunk', 'videoke', 'sound system', 'istambay', 'tambay', 'gulo', 'nagkagulo', 'kaguluhan', 'maingay', 'ingay', 'noise', 'infrastructure', 'brownout', 'blackout', 'power outage', 'power interruption', 'walang kuryente', 'putol ang kuryente', 'no electricity', 'elektrisidad', 'poste', 'tangke', 'tubig', 'water interruption', 'walang tubig', 'leakage', 'tagas ng tubig', 'butas', 'pothole', 'butas ng daan', 'sira ng kalsada', 'kalsada', 'damaged road', 'ilaw', 'streetlight', 'ilaw ng kalsada', 'wire', 'kable', 'cable', 'nakasabit na kable', 'manhole', 'drainage', 'kanal', 'baradong kanal', 'derelict', 'abandoned', 'missing', 'nawawala', 'nawala', 'wala', 'hindi na umuwi', 'di na umuwi', 'hinanap', 'hanapin', 'lost', 'lost child', 'animal', 'aso', 'dog', 'dogs', 'rabid', 'ahas', 'snake', 'kagat ng aso', 'kagat ng ahas', 'nagkagat', 'bubuyog', 'bee', 'bees', 'putakte', 'hayop', 'buwaya', 'crocodile', 'baka', 'toro', 'bull', 'kalabaw', 'baboy ramo', 'wild boar', 'sexual', 'rape', 'ginahasa', 'nirape', 'manyakis', 'molest', 'harass', 'harassment', 'hubad', 'bastos', 'catcall', 'stalker', 'libog', 'lascivious', 'lewd', 'porn', 'pornography', 'groping', 'touching', 'nanggipit', 'abuse', 'abuso', 'kantutan', 'suicide', 'magpakamatay', 'nagpakamatay', 'pagpapakamatay', 'nagpapakamatay', 'nagbigti', 'bigti', 'hijaw', 'hijiw', 'self-harm', 'attempt', 'cutting', 'wrist', 'pills', 'help', 'tulong', 'evacuate', 'police', 'tanod', 'barangay', 'sunugin', 'nagliliyab',
+ 'sigaw', 'sumisigaw', 'nagsisigaw', 'nagsisigawan', 'shout', 'shouting', 'scream', 'screaming',
+ 'nag-iingay', 'maingay sa gabi', 'ingayan', 'gulo', 'nagkakagulo', 'nagkagulo', 'kaguluhan',
+ 'away', 'awayan', 'nag-aaway', 'nag-away', 'inaaway', 'brawl', 'rumble', 'rambol', 'suntukan',
+ 'bugbugan', 'sabunutan', 'gulpi', 'ginulpi', 'binugbog', 'lasing', 'lasingan', 'lasinggero',
+ 'alak', 'inuman', 'drunk', 'intoxicated', 'drinking', 'videoke', 'karaoke', 'sound system',
+ 'istambay', 'tambay', 'loitering', 'tumambay', 'disturbance', 'noise', 'maingay', 'ingay',
+ 'protest', 'rally', 'protesta', 'marcha', 'demonstration', 'picketing', 'piket', 'nagrerally',
+ 'rallyist', 'komprontasyon', 'confrontation', 'nagsisigawan', 'nagtatalo', 'talo', 'insulto',
+ 'nagmumura', 'mura', 'mumurahin', 'nagbabato', 'batuhan', 'nagtatapon ng bote', 'trouble',
+ 'scandal', 'iskandalo', 'unruly', 'sutil', 'salbahe', 'bastos', 'nanggugulo', 'nananakit',
+ 'nakakaistorbo', 'istorbo', 'istorbo sa kapitbahay', 'anxiety', 'alarma', 'alarm', 'honk',
+ 'busina', 'nagbubusina', 'sirena', 'tahol', 'nagtatahol', 'umiiyak', 'naging maingay',
+ 'nagamit ang videoke', 'nagkakanta', 'kanta', 'nagpapatugtog', 'tugtog', 'musika',
+ 'tumutugtog', 'naggigitara', 'nagsasayaw', 'napapalakpak', 'nagpapalakpakan',
+ 'nagta-tagay', 'tagayan', 'nagtataray', 'tumataray', 'nagmamaldita', 'nagmamalupit',
+ 'labag sa batas', 'violation', 'banat', 'natamaan', 'nanakit', 'sinampal', 'sampal',
+ 'hampas', 'naghahampas', 'nagsusuntukan', 'nagsusuntok', 'nagsasapakan', 'ginigitgit',
+ 'ginitgit', 'nang-aasar', 'asar', 'inuulol', 'ulol', 'pang-aabala', 'aabala'
+];
 
 // Decides whether the title + description read like a real, actionable
 // incident. Returns false for gibberish, test input, or clearly off-topic text
@@ -146,10 +172,11 @@ function looksLikeIncident(title: string, description: string) {
  if (text.length < 3) return false;
  const lower = text.toLowerCase();
  if (INCIDENT_KEYWORDS.some((k) => lower.includes(k))) return true;
- // No keyword match — only treat as an incident if it's a substantial,
- // multi-word description (less likely to be random noise).
- const words = lower.replace(/[^a-z\s]/g, ' ').split(/\s+/).filter((w) => w.length > 1);
- return words.length >= 4 && text.length > 30;
+// No keyword match — only treat as an incident if it's a substantial,
+  // multi-word description (less likely to be random noise). Short Filipino
+  // phrases are still accepted when they read like a genuine report.
+  const words = lower.replace(/[^a-z\s]/g, ' ').split(/\s+/).filter((w) => w.length > 1);
+  return words.length >= 3 && text.length > 20;
 }
 
 function localFallback(category: string): AiAnalysis {
@@ -370,9 +397,10 @@ export default function ReportIncident({ className = '' }: { className?: string 
  const titleInputRef = useRef<HTMLInputElement>(null);
  const customCategoryInputRef = useRef<HTMLInputElement>(null);
  const descriptionTextareaRef = useRef<HTMLTextAreaElement>(null);
- const analysisSeq = useRef(0);
- const analysisCache = useRef<Map<string, AiAnalysis>>(new Map());
- const forceAnalyzeRef = useRef(false);
+const analysisSeq = useRef(0);
+  const analysisCache = useRef<Map<string, AiAnalysis>>(new Map());
+  const forceAnalyzeRef = useRef(false);
+  const aiSheetOpenRef = useRef(false);
  const [step, setStep] = useState(1);
  const [category, setCategory] = useState('');
  const [incidentStatus, setIncidentStatus] = useState('Ongoing');
@@ -383,7 +411,6 @@ export default function ReportIncident({ className = '' }: { className?: string 
  const [additionalContext, setAdditionalContext] = useState('');
  const [incidentTime, setIncidentTime] = useState(() => toLocalInput(new Date()));
  const [customCategory, setCustomCategory] = useState('');
- const [aiExpanded, setAiExpanded] = useState(false);
  const [evidenceFiles, setEvidenceFiles] = useState<File[]>([]);
  const [mediaType, setMediaType] = useState<'video' | 'photo' | 'audio'>('photo');
  const [location, setLocation] = useState<[number, number]>(BARANGAY_HALL_CENTER);
@@ -409,10 +436,14 @@ export default function ReportIncident({ className = '' }: { className?: string 
    void el.requestFullscreen();
   }
  };
- const [analysis, setAnalysis] = useState<AiAnalysis | null>(null);
- const [analyzing, setAnalyzing] = useState(false);
- const [analyzeTick, setAnalyzeTick] = useState(0);
- const [submitting, setSubmitting] = useState(false);
+const [analysis, setAnalysis] = useState<AiAnalysis | null>(null);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [analyzeTick, setAnalyzeTick] = useState(0);
+  // Bottom-sheet dialog for the map AI assistant (keeps the map clear).
+  const [aiSheetOpen, setAiSheetOpen] = useState(false);
+  const [guideOpen, setGuideOpen] = useState(false);
+  const [aiNewResult, setAiNewResult] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
  const [confirm1, setConfirm1] = useState(false);
  const [confirm2, setConfirm2] = useState(false);
  const [anonymous, setAnonymous] = useState(false);
@@ -493,12 +524,34 @@ export default function ReportIncident({ className = '' }: { className?: string 
   category === 'Other/Uncategorized' && customCategory.trim() ? customCategory.trim() : category;
  const threatActive = Math.ceil((ai.threat / 100) * 4);
  const priorityTone = PRIORITY_STYLES[ai.priority];
+ const robotSeverity = analysis && !analyzing ? ROBOT_SEVERITY_STYLES[analysis.priority] : null;
+
+ // Reset the robot's report-specific state whenever the report title or
+ // category changes; the analysis effect will re-color it for the new report.
+ const resetReportAnalysis = () => {
+  setAnalysis(null);
+  setAnalyzing(false);
+  setAiNewResult(false);
+ };
 
  const handlePick = useCallback((lat: number, lng: number) => {
   setLocation([lat, lng]);
  }, []);
 
  const handleFlyDone = useCallback(() => setFlyTarget(null), []);
+
+ const runAnalysis = () => {
+  if (reportTitle.trim().length < 3 && reportDescription.trim().length < 3) {
+   setToast({ type: 'error', message: 'Add a report title (and description) first so the AI can analyze the incident.' });
+   return;
+  }
+  if (!looksLikeIncident(reportTitle, reportDescription)) {
+   setToast({ type: 'error', message: 'Not enough incident detail to run the AI tactical analysis.' });
+   return;
+  }
+  forceAnalyzeRef.current = true;
+  setAnalyzeTick((t) => t + 1);
+ };
 
  const useCurrentLocation = () => {
   if (!('geolocation' in navigator)) {
@@ -546,12 +599,13 @@ export default function ReportIncident({ className = '' }: { className?: string 
  useEffect(() => {
   const forced = forceAnalyzeRef.current;
   forceAnalyzeRef.current = false;
-  if (reportTitle.trim().length < 3 && reportDescription.trim().length < 3) return;
+  if (!reportTitle.trim() && !category) return;
   // Don't run the AI tactical analysis when the text doesn't read like a
   // real, actionable incident (gibberish, test input, off-topic text).
   if (!looksLikeIncident(reportTitle, reportDescription)) {
    setAnalysis(null);
    setAnalyzing(false);
+   setAiNewResult(false);
    return;
   }
   const seq = ++analysisSeq.current;
@@ -561,29 +615,42 @@ export default function ReportIncident({ className = '' }: { className?: string 
    if (cached) {
     setAnalysis(cached);
     setAnalyzing(false);
+    if (!aiSheetOpenRef.current) setAiNewResult(true);
     return;
    }
   }
+  setAiNewResult(false);
   const timer = setTimeout(async () => {
    setAnalyzing(true);
    try {
-    const res = await classifyIncident({
-     title: reportTitle,
-     description: reportDescription,
-     categoryHint: category,
-     lat: location[0],
-     lng: location[1],
-    });
+const res = await classifyIncident({
+      title: reportTitle,
+      description: reportDescription,
+      categoryHint: effectiveCategory,
+      lat: location[0],
+      lng: location[1],
+     });
     if (analysisSeq.current !== seq) return;
     if (res.source === 'gemini') analysisCache.current.set(key, res);
     setAnalysis(res);
     setAnalyzing(false);
+    if (!aiSheetOpenRef.current) setAiNewResult(true);
    } catch {
     if (analysisSeq.current !== seq) return;
    }
   }, forced ? 0 : 1500);
   return () => clearTimeout(timer);
- }, [reportTitle, reportDescription, category, analyzeTick]); // eslint-disable-line react-hooks/exhaustive-deps
+ }, [reportTitle, reportDescription, effectiveCategory, analyzeTick]); // eslint-disable-line react-hooks/exhaustive-deps
+
+ useEffect(() => {
+  aiSheetOpenRef.current = aiSheetOpen;
+ }, [aiSheetOpen]);
+
+ useEffect(() => {
+  if (!guideOpen) return;
+  const t = setTimeout(() => setGuideOpen(false), 5000);
+  return () => clearTimeout(t);
+ }, [guideOpen]);
 
  const addFiles = (list: FileList | null) => {
   if (!list) return;
@@ -839,7 +906,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
               key={opt.label}
               type="button"
               onClick={() => {
-               setCategory(opt.label);
+               setCategory(opt.label); resetReportAnalysis();
                setMissingField((m) => (m === 'category' ? null : m));
                if (opt.label !== 'Other/Uncategorized') setCustomCategory('');
                setIsCategoryOpen(false);
@@ -858,7 +925,7 @@ export default function ReportIncident({ className = '' }: { className?: string 
         {category === 'Other/Uncategorized' && (
          <div>
           <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider font-bold">Specify Incident Type <span className="text-error">*</span></label>
-          <input ref={customCategoryInputRef} className={`w-full bg-white border rounded-lg py-[10px] px-3 font-label-md text-label-md text-on-surface focus:outline-none focus:border-secondary placeholder:text-xs placeholder:text-on-surface-variant placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all ${missingField === 'category' ? 'border-error' : 'border-outline-variant'}`} type="text" value={customCategory} placeholder="e.g. Flood, Landslide, Electrical outage" onChange={(e) => { setCustomCategory(e.target.value); setMissingField((m) => (m === 'category' ? null : m)); if (e.target.value.trim()) setAiExpanded(true); }} />
+          <input ref={customCategoryInputRef} className={`w-full bg-white border rounded-lg py-[10px] px-3 font-label-md text-label-md text-on-surface focus:outline-none focus:border-secondary placeholder:text-xs placeholder:text-on-surface-variant placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all ${missingField === 'category' ? 'border-error' : 'border-outline-variant'}`} type="text" value={customCategory} placeholder="e.g. Flood, Landslide, Electrical outage" onChange={(e) => { setCustomCategory(e.target.value); setMissingField((m) => (m === 'category' ? null : m)); resetReportAnalysis(); }} />
          </div>
         )}
         <div>
@@ -879,12 +946,13 @@ export default function ReportIncident({ className = '' }: { className?: string 
         <div>
          <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider font-bold">Date &amp; Time</label>
          <input className="w-full bg-white border border-outline-variant rounded-lg py-[10px] px-3 font-label-md text-label-md text-on-surface focus:outline-none focus:border-secondary transition-all" type="datetime-local" value={incidentTime} onChange={(e) => setIncidentTime(e.target.value)} />
-        </div>
+         </div>
         <div>
-         <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider font-bold">Report Title <span className="text-error">*</span></label>
-         <input ref={titleInputRef} className={`w-full bg-white border rounded-lg py-[10px] px-3 font-label-md text-label-md text-on-surface focus:outline-none focus:border-secondary placeholder:text-xs placeholder:text-on-surface-variant placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all ${missingField === 'title' ? 'border-error' : 'border-outline-variant'}`} type="text" value={reportTitle} placeholder="e.g. Sunog sa barangay" onChange={(e) => { setReportTitle(e.target.value); setMissingField((m) => (m === 'title' ? null : m)); if (e.target.value.trim()) setAiExpanded(true); }} />
-        </div>
-       </div>
+          <label className="block font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider font-bold">Report Title <span className="text-error">*</span></label>
+          <input ref={titleInputRef} className={`w-full bg-white border rounded-lg py-[10px] px-3 font-label-md text-label-md text-on-surface focus:outline-none focus:border-secondary placeholder:text-xs placeholder:text-on-surface-variant placeholder:font-light placeholder:tracking-normal placeholder:italic transition-all ${missingField === 'title' ? 'border-error' : 'border-outline-variant'}`} type="text" value={reportTitle} placeholder="e.g. Sunog sa barangay" onChange={(e) => { setReportTitle(e.target.value); setMissingField((m) => (m === 'title' ? null : m)); resetReportAnalysis(); }} />
+         </div>
+
+         </div>
       </div>
 
       {/* ===== REALTIME LOCATION MAP ===== */}
@@ -974,111 +1042,184 @@ export default function ReportIncident({ className = '' }: { className?: string 
          </div> 
         </div>
 
-        {/* ===== AI TACTICAL ANALYSIS ===== */}
-        <div className="absolute bottom-3 right-3 sm:bottom-4 sm:w-64 lg:w-72 z-[600] w-44 bg-surface-container-low/95 backdrop-blur-md rounded-xl border-l-4 border-l-tertiary border-y border-r border-outline-variant/30 overflow-hidden">
-         <div className="bg-tertiary/5 border-b border-outline-variant/30 p-1.5 sm:p-3 flex items-center justify-between cursor-pointer" onClick={() => setAiExpanded((v) => !v)}>
-          <h3 className="font-caps-xs text-[9px] sm:text-[10px] text-on-surface tracking-widest uppercase flex items-center gap-1.5 font-bold min-w-0">
-<span className="w-5 h-5 rounded-md bg-tertiary/10 flex items-center justify-center shrink-0">
-             <span className="material-symbols-outlined text-[12px] text-tertiary">psychology</span>
-           </span>
-           <span className="sm:hidden">AI Analysis</span>
-           <span className="hidden sm:inline">AI Tactical Analysis</span>
-          </h3>
-          <div className="flex items-center gap-2">
-<span className="flex h-1.5 w-1 relative">
-             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-             <span className="relative inline-flex rounded-full h-1 w-1 bg-secondary"></span>
-            </span>
-           <button type="button" className="text-on-surface-variant hover:text-on-surface transition-colors">
-            <span className={`material-symbols-outlined text-[13px] transition-transform ${aiExpanded ? '' : '-rotate-180'}`}>expand_less</span>
-           </button>
-          </div>
+         {/* ===== AI robot FAB (all viewports) ===== */}
+        {guideOpen && (
+         <div className="absolute bottom-16 right-3 z-[600] max-w-[240px] bg-surface-container-low border border-outline-variant/40 rounded-2xl rounded-br-sm px-4 py-3 shadow-lg animate-ai-robot-output">
+          <p className="text-xs text-on-surface leading-snug font-medium">Add a report and I will be your guide.</p>
+          <span className="absolute -bottom-1.5 right-5 w-3 h-3 bg-surface-container-low border-r border-b border-outline-variant/40 rotate-45"></span>
          </div>
+        )}
+        <button
+         type="button"
+         onClick={() => {
+          if (!analysis && !analyzing) {
+           setGuideOpen((v) => !v);
+           setAiSheetOpen(false);
+           return;
+          }
+          setAiSheetOpen((v) => !v);
+          setGuideOpen(false);
+          if (!aiSheetOpen) setAiNewResult(false);
+         }}
+         aria-label={analyzing ? 'AI is analyzing' : analysis ? 'Open AI analysis' : 'AI assistant'}
+         className={`absolute bottom-3 right-3 z-[600] w-12 h-12 rounded-full flex items-center justify-center shadow-lg border transition-all active:scale-95 ${
+          analyzing ? 'bg-secondary border-secondary ai-robot-thinking'
+           : robotSeverity ? `${robotSeverity.fab} ${analysis?.criticalFlag && aiNewResult && !aiSheetOpen ? 'ai-robot-alert' : 'ai-robot-ready'}`
+           : 'bg-surface-container-low/95 border-outline-variant'
+         }`}
+        >
+         {/* Critical unread: pulsing ring */}
+         {analysis?.criticalFlag && aiNewResult && !aiSheetOpen && (
+          <span className="robot-alert-ring absolute -inset-1 w-14 h-14 rounded-full"></span>
+         )}
+         <span className="relative inline-flex items-center justify-center">
+          <span className={`material-symbols-outlined text-[24px] ${
+           analyzing ? 'text-on-secondary animate-robot-blink'
+            : robotSeverity ? robotSeverity.icon
+            : 'text-on-surface'
+          }`}>smart_toy</span>
+          {analyzing && <span className="robot-scan-ring absolute -inset-1 w-[32px] h-[32px] rounded-full" />}
+         </span>
+         {/* Status badge */}
+         {analyzing ? (
+          <span className="absolute -top-0.5 -right-0.5 flex h-3 w-3">
+           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+           <span className="relative inline-flex rounded-full h-3 w-3 bg-white border-2 border-secondary" />
+          </span>
+         ) : analysis?.criticalFlag && aiNewResult && !aiSheetOpen ? (
+          <span className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-white border-2 border-error flex items-center justify-center">
+           <span className="material-symbols-rounded text-[10px] text-error leading-none">priority_high</span>
+          </span>
+         ) : aiNewResult ? (
+          <span className="absolute -top-0.5 -right-0.5 flex h-3 w-3">
+           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-70" />
+           <span className="relative inline-flex rounded-full h-3 w-3 bg-white border-2 border-on-surface/30" />
+          </span>
+         ) : analysis ? (
+          <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-success-green border-2 border-white animate-ai-done" />
+         ) : null}
+        </button>
+        {aiSheetOpen && (
 
-         <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${aiExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
-          <div className="overflow-hidden min-h-0">
-           <div className="p-2.5 sm:p-3 space-y-2.5 sm:space-y-3 max-h-[150px] sm:max-h-[320px] overflow-y-auto">
+         <div key={analysis ? `result-${analysis.confidence}-${analysis.category}-${analysis.threat ?? ''}` : 'loading'} className="absolute bottom-16 inset-x-3 sm:inset-x-auto sm:right-3 z-[700] sm:w-[420px] lg:w-[460px] max-h-[calc(100%-5.5rem)] flex flex-col animate-ai-robot-output" role="dialog" aria-modal="true" aria-label="AI analysis">
+          <div className="flex flex-col min-h-0 bg-surface-container-low rounded-2xl border border-outline-variant/30 shadow-xl overflow-hidden">
+           <div className="bg-surface-container-high/95 border-b border-outline-variant/30 px-4 py-2.5 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-2 min-w-0">
+             <span className={`relative inline-flex items-center justify-center ${analyzing ? 'animate-robot-analyze' : ''}`}>
+              <span className="w-8 h-8 rounded-lg bg-secondary/10 flex items-center justify-center">
+               <span className={`material-symbols-outlined text-[20px] ${analyzing ? 'text-secondary animate-robot-blink' : 'text-secondary'}`}>smart_toy</span>
+              </span>
+              {analyzing && <span className="robot-scan-ring absolute inset-0 w-8 h-8 rounded-lg" />}
+             </span>
+             <div className="min-w-0">
+              <h3 className="text-[11px] text-on-surface tracking-widest uppercase font-bold leading-tight">AI Assistant</h3>
+              <p className={`text-[10px] leading-tight ${analyzing ? 'text-secondary animate-robot-blink' : 'text-on-surface-variant'}`}>{analyzing ? 'Analyzing your report…' : analysis ? 'Analysis ready' : 'Waiting for report details'}</p>
+             </div>
+            </div>
+            <button type="button" onClick={() => setAiSheetOpen(false)} aria-label="Close" className="w-8 h-8 rounded-full bg-outline-variant/30 text-on-surface flex items-center justify-center hover:bg-outline-variant/60 transition-colors active:scale-95">
+             <span className="material-symbols-outlined text-[18px]">close</span>
+            </button>
+           </div>
+           <div className="p-4 space-y-3 overflow-y-auto min-h-0">
             {analyzing && (
-             <p className="text-[10px] text-secondary font-bold flex items-center gap-1.5">
-              <span className="material-symbols-outlined text-[13px]">progress_activity</span> Analyzing live…
-             </p>
+             <div className="space-y-2">
+              <p className="text-xs text-secondary font-bold flex items-center gap-1.5">
+               <span className="material-symbols-outlined text-[15px] animate-robot-blink">smart_toy</span> Analyzing live…<span className="terminal-cursor text-secondary font-bold">▌</span>
+              </p>
+              <div className="flex items-center gap-1.5 py-1" aria-hidden="true">
+               <span className="ai-thinking-dot w-2 h-2 rounded-full bg-secondary" style={{ animationDelay: '0s' }}></span>
+               <span className="ai-thinking-dot w-2 h-2 rounded-full bg-secondary" style={{ animationDelay: '0.18s' }}></span>
+               <span className="ai-thinking-dot w-2 h-2 rounded-full bg-secondary" style={{ animationDelay: '0.36s' }}></span>
+              </div>
+              <div className="flex flex-col gap-0.5 mt-1">
+               <span className="ai-status-step text-[11px] text-secondary/80 font-medium">Reading report…</span>
+               <span className="ai-status-step text-[11px] text-secondary/80 font-medium">Classifying incident…</span>
+               <span className="ai-status-step text-[11px] text-secondary/80 font-medium">Preparing dispatch…</span>
+              </div>
+              <div className="h-1.5 bg-outline-variant/30 rounded-full overflow-hidden mt-1">
+                <div className="h-full bg-secondary rounded-full ai-progress-slide" style={{ width: '40%' }}></div>
+              </div>
+              </div>
             )}
             {!analyzing && analysis != null && (
-            <>
-            {reportTitle.trim() && (
-             <div className="flex items-start gap-1.5">
-              <span className="material-symbols-outlined text-[13px] text-secondary mt-[1px]">summarize</span>
-              <div className="min-w-0">
-               <p className="font-label-sm text-[11px] text-on-surface-variant mb-0.5">Report Summary</p>
-               <p className="text-[11px] font-semibold text-on-surface leading-tight truncate">{reportTitle}</p>
+              <div className="space-y-3">
+                {reportTitle.trim() && (
+                  <div className="flex items-start gap-1.5 animate-ai-result" style={{ animationDelay: '0s' }}>
+                    <span className="material-symbols-outlined text-[15px] text-secondary mt-[1px]">summarize</span>
+                    <div className="min-w-0">
+                      <p className="text-xs text-on-surface-variant mb-0.5">Report Summary</p>
+                      <p className="text-[13px] font-semibold text-on-surface leading-tight">{reportTitle}</p>
+                    </div>
+                  </div>
+                )}
+                <div className="animate-ai-result" style={{ animationDelay: '0.06s' }}>
+                  <p className="text-xs text-on-surface-variant mb-1.5">Auto-detected Category</p>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="flex items-center gap-1.5 text-[15px] text-on-surface font-bold">
+                      <span className="material-symbols-outlined text-[17px] text-secondary">{CATEGORY_ICONS[ai.category] ?? 'more_horiz'}</span>{ai.category}
+                    </span>
+                    <span className="text-xs font-bold text-secondary">{ai.confidence}%</span>
+                  </div>
+                  <div className="mt-2 h-1.5 bg-outline-variant/30 rounded-full overflow-hidden">
+                    <div className="h-full bg-secondary rounded-full transition-all duration-700" style={{ width: `${ai.confidence}%` }}></div>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-outline-variant animate-ai-result" style={{ animationDelay: '0.12s' }}>
+                  <p className="text-xs text-on-surface-variant mb-1.5">Response Priority</p>
+                  <div className="flex items-center gap-1.5">
+                    <span className={`px-1.5 py-[2px] rounded text-[10px] font-bold tracking-wide border ${priorityTone}`}>{ai.priority}</span>
+                    <span className={`text-[13px] font-bold leading-tight ${ai.priority === 'CRITICAL' ? 'text-error' : 'text-secondary'}`}>{ai.priority} Priority</span>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-outline-variant animate-ai-result" style={{ animationDelay: '0.18s' }}>
+                  <p className="text-xs text-on-surface-variant mb-1.5">Threat Level</p>
+                  <div className="grid grid-cols-4 gap-1">
+                    {THREAT_SEGMENTS.map((seg, i) => (
+                      <div key={seg.label} className={`h-1.5 rounded-full ${i < threatActive ? seg.color : 'bg-outline-variant/30'}`}></div>
+                    ))}
+                  </div>
+                  <div className="flex justify-between mt-1">
+                    {THREAT_SEGMENTS.map((seg) => (
+                      <span key={seg.label} className="text-[10px] font-bold text-on-surface-variant uppercase">{seg.label}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-outline-variant animate-ai-result" style={{ animationDelay: '0.24s' }}>
+                  <p className="text-xs text-on-surface-variant mb-1.5">Recommended Actions for You</p>
+                  <ul className="space-y-1.5">
+                    {(ai.user_actions?.length ? ai.user_actions : localFallback(ai.category).user_actions).map((action, idx) => (
+                      <li key={action} className="flex items-start gap-1.5 text-xs text-on-surface-variant leading-snug animate-ai-result" style={{ animationDelay: `${0.28 + idx * 0.06}s` }}>
+                        <span className="material-symbols-outlined text-[15px] text-success-green mt-[1px] shrink-0">check_circle</span>{action}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="pt-2 border-t border-outline-variant animate-ai-result" style={{ animationDelay: '0.30s' }}>
+                  <div className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-secondary/10 border border-secondary/20">
+                    <span className="material-symbols-outlined text-[16px] text-secondary shrink-0">route</span>
+                    <span className="text-xs font-bold text-on-surface leading-tight">{ai.dispatch}</span>
+                  </div>
+                </div>
+                <button type="button" onClick={runAnalysis} className="w-full py-2.5 rounded-lg border border-secondary/50 bg-secondary/10 text-secondary text-xs font-bold hover:bg-secondary/20 transition-colors flex items-center justify-center gap-1.5">
+                  <span className="material-symbols-outlined text-[15px]">refresh</span> Re-analyze
+                </button>
               </div>
-             </div>
             )}
-            <div>
-             <p className="font-label-sm text-[11px] text-on-surface-variant mb-1.5">Auto-detected Category</p>
-             <div className="flex items-center justify-between gap-2">
-              <span className="flex items-center gap-1.5 font-label-md text-[14px] text-on-surface font-bold">
-               <span className="material-symbols-outlined text-[15px] text-secondary">{CATEGORY_ICONS[ai.category] ?? 'more_horiz'}</span>
-               {ai.category}
-              </span>
-              <span className="text-[11px] font-bold text-secondary">{ai.confidence}%</span>
-             </div>
-             <div className="mt-2 h-1.5 bg-outline-variant/30 rounded-full overflow-hidden">
-              <div className="h-full bg-secondary rounded-full" style={{ width: `${ai.confidence}%` }}></div>
-             </div>
-            </div>
-
-            <div className="pt-2 border-t border-outline-variant">
-             <p className="font-label-sm text-[11px] text-on-surface-variant mb-1.5">Response Priority</p>
-<div className="flex items-center gap-1.5">
-              <span className={`px-1.5 py-[2px] rounded text-[9px] font-bold tracking-wide border ${priorityTone}`}>{ai.priority}</span>
-              <span className={`text-[12px] font-bold leading-tight ${ai.priority === 'CRITICAL' ? 'text-error' : ai.priority === 'HIGH' ? 'text-secondary' : 'text-secondary'}`}>{ai.priority} Priority</span>
-             </div>
-            </div>
-
-            <div className="pt-2 border-t border-outline-variant">
-             <p className="font-label-sm text-[11px] text-on-surface-variant mb-1.5">Threat Level</p>
-             <div className="grid grid-cols-4 gap-1">
-              {THREAT_SEGMENTS.map((seg, i) => (
-               <div key={seg.label} className={`h-1.5 rounded-full ${i < threatActive ? seg.color : 'bg-outline-variant/30'}`}></div>
-              ))}
-             </div>
-             <div className="flex justify-between mt-1">
-              {THREAT_SEGMENTS.map((seg) => (
-               <span key={seg.label} className="text-[9px] font-bold text-on-surface-variant uppercase">{seg.label}</span>
-              ))}
-             </div>
-            </div>
-
-            <div className="pt-2 border-t border-outline-variant">
-             <p className="font-label-sm text-[11px] text-on-surface-variant mb-1.5">Recommended Actions for You</p>
-             <ul className="space-y-1.5">
-              {(ai.user_actions?.length ? ai.user_actions : localFallback(ai.category).user_actions).map((action) => (
-               <li key={action} className="flex items-start gap-1.5 text-[11px] text-on-surface-variant leading-tight">
-                <span className="material-symbols-outlined text-[13px] text-success-green mt-[1px]">check_circle</span>
-                {action}
-               </li>
-              ))}
-             </ul>
-            </div>
-
-            <div className="pt-2 border-t border-outline-variant">
-             <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-secondary/10 border border-secondary/20">
-              <span className="material-symbols-outlined text-[14px] text-secondary">route</span>
-              <span className="text-[10px] font-bold text-on-surface leading-tight">{ai.dispatch}</span>
-             </div>
-            </div>
-
-            <button type="button" onClick={() => { forceAnalyzeRef.current = true; setAnalyzeTick((t) => t + 1); }} disabled={analyzing} className="w-full py-2 sm:py-1.5 rounded-lg border border-secondary/50 bg-secondary/10 text-secondary text-[11px] font-bold hover:bg-secondary/20 transition-colors flex items-center justify-center gap-1.5 disabled:opacity-60">
-             <span className="material-symbols-outlined text-[13px]">refresh</span> {analyzing ? 'Analyzing…' : 'Re-analyze'}
-            </button>
-            </>
+            {!analyzing && analysis == null && (
+              <div className="flex flex-col items-center text-center gap-2 py-6">
+                <span className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center ai-robot-idle">
+                  <span className="material-symbols-outlined text-[26px] text-secondary">smart_toy</span>
+                </span>
+                <p className="text-sm font-bold text-on-surface">No analysis yet</p>
+                <p className="text-xs text-on-surface-variant leading-relaxed max-w-[260px]">Enter a report title and description — the AI will analyze the incident automatically.</p>
+              </div>
             )}
+            </div>
            </div>
+           <span className="absolute -bottom-1.5 right-8 h-3 w-3 rotate-45 bg-surface-container-low border-b border-r border-outline-variant/30" />
           </div>
-         </div>
+        )}
         </div>
-       </div>
       </div>
      </div>
     )}
@@ -1400,3 +1541,4 @@ export default function ReportIncident({ className = '' }: { className?: string 
 
 
 
+ 

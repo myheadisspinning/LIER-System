@@ -102,10 +102,10 @@ export default function SuperadminAiDispatch() {
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Active AI Model</label>
                 <select
                   className="w-full text-sm rounded-lg border-slate-200 focus:ring-secondary bg-white font-medium"
-                  value={String(g('model', { name: 'gemini-flash-latest' }).name)}
+                  value={String(g('model', { name: 'gemini-3.6-flash' }).name)}
                   onChange={(e) => set('model', { name: e.target.value })}
                 >
-                  <option value="gemini-flash-latest">Gemini Flash (Latest)</option>
+                  <option value="gemini-3.6-flash">Gemini 3.6 Flash (Recommended)</option>
                   <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
                   <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
                   <option value="gemini-flash-lite-latest">Gemini Flash Lite</option>

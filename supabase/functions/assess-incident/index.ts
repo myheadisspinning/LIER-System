@@ -1,7 +1,7 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY') ?? '';
-const DEFAULT_MODEL = 'gemini-flash-latest';
+const DEFAULT_MODEL = 'gemini-3.6-flash';
 
 const corsHeaders = {
   'access-control-allow-origin': '*',
@@ -258,7 +258,9 @@ async function callGemini(
       ],
       generationConfig: {
         temperature,
-        maxOutputTokens: maxTokens,
+        // gemini-3.x uses hidden reasoning tokens that count against the output
+        // budget, so never let a small configured max under-feed it.
+        maxOutputTokens: Math.max(maxTokens, 2048),
         responseMimeType: 'application/json',
         responseSchema: {
           type: 'OBJECT',
@@ -283,7 +285,12 @@ async function callGemini(
   const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) throw new Error('Empty Gemini response');
 
-  const parsed = JSON.parse(text);
+  let parsed: Record<string, unknown>;
+  try {
+    parsed = JSON.parse(text);
+  } catch (e) {
+    throw new Error(`Gemini returned invalid JSON (${e instanceof Error ? e.message : String(e)}): ${JSON.stringify(text.slice(0, 400))}`);
+  }
   const verdictRaw = String(parsed.verdict ?? 'ambiguous').toLowerCase();
   const verdict: AssessmentVerdict = ['legitimate', 'ambiguous', 'spam_or_troll'].includes(verdictRaw)
     ? verdictRaw as AssessmentVerdict
@@ -336,20 +343,34 @@ Deno.serve(async (req) => {
 
     const { data: cfgRows } = await supabase.from('ai_config').select('key, value');
     const cfg = new Map<string, unknown>((cfgRows ?? []).map((r) => [r.key, r.value])) as Record<string, { enabled?: boolean; name?: string; value?: number; mode?: string; level?: string }>;
-    const model = cfg.model?.name ?? DEFAULT_MODEL;
+    const deadAliases = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-2.5-pro'];
+    const configured = (cfg.model?.name ?? '').trim();
+    const primary = deadAliases.includes(configured) ? DEFAULT_MODEL : configured || DEFAULT_MODEL;
+    const models = Array.from(new Set([primary, DEFAULT_MODEL]));
     const maxTokens = Number(cfg.max_tokens?.value) || 1024;
     const temperature = Number(cfg.temperature?.value) ?? 0.1;
 
     let result: Assessment;
     let aiError: string | null = null;
     if (GEMINI_API_KEY) {
-      try {
-        result = await callGemini(model, maxTokens, temperature, reportText, lat, lng);
-      } catch (e) {
-        const msg = e instanceof Error ? e.message : String(e);
+      const errs: string[] = [];
+      for (const m of models) {
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try {
+            result = await callGemini(m, maxTokens, temperature, reportText, lat, lng);
+            break;
+          } catch (e) {
+            errs.push(`${m}: ${e instanceof Error ? e.message : String(e)}`);
+            if (attempt < 2) await new Promise((r) => setTimeout(r, 600 * (attempt + 1)));
+          }
+        }
+        if (result) break;
+      }
+      if (!result) {
+        const msg = errs.join(' | ') || 'unknown error';
         aiError = /429|RESOURCE_EXHAUSTED|quota/i.test(msg)
           ? 'Gemini quota reached — used rule-based credibility checks.'
-          : 'Gemini request failed — used rule-based credibility checks.';
+          : 'Gemini request failed: ' + msg;
         result = fallbackRules(reportText, categoryHint);
       }
     } else {

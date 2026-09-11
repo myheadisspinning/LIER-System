@@ -214,7 +214,7 @@ create trigger trg_set_report_no
 -- ------------------------------------------------------------------
 insert into public.ai_config (key, value) values
   ('ai_enabled', '{"enabled": true}'),
-  ('model', '{"name": "gemini-flash-latest"}'),
+  ('model', '{"name": "gemini-3.6-flash"}'),
   ('max_tokens', '{"value": 1024}'),
   ('temperature', '{"value": 0.1}'),
   ('auto_dispatch_threshold', '{"value": 95}'),
