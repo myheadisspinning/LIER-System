@@ -341,7 +341,7 @@ if (loading) {
    <p className="font-body-sm text-body-sm text-outline">Connecting you to the Barangay desk</p>
   </div>
   ) : !openThread && !viewingPastId ? (
-  <div className="flex-1 flex flex-col items-center justify-center p-6 overflow-y-auto">
+  <div className="flex-1 flex flex-col items-center justify-center p-6 overflow-y-auto overflow-x-hidden">
    <div className="max-w-2xl w-full">
    <div className="text-center mb-8">
     <div className="relative inline-block mb-4">
@@ -364,11 +364,11 @@ if (loading) {
      <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Start a new chat</div>
      <h3 className="font-label-md text-label-md font-bold text-on-surface">Choose a topic</h3>
     </div>
-    <div className="grid gap-3 sm:grid-cols-2 max-w-lg mx-auto">
+    <div className="grid gap-3 sm:grid-cols-2 w-full max-w-lg mx-auto">
     <button
      type="button"
      onClick={() => startTopic('general')}
-     className="p-4 bg-surface-container rounded-2xl border border-border-subtle hover:border-secondary transition-all text-left group"
+     className="w-full max-w-sm mx-auto p-4 bg-surface-container rounded-2xl border border-border-subtle hover:border-secondary transition-all text-left group"
     >
      <div className="flex items-start gap-3">
      <div className="w-10 h-10 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0">
@@ -386,14 +386,14 @@ if (loading) {
      key={inc.id}
      type="button"
      onClick={() => startTopic(inc.id)}
-     className="p-4 bg-surface-container rounded-2xl border border-border-subtle hover:border-secondary transition-all text-left group"
+     className="w-full max-w-sm mx-auto p-4 bg-surface-container rounded-2xl border border-border-subtle hover:border-secondary transition-all text-left group"
      >
      <div className="flex items-start gap-3">
       <div className="w-10 h-10 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0">
       <Ph className="text-[20px]" name={caseIcon(inc.category)} />
       </div>
       <div className="flex-1 min-w-0">
-      <h4 className="font-label-md text-label-md font-bold text-on-surface mb-1">{caseLabel(inc)}</h4>
+      <h4 className="font-label-md text-label-md font-bold text-on-surface mb-1 truncate">{caseLabel(inc)}</h4>
       <p className="font-body-sm text-body-sm text-on-surface-variant truncate">{inc.title}</p>
       </div>
       <Ph className="text-outline group-hover:text-secondary transition-colors" name="arrow_forward" />
