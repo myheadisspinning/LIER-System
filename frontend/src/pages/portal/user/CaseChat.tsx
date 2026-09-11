@@ -364,7 +364,7 @@ if (loading) {
      <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Start a new chat</div>
      <h3 className="font-label-md text-label-md font-bold text-on-surface">Choose a topic</h3>
     </div>
-    <div className="grid gap-3 sm:grid-cols-2">
+    <div className="grid gap-3 sm:grid-cols-2 max-w-lg mx-auto">
     <button
      type="button"
      onClick={() => startTopic('general')}
