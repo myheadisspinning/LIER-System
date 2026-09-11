@@ -1044,10 +1044,30 @@ const res = await classifyIncident({
 
          {/* ===== AI robot FAB (all viewports) ===== */}
         {guideOpen && (
-         <div className="absolute bottom-16 right-3 z-[600] max-w-[240px] bg-surface-container-low border border-outline-variant/40 rounded-2xl rounded-br-sm px-4 py-3 shadow-lg animate-ai-robot-output">
-          <p className="text-xs text-on-surface leading-snug font-medium">Add a report and I will be your guide.</p>
-          <span className="absolute -bottom-1.5 right-5 w-3 h-3 bg-surface-container-low border-r border-b border-outline-variant/40 rotate-45"></span>
-         </div>
+<div className="absolute bottom-16 right-3 z-[600] w-[214px] max-w-[68vw] sm:w-[258px] bg-surface-container-low/95 backdrop-blur rounded-2xl rounded-br-sm shadow-xl shadow-secondary/15 border border-secondary/25 overflow-hidden animate-ai-robot-output">
+           <span className="block h-0.5 bg-gradient-to-r from-secondary via-tertiary to-[#316bf3]"></span>
+           <div className="flex items-center gap-2 px-3 pt-2">
+            <span className="relative inline-flex items-center justify-center">
+             <span className="w-6 h-6 rounded-full bg-gradient-to-br from-secondary/30 to-tertiary/15 border border-secondary/30 flex items-center justify-center">
+              <span className="material-symbols-outlined text-secondary text-[13px]">smart_toy</span>
+             </span>
+             <span className="robot-scan-ring absolute -inset-1 w-8 h-8 rounded-full" />
+            </span>
+            <div className="min-w-0 leading-tight">
+             <p className="text-[9px] font-bold tracking-[0.16em] uppercase text-secondary">AI Assistant</p>
+             <p className="text-[8px] text-on-surface-variant truncate">Barangay Culiat Public Info</p>
+            </div>
+           </div>
+           <div className="px-3 pb-2 pt-1.5 flex items-start gap-1.5">
+            <span className="mt-[5px] flex gap-1">
+             <span className="ai-thinking-dot w-1 h-1 rounded-full bg-secondary" style={{ animationDelay: '0s' }} />
+             <span className="ai-thinking-dot w-1 h-1 rounded-full bg-secondary" style={{ animationDelay: '0.18s' }} />
+             <span className="ai-thinking-dot w-1 h-1 rounded-full bg-secondary" style={{ animationDelay: '0.36s' }} />
+            </span>
+            <p className="text-[11px] text-on-surface leading-snug font-medium">Add a report and I will be your guide.</p>
+           </div>
+           <span className="absolute -bottom-1.5 right-5 w-3 h-3 bg-surface-container-low border-r border-b border-secondary/25 rotate-45"></span>
+          </div>
         )}
         <button
          type="button"
