@@ -7,7 +7,7 @@ import { supabase } from '../../../supabaseClient';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
 import { fmtDate, fmtDurationMs, PRIORITY_BADGE, STATUS_BADGE } from '../../../lib/admin';
 import { BARANGAY_HALL_CENTER } from '../../../lib/geo';
-import { PRIORITY_COLORS, pinIconFor, closedPinIcon } from '../../../lib/mapPins';
+import { pinIconFor, closedPinIcon } from '../../../lib/mapPins';
 import Pagination from '../../../components/Pagination';
 
 type Row = {

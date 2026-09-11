@@ -474,7 +474,7 @@ export default function AdminIncidentReporting() {
               <span className="bg-secondary/10 text-secondary px-2 py-0.5 rounded-full text-[11px] font-bold">{mapPins.length} PIN{mapPins.length === 1 ? '' : 'S'}</span>
             </div>
             <div className="flex items-center gap-3">
-              {Object.entries(PRIORITY_COLORS).filter(([k]) => k !== 'LOW').map(([p, c]) => (
+              {Object.entries(PRIORITY_COLORS).filter(([k]) => k !== 'LOW').map(([p]) => (
                 <span key={p} className="flex items-center gap-1.5 text-[11px] font-semibold text-on-surface-variant">
                   <span className="w-2.5 h-2.5 rounded-full"></span>
                   {p}
