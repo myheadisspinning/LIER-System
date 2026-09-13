@@ -9,7 +9,7 @@ import ConfirmDialog from '../components/ConfirmDialog';
 import LoadingScreen from '../components/LoadingScreen';
 import styles from '../styles/modules/Home.module.css';
 
-function CountUp({ target, suffix = '', duration = 2000 }: { target: number; suffix?: string; duration?: number }) {
+function CountUp({ target, suffix = '', duration = 2000, className = '' }: { target: number; suffix?: string; duration?: number; className?: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const counted = useRef(false);
@@ -41,7 +41,7 @@ function CountUp({ target, suffix = '', duration = 2000 }: { target: number; suf
   }, [target, duration]);
 
   return (
-    <span ref={ref} className="font-display-lg text-2xl md:text-display-lg text-on-surface">
+    <span ref={ref} className={className || 'font-display-lg text-2xl md:text-display-lg text-on-surface'}>
       {count.toLocaleString()}{suffix}
     </span>
   );
@@ -65,13 +65,6 @@ const FALLBACK_GALLERY: GalleryImage[] = [
   { title: 'Community Clean-Up Drive', image_url: '/image/tandangsora.jpg' },
   { title: 'Barangay Safety Orientation', image_url: '/image/culiat-brgy.jpg' },
 ];
-
-const FALLBACK_SERVICES: Record<string, string> = {
-  report_incident: '/image/culiat-brgy.jpg',
-  emergency_hotline: '/image/tandangsora.jfif',
-  police_assistance: '/image/barangayhalltandangsora.jfif',
-  contact_barangay: '/image/tandangsorashrine.jpg',
-};
 
 const FALLBACK_GUIDES: Record<string, string> = {
   elders_guide: '/image/culiat-brgy.jpg',
@@ -216,11 +209,6 @@ export default function Home() {
     })();
   }, []);
 
-  const getServiceImage = (slotKey: string) => {
-    const dbImage = sectionImages.find((img) => img.section === 'services' && img.slot_key === slotKey);
-    return dbImage?.image_url || FALLBACK_SERVICES[slotKey] || '/image/culiat-brgy.jpg';
-  };
-
   const getGuideImage = (slotKey: string) => {
     const dbImage = sectionImages.find((img) => img.section === 'guides' && img.slot_key === slotKey);
     return dbImage?.image_url || FALLBACK_GUIDES[slotKey] || '/image/culiat-brgy.jpg';
@@ -326,6 +314,22 @@ export default function Home() {
                 </div>
               </div>
             </div>
+            <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3 pt-1" data-section="stats">
+              {[
+                { icon: 'assignment', iconColor: 'text-secondary-fixed-dim', target: 2450, suffix: '+', label: 'Total Incidents' },
+                { icon: 'warning', iconColor: 'text-red-300', target: 124, suffix: '', label: 'Active Cases' },
+                { icon: 'check_circle', iconColor: 'text-secondary-fixed-dim', target: 2210, suffix: '', label: 'Resolved Cases' },
+                { icon: 'groups', iconColor: 'text-secondary-fixed-dim', target: 15000, suffix: '+', label: 'Registered Users' },
+              ].map((s, i) => (
+                <div key={i} className="bg-white/10 backdrop-blur-md border border-white/15 rounded-lg px-3 py-2 flex items-start gap-2 text-left">
+                  <Ph className={`${s.iconColor} text-base md:text-xl mt-0.5`} name={s.icon} weight="fill" />
+                  <span className="flex flex-col leading-tight">
+                    <CountUp className="font-display-lg text-base md:text-lg text-white leading-tight" target={s.target} suffix={s.suffix} />
+                    <span className="text-[9px] md:text-[10px] text-surface-container-low/70 uppercase tracking-wider font-semibold">{s.label}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="hidden lg:flex items-center justify-center relative" data-section="hero">
             <div className="relative w-64 md:w-72 aspect-square rounded-full p-5 md:p-6 glass-card border-2 border-secondary-fixed-dim/40 shadow-2xl flex items-center justify-center backdrop-blur-md transition-all duration-500 group hover:scale-105 hover:border-secondary-fixed-dim/70 hover:shadow-[0_0_40px_rgba(180,197,255,0.35)]">
@@ -336,31 +340,6 @@ export default function Home() {
         </div>
       </header>
 
-      <section ref={(el) => { sectionRefs.current[1] = el; }} className="py-md md:py-xl -mt-8 md:-mt-xl relative z-20 bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-1000 delay-100">
-        <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
-          <div className="bg-white/95 backdrop-blur-md p-3 md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
-            <Ph className="text-secondary text-2xl md:text-4xl" name="assignment" weight="fill" />
-            <CountUp target={2450} suffix="+" />
-            <span className="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Total Incidents</span>
-          </div>
-          <div className="bg-white/95 backdrop-blur-md p-3 md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border-l-4 border-l-error border-y border-r border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
-            <Ph className="text-error text-2xl md:text-4xl" name="warning" weight="fill" />
-            <CountUp target={124} />
-            <span className="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Active Cases</span>
-          </div>
-          <div className="bg-white/95 backdrop-blur-md p-3 md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border-l-4 border-l-secondary border-y border-r border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
-            <Ph className="text-secondary text-2xl md:text-4xl" name="check_circle" weight="fill" />
-            <CountUp target={2210} />
-            <span className="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Resolved Cases</span>
-          </div>
-          <div className="bg-white/95 backdrop-blur-md p-3 md:p-lg rounded-2xl shadow-xl flex flex-col items-center text-center space-y-xs md:space-y-sm border border-outline-variant/20 transition-all hover:-translate-y-2 hover:shadow-2xl" data-section="stats">
-            <Ph className="text-secondary text-2xl md:text-4xl" name="groups" weight="fill" />
-            <CountUp target={15000} suffix="+" />
-            <span className="font-label-md text-[10px] md:text-label-md text-on-surface-variant uppercase tracking-wider">Registered Users</span>
-          </div>
-        </div>
-      </section>
-
       <section ref={(el) => { sectionRefs.current[2] = el; }} className="py-8 md:py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-1000 delay-200">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
           <div className="text-center mb-4 md:mb-12" data-section="services-title">
@@ -369,23 +348,17 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2 gap-3 md:gap-gutter lg:grid-cols-4">
             {[
-              { icon: 'report_problem', title: 'Report an Incident', desc: 'Submit detailed reports for security concerns in your area.', hoverBorder: 'hover:border-secondary', slotKey: 'report_incident' },
-              { icon: 'call', title: 'Emergency Hotline', desc: 'Quick access to local police, fire department, and medical EMS.', hoverBorder: 'hover:border-error', slotKey: 'emergency_hotline' },
-              { icon: 'local_police', title: 'Police Assistance', desc: 'Request emergency patrol or police presence in your zone.', hoverBorder: 'hover:border-secondary', slotKey: 'police_assistance' },
-              { icon: 'forum', title: 'Contact Barangay', desc: 'Direct messaging line to Barangay officials and safety officers.', hoverBorder: 'hover:border-secondary', slotKey: 'contact_barangay' },
+              { icon: 'report_problem', title: 'Report an Incident', desc: 'Submit detailed reports for security concerns in your area.', card: 'bg-white border-outline-variant hover:border-secondary', chip: 'bg-red-100 text-red-600' },
+              { icon: 'call', title: 'Emergency Hotline', desc: 'Quick access to local police, fire department, and medical EMS.', card: 'bg-white border-outline-variant hover:border-secondary', chip: 'bg-amber-100 text-amber-600' },
+              { icon: 'local_police', title: 'Police Assistance', desc: 'Request emergency patrol or police presence in your zone.', card: 'bg-white border-outline-variant hover:border-secondary', chip: 'bg-blue-100 text-blue-600' },
+              { icon: 'forum', title: 'Contact Barangay', desc: 'Direct messaging line to Barangay officials and safety officers.', card: 'bg-white border-outline-variant hover:border-secondary', chip: 'bg-green-100 text-green-600' },
             ].map((svc, i) => (
-              <div key={i} className={`group relative rounded-2xl border border-outline-variant overflow-hidden ${svc.hoverBorder} hover:shadow-xl transition-all cursor-pointer touch-manipulation hover:-translate-y-1 min-h-[120px] sm:min-h-[180px] md:min-h-[260px]`} data-section="services">
-                <div className="absolute inset-0">
-                  <img alt={svc.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={getServiceImage(svc.slotKey)} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+              <div key={i} className={`group relative rounded-2xl border ${svc.card} hover:shadow-xl transition-all cursor-pointer touch-manipulation hover:-translate-y-1 flex flex-col justify-end p-3 sm:p-5 md:p-lg min-h-[120px] sm:min-h-[180px] md:min-h-[260px]`} data-section="services">
+                <div className={`w-8 h-8 sm:w-12 sm:h-12 rounded-xl ${svc.chip} flex items-center justify-center mb-1.5 sm:mb-sm transition-transform duration-300 group-hover:scale-110`}>
+                  <Ph className="text-base sm:text-2xl" name={svc.icon} />
                 </div>
-                <div className="relative p-3 sm:p-5 md:p-lg h-full flex flex-col justify-end">
-                  <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl bg-blue-600/80 flex items-center justify-center text-white mb-1.5 sm:mb-sm group-hover:bg-secondary transition-colors duration-300">
-                    <Ph className="text-base sm:text-2xl" name={svc.icon} />
-                  </div>
-                  <h3 className="font-headline-md text-[13px] sm:text-lg md:text-xl mb-xs text-white leading-tight">{svc.title}</h3>
-                  <p className="font-body-md text-white/90 text-[10px] sm:text-sm leading-tight">{svc.desc}</p>
-                </div>
+                <h3 className="font-headline-md text-[13px] sm:text-lg md:text-xl mb-xs text-on-surface leading-tight">{svc.title}</h3>
+                <p className="font-body-md text-on-surface-variant text-[10px] sm:text-sm leading-tight">{svc.desc}</p>
               </div>
             ))}
           </div>
