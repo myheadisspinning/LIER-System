@@ -4,7 +4,7 @@ interface LogoutScreenProps {
 
 export default function LogoutScreen({ message = 'Signing you out...' }: LogoutScreenProps) {
   return (
-    <div className="fixed inset-0 z-[400] flex flex-col items-center justify-center bg-background/90 backdrop-blur-md animate-fade-in">
+    <div className="fixed inset-0 z-[1100] flex flex-col items-center justify-center bg-background/90 backdrop-blur-md animate-fade-in">
       <div className="relative flex items-center justify-center">
         <div className="absolute -inset-6 rounded-full bg-secondary/15 blur-2xl animate-pulse"></div>
         <div className="relative w-24 h-24 rounded-full border-4 border-secondary/25 border-t-secondary animate-spin"></div>

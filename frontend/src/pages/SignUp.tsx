@@ -334,7 +334,7 @@ export default function SignUp() {
                       Address in Barangay Culiat
                     </label>
                     <div className="relative">
-                      <Ph className="absolute left-4 top-1/2 -translate-y-1/2 text-outline" name="location_on" />
+                      <Ph className="absolute left-4 top-1/3 -translate-y-1/2 text-outline pointer-events-none" name="location_on" />
                       <textarea
                         className="w-full pl-12 pr-4 bg-surface-container-low border-transparent rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all outline-none text-on-surface resize-none py-1.5"
                         id="address"

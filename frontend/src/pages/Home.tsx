@@ -127,18 +127,21 @@ function CommunityGallery() {
         {getVisible().map((item, i) => (
             <div
               key={`${item.title}-${i}`}
-              className={`relative h-56 md:h-72 shrink-0 w-full md:w-[calc((100%-2*1.5rem)/3)] rounded-xl overflow-hidden cursor-pointer transition-all duration-1000 ease-in-out ${
+              className={`group relative h-56 md:h-72 shrink-0 w-full md:w-[calc((100%-2*1.5rem)/3)] rounded-xl overflow-hidden cursor-pointer transition-all duration-1000 ease-in-out ${
                 item._center ? 'ring-2 ring-secondary shadow-xl scale-[1.02]' : 'shadow-md scale-100 opacity-80'
               }`}
             >
               <img
                 src={item.image_url}
                 alt={item.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-              <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4">
-                <p className="text-white font-semibold text-base md:text-lg leading-snug drop-shadow-lg">{item.title}</p>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-3 md:p-4 flex items-end justify-between gap-3">
+                <p className="text-white font-semibold text-sm sm:text-base md:text-lg leading-snug drop-shadow-lg">{item.title}</p>
+                <div className="shrink-0 w-7 h-7 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center transition-all group-hover:bg-secondary group-hover:rotate-45">
+                  <Ph className="text-white text-[14px]" name="arrow_forward" />
+                </div>
               </div>
             </div>
         ))}
@@ -149,7 +152,7 @@ function CommunityGallery() {
           <button
             type="button"
             onClick={() => go(-1)}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 hidden md:flex w-10 h-10 rounded-full bg-white shadow-lg items-center justify-center text-on-surface hover:bg-surface-container-low transition-colors z-10"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 flex w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-lg items-center justify-center text-on-surface hover:bg-surface-container-low transition-colors z-10"
             aria-label="Previous"
           >
             <Ph className="text-xl" name="chevron_left" />
@@ -157,7 +160,7 @@ function CommunityGallery() {
           <button
             type="button"
             onClick={() => go(1)}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 hidden md:flex w-10 h-10 rounded-full bg-white shadow-lg items-center justify-center text-on-surface hover:bg-surface-container-low transition-colors z-10"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 flex w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-lg items-center justify-center text-on-surface hover:bg-surface-container-low transition-colors z-10"
             aria-label="Next"
           >
             <Ph className="text-xl" name="chevron_right" />
@@ -166,7 +169,10 @@ function CommunityGallery() {
       )}
 
       {items.length > 1 && (
-        <div className="flex justify-center gap-2 mt-3 md:mt-4">
+        <div className="flex justify-center items-center gap-2 mt-3 md:mt-4">
+          <span className="text-[10px] font-bold text-on-surface-variant tracking-widest mr-1">
+            {String(active + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
+          </span>
           {items.map((_, i) => (
             <button
               key={i}
@@ -355,30 +361,30 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[2] = el; }} className="py-10 md:py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-1000 delay-200">
+      <section ref={(el) => { sectionRefs.current[2] = el; }} className="py-8 md:py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-1000 delay-200">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
-          <div className="text-center mb-6 md:mb-12" data-section="services-title">
+          <div className="text-center mb-4 md:mb-12" data-section="services-title">
             <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-base">LGU Public Safety Services</h2>
             <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Access critical services and report concerns directly to our integrated law enforcement team.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
+          <div className="grid grid-cols-2 gap-3 md:gap-gutter lg:grid-cols-4">
             {[
               { icon: 'report_problem', title: 'Report an Incident', desc: 'Submit detailed reports for security concerns in your area.', hoverBorder: 'hover:border-secondary', slotKey: 'report_incident' },
               { icon: 'call', title: 'Emergency Hotline', desc: 'Quick access to local police, fire department, and medical EMS.', hoverBorder: 'hover:border-error', slotKey: 'emergency_hotline' },
               { icon: 'local_police', title: 'Police Assistance', desc: 'Request emergency patrol or police presence in your zone.', hoverBorder: 'hover:border-secondary', slotKey: 'police_assistance' },
               { icon: 'forum', title: 'Contact Barangay', desc: 'Direct messaging line to Barangay officials and safety officers.', hoverBorder: 'hover:border-secondary', slotKey: 'contact_barangay' },
             ].map((svc, i) => (
-              <div key={i} className={`group relative rounded-2xl border border-outline-variant overflow-hidden ${svc.hoverBorder} hover:shadow-xl transition-all cursor-pointer touch-manipulation hover:-translate-y-2 min-h-[160px] sm:min-h-[200px] md:min-h-[280px]`} data-section="services">
+              <div key={i} className={`group relative rounded-2xl border border-outline-variant overflow-hidden ${svc.hoverBorder} hover:shadow-xl transition-all cursor-pointer touch-manipulation hover:-translate-y-1 min-h-[120px] sm:min-h-[180px] md:min-h-[260px]`} data-section="services">
                 <div className="absolute inset-0">
                   <img alt={svc.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={getServiceImage(svc.slotKey)} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                 </div>
-                <div className="relative p-4 sm:p-5 md:p-lg h-full flex flex-col justify-end">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-600/80 flex items-center justify-center text-white mb-2 sm:mb-sm group-hover:bg-secondary transition-colors duration-300">
-                    <Ph className="text-xl sm:text-2xl" name={svc.icon} />
+                <div className="relative p-3 sm:p-5 md:p-lg h-full flex flex-col justify-end">
+                  <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl bg-blue-600/80 flex items-center justify-center text-white mb-1.5 sm:mb-sm group-hover:bg-secondary transition-colors duration-300">
+                    <Ph className="text-base sm:text-2xl" name={svc.icon} />
                   </div>
-                  <h3 className="font-headline-md text-base sm:text-lg md:text-xl mb-xs text-white">{svc.title}</h3>
-                  <p className="font-body-md text-white/90 text-sm">{svc.desc}</p>
+                  <h3 className="font-headline-md text-[13px] sm:text-lg md:text-xl mb-xs text-white leading-tight">{svc.title}</h3>
+                  <p className="font-body-md text-white/90 text-[10px] sm:text-sm leading-tight">{svc.desc}</p>
                 </div>
               </div>
             ))}
@@ -388,7 +394,11 @@ export default function Home() {
 
       <section ref={(el) => { sectionRefs.current[3] = el; }} className="py-10 md:py-xl bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-1000 delay-100">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
-          <div className="text-center mb-8 md:mb-12">
+          <div className="text-center mb-6 md:mb-12">
+            <div className="inline-flex items-center gap-sm bg-secondary/10 px-md py-xs rounded-full mb-3 md:mb-md">
+              <Ph className="text-secondary text-sm" name="photo_library" />
+              <span className="text-secondary font-label-md text-xs tracking-wider uppercase font-semibold">Community Gallery</span>
+            </div>
             <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-base">Barangay Culiat in Action</h2>
             <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">A glimpse into the programs, events, and community efforts that make our barangay safer and more connected.</p>
           </div>
@@ -396,54 +406,26 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[4] = el; }} className="py-10 md:py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-1000 delay-200">
+      <section ref={(el) => { sectionRefs.current[4] = el; }} className="py-8 md:py-lg bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-1000 delay-100">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div className="order-2 lg:order-1 text-center lg:text-left" data-section="impact">
-              <div className="inline-flex items-center gap-sm bg-secondary/10 px-md py-xs rounded-full mb-3 md:mb-md mx-auto lg:mx-0">
-                <Ph className="text-secondary text-sm" name="auto_awesome" />
-                <span className="text-secondary font-label-md text-xs tracking-wider uppercase">COMMUNITY IMPACT</span>
-              </div>
-              <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-3 md:mb-md leading-tight">Digital Dispatch: A 4-Minute Success Story</h2>
-              <p className="font-body-md md:font-body-lg text-on-surface-variant mb-6 md:mb-lg">
-                Last Tuesday, our AI-assisted dispatch routed an emergency call in record time, resulting in a 4-minute response. This is how smart governance saves lives.
-              </p>
-              <button className="w-full sm:w-auto px-lg py-sm bg-secondary text-on-secondary font-label-md rounded-lg hover:bg-secondary-container hover:shadow-lg transition-all flex items-center justify-center gap-xs group">
-                Read Full Story <Ph className="group-hover:translate-x-1 transition-transform" name="arrow_forward" />
-              </button>
-            </div>
-            <div className="order-1 lg:order-2" data-section="impact">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-video group">
-                <img alt="Community Safety" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="frontend/public/image/image-section-culiat.jfif" />
-                <div className={`absolute inset-0 bg-gradient-to-t from-on-background/80 to-transparent flex items-end p-4 md:p-6 ${styles.communityGradient}`}>
-                  <p className="text-white font-caption text-caption italic">"The response was faster than I ever expected. Technology really made the difference." - Local Resident</p>
-                </div>
-              </div>
-            </div>
+          <div className="text-center mb-4 md:mb-8" data-section="guides">
+            <h2 className="font-headline-md text-xl md:text-2xl text-on-surface mb-base">Community Safety Guides</h2>
+            <p className="font-body-md text-sm md:text-base text-on-surface-variant max-w-2xl mx-auto px-4">Essential resources and step-by-step instructions for a safer Barangay Culiat.</p>
           </div>
-        </div>
-      </section>
-
-      <section ref={(el) => { sectionRefs.current[5] = el; }} className="py-10 md:py-xl bg-surface-container-lowest opacity-0 translate-y-10 transition-all duration-1000 delay-100">
-        <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
-          <div className="text-center mb-8 md:mb-12" data-section="guides">
-            <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-base">Community Safety Guides</h2>
-            <p className="font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mx-auto px-4">Essential resources and step-by-step instructions for a safer Barangay Culiat.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-gutter">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
             {[
               { title: "Elders' Guide: Navigating the Portal", desc: 'A step-by-step guide for our seniors on how to use digital tools to report incidents and access services safely.', btn: 'View Guide', link: '/elder-guide', slotKey: 'elders_guide' },
               { title: 'Public Safety & Protocols', desc: 'Learn the official procedures for reporting emergencies and how to coordinate with our public safety officers during critical incidents.', btn: 'Learn More', link: '/services', slotKey: 'safety_protocols' },
               { title: 'Building a Resilient Community', desc: 'Discover community initiatives, neighborhood watch programs, and best practices for maintaining a safe environment.', btn: 'Get Involved', link: '/contact', slotKey: 'resilient_community' },
             ].map((guide, i) => (
               <div key={i} className="bg-surface-container-low rounded-2xl border border-outline-variant/30 flex flex-col overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all" data-section="guides">
-                <div className="h-36 md:h-44 overflow-hidden">
+                <div className="h-24 md:h-28 overflow-hidden">
                   <img alt={guide.title} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src={getGuideImage(guide.slotKey)} />
                 </div>
-                <div className="p-4 md:p-lg flex flex-col flex-grow">
-                  <h3 className="font-headline-md text-lg md:text-xl text-on-surface mb-sm">{guide.title}</h3>
-                  <p className="font-body-md text-on-surface-variant mb-4 md:mb-lg flex-grow">{guide.desc}</p>
-                  <Link to={guide.link} className="w-full py-3 border border-secondary text-secondary font-label-md rounded-lg hover:bg-secondary hover:text-white transition-all text-center inline-block">{guide.btn}</Link>
+                <div className="p-3 md:p-4 flex flex-col flex-grow">
+                  <h3 className="font-headline-md text-base md:text-lg text-on-surface mb-sm leading-tight">{guide.title}</h3>
+                  <p className="font-body-md text-sm text-on-surface-variant mb-3 md:mb-4 flex-grow">{guide.desc}</p>
+                  <Link to={guide.link} className="w-full py-2 border border-secondary text-secondary font-label-md text-sm rounded-lg hover:bg-secondary hover:text-white transition-all text-center inline-block">{guide.btn}</Link>
                 </div>
               </div>
             ))}
@@ -451,7 +433,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={(el) => { sectionRefs.current[6] = el; }} className="py-10 md:py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-1000 delay-200">
+      <section ref={(el) => { sectionRefs.current[5] = el; }} className="py-10 md:py-xl bg-surface-container-low opacity-0 translate-y-10 transition-all duration-1000 delay-200">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-desktop">
           <div className="text-center mb-8 md:mb-12" data-section="hotlines">
             <h2 className="font-headline-lg text-2xl md:text-[28px] text-on-surface mb-base">Emergency Hotlines</h2>
