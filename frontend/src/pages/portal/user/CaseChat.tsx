@@ -45,14 +45,6 @@ const dayLabel = (iso: string) => {
  return d.toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' });
 };
 
-const caseIcon = (category: string) => {
- const c = category.toLowerCase();
- if (c.includes('fire')) return 'local_fire_department';
- if (c.includes('medic')) return 'medical_services';
- if (c.includes('crime') || c.includes('theft')) return 'local_police';
- return 'fact_check';
-};
-
 type TimelineItem =
  | { kind: 'day'; label: string; key: string }
  | { kind: 'inquiry'; key: string }
@@ -324,14 +316,14 @@ const statusBadge = (s: string) =>
 
 if (loading) {
   return (
-   <div className="h-[calc(100dvh-5rem)] min-h-[360px] sm:h-[65vh] sm:max-h-[600px] bg-surface-container-lowest rounded-2xl border border-border-subtle flex items-center justify-center">
+   <div className="h-[calc(100dvh-5.5rem)] min-h-[360px] sm:h-[65vh] sm:max-h-[600px] bg-surface-container-lowest rounded-2xl border border-border-subtle flex items-center justify-center">
    <p className="text-on-surface-variant">Loading…</p>
    </div>
   );
   }
 
   return (
-  <div className="h-[calc(100dvh-5rem)] min-h-[360px] sm:h-[65vh] sm:max-h-[600px] bg-surface-container-lowest rounded-2xl border border-border-subtle flex flex-col overflow-hidden">
+  <div className="h-[calc(100dvh-5.5rem)] min-h-[360px] sm:h-[65vh] sm:max-h-[600px] bg-surface-container-lowest rounded-2xl border border-border-subtle flex flex-col overflow-hidden">
   {startingChat ? (
   <div className="flex-1 flex flex-col items-center justify-center p-6">
    <div className="w-16 h-16 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center mb-4">
@@ -341,7 +333,7 @@ if (loading) {
    <p className="font-body-sm text-body-sm text-outline">Connecting you to the Barangay desk</p>
   </div>
   ) : !openThread && !viewingPastId ? (
-  <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 overflow-y-auto">
+  <div className="flex-1 flex flex-col items-center justify-center p-6 overflow-y-auto">
    <div className="max-w-2xl w-full">
    <div className="text-center mb-8">
     <div className="relative inline-block mb-4">
@@ -380,27 +372,8 @@ if (loading) {
      </div>
      <Ph className="text-outline group-hover:text-secondary transition-colors" name="arrow_forward" />
      </div>
-    </button>
-    {incidents.map((inc) => (
-     <button
-     key={inc.id}
-     type="button"
-     onClick={() => startTopic(inc.id)}
-     className="p-4 bg-surface-container rounded-2xl border border-border-subtle hover:border-secondary transition-all text-left group"
-     >
-     <div className="flex items-start gap-3">
-      <div className="w-10 h-10 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0">
-      <Ph className="text-[20px]" name={caseIcon(inc.category)} />
-      </div>
-      <div className="flex-1 min-w-0">
-      <h4 className="font-label-md text-label-md font-bold text-on-surface mb-1">{caseLabel(inc)}</h4>
-      <p className="font-body-sm text-body-sm text-on-surface-variant truncate">{inc.title}</p>
-      </div>
-      <Ph className="text-outline group-hover:text-secondary transition-colors" name="arrow_forward" />
+</button>
      </div>
-     </button>
-    ))}
-    </div>
    </div>
 
    {archivedThreads.length > 0 && (
@@ -439,7 +412,7 @@ if (loading) {
     )}
     </div>
     <div>
-    <h3 className="font-headline-md text-[15px] sm:text-[16px] font-bold text-on-surface leading-tight truncate">Barangay Support</h3>
+    <h3 className="font-headline-md text-[16px] font-bold text-on-surface leading-tight">Barangay Support</h3>
     <span className="font-label-sm text-label-sm flex items-center gap-1">
      {isViewingPast ? (
      <span className="text-outline">Viewing past conversation</span>
@@ -469,7 +442,7 @@ if (loading) {
     )}
    </div>
    </div>
-   <div className="flex-1 overflow-y-auto p-3 sm:p-6 flex flex-col gap-4 bg-surface-bg/50" ref={scrollRef} onScroll={handleScroll}>
+   <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4 bg-surface-bg/50" ref={scrollRef} onScroll={handleScroll}>
    {timeline.map((item) => {
     if (item.kind === 'day') {
     return (
@@ -523,7 +496,7 @@ if (loading) {
 })}
     </div>
    {isClosed ? (
-   <div className="p-3 sm:p-4 border-t border-border-subtle bg-surface/30">
+   <div className="p-4 border-t border-border-subtle bg-surface/30">
     <div className="flex items-center gap-3 bg-surface-container-lowest border border-border-subtle rounded-xl p-3">
     <Ph className={` text-[22px] shrink-0 ${active.status === 'Resolved' ? 'text-success-green' : 'text-outline'}`} name={active.status === 'Resolved' ? 'task_alt' : 'archive'} />
     <div>
@@ -534,7 +507,7 @@ if (loading) {
     <p className="text-center font-caps-xs text-[9px] text-outline mt-2">Direct line to the Barangay desk — conversations are logged for transparency.</p>
    </div>
    ) : (
-   <div className="px-3 py-3 sm:p-4 border-t border-border-subtle bg-surface-container-lowest">
+   <div className="p-4 border-t border-border-subtle bg-surface-container-lowest">
     <div className="flex items-end gap-2 bg-surface-container rounded-full border border-border-subtle px-3 py-2 focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary transition-all ">
 <textarea
       ref={inputRef}
@@ -568,13 +541,13 @@ if (loading) {
   {composerOpen && createPortal(
   <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
    <div className="bg-surface-container-lowest rounded-xl border border-border-subtle w-full max-w-2xl">
-   <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-border-subtle flex justify-between items-center">
+   <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
     <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Start a new chat</h3>
     <button type="button" onClick={() => setComposerOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
     <Ph name="close" />
     </button>
    </div>
-   <div className="p-4 sm:p-5 space-y-4">
+   <div className="p-5 space-y-4">
     <div>
     <label className="block text-xs text-on-surface-variant mb-1.5">Topic</label>
     <select
@@ -614,9 +587,9 @@ if (loading) {
   )}
 
   {pastChatsOpen && createPortal(
-  <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-3 sm:p-4">
+  <div className="fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4">
    <div className="bg-surface-container-lowest rounded-xl border border-border-subtle w-full max-w-2xl max-h-[80vh] flex flex-col">
-   <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-border-subtle flex justify-between items-center">
+   <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center">
     <h3 className="font-headline-md text-headline-md font-bold text-on-surface">Past Chats</h3>
     <button type="button" onClick={() => setPastChatsOpen(false)} className="text-on-surface-variant hover:text-on-surface" aria-label="Close">
     <Ph name="close" />
