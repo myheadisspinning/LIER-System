@@ -429,6 +429,7 @@ export default function AdminTanodRoster() {
               )}
             </div>
             <Pagination
+              fabClearance
               currentPage={currentPage}
               totalPages={totalPages}
               itemsPerPage={itemsPerPage}

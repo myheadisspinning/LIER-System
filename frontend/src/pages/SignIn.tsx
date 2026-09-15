@@ -5,8 +5,16 @@ import { supabase } from '../supabaseClient';
 import Toast, { type ToastData } from '../components/Toast';
 import LoadingScreen from '../components/LoadingScreen';
 import OTPVerificationModal from '../components/OTPVerificationModal';
+import TurnstileCaptcha from '../components/TurnstileCaptcha';
 import { getRole, dashboardPathFor, checkUserAccess } from '../lib/role';
+import { authGate, recordAuthAttempt } from '../lib/security';
 import styles from '../styles/modules/SignIn.module.css';
+
+const TURNSTILE_SITE_KEY = (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) || '';
+
+function recordAuthFailure(email: string) {
+  void recordAuthAttempt({ email, success: false, reason: 'Invalid credentials' });
+}
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -16,7 +24,10 @@ export default function SignIn() {
   const [remember, setRemember] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState<ToastData | null>(null);
+  const [toast, setToast] = useState<ToastData | null>(() => {
+    const state = location.state as { error?: string } | null;
+    return state?.error ? { type: 'error' as const, message: state.error } : null;
+  });
   const [showLoading, setShowLoading] = useState(false);
   const [showResendOption, setShowResendOption] = useState(false);
   const [resending, setResending] = useState(false);
@@ -27,11 +38,12 @@ export default function SignIn() {
   const [otpEmail, setOtpEmail] = useState('');
   const [otpPhone, setOtpPhone] = useState('');
   const [otpDestination, setOtpDestination] = useState('');
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaResetKey, setCaptchaResetKey] = useState(0);
 
   useEffect(() => {
     const state = location.state as { error?: string } | null;
     if (state?.error) {
-      setToast({ type: 'error', message: state.error });
       window.history.replaceState({}, '');
     }
   }, [location]);
@@ -73,14 +85,33 @@ export default function SignIn() {
     setLoading(true);
     setShowResendOption(false);
 
+    const gate = await authGate('check');
+    if (!gate.ok || gate.banned) {
+      setLoading(false);
+      setToast({
+        type: 'error',
+        message: gate.error || 'Too many login attempts. Please try again later.',
+      });
+      return;
+    }
+
+    if (TURNSTILE_SITE_KEY && !captchaToken) {
+      setLoading(false);
+      setToast({ type: 'error', message: 'Please complete the security check first.' });
+      return;
+    }
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email: identity,
       password,
+      options: TURNSTILE_SITE_KEY ? { captchaToken: captchaToken ?? undefined } : undefined,
     });
 
     setLoading(false);
 
     if (error) {
+      void recordAuthFailure(identity);
+      if (TURNSTILE_SITE_KEY) setCaptchaResetKey((k) => k + 1);
       console.error('Signin error:', error);
       const errorObj = error as { message?: string; error_description?: string };
       const raw = errorObj.message || errorObj.error_description || '';
@@ -261,6 +292,15 @@ export default function SignIn() {
                     Remember me on this device
                   </label>
                 </div>
+                {/* Turnstile security check */}
+                {TURNSTILE_SITE_KEY && (
+                  <TurnstileCaptcha
+                    key={captchaResetKey}
+                    siteKey={TURNSTILE_SITE_KEY}
+                    onToken={setCaptchaToken}
+                    className="[&_iframe]:rounded-lg"
+                  />
+                )}
                 {/* Submit button */}
                 <button className="w-full bg-secondary rounded-lg text-white font-semibold text-body-lg shadow-lg hover:bg-secondary/90 transition-all active:scale-[0.98] flex items-center justify-center gap-base py-2.5"
                   type="submit" disabled={loading}>

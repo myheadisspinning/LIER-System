@@ -537,6 +537,7 @@ export default function AdminContactsInbox() {
           )}
         </div>
         <Pagination
+          fabClearance
           currentPage={currentPage}
           totalPages={totalPages}
           itemsPerPage={itemsPerPage}

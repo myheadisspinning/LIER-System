@@ -10,6 +10,7 @@ import { BARANGAY_HALL_CENTER, BARANGAY_HALL_ADDRESS } from '../../../lib/geo';
 import { supabase } from '../../../supabaseClient';
 import type { User } from '@supabase/supabase-js';
 
+
 const EVIDENCE_ACCEPT = {
  video: 'video/*',
  photo: 'image/png,image/jpeg,image/jpg',
@@ -984,10 +985,7 @@ const res = await classifyIncident({
         <MapContainer center={BARANGAY_HALL_CENTER} zoom={15} className="absolute inset-0 z-0" scrollWheelZoom zoomControl={false}>
          <MapSizeSync />
          <FullscreenSizeSync isFullscreen={isFullscreen} />
-         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-         />
+         <TileLayer attribution="&copy; OpenStreetMap contributors" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
          {tile === 'satellite' && (
           <TileLayer
            attribution="Tiles &copy; Esri"
@@ -1417,7 +1415,7 @@ const res = await classifyIncident({
          <div className="h-36 sm:h-48 rounded bg-surface-container-low mb-3 relative overflow-hidden border border-outline-variant/30">
           <MapContainer center={location} zoom={15} className="w-full h-full" zoomControl={false} attributionControl={false} dragging={false} scrollWheelZoom={false} doubleClickZoom={false}>
            <MapSizeSync />
-           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
            <Marker position={location} icon={pinIcon} />
           </MapContainer>
           <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent pointer-events-none"></div>

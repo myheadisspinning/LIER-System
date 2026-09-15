@@ -1,6 +1,7 @@
 ﻿import Ph from './PhIcon';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from '../supabaseClient';
+import { authGate } from '../lib/security';
 import { useScrollLock } from '../lib/useScrollLock';
 
 type Channel = 'email' | 'sms';
@@ -48,6 +49,11 @@ export default function OTPVerificationModal({
     setDevOtp('');
 
     try {
+      const gate = await authGate('check');
+      if (!gate.ok || gate.banned) {
+        throw new Error(gate.error || 'Too many attempts. Please try again later.');
+      }
+
       const { data, error: fnError } = await supabase.functions.invoke('send-admin-otp', {
         body: { userId, email, phone, channel: ch },
       });
@@ -148,6 +154,11 @@ export default function OTPVerificationModal({
     setError('');
 
     try {
+      const gate = await authGate('check');
+      if (!gate.ok || gate.banned) {
+        throw new Error(gate.error || 'Too many attempts. Please try again later.');
+      }
+
       const { data, error: fnError } = await supabase.functions.invoke('verify-admin-otp', {
         body: { userId, otpCode, channel },
       });

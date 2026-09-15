@@ -81,6 +81,10 @@ const CONFIRM_META: Record<ConfirmKind, ConfirmMeta> = {
   },
 };
 
+// Legacy/corrupt presence stamps (the old 1970-01-01 "offline" marker) can
+// never be legit history for this app, so treat anything older as absent.
+const PRESENCE_VALID_SINCE = new Date('2024-01-01T00:00:00Z').getTime();
+
 const ROLE_BADGE: Record<string, string> = {
   user: 'bg-surface-container-high text-on-surface-variant',
   officer: 'bg-secondary/10 text-secondary',
@@ -134,7 +138,10 @@ export default function AdminAccountSettings() {
     const { data } = await supabase.from('presence').select('user_id, last_seen_at');
     const map = new Map<string, string>();
     for (const row of (data ?? []) as { user_id: string; last_seen_at: string }[]) {
-      map.set(row.user_id, row.last_seen_at);
+      const t = new Date(row.last_seen_at).getTime();
+      // Drop corrupted/legacy rows (e.g. the old 1970-01-01 "offline" stamp)
+      // so they never render as absurd "20711d ago" text.
+      if (Number.isFinite(t) && t >= PRESENCE_VALID_SINCE) map.set(row.user_id, row.last_seen_at);
     }
     setPresenceMap(map);
   };
@@ -154,12 +161,12 @@ export default function AdminAccountSettings() {
     })();
 
     // Update presence live so the Online column reflects heartbeats as they
-    // land; a slow fallback poll covers setups where realtime is not published.
+    // land; a fast fallback poll covers setups where realtime is not published.
     const channel = supabase
-      .channel('admin-account-presence')
+      .channel(`admin-account-presence-${Math.random().toString(36).slice(2)}`)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'presence' }, () => void fetchPresence())
       .subscribe();
-    const interval = window.setInterval(fetchPresence, 60_000);
+    const interval = window.setInterval(fetchPresence, 10_000);
     return () => {
       void supabase.removeChannel(channel);
       window.clearInterval(interval);
@@ -516,6 +523,7 @@ export default function AdminAccountSettings() {
             )}
           </div>
           <Pagination
+            fabClearance
             currentPage={currentPage}
             totalPages={totalPages}
             itemsPerPage={itemsPerPage}

@@ -10,6 +10,7 @@ import type { EvidenceFile } from '../../../lib/ai';
 import { logAudit, fetchOpenUnitAssignments, deriveUnitStatus } from '../../../lib/admin';
 import { BARANGAY_HALL_CENTER } from '../../../lib/geo';
 
+
 type ReportRow = {
   id: string;
   report_no: string | null;
@@ -294,6 +295,7 @@ export default function AdminAiDispatchTerminal() {
           ))}
         </div>
         <Pagination
+          fabClearance
           currentPage={currentPage}
           totalPages={totalPages}
           itemsPerPage={itemsPerPage}

@@ -300,6 +300,7 @@ export default function AdminCommunityGallery() {
             </div>
           )}
         <Pagination
+          fabClearance
           currentPage={currentPage}
           totalPages={totalPages}
           itemsPerPage={itemsPerPage}

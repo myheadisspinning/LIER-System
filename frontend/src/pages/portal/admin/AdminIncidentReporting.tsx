@@ -8,6 +8,8 @@ import { supabase } from '../../../supabaseClient';
 import Toast from '../../../components/Toast';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
 import AiVerdictBanner from '../../../components/AiVerdictBanner';
+import StreetViewPreview from '../../../components/StreetViewPreview';
+
 import { BARANGAY_HALL_CENTER } from '../../../lib/geo';
 import { PRIORITY_COLORS, pinIconFor } from '../../../lib/mapPins';
 import Pagination from '../../../components/Pagination';
@@ -474,9 +476,9 @@ export default function AdminIncidentReporting() {
               <span className="bg-secondary/10 text-secondary px-2 py-0.5 rounded-full text-[11px] font-bold">{mapPins.length} PIN{mapPins.length === 1 ? '' : 'S'}</span>
             </div>
             <div className="flex items-center gap-3">
-              {Object.entries(PRIORITY_COLORS).filter(([k]) => k !== 'LOW').map(([p]) => (
+              {Object.entries(PRIORITY_COLORS).filter(([k]) => k !== 'LOW').map(([p, color]) => (
                 <span key={p} className="flex items-center gap-1.5 text-[11px] font-semibold text-on-surface-variant">
-                  <span className="w-2.5 h-2.5 rounded-full"></span>
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: color }}></span>
                   {p}
                 </span>
               ))}
@@ -492,16 +494,14 @@ export default function AdminIncidentReporting() {
           </div>
           <div className="relative flex-1 bg-slate-100 overflow-hidden isolate">
             <MapContainer center={BARANGAY_HALL_CENTER} zoom={13} className="w-full h-full absolute inset-0" scrollWheelZoom>
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
+              <TileLayer attribution="&copy; OpenStreetMap contributors" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               {tile === 'satellite' && (
                 <TileLayer attribution="Tiles &copy; Esri" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" opacity={0.9} />
               )}
               <PinsLayer reports={mapPins} selectedId={selectedId} onSelect={selectReport} />
               <RecenterControl trigger={recenterTrigger} />
             </MapContainer>
+            <StreetViewPreview lat={selected?.lat ?? null} lng={selected?.lng ?? null} open={!!selected} />
             {mapPins.length === 0 && !loading && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="bg-white/90 border border-border-subtle rounded-lg px-5 py-3 text-sm text-on-surface-variant shadow-sm">No pinned incident locations for the current filters.</div>
@@ -882,6 +882,7 @@ export default function AdminIncidentReporting() {
           )}
         </div>
         <Pagination
+          fabClearance
           currentPage={currentPage}
           totalPages={totalPages}
           itemsPerPage={itemsPerPage}

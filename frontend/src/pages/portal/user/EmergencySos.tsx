@@ -63,34 +63,40 @@ export default function EmergencySos() {
  };
  }, []);
 
+const pressingRef = useRef(false);
+
  const startPress = () => {
- setPressing(true);
- setDispatched(false);
- timerRef.current = window.setTimeout(() => {
- setDispatched(true);
- setPressing(false);
- }, 3000);
+  if (pressingRef.current) return;
+  pressingRef.current = true;
+  setPressing(true);
+  setDispatched(false);
+  timerRef.current = window.setTimeout(() => {
+  pressingRef.current = false;
+  setDispatched(true);
+  setPressing(false);
+  }, 3000);
  };
 
  const cancelPress = () => {
- if (timerRef.current) window.clearTimeout(timerRef.current);
- setPressing(false);
+  pressingRef.current = false;
+  if (timerRef.current) window.clearTimeout(timerRef.current);
+  setPressing(false);
  };
 
  return (
- <div className="space-y-3 sm:space-y-8">
- <div className="bg-[#FEF2F2] border border-error-red/30 rounded-2xl p-3 sm:p-8 relative overflow-hidden">
- <div className="absolute inset-0 bg-error-red opacity-5"></div>
- <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-8">
+<div className="space-y-3 sm:space-y-6">
+  <div className="bg-[#FEF2F2] border border-error-red/30 rounded-2xl p-3 sm:p-6 relative overflow-hidden">
+  <div className="absolute inset-0 bg-error-red opacity-5"></div>
+  <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-6">
   <div className="flex-1 text-center md:text-left">
   <div className="inline-flex items-center px-3 py-1 rounded-full bg-error-red/10 text-error-red font-caps-xs text-caps-xs font-bold mb-4">
   <Ph className="text-[14px] mr-1" name="cell_tower" />
   PRIORITY CONNECTION ACTIVE
   </div>
-  <h3 className="font-label-md text-label-md sm:font-headline-md sm:text-headline-md sm:font-headline-lg sm:text-headline-lg text-on-surface mb-3">Emergency? Don't Wait.</h3>
-  <p className="font-body-sm text-body-sm sm:font-body-md sm:text-body-md text-on-surface-variant mb-2 sm:mb-6 max-w-2xl">
-  Transmits your GPS location, contact info, and registered household address directly to Barangay Desk Officers and PNP Station 14.
-  </p>
+  <h3 className="font-label-md text-label-md sm:text-headline-md text-on-surface mb-3">Emergency? Don't Wait.</h3>
+<p className="font-body-sm text-body-sm sm:text-body-md text-on-surface-variant mb-2 sm:mb-4 max-w-2xl">
+   Transmits your GPS location, contact info, and registered household address directly to Barangay Desk Officers and PNP Station 14. Press and hold the button for 3 seconds to dispatch.
+   </p>
   <div className="flex flex-col gap-3">
   <label className="flex items-center space-x-3 bg-white/50 p-2 sm:p-3 rounded-lg border border-error-red/20 max-w-2xl cursor-pointer">
   <input type="checkbox" className="h-4 w-4 sm:h-5 sm:w-5 text-error-red rounded border-error-red/30 focus:ring-error-red" defaultChecked />
@@ -102,41 +108,47 @@ export default function EmergencySos() {
   </label>
   </div>
   </div>
-  <div
-  className="flex-shrink-0 cursor-pointer select-none"
-  onMouseDown={startPress}
-  onMouseUp={cancelPress}
-  onMouseLeave={cancelPress}
-  onTouchStart={startPress}
-  onTouchEnd={cancelPress}
-  >
-  <div className="relative w-28 h-28 sm:w-48 sm:h-48 flex items-center justify-center">
-  <svg className="absolute inset-0 w-full h-full transform -rotate-90 pointer-events-none" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" fill="none" r="45" stroke="#fca5a5" strokeWidth="4"></circle>
-  <circle
-   cx="50"
-   cy="50"
-   fill="none"
-   r="45"
-   stroke="#ef4444"
-   strokeLinecap="round"
-   strokeWidth="8"
-   strokeDasharray="283"
-   strokeDashoffset={pressing ? 0 : 283}
-  ></circle>
-  </svg>
-  <div
-  className={`w-20 h-20 sm:w-40 sm:h-40 rounded-full flex flex-col items-center justify-center  border-4 border-white z-10 ${
-   pressing ? 'bg-error active:scale-95' : 'bg-error-red hover:bg-error'
-  }`}
-  >
-  <Ph className="text-white text-3xl sm:text-5xl mb-1" name="sos" weight="fill" />
+<div
+   className="flex-shrink-0 cursor-pointer select-none touch-none"
+   onMouseDown={startPress}
+   onMouseUp={cancelPress}
+   onMouseLeave={cancelPress}
+   onTouchStart={(e) => {
+    e.preventDefault();
+    startPress();
+   }}
+   onTouchEnd={cancelPress}
+   onTouchCancel={cancelPress}
+   onContextMenu={(e) => e.preventDefault()}
+   >
+   <div className="relative w-28 h-28 sm:w-36 sm:h-36 flex items-center justify-center">
+   <svg className="absolute inset-0 w-full h-full transform -rotate-90 pointer-events-none" viewBox="0 0 100 100">
+   <circle cx="50" cy="50" fill="none" r="45" stroke="#fca5a5" strokeWidth="4"></circle>
+   <circle
+    cx="50"
+    cy="50"
+    fill="none"
+    r="45"
+    stroke="#ef4444"
+    strokeLinecap="round"
+    strokeWidth="8"
+    strokeDasharray="283"
+    strokeDashoffset={pressing ? 0 : 283}
+    className="transition-[stroke-dashoffset] duration-[3000ms] ease-linear"
+   ></circle>
+   </svg>
+   <div
+   className={`w-20 h-20 sm:w-28 sm:h-28 rounded-full flex flex-col items-center justify-center  border-4 border-white z-10 ${
+    pressing ? 'bg-error active:scale-95' : 'bg-error-red hover:bg-error'
+   }`}
+   >
+   <Ph className="text-white text-3xl sm:text-4xl mb-1" name="sos" weight="fill" />
 <span className="text-white text-[9px] leading-[11px] text-center px-1 mt-1 font-bold uppercase sm:hidden">
    {pressing ? 'DISPATCHING...' : 'HOLD TO DISPATCH'}
   </span>
-  <span className="hidden sm:block text-white font-caps-xs text-caps-xs text-center px-4 mt-2 font-bold uppercase">
-   {pressing ? 'DISPATCHING...' : 'HOLD 3 SECONDS FOR IMMEDIATE DISPATCH'}
-  </span>
+<span className="hidden sm:block text-white font-caps-xs text-caps-xs text-center px-1 mt-1.5 font-bold uppercase">
+    {pressing ? 'DISPATCHING...' : 'HOLD TO DISPATCH'}
+   </span>
   </div>
   <div className="absolute inset-0 rounded-full border-4 border-error-red animate-ping opacity-20 pointer-events-none z-0"></div>
   </div>
@@ -153,33 +165,33 @@ export default function EmergencySos() {
  </div>
 
  <div>
- <h3 className="font-label-md text-label-md sm:font-headline-md sm:text-headline-md text-on-surface mb-2 sm:mb-6 flex items-center">
-  <Ph className="mr-2 text-secondary" name="contact_phone" />
-  Direct Action Hotlines
- </h3>
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-  {hotlines.map((h) => (
-  <div
-  key={h.name}
-  className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-3 sm:p-6 hover:-translate-y-0.5 transition-all duration-200"
-  >
+<h3 className="font-label-md text-label-md sm:text-headline-md text-on-surface mb-2 sm:mb-4 flex items-center">
+   <Ph className="mr-2 text-secondary" name="contact_phone" />
+   Direct Action Hotlines
+  </h3>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+   {hotlines.map((h) => (
+   <div
+   key={h.name}
+   className="bg-surface-container-lowest border border-border-subtle rounded-2xl p-3 sm:p-5 hover:-translate-y-0.5 transition-all duration-200"
+   >
   <div className="flex justify-between items-start mb-4">
   <div>
    <span className="font-caps-xs text-caps-xs text-secondary font-bold uppercase tracking-wider mb-1 block">{h.label}</span>
-   <h4 className="font-label-md text-label-md sm:font-headline-md sm:text-headline-md text-on-surface">{h.name}</h4>
+   <h4 className="font-label-md text-label-md sm:text-lg sm:font-bold text-on-surface">{h.name}</h4>
   </div>
   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${h.statusClass}`}>
    {h.dot && <span className={`w-2 h-2 mr-1.5 rounded-full ${h.dot}`}></span>}
    {h.status}
   </span>
   </div>
-  <div className="flex items-center mb-2 sm:mb-6 text-on-surface-variant">
-  <Ph className="mr-2 text-outline" name={h.icon} />
-  <span className="font-body-sm text-body-sm sm:font-body-md sm:text-body-md">{h.number}</span>
-  </div>
-  <button
-  type="button"
-  className={`w-full font-label-md py-2 sm:py-3 rounded-lg sm:rounded-xl flex justify-center items-center transition-all active:scale-[0.98] ${
+<div className="flex items-center mb-2 sm:mb-4 text-on-surface-variant">
+   <Ph className="mr-2 text-outline" name={h.icon} />
+   <span className="font-body-sm text-body-sm sm:text-body-md">{h.number}</span>
+   </div>
+   <button
+   type="button"
+   className={`w-full font-label-md py-2 sm:py-2.5 rounded-lg flex justify-center items-center transition-all active:scale-[0.98] ${
    h.primary
    ? 'bg-gradient-to-r from-secondary to-[#316bf3] hover:opacity-90 text-white'
    : 'bg-surface-container-high hover:bg-surface-dim text-on-surface border border-outline-variant'

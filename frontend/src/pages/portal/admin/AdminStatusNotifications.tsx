@@ -235,6 +235,7 @@ export default function AdminStatusNotifications() {
           </div>
         )}
         <Pagination
+          fabClearance
           currentPage={currentPage}
           totalPages={totalPages}
           itemsPerPage={itemsPerPage}

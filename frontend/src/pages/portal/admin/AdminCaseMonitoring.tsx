@@ -7,8 +7,9 @@ import { supabase } from '../../../supabaseClient';
 import IncidentDetailModal from '../../../components/IncidentDetailModal';
 import { fmtDate, fmtDurationMs, PRIORITY_BADGE, STATUS_BADGE } from '../../../lib/admin';
 import { BARANGAY_HALL_CENTER } from '../../../lib/geo';
-import { pinIconFor, closedPinIcon } from '../../../lib/mapPins';
+import { pinIconFor, closedPinIcon, PRIORITY_COLORS } from '../../../lib/mapPins';
 import Pagination from '../../../components/Pagination';
+
 
 type Row = {
   id: string;
@@ -348,7 +349,7 @@ export default function AdminCaseMonitoring() {
             {prioritySplit.map((p) => (
               <div key={p.priority} className="flex items-center justify-between">
                 <span className="flex items-center gap-2 text-sm font-medium text-on-surface">
-                  <span className="w-2.5 h-2.5 rounded-full"></span>
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: PRIORITY_COLORS[p.priority] }}></span>
                   {p.priority}
                 </span>
                 <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${PRIORITY_BADGE[p.priority]}`}>{p.count}</span>
@@ -381,12 +382,12 @@ export default function AdminCaseMonitoring() {
           </div>
           <div className="flex items-center gap-3 flex-wrap">
             <span className="flex items-center gap-1.5 text-[11px] font-semibold text-on-surface-variant">
-              <span className="w-2.5 h-2.5 rounded-full"></span>
+              <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#94a3b8' }}></span>
               Closed
             </span>
             {(['CRITICAL', 'HIGH', 'MEDIUM'] as const).map((p) => (
               <span key={p} className="flex items-center gap-1.5 text-[11px] font-semibold text-on-surface-variant">
-                <span className="w-2.5 h-2.5 rounded-full"></span>
+                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: PRIORITY_COLORS[p] }}></span>
                 {p}
               </span>
             ))}
@@ -415,7 +416,7 @@ export default function AdminCaseMonitoring() {
         <div className="relative h-[420px] bg-slate-100 overflow-hidden isolate">
           {mapPins.length > 0 ? (
             <MapContainer center={BARANGAY_HALL_CENTER} zoom={13} className="w-full h-full" scrollWheelZoom>
-              <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              <TileLayer attribution="&copy; OpenStreetMap contributors" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               {tile === 'satellite' && (
                 <TileLayer attribution="Tiles &copy; Esri" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" opacity={0.9} />
               )}
@@ -535,6 +536,7 @@ export default function AdminCaseMonitoring() {
           )}
         </div>
         <Pagination
+          fabClearance
           currentPage={currentPage}
           totalPages={totalPages}
           itemsPerPage={itemsPerPage}

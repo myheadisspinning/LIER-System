@@ -65,13 +65,6 @@ export const adminNav: RoleNav = {
       to: '/admin/tanod-roster',
     },
     {
-      label: 'Blotter & Case Tracking',
-      subLabel: 'Create and manage cases',
-      icon: 'assignment_turned_in',
-      to: '/admin/blotter-tracking',
-      section: 'Case Management',
-    },
-    {
       label: 'Evidence Vault',
       subLabel: 'Manage evidence records',
       icon: 'inventory_2',
@@ -110,6 +103,12 @@ export const adminNav: RoleNav = {
       to: '/admin/community-gallery',
     },
     {
+      label: 'IP Bans',
+      subLabel: 'Rate-limit & IP ban management',
+      icon: 'block',
+      to: '/admin/ip-bans',
+    },
+    {
       label: 'Audit Logs',
       subLabel: 'System activity and security logs',
       icon: 'security',
@@ -117,7 +116,7 @@ export const adminNav: RoleNav = {
     },
     {
       label: 'Account Settings',
-      subLabel: 'Manage user accounts (except Super Admin)',
+      subLabel: 'Manage user accounts',
       icon: 'manage_accounts',
       to: '/admin/account-settings',
     },

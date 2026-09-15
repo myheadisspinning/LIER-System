@@ -241,20 +241,11 @@ export function usePresenceHeartbeat(intervalMs = 30_000) {
       if (timer) window.clearTimeout(timer);
       document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('focus', onFocus);
-      // Only mark offline when the session has actually ended (real sign-out).
-      // A layout remount (e.g. role change, route regrouping) keeps the user
-      // logged in; marking them offline there is what made the Online column
-      // wrongly show "Offline" for users who were still signed in.
-      void (async () => {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        if (!session?.user) return;
-        await supabase.from('presence').upsert(
-          { user_id: session.user.id, last_seen_at: '1970-01-01T00:00:00Z' },
-          { onConflict: 'user_id' },
-        );
-      })();
+      // Do NOT write to presence on unmount. Layouts remount while the user is
+      // still signed in (route changes, role regrouping); zeroing last_seen_at
+      // there is what created fake 1970 rows (seen as a ~20700d-ago bug in the
+      // admin Online column) and flickered active users to Offline. Presence
+      // instead lapses naturally via ONLINE_THRESHOLD_MS once heartbeats stop.
     };
   }, [intervalMs]);
 }

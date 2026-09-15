@@ -186,6 +186,7 @@ export default function AdminOfficialsManagement() {
             ))}
           </div>
           <Pagination
+            fabClearance
             currentPage={currentPage}
             totalPages={totalPages}
             itemsPerPage={itemsPerPage}

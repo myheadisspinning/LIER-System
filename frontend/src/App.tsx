@@ -16,6 +16,7 @@ import TrackCases from './pages/TrackCases';
 import FAQ from './pages/FAQ';
 import Profile from './pages/portal/Profile';
 import RoleGuard from './components/RoleGuard';
+import HomeGate from './components/HomeGate';
 import AdminLayout from './pages/portal/layouts/AdminLayout';
 import SuperadminLayout from './pages/portal/layouts/SuperadminLayout';
 import UserLayout from './pages/portal/layouts/UserLayout';
@@ -26,7 +27,6 @@ import AdminIncidentArchive from './pages/portal/admin/AdminIncidentArchive';
 import AdminAiDispatchTerminal from './pages/portal/admin/AdminAiDispatchTerminal';
 import AdminContactsInbox from './pages/portal/admin/AdminContactsInbox';
 import AdminTanodRoster from './pages/portal/admin/AdminTanodRoster';
-import AdminBlotterTracking from './pages/portal/admin/AdminBlotterTracking';
 import AdminEvidenceVault from './pages/portal/admin/AdminEvidenceVault';
 import AdminStatusNotifications from './pages/portal/admin/AdminStatusNotifications';
 import AdminCaseMonitoring from './pages/portal/admin/AdminCaseMonitoring';
@@ -35,6 +35,7 @@ import AdminOfficialsManagement from './pages/portal/admin/AdminOfficialsManagem
 import AdminAuditLogs from './pages/portal/admin/AdminAuditLogs';
 import AdminAccountSettings from './pages/portal/admin/AdminAccountSettings';
 import AdminCommunityGallery from './pages/portal/admin/AdminCommunityGallery';
+import AdminIpBans from './pages/portal/admin/AdminIpBans';
 import SuperadminDashboard from './pages/portal/superadmin/SuperadminDashboard';
 import SuperadminAdminManagement from './pages/portal/superadmin/SuperadminAdminManagement';
 import SuperadminUserControl from './pages/portal/superadmin/SuperadminUserControl';
@@ -64,7 +65,7 @@ const router = createBrowserRouter([
   {
     element: <><PageLoader /><Outlet /></>,
     children: [
-      { path: "/", element: <Home /> },
+      { path: "/", element: <HomeGate><Home /></HomeGate> },
       { path: "/about", element: <About /> },
       { path: "/services", element: <Services /> },
       { path: "/contact", element: <Contact /> },
@@ -94,13 +95,13 @@ const router = createBrowserRouter([
           { path: "ai-dispatch-terminal", element: <AdminAiDispatchTerminal /> },
           { path: "contacts-inbox", element: <AdminContactsInbox /> },
           { path: "tanod-roster", element: <AdminTanodRoster /> },
-          { path: "blotter-tracking", element: <AdminBlotterTracking /> },
           { path: "evidence-vault", element: <AdminEvidenceVault /> },
           { path: "status-notifications", element: <AdminStatusNotifications /> },
           { path: "case-monitoring", element: <AdminCaseMonitoring /> },
           { path: "reports", element: <AdminReportsAnalytics /> },
           { path: "officials", element: <AdminOfficialsManagement /> },
           { path: "community-gallery", element: <AdminCommunityGallery /> },
+          { path: "ip-bans", element: <AdminIpBans /> },
           { path: "audit-logs", element: <AdminAuditLogs /> },
           { path: "account-settings", element: <AdminAccountSettings /> },
         ],

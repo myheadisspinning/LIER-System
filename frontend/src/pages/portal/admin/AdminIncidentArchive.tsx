@@ -219,6 +219,7 @@ export default function AdminIncidentArchive() {
           )}
         </div>
         <Pagination
+          fabClearance
           currentPage={currentPage}
           totalPages={totalPages}
           itemsPerPage={itemsPerPage}

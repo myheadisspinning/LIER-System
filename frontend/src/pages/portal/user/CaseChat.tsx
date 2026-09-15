@@ -356,13 +356,13 @@ if (loading) {
      <div className="font-caps-xs text-caps-xs text-on-surface-variant uppercase tracking-wider mb-1">Start a new chat</div>
      <h3 className="font-label-md text-label-md font-bold text-on-surface">Choose a topic</h3>
     </div>
-    <div className="grid gap-3 sm:grid-cols-2">
+    <div className="grid gap-3">
     <button
      type="button"
      onClick={() => startTopic('general')}
      className="p-4 bg-surface-container rounded-2xl border border-border-subtle hover:border-secondary transition-all text-left group"
     >
-     <div className="flex items-start gap-3">
+     <div className="flex items-center gap-3">
      <div className="w-10 h-10 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0">
       <Ph className="text-[20px]" name="help" />
      </div>

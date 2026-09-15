@@ -150,6 +150,7 @@ export default function AdminAuditLogs() {
           
           {/* Pagination Controls */}
           <Pagination
+            fabClearance
             currentPage={currentPage}
             totalPages={totalPages}
             itemsPerPage={itemsPerPage}

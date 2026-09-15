@@ -4,7 +4,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import Toast, { type ToastData } from '../components/Toast';
 import LoadingScreen from '../components/LoadingScreen';
+import TurnstileCaptcha from '../components/TurnstileCaptcha';
+import { authGate, recordAuthAttempt } from '../lib/security';
 import styles from '../styles/modules/SignUp.module.css';
+
+const TURNSTILE_SITE_KEY = (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) || '';
 
 interface PasswordStrength {
   score: number;
@@ -45,6 +49,8 @@ export default function SignUp() {
   const [tos, setTos] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
   const [resending, setResending] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaResetKey, setCaptchaResetKey] = useState(0);
 
   const thirteenYearsAgo = new Date();
   thirteenYearsAgo.setFullYear(thirteenYearsAgo.getFullYear() - 13);
@@ -86,6 +92,22 @@ export default function SignUp() {
       return;
     }
 
+    const gate = await authGate('check');
+    if (!gate.ok || gate.banned) {
+      setLoading(false);
+      setToast({
+        type: 'error',
+        message: gate.error || 'Too many signup attempts. Please try again later.',
+      });
+      return;
+    }
+
+    if (TURNSTILE_SITE_KEY && !captchaToken) {
+      setLoading(false);
+      setToast({ type: 'error', message: 'Please complete the security check first.' });
+      return;
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -97,12 +119,15 @@ export default function SignUp() {
           address,
           phone,
         },
+        captchaToken: TURNSTILE_SITE_KEY ? (captchaToken ?? undefined) : undefined,
       },
     });
 
     setLoading(false);
 
     if (error) {
+      void recordAuthAttempt({ email, success: false, reason: 'Signup rejected' });
+      if (TURNSTILE_SITE_KEY) setCaptchaResetKey((k) => k + 1);
       console.error('Supabase signup error:', error);
       console.error('Error keys:', Object.keys(error));
       console.error('Error stringified:', JSON.stringify(error));
@@ -496,6 +521,16 @@ export default function SignUp() {
                       <a className="text-secondary font-semibold hover:underline" href="#">Privacy Policy</a>.
                     </label>
                   </div>
+
+                  {/* Turnstile security check */}
+                  {TURNSTILE_SITE_KEY && (
+                    <TurnstileCaptcha
+                      key={captchaResetKey}
+                      siteKey={TURNSTILE_SITE_KEY}
+                      onToken={setCaptchaToken}
+                      className="[&_iframe]:rounded-lg"
+                    />
+                  )}
 
                   <button
                     className="w-full bg-secondary rounded-lg text-white font-semibold text-body-lg shadow-lg hover:bg-secondary/90 transition-all active:scale-[0.98] flex items-center justify-center gap-base py-1.5"

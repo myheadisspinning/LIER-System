@@ -7,6 +7,23 @@ const corsHeaders = {
   'access-control-max-age': '86400',
 };
 
+function getClientIp(req: Request): string {
+  const forwarded = req.headers.get('x-forwarded-for');
+  const raw = forwarded
+    ? forwarded.split(',')[0].trim()
+    : 'unknown';
+  return raw.replace(/^::ffff:/, '');
+}
+
+function formatDuration(seconds: number): string {
+  const s = Math.max(0, Math.round(seconds));
+  if (s < 60) return `${s} second${s === 1 ? '' : 's'}`;
+  const mins = Math.floor(s / 60);
+  if (mins < 60) return `${mins} minute${mins === 1 ? '' : 's'}`;
+  const hrs = Math.floor(mins / 60);
+  return `${hrs} hour${hrs === 1 ? '' : 's'}`;
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers: corsHeaders });
@@ -42,6 +59,20 @@ Deno.serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey, {
       auth: { persistSession: false },
     });
+
+    const clientIp = getClientIp(req);
+    const { data: ipBan } = await supabase.rpc('is_ip_banned', { p_ip: clientIp });
+
+    if (ipBan?.banned === true) {
+      const retryAfter = ipBan.retry_after_seconds ?? 0;
+      return Response.json(
+        {
+          ok: false,
+          error: `This network is temporarily blocked due to too many failed attempts. Try again in ${formatDuration(retryAfter)}.`,
+        },
+        { status: 429, headers: { ...corsHeaders, 'Retry-After': String(retryAfter) } }
+      );
+    }
 
     await supabase.rpc('cleanup_expired_otps');
 
@@ -109,6 +140,14 @@ Deno.serve(async (req) => {
         { headers: corsHeaders }
       );
     } else {
+      await supabase.rpc('record_auth_attempt', {
+        p_ip: clientIp,
+        p_email: null,
+        p_user_id: userId,
+        p_success: false,
+        p_reason: 'Invalid OTP code',
+      });
+
       await supabase.from('ai_audit_logs').insert({
         actor: 'OTP_System',
         action: channel === 'email' ? 'Admin OTP Failed (Email)' : 'Admin OTP Failed (SMS)',

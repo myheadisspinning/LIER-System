@@ -11,6 +11,7 @@ type PaginationProps = {
   startIndex: number;
   endIndex: number;
   hidePerPage?: boolean;
+  fabClearance?: boolean;
 };
 
 export default function Pagination({
@@ -23,6 +24,7 @@ export default function Pagination({
   startIndex,
   endIndex,
   hidePerPage = false,
+  fabClearance = false,
 }: PaginationProps) {
   const safeTotalPages = Math.max(1, totalPages);
   const safeCurrentPage = Math.min(Math.max(1, currentPage), safeTotalPages);
@@ -61,7 +63,7 @@ export default function Pagination({
   }, [safeCurrentPage, safeTotalPages]);
 
   return (
-    <div className="px-3 py-2 border-t border-border-subtle flex items-center justify-between gap-2 bg-surface-container-lowest">
+    <div className={`py-2 border-t border-border-subtle flex items-center justify-between gap-2 bg-surface-container-lowest ${fabClearance ? 'pl-3 pr-20' : 'px-3'}`}>
       {!hidePerPage && (
         <div className="flex items-center gap-1.5 shrink-0">
           <span className="text-body-sm text-on-surface-variant whitespace-nowrap">Items</span>

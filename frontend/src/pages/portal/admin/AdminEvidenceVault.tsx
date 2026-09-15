@@ -244,6 +244,7 @@ export default function AdminEvidenceVault() {
                 )}
               </div>
               <Pagination
+                fabClearance
                 currentPage={currentPage}
                 totalPages={totalPages}
                 itemsPerPage={itemsPerPage}

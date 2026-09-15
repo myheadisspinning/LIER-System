@@ -9,6 +9,23 @@ const corsHeaders = {
 
 const STATIC_PHONE_OTP = '847293';
 
+function getClientIp(req: Request): string {
+  const forwarded = req.headers.get('x-forwarded-for');
+  const raw = forwarded
+    ? forwarded.split(',')[0].trim()
+    : 'unknown';
+  return raw.replace(/^::ffff:/, '');
+}
+
+function formatDuration(seconds: number): string {
+  const s = Math.max(0, Math.round(seconds));
+  if (s < 60) return `${s} second${s === 1 ? '' : 's'}`;
+  const mins = Math.floor(s / 60);
+  if (mins < 60) return `${mins} minute${mins === 1 ? '' : 's'}`;
+  const hrs = Math.floor(mins / 60);
+  return `${hrs} hour${hrs === 1 ? '' : 's'}`;
+}
+
 function generateOTP(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
@@ -181,6 +198,20 @@ Deno.serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey, {
       auth: { persistSession: false },
     });
+
+    const clientIp = getClientIp(req);
+    const { data: ipBan } = await supabase.rpc('is_ip_banned', { p_ip: clientIp });
+
+    if (ipBan?.banned === true) {
+      const retryAfter = ipBan.retry_after_seconds ?? 0;
+      return Response.json(
+        {
+          ok: false,
+          error: `This network is temporarily blocked due to too many failed attempts. Try again in ${formatDuration(retryAfter)}.`,
+        },
+        { status: 429, headers: { ...corsHeaders, 'Retry-After': String(retryAfter) } }
+      );
+    }
 
     const { data: rateLimitRows } = await supabase.rpc('check_otp_rate_limit', {
       p_user_id: userId,

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import Toast, { type ToastData } from '../components/Toast';
+import { authGate, recordAuthAttempt } from '../lib/security';
 import styles from '../styles/modules/SignIn.module.css';
 
 export default function ForgotPassword() {
@@ -14,6 +15,16 @@ export default function ForgotPassword() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+
+    const gate = await authGate('check');
+    if (!gate.ok || gate.banned) {
+      setLoading(false);
+      setToast({
+        type: 'error',
+        message: gate.error || 'Too many attempts. Please try again later.',
+      });
+      return;
+    }
 
     const { data: emailExists, error: rpcError } = await supabase.rpc('is_email_registered', {
       p_email: email,
@@ -34,6 +45,7 @@ export default function ForgotPassword() {
     setLoading(false);
 
     if (error) {
+      void recordAuthAttempt({ email, success: false, reason: 'Reset link rejected' });
       console.error('Reset password error:', error);
       const errorObj = error as { message?: string; error_description?: string };
       const raw = errorObj.message || errorObj.error_description || '';
